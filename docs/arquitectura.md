@@ -1,31 +1,33 @@
 # Arquitectura
 
-SoftwareTextil usa una arquitectura en capas con DDD. El equipo trabaja con un monolito modular porque este estilo reduce la complejidad inicial y conserva límites claros entre módulos de negocio.
+SoftwareTextil usa una arquitectura en capas con DDD. El equipo trabaja con un monolito modular porque reduce la complejidad inicial y conserva limites claros entre modulos de negocio.
 
 ## Capas
 
 | Capa | Responsabilidad |
 | --- | --- |
-| Presentación | Recibe peticiones HTTP mediante controladores Flask. |
-| Aplicación | Coordina casos de uso y comandos del usuario. |
-| Dominio | Contiene agregados, objetos de valor, servicios de dominio, eventos e interfaces de repositorio. |
-| Infraestructura | Implementa persistencia con SQLAlchemy y conecta servicios externos. |
+| Presentacion | Recibe peticiones HTTP mediante controladores Flask |
+| Aplicacion | Coordina casos de uso y comandos del usuario |
+| Dominio | Contiene agregados, objetos de valor, servicios de dominio, eventos e interfaces de repositorio |
+| Infraestructura | Implementa persistencia con SQLAlchemy y conecta servicios externos |
 
 ## Reglas De Dependencia
 
-| Regla | Aplicación |
+| Regla | Aplicacion |
 | --- | --- |
-| El dominio evita frameworks | Las entidades no importan Flask ni SQLAlchemy. |
-| La aplicación usa el dominio | Los servicios coordinan agregados y repositorios abstractos. |
-| La presentación usa la aplicación | Los controladores llaman casos de uso. |
-| La infraestructura implementa contratos | Los repositorios concretos guardan y consultan datos. |
+| El dominio evita frameworks | Las entidades no importan Flask ni SQLAlchemy |
+| La aplicacion usa el dominio | Los servicios coordinan agregados y repositorios abstractos |
+| La presentacion usa la aplicacion | Los controladores llaman casos de uso |
+| La infraestructura implementa contratos | Los repositorios concretos guardan y consultan datos |
+
+---
 
 ## Vista General
 
 ```mermaid
 flowchart TD
     UsuarioWeb["Usuario web"] --> Flask["Flask routes / controllers"]
-    Flask --> AppServices["Servicios de aplicación"]
+    Flask --> AppServices["Servicios de aplicacion"]
     AppServices --> DomainModel["Modelo de dominio"]
     AppServices --> Ports["Repositorios abstractos"]
     SQLA["Repositorios SQLAlchemy"] --> Ports
@@ -33,6 +35,8 @@ flowchart TD
     AppServices --> Events["Eventos de dominio"]
     Events --> Reports["Reportes"]
 ```
+
+---
 
 ## Diagrama De Paquetes
 
@@ -78,6 +82,20 @@ flowchart TB
     Tests --> Services
 ```
 
+---
+
+## Modelo de Dominio UML (StarUML)
+
+El modelo fue diseñado en StarUML. A continuacion se muestra el diagrama principal del dominio textil.
+
+![Modelo de dominio de inventario y logistica](../assets/lab05/figura-02-modelo-inventario-logistica.png)
+
+### Ejemplo de organizacion del Modelo de Dominio
+
+![Ejemplo de organizacion del Modelo de Dominio](../assets/lab05/figura-01-ejemplo-modelo-dominio.png)
+
+---
+
 ## Diagrama De Clases Por Capas
 
 ```mermaid
@@ -91,11 +109,23 @@ classDiagram
         +ajustar_stock()
     }
 
+    class DespachoController {
+        +crear_despacho()
+        +confirmar_despacho()
+        +cancelar_despacho()
+    }
+
     class ServicioInventario {
         +consultar_stock(prenda_id)
         +registrar_ingreso(comando)
         +registrar_salida(comando)
         +ajustar_stock(comando)
+    }
+
+    class ServicioDespacho {
+        +crear_despacho(comando)
+        +confirmar_despacho(id)
+        +cancelar_despacho(id)
     }
 
     class RepositorioStockPrenda {
@@ -105,10 +135,17 @@ classDiagram
         +actualizar(stock)
     }
 
-    class RepositorioMovimientoInventario {
+    class RepositorioMovimiento {
         <<interface>>
         +guardar(movimiento)
         +listar_por_stock(stock_id)
+    }
+
+    class RepositorioDespacho {
+        <<interface>>
+        +guardar(despacho)
+        +buscar_por_id(id)
+        +actualizar(despacho)
     }
 
     class StockPrenda {
@@ -124,25 +161,52 @@ classDiagram
         +crear_ajuste(stock_id, cantidad)
     }
 
-    class RepositorioStockPrendaSQLAlchemy {
+    class Despacho {
+        +preparar()
+        +confirmar()
+        +cancelar()
+        +agregar_salida(movimiento)
+    }
+
+    class StockPrendaSQLAlchemy {
         +guardar(stock)
         +buscar_por_prenda(prenda_id)
         +actualizar(stock)
     }
 
-    class RepositorioMovimientoSQLAlchemy {
+    class MovimientoSQLAlchemy {
         +guardar(movimiento)
         +listar_por_stock(stock_id)
     }
 
+    class DespachoSQLAlchemy {
+        +guardar(despacho)
+        +buscar_por_id(id)
+        +actualizar(despacho)
+    }
+
     InventarioController --> ServicioInventario
+    DespachoController --> ServicioDespacho
     ServicioInventario --> RepositorioStockPrenda
-    ServicioInventario --> RepositorioMovimientoInventario
+    ServicioInventario --> RepositorioMovimiento
     ServicioInventario --> StockPrenda
     ServicioInventario --> MovimientoInventario
-    RepositorioStockPrendaSQLAlchemy ..|> RepositorioStockPrenda
-    RepositorioMovimientoSQLAlchemy ..|> RepositorioMovimientoInventario
+    ServicioDespacho --> RepositorioDespacho
+    ServicioDespacho --> Despacho
+    StockPrendaSQLAlchemy ..|> RepositorioStockPrenda
+    MovimientoSQLAlchemy ..|> RepositorioMovimiento
+    DespachoSQLAlchemy ..|> RepositorioDespacho
 ```
+
+---
+
+## Codigo Generado desde StarUML
+
+El modelo fue diseñado en StarUML y se genero codigo fuente para Python.
+
+![Codigo generado para Python](../assets/lab05/figura-03-codigo-generado-python.png)
+
+---
 
 ## Flujo Registrar Salida
 
@@ -152,7 +216,7 @@ sequenceDiagram
     participant API as InventarioController
     participant Servicio as ServicioInventario
     participant StockRepo as RepositorioStockPrenda
-    participant MovRepo as RepositorioMovimientoInventario
+    participant MovRepo as RepositorioMovimiento
     participant Stock as StockPrenda
     participant DB as Base de datos
 
@@ -168,27 +232,29 @@ sequenceDiagram
     Servicio->>MovRepo: guardar(movimiento)
     StockRepo->>DB: Actualiza stock
     MovRepo->>DB: Inserta movimiento
-    Servicio-->>API: Confirma operación
+    Servicio-->>API: Confirma operacion
     API-->>Encargado: Muestra salida registrada
 ```
 
+---
+
 ## Estructura De Carpetas
 
-```text
+```
 src/software_textil/
-├── presentation/
+├── presentation/     # Controladores Flask
 │   └── controllers/
-├── application/
+├── application/      # Casos de uso y DTOs
 │   ├── dtos/
 │   └── services/
-├── domain/
+├── domain/           # Modelo de dominio puro
 │   ├── catalogo/
 │   ├── inventario/
 │   ├── despachos/
 │   ├── usuarios/
 │   ├── reportes/
 │   └── compartido/
-└── infrastructure/
+└── infrastructure/   # Implementaciones tecnicas
     ├── external_services/
     ├── persistence/
     └── repositories/
