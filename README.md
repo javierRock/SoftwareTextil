@@ -1,130 +1,85 @@
-<![CDATA[<div align="center">
+# SoftwareTextil
 
-# 🧵 SoftwareTextil
+Sistema de gestión de inventario textil desarrollado con **Domain-Driven Design (DDD)** y arquitectura en capas.
 
-**Sistema de Gestión de Inventario Textil con Domain-Driven Design**
-
-[![Python](https://img.shields.io/badge/Python-≥3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-≥3.0-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
-[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-≥2.0-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org)
-[![License](https://img.shields.io/badge/Licencia-Académico-blue?style=for-the-badge)](#)
-
-*Proyecto académico de Ingeniería de Software — Universidad Nacional de San Agustín de Arequipa*
+> Proyecto académico — **Ingeniería de Software**
+> Universidad Nacional de San Agustín de Arequipa
 
 ---
 
-</div>
+## Integrantes
 
-## 📋 Tabla de Contenido
+| Integrante | 
+| --- |
+| Condori Pallardel, Emilio |
+| Gutierrez Castilla, Carlos Enrique |
+| Huayhua Perez, Lizzy Arlette |
+| Peñalva Humire, Javier Alonzo |
+| Quispe Suarez, Angelo Josué |
 
-- [Descripción](#-descripción)
-- [Equipo de Desarrollo](#-equipo-de-desarrollo)
-- [Enfoque DDD](#-enfoque-domain-driven-design)
-- [Lenguaje Ubicuo](#-lenguaje-ubicuo)
-- [Modelo de Dominio](#-modelo-de-dominio)
-- [Bounded Contexts y Módulos](#-bounded-contexts-y-módulos)
-- [Arquitectura](#-arquitectura)
-- [Funcionalidades](#-funcionalidades)
-- [API REST](#-api-rest)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Instalación y Ejecución](#-instalación-y-ejecución)
-- [Tecnologías](#-tecnologías)
-- [Referencias](#-referencias)
+**Docente:** Edgar Sarmiento Calisaya — **Grupo:** 3ro A — **Escuela:** Ciencia de la Computación
 
 ---
 
-## 📖 Descripción
+## Descripción
 
-**SoftwareTextil** organiza la gestión de inventario de una empresa textil aplicando principios de **Domain-Driven Design (DDD)**. El sistema modela el negocio con conceptos propios del almacén textil: prendas, stock, ingresos, salidas, ajustes, despachos, guías de remisión, alertas y reportes.
+SoftwareTextil ayuda al encargado de inventario a controlar el movimiento diario de prendas en almacén. El sistema registra productos textiles, controla cantidades disponibles, guarda ingresos y salidas, prepara despachos, genera alertas de stock bajo y entrega reportes para tomar decisiones rápidas.
 
-El proyecto toma como referencia el estilo de [DDDSample Core](https://github.com/citerus/dddsample-core): separa el dominio de la tecnología, define agregados claros, trabaja con repositorios por agregado y documenta las relaciones del modelo antes de implementar la lógica completa.
-
-> **Objetivo principal:** Ayudar al encargado de inventario a controlar el movimiento diario de prendas en almacén, registrando productos textiles, controlando cantidades disponibles, guardando ingresos y salidas, preparando despachos, generando alertas de stock bajo y entregando reportes para la toma de decisiones.
+El proyecto toma como referencia [DDDSample Core](https://github.com/citerus/dddsample-core): separa el dominio de la tecnología, define agregados claros, trabaja con repositorios por agregado y documenta las relaciones del modelo antes de implementar la lógica completa.
 
 ---
 
-## 👥 Equipo de Desarrollo
+## Enfoque DDD
 
-| # | Integrante | Rol |
-|---|---|---|
-| 1 | **Condori Pallardel, Emilio** | Desarrollador |
-| 2 | **Gutierrez Castilla, Carlos Enrique** | Desarrollador |
-| 3 | **Huayhua Perez, Lizzy Arlette** | Desarrolladora |
-| 4 | **Peñalva Humire, Javier Alonzo** | Desarrollador |
-| 5 | **Quispe Suarez, Angelo Josué** | Desarrollador |
-
-> **Asignatura:** Ingeniería de Software · **Docente:** Edgar Sarmiento Calisaya  
-> **Universidad:** UNSA · **Escuela:** Ciencia de la Computación · **Grupo:** 3ro - A
-
----
-
-## 🎯 Enfoque Domain-Driven Design
-
-El equipo mantiene las reglas del negocio dentro del dominio. Flask atiende las rutas web, SQLAlchemy resuelve la persistencia y la capa de aplicación coordina los casos de uso. Esta separación permite cambiar detalles técnicos sin tocar las reglas centrales del inventario.
+El equipo mantiene las reglas del negocio dentro del dominio. Flask atiende las rutas web, SQLAlchemy resuelve la persistencia y la capa de aplicación coordina los casos de uso.
 
 | Concepto DDD | Aplicación en SoftwareTextil |
-|---|---|
-| **Lenguaje ubicuo** | El equipo usa los mismos términos del negocio: prenda, stock, ingreso, salida, ajuste y despacho. |
-| **Agregado** | Cada raíz protege un conjunto de reglas: `Prenda`, `StockPrenda`, `MovimientoInventario`, `Despacho` y `Usuario`. |
-| **Objeto de valor** | Valores inmutables como `Cantidad`, `Dinero`, `Talla`, `Color`, `CodigoPrenda` y `PeriodoReporte`. |
-| **Repositorio** | Cada agregado expone un contrato de persistencia: `RepositorioStockPrenda`, `RepositorioDespacho`, etc. |
-| **Servicio de dominio** | Reglas que no pertenecen a una sola entidad, como `PoliticaStock` para evaluación de stock bajo. |
-| **Evento de dominio** | El sistema publica eventos como `StockIngresado`, `StockDescontado` y `DespachoConfirmado`. |
-| **Fábrica** | Construcción de agregados complejos mediante `FabricaDespacho`. |
+| --- | --- |
+| Lenguaje ubicuo | Términos del negocio: prenda, stock, ingreso, salida, ajuste, despacho |
+| Agregado | Raíces que protegen reglas: `Prenda`, `StockPrenda`, `MovimientoInventario`, `Despacho`, `Usuario` |
+| Objeto de valor | Valores inmutables: `Cantidad`, `Dinero`, `Talla`, `Color`, `CodigoPrenda` |
+| Repositorio | Contratos de persistencia por agregado: `RepositorioStockPrenda`, `RepositorioDespacho` |
+| Servicio de dominio | Reglas transversales: `PoliticaStock` para evaluación de stock bajo |
+| Evento de dominio | Eventos publicados: `StockIngresado`, `StockDescontado`, `DespachoConfirmado` |
+| Fábrica | Construcción de agregados complejos: `FabricaDespacho` |
 
 ---
 
-## 📚 Lenguaje Ubicuo
+## Lenguaje Ubicuo
 
-El equipo adoptó un **vocabulario compartido** entre desarrolladores y stakeholders del negocio textil:
-
-| Término | Definición en el dominio textil |
-|---|---|
-| **Prenda** | Producto textil terminado (polo, pantalón, uniforme), listo para venta. |
-| **Categoría** | Agrupación comercial de prendas: uniformes, ropa casual, ropa deportiva. |
-| **Stock** | Cantidad disponible de una prenda en almacén. |
-| **Nivel mínimo** | Umbral de stock que dispara una alerta de reposición. |
-| **Ingreso** | Entrada de prendas al almacén por producción, compra o devolución. |
-| **Salida** | Egreso de prendas del almacén por venta, despacho, merma o ajuste. |
-| **Ajuste** | Corrección manual de stock por conteo físico o deterioro. |
-| **Movimiento** | Registro inmutable de un ingreso, salida o ajuste; permite trazabilidad completa. |
-| **Despacho** | Proceso de preparación y envío de prendas a un cliente. |
-| **Guía de remisión** | Documento que acompaña el despacho físico (requerido por SUNAT). |
-| **Alerta de stock bajo** | Notificación automática cuando `stockActual < nivelMinimo`. |
+| Término | Definición |
+| --- | --- |
+| Prenda | Producto textil terminado (polo, pantalón, uniforme), listo para venta |
+| Categoría | Agrupación comercial: uniformes, ropa casual, ropa deportiva |
+| Stock | Cantidad disponible de una prenda en almacén |
+| Nivel mínimo | Umbral que dispara una alerta de reposición |
+| Ingreso | Entrada de prendas por producción, compra o devolución |
+| Salida | Egreso de prendas por venta, despacho, merma o ajuste |
+| Ajuste | Corrección manual por conteo físico o deterioro |
+| Movimiento | Registro inmutable de ingreso, salida o ajuste |
+| Despacho | Preparación y envío de prendas a un cliente |
+| Guía de remisión | Documento que acompaña el despacho físico (requerido por SUNAT) |
+| Alerta de stock bajo | Notificación cuando `stockActual < nivelMinimo` |
 
 ---
 
-## 🏗️ Modelo de Dominio
+## Modelo de Dominio
 
-El modelo de dominio es el corazón de SoftwareTextil. Fue diseñado como un **Diagrama de Clases UML** siguiendo las prácticas de DDD, identificando entidades, objetos de valor, agregados, servicios de dominio y sus relaciones.
+El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las prácticas de DDD: entidades, objetos de valor, agregados, servicios de dominio y sus relaciones.
 
-### Visión General del Modelo
-
-El siguiente diagrama muestra un ejemplo de cómo se organiza un modelo de dominio con paquetes UML, bounded contexts y las relaciones entre módulos:
-
-<div align="center">
+### Organización del modelo con paquetes UML
 
 ![Ejemplo de organización del Modelo de Dominio](assets/lab05/figura-01-ejemplo-modelo-dominio.png)
 
-*Figura 1 — Ejemplo de organización del Modelo de Dominio con paquetes UML*
-
-</div>
-
 ### Gestión de Inventario y Logística
 
-El modelo principal organiza el dominio textil alrededor de **inventario**, **movimientos**, **despachos** y **facturación electrónica** como contexto de soporte:
-
-<div align="center">
+El modelo principal organiza el dominio textil alrededor de inventario, movimientos, despachos y facturación electrónica.
 
 ![Modelo de dominio de inventario y logística](assets/lab05/figura-02-modelo-inventario-logistica.png)
 
-*Figura 2 — Modelo de dominio: inventario, movimientos, despachos y facturación*
+### Diagrama de Clases del Dominio
 
-</div>
-
-### Diagrama de Clases del Dominio (Mermaid)
-
-El modelo coloca a `StockPrenda` como **agregado central** del inventario. `Prenda` describe el producto textil, `MovimientoInventario` registra cada cambio de cantidad y `Despacho` agrupa las salidas físicas hacia un cliente.
+`StockPrenda` es el agregado central. `Prenda` describe el producto textil, `MovimientoInventario` registra cada cambio de cantidad y `Despacho` agrupa las salidas físicas.
 
 ```mermaid
 classDiagram
@@ -198,8 +153,6 @@ classDiagram
         +str nombre
         +str correo
         +bool activo
-        +activar()
-        +desactivar()
     }
 
     class Rol {
@@ -211,29 +164,12 @@ classDiagram
         <<ValueObject>>
         +int valor
         +str unidad
-        +sumar(otra)
-        +restar(otra)
     }
 
     class Dinero {
         <<ValueObject>>
         +Decimal monto
         +str moneda
-    }
-
-    class CodigoPrenda {
-        <<ValueObject>>
-        +str valor
-    }
-
-    class Talla {
-        <<ValueObject>>
-        +str valor
-    }
-
-    class Color {
-        <<ValueObject>>
-        +str nombre
     }
 
     class TipoMovimiento {
@@ -256,7 +192,6 @@ classDiagram
         +str stock_id
         +datetime fecha
         +bool atendida
-        +marcar_como_atendida()
     }
 
     class PoliticaStock {
@@ -270,30 +205,11 @@ classDiagram
         +crear(cliente, movimientos)
     }
 
-    class StockIngresado {
-        <<DomainEvent>>
-        +str stock_id
-        +Cantidad cantidad
-        +datetime ocurrido_en
-    }
-
-    class StockDescontado {
-        <<DomainEvent>>
-        +str stock_id
-        +Cantidad cantidad
-        +datetime ocurrido_en
-    }
-
     Categoria "1" --> "*" Prenda : agrupa
-    Prenda --> CodigoPrenda : identifica
-    Prenda --> Talla : usa
-    Prenda --> Color : usa
-    Prenda --> Dinero : precio
     Prenda "1" --> "1" StockPrenda : controla
     StockPrenda --> Cantidad : cantidad actual
     StockPrenda "1" --> "*" MovimientoInventario : registra
     MovimientoInventario --> TipoMovimiento : clasifica
-    MovimientoInventario --> Cantidad : mueve
     StockPrenda "1" --> "*" AlertaStockBajo : genera
     Despacho "1" --> "*" MovimientoInventario : agrupa salidas
     Despacho --> EstadoDespacho : estado
@@ -301,13 +217,10 @@ classDiagram
     Usuario "1" --> "*" MovimientoInventario : registra
     Usuario "*" --> "1" Rol : tiene
     PoliticaStock ..> StockPrenda : valida
-    PoliticaStock ..> AlertaStockBajo : crea
     FabricaDespacho ..> Despacho : construye
-    StockPrenda ..> StockIngresado : publica
-    StockPrenda ..> StockDescontado : publica
 ```
 
-### Relaciones de Entidades Persistentes
+### Relaciones de Entidades
 
 ```mermaid
 erDiagram
@@ -392,84 +305,54 @@ erDiagram
 
 ---
 
-## 📦 Bounded Contexts y Módulos
+## Bounded Contexts y Módulos
 
-El dominio se divide en **contextos delimitados** que agrupan modelos con responsabilidades claramente definidas, siguiendo las prácticas de DDD.
+El dominio se divide en contextos delimitados con responsabilidades claramente definidas.
 
-### Módulos de Autenticación y Catálogo
+### Autenticacion y Catalogo
 
-Agrupa entidades y servicios relacionados con autenticación, credenciales, sesiones, catálogo, prendas, tipos de producto y categorías:
+Entidades y servicios de autenticación, credenciales, sesiones, catálogo, prendas y categorías.
 
-<div align="center">
+![Modulos de autenticacion y catalogo](assets/lab05/figura-04-modulos-autenticacion-catalogo.png)
 
-![Módulos de autenticación y catálogo](assets/lab05/figura-04-modulos-autenticacion-catalogo.png)
+### Usuarios e Inventario
 
-*Figura 3 — Bounded contexts: autenticación y catálogo de productos*
+Módulos para usuarios, roles, permisos, inventario, stock, movimientos y alertas.
 
-</div>
+![Modulos de usuarios e inventario](assets/lab05/figura-05-modulos-usuarios-inventario.png)
 
-### Módulos de Usuarios e Inventario
+### Configuracion y Reportes
 
-Muestra módulos para gestión de usuarios, roles, permisos, inventario, stock, movimientos y alertas:
+Configuración general del sistema, parámetros y reportes de inventario o ventas.
 
-<div align="center">
-
-![Módulos de usuarios e inventario](assets/lab05/figura-05-modulos-usuarios-inventario.png)
-
-*Figura 4 — Bounded contexts: usuarios, roles e inventario*
-
-</div>
-
-### Módulos de Configuración y Reportes
-
-Configuración general del sistema, parámetros y reportes de inventario o ventas:
-
-<div align="center">
-
-![Módulos de configuración y reportes](assets/lab05/figura-06-modulos-configuracion-reportes.png)
-
-*Figura 5 — Bounded contexts: configuración del sistema y reportes*
-
-</div>
+![Modulos de configuracion y reportes](assets/lab05/figura-06-modulos-configuracion-reportes.png)
 
 ### Sistema Contable Textil
 
-Contextos delimitados para autenticación, gestión de ingresos y egresos, inventario, facturación SUNAT, impuestos/declaraciones y cierre/auditoría:
-
-<div align="center">
+Contextos delimitados para autenticación, gestión de ingresos/egresos, inventario, facturación SUNAT, impuestos y auditoría.
 
 ![Sistema contable textil](assets/lab05/figura-07-sistema-contable-textil.png)
 
-*Figura 6 — Mapa de contextos delimitados del sistema contable textil*
-
-</div>
-
 ### Dominio E-Commerce Textil
 
-Agregados y relaciones para usuarios, carrito de compras, historial, pedidos, catálogo de productos, pagos y entregas:
-
-<div align="center">
+Agregados para usuarios, carrito de compras, historial, pedidos, catálogo, pagos y entregas.
 
 ![Dominio e-commerce textil](assets/lab05/figura-08-dominio-ecommerce-textil.png)
 
-*Figura 7 — Modelo de dominio del e-commerce textil*
-
-</div>
-
-### Mapa de Módulos (Mermaid)
+### Mapa de Modulos
 
 ```mermaid
 flowchart TB
-    subgraph Core["🏭 Núcleo del Negocio"]
-        Catalogo["📋 Catálogo\nPrendas, categorías, tallas, colores y precios"]
-        Inventario["📦 Inventario\nStock, ingresos, salidas, ajustes y alertas"]
-        Despachos["🚚 Despachos\nPreparación, guía de remisión y confirmación"]
+    subgraph Core["Nucleo del Negocio"]
+        Catalogo["Catalogo - Prendas, categorias, tallas, colores y precios"]
+        Inventario["Inventario - Stock, ingresos, salidas, ajustes y alertas"]
+        Despachos["Despachos - Preparacion, guia de remision y confirmacion"]
     end
 
-    subgraph Soporte["🔧 Contextos de Soporte"]
-        Usuarios["👤 Usuarios\nUsuarios, roles y permisos"]
-        Reportes["📊 Reportes\nConsultas de stock y movimientos"]
-        Compartido["🔗 Compartido\nObjetos de valor y eventos comunes"]
+    subgraph Soporte["Contextos de Soporte"]
+        Usuarios["Usuarios - Usuarios, roles y permisos"]
+        Reportes["Reportes - Consultas de stock y movimientos"]
+        Compartido["Compartido - Objetos de valor y eventos comunes"]
     end
 
     Catalogo --> Inventario
@@ -482,41 +365,31 @@ flowchart TB
     Compartido --> Despachos
 ```
 
-| Módulo | Responsabilidad | Agregados principales |
-|---|---|---|
-| **Catálogo** | Mantiene la información comercial de las prendas | `Prenda` |
-| **Inventario** | Controla existencias, movimientos y alertas | `StockPrenda`, `MovimientoInventario` |
-| **Despachos** | Gestiona la salida física de prendas y su guía de remisión | `Despacho` |
-| **Usuarios** | Controla acceso, roles y responsables de movimientos | `Usuario` |
-| **Reportes** | Consulta información del inventario sin modificar reglas de negocio | `ReporteInventario` |
-| **Compartido** | Comparte objetos de valor, eventos y errores del dominio | `Cantidad`, `Dinero`, `CodigoPrenda` |
+| Modulo | Responsabilidad | Agregados principales |
+| --- | --- | --- |
+| Catalogo | Informacion comercial de las prendas | `Prenda` |
+| Inventario | Existencias, movimientos y alertas | `StockPrenda`, `MovimientoInventario` |
+| Despachos | Salida fisica de prendas y guia de remision | `Despacho` |
+| Usuarios | Acceso, roles y responsables de movimientos | `Usuario` |
+| Reportes | Consulta de informacion sin modificar reglas | `ReporteInventario` |
+| Compartido | Objetos de valor, eventos y errores del dominio | `Cantidad`, `Dinero`, `CodigoPrenda` |
 
 ---
 
-## 🏛️ Arquitectura
+## Arquitectura
 
-SoftwareTextil usa un **monolito modular** con arquitectura en capas. El proyecto mantiene una sola aplicación desplegable pero separa responsabilidades por capas y módulos de negocio.
-
-### Vista General
+SoftwareTextil usa un monolito modular. Una sola aplicación desplegable con responsabilidades separadas por capas y módulos.
 
 ```mermaid
 flowchart TD
-    UsuarioWeb["🌐 Usuario web"] --> Flask["Flask routes / controllers"]
-    Flask --> AppServices["Servicios de aplicación\nCasos de uso"]
-    AppServices --> DomainModel["Modelo de dominio\nAgregados, objetos de valor y servicios"]
-    AppServices --> Ports["Repositorios abstractos\nContratos del dominio"]
+    UsuarioWeb["Usuario web"] --> Flask["Flask routes / controllers"]
+    Flask --> AppServices["Servicios de aplicacion - Casos de uso"]
+    AppServices --> DomainModel["Modelo de dominio - Agregados, value objects y servicios"]
+    AppServices --> Ports["Repositorios abstractos - Contratos del dominio"]
     SQLA["Repositorios SQLAlchemy"] --> Ports
-    SQLA --> DB[("🗄️ Base de datos relacional")]
+    SQLA --> DB[("Base de datos relacional")]
     AppServices --> Events["Eventos de dominio"]
-    Events --> Reports["Proyección para reportes"]
-
-    classDef outer fill:#e8f1ff,stroke:#2b5fab,stroke-width:2px
-    classDef core fill:#fff6d6,stroke:#9a6a00,stroke-width:2px
-    classDef infra fill:#e9f8ec,stroke:#2f7d3c,stroke-width:2px
-
-    class UsuarioWeb,Flask outer
-    class AppServices,DomainModel,Ports,Events core
-    class SQLA,DB,Reports infra
+    Events --> Reports["Proyeccion para reportes"]
 ```
 
 ### Diagrama de Clases por Capas
@@ -558,7 +431,7 @@ classDiagram
         +actualizar(stock)
     }
 
-    class RepositorioMovimientoInventario {
+    class RepositorioMovimiento {
         <<interface>>
         +guardar(movimiento)
         +listar_por_stock(stock_id)
@@ -578,12 +451,6 @@ classDiagram
         +esta_bajo_minimo()
     }
 
-    class MovimientoInventario {
-        +crear_ingreso(stock_id, cantidad)
-        +crear_salida(stock_id, cantidad)
-        +crear_ajuste(stock_id, cantidad)
-    }
-
     class Despacho {
         +preparar()
         +confirmar()
@@ -591,18 +458,18 @@ classDiagram
         +agregar_salida(movimiento)
     }
 
-    class RepositorioStockPrendaSQLAlchemy {
+    class StockPrendaSQLAlchemy {
         +guardar(stock)
         +buscar_por_prenda(prenda_id)
         +actualizar(stock)
     }
 
-    class RepositorioMovimientoSQLAlchemy {
+    class MovimientoSQLAlchemy {
         +guardar(movimiento)
         +listar_por_stock(stock_id)
     }
 
-    class RepositorioDespachoSQLAlchemy {
+    class DespachoSQLAlchemy {
         +guardar(despacho)
         +buscar_por_id(id)
         +actualizar(despacho)
@@ -611,69 +478,60 @@ classDiagram
     InventarioController --> ServicioInventario
     DespachoController --> ServicioDespacho
     ServicioInventario --> RepositorioStockPrenda
-    ServicioInventario --> RepositorioMovimientoInventario
+    ServicioInventario --> RepositorioMovimiento
     ServicioInventario --> StockPrenda
-    ServicioInventario --> MovimientoInventario
     ServicioDespacho --> RepositorioDespacho
     ServicioDespacho --> Despacho
-    RepositorioStockPrendaSQLAlchemy ..|> RepositorioStockPrenda
-    RepositorioMovimientoSQLAlchemy ..|> RepositorioMovimientoInventario
-    RepositorioDespachoSQLAlchemy ..|> RepositorioDespacho
+    StockPrendaSQLAlchemy ..|> RepositorioStockPrenda
+    MovimientoSQLAlchemy ..|> RepositorioMovimiento
+    DespachoSQLAlchemy ..|> RepositorioDespacho
 ```
 
-### Código Generado desde el Modelo (StarUML → Python)
+### Codigo generado desde StarUML
 
-El modelo de dominio fue diseñado en StarUML y se generó código fuente para Python:
+El modelo fue diseñado en StarUML y se generó código fuente para Python.
 
-<div align="center">
-
-![Código generado para Python](assets/lab05/figura-03-codigo-generado-python.png)
-
-*Figura 8 — Evidencia de generación de código Python desde StarUML*
-
-</div>
+![Codigo generado para Python](assets/lab05/figura-03-codigo-generado-python.png)
 
 ---
 
-## ⚙️ Funcionalidades
+## Funcionalidades
 
-### Funcionalidades de Alto Nivel
+| Funcionalidad | Descripcion |
+| --- | --- |
+| Gestionar prendas | Registrar, actualizar, consultar y desactivar prendas del catalogo |
+| Organizar categorias | Agrupar prendas por linea comercial, uso, talla o color |
+| Controlar stock | Consultar cantidades disponibles y niveles minimos |
+| Registrar ingresos | Registrar entradas por produccion, compra o devolucion |
+| Registrar salidas | Descontar prendas por venta, despacho, merma o ajuste |
+| Ajustar stock | Corregir diferencias detectadas en conteo fisico |
+| Generar alertas | Detectar prendas con stock por debajo del nivel minimo |
+| Preparar despachos | Armar el despacho y asociar movimientos de salida |
+| Emitir guia de remision | Registrar datos necesarios para el traslado fisico |
+| Consultar movimientos | Revisar historial de ingresos, salidas y ajustes |
+| Generar reportes | Consultar stock, movimientos, alertas y despachos |
+| Administrar usuarios | Gestionar usuarios, roles y permisos |
 
-| Funcionalidad | Descripción |
-|---|---|
-| 📋 **Gestionar prendas** | Registrar, actualizar, consultar y desactivar prendas del catálogo. |
-| 🏷️ **Organizar categorías** | Agrupar prendas por línea comercial, uso, talla o color. |
-| 📦 **Controlar stock** | Consultar cantidades disponibles y niveles mínimos. |
-| ➕ **Registrar ingresos** | Registrar entradas por producción, compra o devolución. |
-| ➖ **Registrar salidas** | Descontar prendas por venta, despacho, merma o ajuste. |
-| 🔧 **Ajustar stock** | Corregir diferencias detectadas en conteo físico. |
-| 🔔 **Generar alertas** | Detectar prendas con stock por debajo del nivel mínimo. |
-| 🚚 **Preparar despachos** | Armar el despacho y asociar movimientos de salida. |
-| 📄 **Emitir guía de remisión** | Registrar datos necesarios para el traslado físico. |
-| 🔍 **Consultar movimientos** | Revisar historial de ingresos, salidas y ajustes. |
-| 📊 **Generar reportes** | Consultar stock, movimientos, alertas y despachos. |
-| 👤 **Administrar usuarios** | Gestionar usuarios, roles y permisos. |
-
-### Diagrama de Casos de Uso
+### Casos de Uso
 
 ```mermaid
 flowchart LR
-    Encargado["🧑‍💼 Encargado de inventario"]
-    Administrador["👨‍💼 Administrador"]
-    Vendedor["🛒 Vendedor"]
-    Cliente["👤 Cliente"]
+    Encargado["Encargado de inventario"]
+    Administrador["Administrador"]
+    Vendedor["Vendedor"]
+    Cliente["Cliente"]
 
     subgraph Sistema["SoftwareTextil"]
         UC01((Gestionar prendas))
-        UC02((Organizar categorías))
-        UC03((Consultar catálogo))
+        UC02((Organizar categorias))
+        UC03((Consultar catalogo))
         UC04((Consultar stock))
         UC05((Registrar ingreso))
         UC06((Registrar salida))
         UC07((Ajustar stock))
         UC08((Evaluar stock bajo))
         UC09((Preparar despacho))
-        UC10((Emitir guía de remisión))
+        UC10((Emitir guia de remision))
         UC11((Consultar movimientos))
         UC12((Generar reporte))
         UC13((Gestionar usuarios))
@@ -701,17 +559,17 @@ flowchart LR
     Cliente --> UC09
 ```
 
-### Flujo: Registrar Salida de Inventario
+### Flujo: Registrar Salida
 
 ```mermaid
 sequenceDiagram
-    actor Encargado as 🧑‍💼 Encargado de inventario
+    actor Encargado as Encargado de inventario
     participant API as InventarioController
     participant Servicio as ServicioInventario
     participant StockRepo as RepositorioStockPrenda
-    participant MovRepo as RepositorioMovimientoInventario
+    participant MovRepo as RepositorioMovimiento
     participant Stock as StockPrenda
-    participant DB as 🗄️ Base de datos
+    participant DB as Base de datos
 
     Encargado->>API: Solicita registrar salida
     API->>Servicio: registrar_salida(comando)
@@ -731,41 +589,41 @@ sequenceDiagram
 
 ### Prototipo de Interfaz
 
-```text
+```
 +--------------------------------------------------------------------------------+
-| SoftwareTextil                                      Usuario: Encargado           |
-| Inventario textil                                   Fecha: 2026-06-15            |
+| SoftwareTextil                                      Usuario: Encargado          |
+| Inventario textil                                   Fecha: 2026-06-15           |
 +-------------------------+------------------------------------------------------+
-| Menú                    | Panel principal                                      |
+| Menu                    | Panel principal                                      |
 |                         |                                                      |
-| 🏠 Inicio               | Indicadores del día                                  |
-| 📋 Catálogo              | +----------------+----------------+----------------+ |
-| 📦 Inventario            | | Stock bajo: 8  | Movimientos:15 | Despachos: 4   | |
-| 🔄 Movimientos           | +----------------+----------------+----------------+ |
-| 🚚 Despachos             |                                                      |
-| 📊 Reportes              | Acciones rápidas                                     |
-| 👤 Usuarios              | [Registrar ingreso] [Registrar salida] [Despachar]  |
+| Inicio                  | Indicadores del dia                                  |
+| Catalogo                | +----------------+----------------+----------------+ |
+| Inventario              | | Stock bajo: 8  | Movimientos:15 | Despachos: 4   | |
+| Movimientos             | +----------------+----------------+----------------+ |
+| Despachos               |                                                      |
+| Reportes                | Acciones rapidas                                     |
+| Usuarios                | [Registrar ingreso] [Registrar salida] [Despachar]  |
 |                         |                                                      |
-|                         | Últimos movimientos                                  |
+|                         | Ultimos movimientos                                  |
 |                         | +------------+----------+----------+---------------+ |
 |                         | | Prenda     | Tipo     | Cantidad | Responsable   | |
 |                         | +------------+----------+----------+---------------+ |
-|                         | | Polo azul  | Salida   | 12       | Almacén       | |
-|                         | | Uniforme   | Ingreso  | 30       | Producción    | |
+|                         | | Polo azul  | Salida   | 12       | Almacen       | |
+|                         | | Uniforme   | Ingreso  | 30       | Produccion    | |
 |                         | +------------+----------+----------+---------------+ |
 +-------------------------+------------------------------------------------------+
 ```
 
-### Flujo Principal de la GUI
+### Flujo de la GUI
 
 ```mermaid
 flowchart TD
-    Login["🔐 Iniciar sesión"] --> Panel["🏠 Ver panel principal"]
-    Panel --> Catalogo["📋 Abrir catálogo"]
-    Panel --> Inventario["📦 Consultar inventario"]
-    Panel --> Movimientos["🔄 Registrar movimiento"]
-    Panel --> Despachos["🚚 Preparar despacho"]
-    Panel --> Reportes["📊 Generar reporte"]
+    Login["Iniciar sesion"] --> Panel["Ver panel principal"]
+    Panel --> Catalogo["Abrir catalogo"]
+    Panel --> Inventario["Consultar inventario"]
+    Panel --> Movimientos["Registrar movimiento"]
+    Panel --> Despachos["Preparar despacho"]
+    Panel --> Reportes["Generar reporte"]
 
     Catalogo --> RegistrarPrenda["Registrar o actualizar prenda"]
     Inventario --> RevisarStock["Revisar stock actual"]
@@ -773,18 +631,16 @@ flowchart TD
     Movimientos --> Ingreso["Registrar ingreso"]
     Movimientos --> Salida["Registrar salida"]
     Movimientos --> Ajuste["Registrar ajuste"]
-    Despachos --> Guia["Emitir guía de remisión"]
+    Despachos --> Guia["Emitir guia de remision"]
 ```
 
 ---
 
-## 🌐 API REST
+## API REST
 
-SoftwareTextil expone una API RESTful para operaciones de inventario y despachos:
-
-| Método | Ruta | Descripción |
-|---|---|---|
-| `GET` | `/api/prendas` | Lista prendas del catálogo |
+| Metodo | Ruta | Descripcion |
+| --- | --- | --- |
+| `GET` | `/api/prendas` | Lista prendas del catalogo |
 | `POST` | `/api/prendas` | Registra una prenda nueva |
 | `GET` | `/api/inventario/stock/{prenda_id}` | Consulta stock de una prenda |
 | `POST` | `/api/inventario/movimientos` | Registra ingreso, salida o ajuste |
@@ -793,8 +649,7 @@ SoftwareTextil expone una API RESTful para operaciones de inventario y despachos
 | `POST` | `/api/despachos/{id}/confirmacion` | Confirma un despacho |
 | `GET` | `/api/reportes/inventario` | Genera reporte de inventario |
 
-<details>
-<summary>📝 Ejemplo de registro de movimiento</summary>
+Ejemplo de registro de movimiento:
 
 ```json
 {
@@ -807,31 +662,27 @@ SoftwareTextil expone una API RESTful para operaciones de inventario y despachos
 }
 ```
 
-</details>
-
 ---
 
-## 📁 Estructura del Proyecto
-
-### Diagrama de Paquetes
+## Estructura del Proyecto
 
 ```mermaid
 flowchart TB
     subgraph Root["SoftwareTextil"]
-        Docs["📄 docs"]
-        Tests["🧪 tests"]
+        Docs["docs"]
+        Tests["tests"]
 
         subgraph Src["src/software_textil"]
-            subgraph Presentation["🌐 presentation"]
+            subgraph Presentation["presentation"]
                 Controllers["controllers"]
             end
 
-            subgraph Application["⚙️ application"]
+            subgraph Application["application"]
                 Services["services"]
                 DTOs["dtos"]
             end
 
-            subgraph Domain["🏗️ domain"]
+            subgraph Domain["domain"]
                 Catalogo["catalogo"]
                 Inventario["inventario"]
                 Despachos["despachos"]
@@ -840,7 +691,7 @@ flowchart TB
                 Compartido["compartido"]
             end
 
-            subgraph Infrastructure["🔌 infrastructure"]
+            subgraph Infrastructure["infrastructure"]
                 Persistence["persistence"]
                 Repositories["repositories"]
                 ApiExternal["external_services"]
@@ -857,51 +708,41 @@ flowchart TB
     Tests --> Services
 ```
 
-### Árbol de Directorios
-
-```text
+```
 SoftwareTextil/
-├── 📄 README.md
-├── 📄 pyproject.toml
-├── 📄 requirements.txt
-├── 🖼️ assets/
-│   └── lab05/              # Diagramas UML del modelo de dominio
-├── 📚 docs/
-│   ├── prototipo.md        # Diseño del prototipo de interfaz
-│   ├── modelo_dominio.md   # Documentación del modelo de dominio
-│   └── arquitectura.md     # Decisiones de arquitectura
-├── 🐍 src/
+├── README.md
+├── pyproject.toml
+├── requirements.txt
+├── assets/
+│   └── lab05/                # Diagramas UML del modelo de dominio
+├── docs/
+│   ├── prototipo.md
+│   ├── modelo_dominio.md
+│   └── arquitectura.md
+├── src/
 │   └── software_textil/
-│       ├── presentation/   # Controladores Flask (rutas HTTP)
+│       ├── presentation/     # Controladores Flask
 │       │   └── controllers/
-│       ├── application/    # Casos de uso y DTOs
+│       ├── application/      # Casos de uso y DTOs
 │       │   ├── dtos/
 │       │   └── services/
-│       ├── domain/         # Modelo de dominio puro (sin dependencias externas)
+│       ├── domain/           # Modelo de dominio puro
 │       │   ├── catalogo/
 │       │   ├── inventario/
 │       │   ├── despachos/
 │       │   ├── usuarios/
 │       │   ├── reportes/
 │       │   └── compartido/
-│       └── infrastructure/ # Implementaciones técnicas
+│       └── infrastructure/   # Implementaciones tecnicas
 │           ├── external_services/
 │           ├── persistence/
 │           └── repositories/
-└── 🧪 tests/
+└── tests/
 ```
 
 ---
 
-## 🚀 Instalación y Ejecución
-
-### Prerrequisitos
-
-- **Python** ≥ 3.11
-- **pip** (gestor de paquetes)
-- **Git**
-
-### Instalación
+## Instalacion
 
 ```bash
 # Clonar el repositorio
@@ -910,63 +751,45 @@ cd SoftwareTextil
 
 # Crear entorno virtual
 python -m venv .venv
-source .venv/bin/activate   # Linux/macOS
-# .venv\Scripts\activate    # Windows
+source .venv/bin/activate
 
 # Instalar dependencias
 pip install -r requirements.txt
 ```
 
-### Ejecución
-
-> ⚠️ **Nota:** La aplicación Flask ejecutable se implementará en próximas iteraciones. El punto de entrada estará dentro de `src/software_textil` y conservará la separación entre controladores, servicios, dominio e infraestructura.
+> La aplicación Flask ejecutable se implementará en próximas iteraciones.
 
 ---
 
-## 🛠️ Tecnologías
+## Tecnologias
 
-| Tecnología | Uso |
-|---|---|
-| ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white) | Lenguaje principal del proyecto |
-| ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white) | Framework web para controladores y rutas HTTP |
-| ![SQLAlchemy](https://img.shields.io/badge/-SQLAlchemy-D71F00?style=flat-square&logo=sqlalchemy&logoColor=white) | Mapeo objeto-relacional para persistencia |
-| ![Mermaid](https://img.shields.io/badge/-Mermaid-FF3670?style=flat-square&logo=mermaid&logoColor=white) | Diagramas visibles directamente en GitHub |
-| ![StarUML](https://img.shields.io/badge/-StarUML-7D4698?style=flat-square) | Modelado UML formal y generación de código |
-| ![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&logoColor=white) | Control de versiones y entrega del repositorio |
-
----
-
-## 📐 Criterios de Diseño
-
-| Criterio | Aplicación en el proyecto |
-|---|---|
-| **DDD** | El equipo modela reglas con conceptos del negocio textil |
-| **Contextos delimitados** | Catálogo, inventario, despachos, usuarios y reportes mantienen responsabilidades separadas |
-| **Agregados** | Cada raíz protege invariantes y evita cambios directos sobre entidades internas |
-| **Repositorios** | El dominio declara contratos y la infraestructura implementa persistencia |
-| **Arquitectura en capas** | Presentación, aplicación, dominio e infraestructura separados |
-| **Bajo acoplamiento** | El dominio no depende de Flask, SQLAlchemy ni detalles de base de datos |
-| **Escalabilidad** | Se pueden agregar módulos sin romper el núcleo de inventario |
+| Tecnologia | Uso |
+| --- | --- |
+| Python 3.11+ | Lenguaje principal |
+| Flask 3.0+ | Framework web para controladores y rutas HTTP |
+| SQLAlchemy 2.0+ | Mapeo objeto-relacional para persistencia |
+| Mermaid | Diagramas visibles directamente en GitHub |
+| StarUML | Modelado UML formal y generacion de codigo |
+| GitHub | Control de versiones y entrega del repositorio |
 
 ---
 
-## 📚 Referencias
+## Criterios de Diseno
 
-| Referencia | Uso en el proyecto |
-|---|---|
-| Evans, E. *Domain-Driven Design* | Guía para entidades, objetos de valor, agregados y repositorios |
-| [Citerus DDD Sample Core](https://github.com/citerus/dddsample-core) | Referencia para documentar relaciones de entidades, capas y API |
-| [Modern DDD Cargo Tracker](https://github.com/eclipse-ee4j/cargotracker) | Referencia para casos de uso, agregados y separación por módulos |
+| Criterio | Aplicacion |
+| --- | --- |
+| DDD | Reglas modeladas con conceptos del negocio textil |
+| Contextos delimitados | Catalogo, inventario, despachos, usuarios y reportes separados |
+| Agregados | Cada raiz protege invariantes |
+| Repositorios | El dominio declara contratos, la infraestructura implementa |
+| Arquitectura en capas | Presentacion, aplicacion, dominio e infraestructura |
+| Bajo acoplamiento | El dominio no depende de Flask ni SQLAlchemy |
+| Escalabilidad | Modulos nuevos sin romper el nucleo |
 
 ---
 
-<div align="center">
+## Referencias
 
-**Universidad Nacional de San Agustín de Arequipa**  
-Facultad de Ingeniería de Producción y Servicios  
-Escuela Profesional de Ciencia de la Computación  
-
-*Ingeniería de Software — 2026*
-
-</div>
-]]>
+- Evans, E. *Domain-Driven Design* — Guía para entidades, objetos de valor, agregados y repositorios
+- [Citerus DDD Sample Core](https://github.com/citerus/dddsample-core) — Referencia para relaciones de entidades, capas y API
+- [Modern DDD Cargo Tracker](https://github.com/eclipse-ee4j/cargotracker) — Referencia para casos de uso y separación por módulos
