@@ -2,9 +2,6 @@
 
 Sistema de gestión de inventario textil desarrollado con **Domain-Driven Design (DDD)** y arquitectura en capas.
 
-> Proyecto académico — **Ingeniería de Software**
-> Universidad Nacional de San Agustín de Arequipa
-
 ---
 
 ## Integrantes
@@ -16,8 +13,6 @@ Sistema de gestión de inventario textil desarrollado con **Domain-Driven Design
 | Huayhua Perez, Lizzy Arlette |
 | Peñalva Humire, Javier Alonzo |
 | Quispe Suarez, Angelo Josué |
-
-**Docente:** Edgar Sarmiento Calisaya — **Grupo:** 3ro A — **Escuela:** Ciencia de la Computación
 
 ---
 
@@ -66,10 +61,6 @@ El equipo mantiene las reglas del negocio dentro del dominio. Flask atiende las 
 ## Modelo de Dominio
 
 El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las prácticas de DDD: entidades, objetos de valor, agregados, servicios de dominio y sus relaciones.
-
-### Organización del modelo con paquetes UML
-
-![Ejemplo de organización del Modelo de Dominio](assets/lab05/figura-01-ejemplo-modelo-dominio.png)
 
 ### Gestión de Inventario y Logística
 
@@ -589,30 +580,57 @@ sequenceDiagram
 
 ### Prototipo de Interfaz
 
-```
-+--------------------------------------------------------------------------------+
-| SoftwareTextil                                      Usuario: Encargado          |
-| Inventario textil                                   Fecha: 2026-06-15           |
-+-------------------------+------------------------------------------------------+
-| Menu                    | Panel principal                                      |
-|                         |                                                      |
-| Inicio                  | Indicadores del dia                                  |
-| Catalogo                | +----------------+----------------+----------------+ |
-| Inventario              | | Stock bajo: 8  | Movimientos:15 | Despachos: 4   | |
-| Movimientos             | +----------------+----------------+----------------+ |
-| Despachos               |                                                      |
-| Reportes                | Acciones rapidas                                     |
-| Usuarios                | [Registrar ingreso] [Registrar salida] [Despachar]  |
-|                         |                                                      |
-|                         | Ultimos movimientos                                  |
-|                         | +------------+----------+----------+---------------+ |
-|                         | | Prenda     | Tipo     | Cantidad | Responsable   | |
-|                         | +------------+----------+----------+---------------+ |
-|                         | | Polo azul  | Salida   | 12       | Almacen       | |
-|                         | | Uniforme   | Ingreso  | 30       | Produccion    | |
-|                         | +------------+----------+----------+---------------+ |
-+-------------------------+------------------------------------------------------+
-```
+**Login**
+
+![Login](assets/Prototipo/01-login.png)
+
+**Catalogo de productos**
+
+![Catalogo de productos](assets/Prototipo/02-catalogo-productos.png)
+
+**Carrito de compras**
+
+![Carrito de compras](assets/Prototipo/03-carrito-compras.png)
+
+**Registrar salida de inventario**
+
+![Registrar salida](assets/Prototipo/04-registrar-salida.png)
+
+**Registrar ingreso de inventario**
+
+![Registrar ingreso](assets/Prototipo/05-registrar-ingreso.png)
+
+**Guia de remision**
+
+![Guia de remision](assets/Prototipo/06-guia-remision.png)
+
+**Gestion de pedidos (administrador)**
+
+![Gestion de pedidos](assets/Prototipo/07-gestion-pedidos-admin.png)
+
+**Panel de control (administrador)**
+
+![Panel de control](assets/Prototipo/08-panel-control-admin.png)
+
+**Generar comprobante electronico**
+
+![Generar comprobante electronico](assets/Prototipo/09-generar-comprobante-electronico.png)
+
+**Enviar a cliente**
+
+![Enviar a cliente](assets/Prototipo/10-enviar-cliente.png)
+
+**Estado SUNAT**
+
+![Estado SUNAT](assets/Prototipo/11-estado-sunat.png)
+
+**Reporte de emitidos**
+
+![Reporte de emitidos](assets/Prototipo/12-reporte-emitidos.png)
+
+**Flujo mobile**
+
+![Flujo mobile](assets/Prototipo/13-flujo-mobile-zuren.png)
 
 ### Flujo de la GUI
 
@@ -714,7 +732,8 @@ SoftwareTextil/
 ├── pyproject.toml
 ├── requirements.txt
 ├── assets/
-│   └── lab05/                # Diagramas UML del modelo de dominio
+│   ├── lab05/                # Diagramas UML del modelo de dominio
+│   └── Prototipo/            # Capturas del prototipo de interfaz
 ├── docs/
 │   ├── prototipo.md
 │   ├── modelo_dominio.md
