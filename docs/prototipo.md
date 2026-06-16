@@ -1,28 +1,28 @@
 # Prototipo Del Sistema
 
-Este documento complementa el README con la propuesta de interfaz para SoftwareTextil. El prototipo esta pensado para el encargado de inventario, tomando como base el rol definido en `lab05.md`.
+SoftwareTextil presenta una interfaz web sencilla para que el encargado de inventario registre operaciones diarias sin perder trazabilidad.
 
 ## Objetivo Del Prototipo
 
-El objetivo es mostrar una interfaz sencilla para trabajar con prendas, stock, movimientos, despachos y reportes. La prioridad es que el usuario pueda encontrar rapidamente las operaciones del dia.
+El prototipo muestra el recorrido principal del usuario: iniciar sesión, revisar el panel, consultar stock, registrar movimientos, preparar despachos y generar reportes.
 
 ## Flujo Principal
 
 ```mermaid
-flowchart LR
-    Login["Inicio de sesion"] --> Panel["Panel principal"]
-    Panel --> Catalogo["Catalogo de prendas"]
-    Panel --> Inventario["Inventario"]
-    Panel --> Movimientos["Movimientos de stock"]
-    Panel --> Despachos["Despachos"]
-    Panel --> Reportes["Reportes"]
-    Panel --> Usuarios["Usuarios"]
+flowchart TD
+    Login["Iniciar sesión"] --> Panel["Ver panel principal"]
+    Panel --> Catalogo["Abrir catálogo"]
+    Panel --> Inventario["Consultar inventario"]
+    Panel --> Movimientos["Registrar movimiento"]
+    Panel --> Despachos["Preparar despacho"]
+    Panel --> Reportes["Generar reporte"]
 
     Catalogo --> RegistroPrenda["Registrar o actualizar prenda"]
-    Inventario --> StockBajo["Revisar stock bajo"]
+    Inventario --> StockBajo["Atender stock bajo"]
     Movimientos --> RegistrarIngreso["Registrar ingreso"]
     Movimientos --> RegistrarSalida["Registrar salida"]
     Movimientos --> AjustarStock["Ajustar stock"]
+    Despachos --> Guia["Emitir guía de remisión"]
     Despachos --> ConfirmarDespacho["Confirmar despacho"]
 ```
 
@@ -30,18 +30,18 @@ flowchart LR
 
 ```text
 +--------------------------------------------------------------------------------+
-| SoftwareTextil                                                                  |
-| Gestion de inventario textil                                                    |
+| SoftwareTextil                                      Usuario: Encargado           |
+| Inventario textil                                   Fecha: 2026-06-15            |
 +-------------------------+------------------------------------------------------+
-| Menu                    | Panel principal                                      |
+| Menú                    | Panel principal                                      |
 |                         |                                                      |
-| Inicio                  | Indicadores                                          |
-| Catalogo                | Stock bajo: 8 prendas                               |
-| Inventario              | Movimientos del dia: 15                             |
-| Movimientos             | Despachos pendientes: 4                             |
+| Inicio                  | Indicadores del día                                  |
+| Catálogo                | +----------------+----------------+----------------+ |
+| Inventario              | | Stock bajo: 8  | Movimientos:15 | Despachos: 4   | |
+| Movimientos             | +----------------+----------------+----------------+ |
 | Despachos               |                                                      |
-| Reportes                | Acciones rapidas                                     |
-| Usuarios                | [Registrar ingreso] [Registrar salida] [Despacho]   |
+| Reportes                | Acciones rápidas                                     |
+| Usuarios                | [Registrar ingreso] [Registrar salida] [Despachar]  |
 +-------------------------+------------------------------------------------------+
 ```
 
@@ -49,21 +49,21 @@ flowchart LR
 
 | Pantalla | Uso |
 | --- | --- |
-| Inicio de sesion | Valida el acceso de usuarios registrados. |
-| Panel principal | Muestra resumen de stock, alertas y movimientos recientes. |
-| Catalogo | Lista prendas con filtros por categoria, talla y color. |
-| Registro de prenda | Permite crear o actualizar una prenda. |
-| Inventario | Muestra stock actual, nivel minimo y estado de alerta. |
+| Inicio de sesión | Valida el acceso de usuarios registrados. |
+| Panel principal | Muestra stock bajo, movimientos y despachos pendientes. |
+| Catálogo | Lista prendas con filtros por categoría, talla y color. |
+| Registro de prenda | Crea o actualiza una prenda. |
+| Inventario | Muestra stock actual, nivel mínimo y estado de alerta. |
 | Movimientos | Registra ingresos, salidas y ajustes. |
-| Despachos | Permite preparar, confirmar o cancelar despachos. |
-| Reportes | Permite consultar movimientos, stock bajo y despachos. |
+| Despachos | Prepara, confirma o cancela despachos. |
+| Reportes | Consulta movimientos, stock bajo y despachos. |
 | Usuarios | Administra usuarios, roles y permisos. |
 
 ## Criterios De Usabilidad
 
-| Criterio | Aplicacion |
+| Criterio | Aplicación |
 | --- | --- |
-| Claridad | Las acciones usan nombres propios del negocio textil. |
+| Claridad | La interfaz usa términos del almacén textil. |
 | Rapidez | El panel principal muestra accesos directos a operaciones frecuentes. |
 | Trazabilidad | Cada movimiento conserva fecha, tipo, cantidad, motivo y usuario. |
 | Control | Las alertas permiten actuar antes de quedarse sin stock. |
