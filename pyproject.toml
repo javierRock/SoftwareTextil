@@ -1,0 +1,13 @@
+[project]
+name = "software-textil"
+version = "0.1.0"
+description = "Sistema universitario de gestion de inventario textil con DDD y arquitectura en capas."
+requires-python = ">=3.11"
+dependencies = [
+    "Flask>=3.0",
+    "SQLAlchemy>=2.0",
+    "Flask-SQLAlchemy>=3.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
