@@ -505,50 +505,23 @@ El modelo fue diseñado en StarUML y se generó código fuente para Python.
 
 ### Casos de Uso
 
-```mermaid
-flowchart LR
-    Encargado["Encargado de inventario"]
-    Administrador["Administrador"]
-    Vendedor["Vendedor"]
-    Cliente["Cliente"]
+Los casos de uso fueron organizados por actor principal del sistema.
 
-    subgraph Sistema["SoftwareTextil"]
-        UC01((Gestionar prendas))
-        UC02((Organizar categorias))
-        UC03((Consultar catalogo))
-        UC04((Consultar stock))
-        UC05((Registrar ingreso))
-        UC06((Registrar salida))
-        UC07((Ajustar stock))
-        UC08((Evaluar stock bajo))
-        UC09((Preparar despacho))
-        UC10((Emitir guia de remision))
-        UC11((Consultar movimientos))
-        UC12((Generar reporte))
-        UC13((Gestionar usuarios))
-    end
+**Cliente**
 
-    Encargado --> UC01
-    Encargado --> UC02
-    Encargado --> UC04
-    Encargado --> UC05
-    Encargado --> UC06
-    Encargado --> UC07
-    Encargado --> UC08
-    Encargado --> UC09
-    Encargado --> UC10
-    Encargado --> UC11
+![Caso de uso - Cliente](assets/casos-uso/cliente.png)
 
-    Administrador --> UC12
-    Administrador --> UC13
-    Administrador --> UC11
+**Administrador del sistema**
 
-    Vendedor --> UC03
-    Vendedor --> UC04
-    Vendedor --> UC09
+![Caso de uso - Administrador del sistema](assets/casos-uso/administrador-sistema.png)
 
-    Cliente --> UC09
-```
+**Contador**
+
+![Caso de uso - Contador](assets/casos-uso/contador.png)
+
+**Administrador y personal de inventario**
+
+![Caso de uso - Administrador y personal de inventario](assets/casos-uso/administrador-inventario.png)
 
 ### Flujo: Registrar Salida
 
