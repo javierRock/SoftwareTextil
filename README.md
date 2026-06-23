@@ -730,6 +730,7 @@ flowchart TB
 SoftwareTextil/
 ├── README.md
 ├── pyproject.toml
+├── uv.lock
 ├── requirements.txt
 ├── assets/
 │   ├── lab05/                # Diagramas UML del modelo de dominio
@@ -768,15 +769,14 @@ SoftwareTextil/
 git clone git@github.com:javierRock/SoftwareTextil.git
 cd SoftwareTextil
 
-# Crear entorno virtual
-python -m venv .venv
-source .venv/bin/activate
+# Crear entorno virtual, resolver e instalar dependencias
+uv sync
 
-# Instalar dependencias
-pip install -r requirements.txt
+# Ejecutar la aplicacion Flask
+uv run flask --app 'software_textil:create_app()' run --debug
 ```
 
-> La aplicación Flask ejecutable se implementará en próximas iteraciones.
+`uv` usa `pyproject.toml` como fuente de dependencias y `uv.lock` para instalaciones reproducibles.
 
 ---
 

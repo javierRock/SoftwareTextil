@@ -242,19 +242,33 @@ sequenceDiagram
 
 ```
 src/software_textil/
-├── presentation/     # Controladores Flask
+├── bootstrap.py       # Composicion de dependencias
+├── presentation/      # Controladores Flask
 │   └── controllers/
-├── application/      # Casos de uso y DTOs
+│       ├── auth_controller.py
+│       ├── catalogo_controller.py
+│       ├── inventario_controller.py
+│       ├── usuarios_controller.py
+│       ├── despachos_controller.py
+│       ├── reportes_controller.py
+│       ├── contabilidad_controller.py
+│       ├── facturacion_controller.py
+│       └── configuracion_controller.py
+├── application/       # Casos de uso y DTOs
 │   ├── dtos/
 │   └── services/
-├── domain/           # Modelo de dominio puro
+├── domain/            # Modelo de dominio puro
 │   ├── catalogo/
 │   ├── inventario/
 │   ├── despachos/
 │   ├── usuarios/
 │   ├── reportes/
+│   ├── contabilidad/
+│   ├── facturacion/
+│   ├── auditoria/
+│   ├── configuracion/
 │   └── compartido/
-└── infrastructure/   # Implementaciones tecnicas
+└── infrastructure/    # Implementaciones tecnicas
     ├── external_services/
     ├── persistence/
     └── repositories/
