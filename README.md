@@ -703,7 +703,6 @@ SoftwareTextil/
 ├── README.md
 ├── pyproject.toml
 ├── uv.lock
-├── requirements.txt
 ├── assets/
 │   ├── Diagramas_uml/        # Diagramas UML por tipo
 │   ├── lab05/                # Diagramas UML del modelo de dominio
@@ -737,19 +736,49 @@ SoftwareTextil/
 
 ## Instalacion
 
+El proyecto usa `uv` para gestionar Python, el entorno virtual y las dependencias. La fuente de dependencias es `pyproject.toml`; `uv.lock` fija las versiones exactas para instalaciones reproducibles.
+
+### Instalar uv
+
+**macOS/Linux**
+
 ```bash
-# Clonar el repositorio
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows 11 PowerShell**
+
+```powershell
+irm https://astral.sh/uv/install.ps1 | iex
+```
+
+### Preparar el proyecto
+
+Los siguientes comandos funcionan igual en macOS, Linux y Windows 11.
+
+```bash
 git clone git@github.com:javierRock/SoftwareTextil.git
 cd SoftwareTextil
 
-# Crear entorno virtual, resolver e instalar dependencias
 uv sync
-
-# Ejecutar la aplicacion Flask
-uv run flask --app 'software_textil:create_app()' run --debug
 ```
 
-`uv` usa `pyproject.toml` como fuente de dependencias y `uv.lock` para instalaciones reproducibles.
+`uv sync` crea `.venv/`, usa Python 3.11 segun `.python-version` e instala las dependencias bloqueadas en `uv.lock`.
+
+### Ejecutar la aplicacion
+
+```bash
+uv run flask --app "software_textil:create_app()" run --debug
+```
+
+### Comandos utiles
+
+```bash
+uv sync --locked
+uv run flask --app "software_textil:create_app()" routes
+```
+
+No es necesario usar `pip install -r requirements.txt`: el proyecto no mantiene `requirements.txt` para evitar duplicar dependencias.
 
 ---
 
@@ -760,6 +789,7 @@ uv run flask --app 'software_textil:create_app()' run --debug
 | Python 3.11+ | Lenguaje principal |
 | Flask 3.0+ | Framework web para controladores y rutas HTTP |
 | SQLAlchemy 2.0+ | Mapeo objeto-relacional para persistencia |
+| uv | Gestion de entorno virtual, dependencias y lockfile |
 | Mermaid | Diagramas visibles directamente en GitHub |
 | StarUML | Modelado UML formal y generacion de codigo |
 | GitHub | Control de versiones y entrega del repositorio |
