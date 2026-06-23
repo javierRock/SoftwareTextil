@@ -6,7 +6,7 @@ Sistema de gestión de inventario textil desarrollado con **Domain-Driven Design
 
 ## Integrantes
 
-| Integrante | 
+| Integrante |
 | --- |
 | Condori Pallardel, Emilio |
 | Gutierrez Castilla, Carlos Enrique |
@@ -509,19 +509,18 @@ Los casos de uso fueron organizados por actor principal del sistema.
 
 **Cliente**
 
-![Caso de uso - Cliente](assets/Diagramas_uml/casos-uso/cliente.png)
-
+![Caso de uso - Cliente](assets/casos-uso/cliente.png)
 **Administrador del sistema**
 
-![Caso de uso - Administrador del sistema](assets/Diagramas_uml/casos-uso/administrador-sistema.png)
+![Caso de uso - Administrador del sistema](assets/casos-uso/administrador-sistema.png)
 
 **Contador**
 
-![Caso de uso - Contador](assets/Diagramas_uml/casos-uso/contador.png)
+![Caso de uso - Contador](assets/casos-uso/contador.png)
 
 **Administrador y personal de inventario**
 
-![Caso de uso - Administrador y personal de inventario](assets/Diagramas_uml/casos-uso/administrador-inventario.png)
+![Caso de uso - Administrador y personal de inventario](assets/casos-uso/administrador-inventario.png)
 
 ### Flujo: Registrar Salida
 
