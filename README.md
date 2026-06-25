@@ -75,11 +75,8 @@ flowchart TD
 
 ---
 
-## Diagramas UML
-
-Los archivos fuente de StarUML se encuentran en `assets/Diagramas_uml/`. Las imágenes exportadas para la documentación están en `assets/figuras_uml/`.
-
-La carpeta `assets/starUML_codigo/` conserva el código generado originalmente por StarUML como evidencia del proceso de modelado. Ese código no se importa directamente en la aplicación porque StarUML genera nombres y firmas que requieren normalización para Python.
+## Modelo de Dominio
+El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las prácticas de DDD: entidades, objetos de valor, agregados, servicios de dominio y sus relaciones.
 
 ### Autenticación
 
