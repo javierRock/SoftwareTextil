@@ -2,17 +2,21 @@
 
 from software_textil.application.services.servicio_autenticacion import ServicioAutenticacion
 from software_textil.application.services.servicio_catalogo import ServicioCatalogo
+from software_textil.application.services.servicio_compras import ServicioCompras
 from software_textil.application.services.servicio_configuracion import ServicioConfiguracion
 from software_textil.application.services.servicio_contabilidad import ServicioContabilidad
 from software_textil.application.services.servicio_despachos import ServicioDespachos
 from software_textil.application.services.servicio_facturacion import ServicioFacturacion
 from software_textil.application.services.servicio_gestion_usuarios import ServicioGestionUsuarios
 from software_textil.application.services.servicio_inventario import ServicioInventario
+from software_textil.application.services.servicio_pagos import ServicioPagos
+from software_textil.application.services.servicio_pedidos import ServicioPedidos
 from software_textil.application.services.servicio_reportes import ServicioReportes
 from software_textil.domain.configuracion.configuracion import ConfiguracionFabrica
 from software_textil.infrastructure.external_services.sunat_client import SunatClient
 from software_textil.infrastructure.repositories.in_memory import (
     InMemoryAlertaStockRepository,
+    InMemoryCarritoRepository,
     InMemoryCatalogoRepository,
     InMemoryConfiguracionRepository,
     InMemoryDespachoRepository,
@@ -21,6 +25,8 @@ from software_textil.infrastructure.repositories.in_memory import (
     InMemoryIntentoLoginRepository,
     InMemoryInventarioRepository,
     InMemoryMovimientoRepository,
+    InMemoryPagoRepository,
+    InMemoryPedidoRepository,
     InMemoryPeriodoContableRepository,
     InMemoryPrendaRepository,
     InMemoryReporteRepository,
@@ -28,9 +34,11 @@ from software_textil.infrastructure.repositories.in_memory import (
     InMemorySesionRepository,
     InMemoryUsuarioRepository,
 )
+from software_textil.infrastructure.security import WorkzeugPasswordHasher
 
 
 def crear_servicios() -> dict[str, object]:
+    password_hasher = WorkzeugPasswordHasher()
     prendas = InMemoryPrendaRepository()
     catalogo = InMemoryCatalogoRepository()
     inventario = InMemoryInventarioRepository()
@@ -46,15 +54,21 @@ def crear_servicios() -> dict[str, object]:
     periodos = InMemoryPeriodoContableRepository()
     configuraciones = InMemoryConfiguracionRepository(ConfiguracionFabrica.crear_default())
     despachos = InMemoryDespachoRepository()
+    carritos = InMemoryCarritoRepository()
+    pedidos = InMemoryPedidoRepository()
+    pagos = InMemoryPagoRepository()
 
     return {
         "catalogo": ServicioCatalogo(prendas, catalogo),
         "inventario": ServicioInventario(inventario, movimientos, alertas),
-        "usuarios": ServicioGestionUsuarios(usuarios, roles),
-        "autenticacion": ServicioAutenticacion(usuarios, sesiones, intentos),
+        "usuarios": ServicioGestionUsuarios(usuarios, roles, password_hasher),
+        "autenticacion": ServicioAutenticacion(usuarios, sesiones, intentos, password_hasher),
         "reportes": ServicioReportes(reportes),
         "contabilidad": ServicioContabilidad(ingresos, egresos, periodos),
         "facturacion": ServicioFacturacion(SunatClient()),
         "configuracion": ServicioConfiguracion(configuraciones),
         "despachos": ServicioDespachos(despachos),
+        "compras": ServicioCompras(carritos),
+        "pedidos": ServicioPedidos(pedidos, carritos),
+        "pagos": ServicioPagos(pagos, pedidos),
     }

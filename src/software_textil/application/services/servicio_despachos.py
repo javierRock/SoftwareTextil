@@ -1,5 +1,6 @@
 """Casos de uso de despachos."""
 
+from software_textil.application.errors import NotFoundError
 from software_textil.domain.despachos.despacho import Despacho, FabricaDespacho
 from software_textil.domain.despachos.repositorios import RepositorioDespacho
 
@@ -34,5 +35,5 @@ class ServicioDespachos:
     def _obtener(self, despacho_id: str) -> Despacho:
         despacho = self.despachos.buscar_por_id(despacho_id)
         if despacho is None:
-            raise ValueError("El despacho no existe")
+            raise NotFoundError("El despacho no existe")
         return despacho

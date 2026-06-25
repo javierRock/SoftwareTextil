@@ -1,8 +1,9 @@
 """Controladores Flask para reportes."""
 
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app, jsonify
 
 from software_textil.domain.compartido.enums import FormatoReporte
+from software_textil.presentation.controllers.http import json_body, optional_int, optional_str, required_str
 from software_textil.presentation.controllers.serializers import to_json
 
 reportes_bp = Blueprint("reportes", __name__, url_prefix="/reportes")
@@ -10,12 +11,12 @@ reportes_bp = Blueprint("reportes", __name__, url_prefix="/reportes")
 
 @reportes_bp.post("/inventario")
 def generar_reporte_inventario():
-    data = request.get_json() or {}
+    data = json_body()
     reporte = current_app.config["services"]["reportes"].generar_reporte_inventario(
-        generado_por=data["generado_por"],
-        stock_actual=int(data.get("stock_actual", 0)),
-        stock_minimo=int(data.get("stock_minimo", 0)),
-        movimientos_periodo=int(data.get("movimientos_periodo", 0)),
-        formato=FormatoReporte(data.get("formato", "pdf")),
+        generado_por=required_str(data, "generado_por"),
+        stock_actual=optional_int(data, "stock_actual"),
+        stock_minimo=optional_int(data, "stock_minimo"),
+        movimientos_periodo=optional_int(data, "movimientos_periodo"),
+        formato=FormatoReporte(optional_str(data, "formato", "pdf")),
     )
     return jsonify(to_json(reporte)), 201

@@ -3,6 +3,7 @@
 from uuid import uuid4
 
 from software_textil.application.dtos.comandos import RegistrarPrendaDTO
+from software_textil.application.errors import NotFoundError
 from software_textil.domain.catalogo.prenda import Categoria, Prenda, PrendaFabrica, TipoProducto
 from software_textil.domain.catalogo.repositorios import RepositorioCatalogo, RepositorioPrenda
 from software_textil.domain.compartido.dinero import Dinero
@@ -28,7 +29,7 @@ class ServicioCatalogo:
     def editar_prenda(self, prenda_id: str, nombre: str | None = None, descripcion: str | None = None) -> Prenda:
         prenda = self.prendas.buscar_por_id(prenda_id)
         if prenda is None:
-            raise ValueError("La prenda no existe")
+            raise NotFoundError("La prenda no existe")
         if nombre is not None:
             prenda.nombre = nombre
         if descripcion is not None:

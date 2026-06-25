@@ -4,13 +4,17 @@ from flask import Flask
 
 from software_textil.bootstrap import crear_servicios
 from software_textil.infrastructure.persistence.database import db
+from software_textil.presentation.error_handlers import register_error_handlers
 from software_textil.presentation.controllers.auth_controller import auth_bp
 from software_textil.presentation.controllers.catalogo_controller import catalogo_bp
+from software_textil.presentation.controllers.compras_controller import compras_bp
 from software_textil.presentation.controllers.configuracion_controller import configuracion_bp
 from software_textil.presentation.controllers.contabilidad_controller import contabilidad_bp
 from software_textil.presentation.controllers.despachos_controller import despachos_bp
 from software_textil.presentation.controllers.facturacion_controller import facturacion_bp
 from software_textil.presentation.controllers.inventario_controller import inventario_bp
+from software_textil.presentation.controllers.pagos_controller import pagos_bp
+from software_textil.presentation.controllers.pedidos_controller import pedidos_bp
 from software_textil.presentation.controllers.reportes_controller import reportes_bp
 from software_textil.presentation.controllers.usuarios_controller import usuarios_bp
 
@@ -25,7 +29,9 @@ def create_app(config: dict | None = None) -> Flask:
         app.config.update(config)
 
     db.init_app(app)
-    app.config["services"] = crear_servicios()
+    if "services" not in app.config:
+        app.config["services"] = crear_servicios()
+    register_error_handlers(app)
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(catalogo_bp)
@@ -36,6 +42,9 @@ def create_app(config: dict | None = None) -> Flask:
     app.register_blueprint(contabilidad_bp)
     app.register_blueprint(facturacion_bp)
     app.register_blueprint(configuracion_bp)
+    app.register_blueprint(compras_bp)
+    app.register_blueprint(pedidos_bp)
+    app.register_blueprint(pagos_bp)
 
     @app.get("/health")
     def health() -> dict[str, str]:

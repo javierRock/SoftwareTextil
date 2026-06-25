@@ -119,6 +119,8 @@ class StockPrenda:
 class InventarioFabrica:
     @staticmethod
     def crear(prenda_id: str, stock_inicial: int, stock_minimo: int, ubicacion: str) -> StockPrenda:
+        if stock_inicial < 0:
+            raise ValueError("El stock inicial no puede ser negativo")
         if stock_minimo < 0:
             raise ValueError("El stock minimo no puede ser negativo")
         return StockPrenda(

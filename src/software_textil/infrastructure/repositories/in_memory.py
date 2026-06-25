@@ -6,14 +6,21 @@ from software_textil.domain.auditoria.registro_auditoria import RegistroAuditori
 from software_textil.domain.auditoria.repositorios import RepositorioAuditoria
 from software_textil.domain.catalogo.prenda import Categoria, Prenda, TipoProducto
 from software_textil.domain.catalogo.repositorios import RepositorioCatalogo, RepositorioPrenda
+from software_textil.domain.compartido.enums import EstadoAlerta
 from software_textil.domain.configuracion.configuracion import ConfiguracionGeneral
 from software_textil.domain.configuracion.repositorios import RepositorioConfiguracion
 from software_textil.domain.contabilidad.contabilidad import EgresoTextil, Ingreso, PeriodoContable
 from software_textil.domain.contabilidad.repositorios import RepositorioEgreso, RepositorioIngreso, RepositorioPeriodoContable
+from software_textil.domain.compras.carrito import CarritoCompras
+from software_textil.domain.compras.repositorios import RepositorioCarrito
 from software_textil.domain.despachos.despacho import Despacho
 from software_textil.domain.despachos.repositorios import RepositorioDespacho
 from software_textil.domain.inventario.repositorios import RepositorioAlertaStock, RepositorioInventario, RepositorioMovimientoInventario
 from software_textil.domain.inventario.stock_prenda import AlertaStock, MovimientoInventario, StockPrenda
+from software_textil.domain.pagos.pago import Pago
+from software_textil.domain.pagos.repositorios import RepositorioPago
+from software_textil.domain.pedidos.pedido import Pedido
+from software_textil.domain.pedidos.repositorios import RepositorioPedido
 from software_textil.domain.reportes.reporte import Reporte
 from software_textil.domain.reportes.repositorios import RepositorioReporte
 from software_textil.domain.usuarios.repositorios import RepositorioIntentoLogin, RepositorioRol, RepositorioSesion, RepositorioUsuario
@@ -77,6 +84,16 @@ class InMemoryAlertaStockRepository(RepositorioAlertaStock):
 
     def guardar(self, alerta: AlertaStock) -> None:
         self.items[alerta.id] = alerta
+
+    def buscar_pendiente_por_stock(self, stock_id: str) -> AlertaStock | None:
+        return next(
+            (
+                alerta
+                for alerta in self.items.values()
+                if alerta.stock_id == stock_id and alerta.estado == EstadoAlerta.PENDIENTE
+            ),
+            None,
+        )
 
 
 class InMemoryUsuarioRepository(RepositorioUsuario):
@@ -153,7 +170,7 @@ class InMemoryEgresoRepository(RepositorioEgreso):
         self.items[egreso.id] = egreso
 
     def listar_por_fecha(self, desde: datetime, hasta: datetime) -> list[EgresoTextil]:
-        return list(self.items.values())
+        return [egreso for egreso in self.items.values() if desde <= egreso.fecha <= hasta]
 
 
 class InMemoryPeriodoContableRepository(RepositorioPeriodoContable):
@@ -192,3 +209,45 @@ class InMemoryConfiguracionRepository(RepositorioConfiguracion):
 
     def obtener(self) -> ConfiguracionGeneral | None:
         return self.configuracion
+
+
+class InMemoryCarritoRepository(RepositorioCarrito):
+    def __init__(self) -> None:
+        self.items: dict[str, CarritoCompras] = {}
+
+    def guardar(self, carrito: CarritoCompras) -> None:
+        self.items[carrito.id] = carrito
+
+    def buscar_por_id(self, carrito_id: str) -> CarritoCompras | None:
+        return self.items.get(carrito_id)
+
+    def listar_por_cliente(self, cliente_id: str) -> list[CarritoCompras]:
+        return [carrito for carrito in self.items.values() if carrito.cliente_id == cliente_id]
+
+
+class InMemoryPedidoRepository(RepositorioPedido):
+    def __init__(self) -> None:
+        self.items: dict[str, Pedido] = {}
+
+    def guardar(self, pedido: Pedido) -> None:
+        self.items[pedido.id] = pedido
+
+    def buscar_por_id(self, pedido_id: str) -> Pedido | None:
+        return self.items.get(pedido_id)
+
+    def listar_por_cliente(self, cliente_id: str) -> list[Pedido]:
+        return [pedido for pedido in self.items.values() if pedido.cliente_id == cliente_id]
+
+
+class InMemoryPagoRepository(RepositorioPago):
+    def __init__(self) -> None:
+        self.items: dict[str, Pago] = {}
+
+    def guardar(self, pago: Pago) -> None:
+        self.items[pago.id] = pago
+
+    def buscar_por_id(self, pago_id: str) -> Pago | None:
+        return self.items.get(pago_id)
+
+    def listar_por_pedido(self, pedido_id: str) -> list[Pago]:
+        return [pago for pago in self.items.values() if pago.pedido_id == pedido_id]

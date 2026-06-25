@@ -15,6 +15,31 @@ class EstadoDespacho(StrEnum):
     CANCELADO = "cancelado"
 
 
+class EstadoCarrito(StrEnum):
+    ABIERTO = "abierto"
+    CONVERTIDO = "convertido"
+    CANCELADO = "cancelado"
+
+
+class EstadoPedido(StrEnum):
+    CREADO = "creado"
+    PAGADO = "pagado"
+    CANCELADO = "cancelado"
+
+
+class EstadoPago(StrEnum):
+    PENDIENTE = "pendiente"
+    APROBADO = "aprobado"
+    RECHAZADO = "rechazado"
+
+
+class MetodoPago(StrEnum):
+    EFECTIVO = "efectivo"
+    TARJETA = "tarjeta"
+    TRANSFERENCIA = "transferencia"
+    YAPE = "yape"
+
+
 class EstadoPrenda(StrEnum):
     ACTIVA = "activa"
     INACTIVA = "inactiva"

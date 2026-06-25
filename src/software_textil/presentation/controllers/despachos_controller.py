@@ -1,7 +1,8 @@
 """Controladores Flask para despachos."""
 
-from flask import Blueprint, current_app, jsonify, request
+from flask import Blueprint, current_app, jsonify
 
+from software_textil.presentation.controllers.http import json_body, optional_str_list, required_str
 from software_textil.presentation.controllers.serializers import to_json
 
 despachos_bp = Blueprint("despachos", __name__, url_prefix="/despachos")
@@ -9,10 +10,10 @@ despachos_bp = Blueprint("despachos", __name__, url_prefix="/despachos")
 
 @despachos_bp.post("")
 def crear_despacho():
-    data = request.get_json() or {}
+    data = json_body()
     despacho = current_app.config["services"]["despachos"].crear_despacho(
-        data["cliente"],
-        data.get("movimientos_ids", []),
+        required_str(data, "cliente"),
+        optional_str_list(data, "movimientos_ids"),
     )
     return jsonify(to_json(despacho)), 201
 

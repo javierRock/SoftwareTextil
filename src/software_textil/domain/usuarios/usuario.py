@@ -32,7 +32,7 @@ class Credencial:
     username: str
     password_hash: str
     salt: str
-    algoritmo_hash: str = "sha256"
+    algoritmo_hash: str = "werkzeug-pbkdf2"
     ultimo_cambio: datetime = field(default_factory=datetime.utcnow)
 
 

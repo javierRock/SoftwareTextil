@@ -30,6 +30,7 @@ class EgresoTextil:
     monto: Dinero
     tipo_material: str
     factura: str
+    fecha: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass

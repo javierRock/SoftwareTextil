@@ -1,6 +1,7 @@
 """Casos de uso de inventario."""
 
 from software_textil.application.dtos.comandos import AjustarStockDTO, CrearStockDTO, MovimientoStockDTO
+from software_textil.application.errors import NotFoundError
 from software_textil.domain.inventario.repositorios import (
     RepositorioAlertaStock,
     RepositorioInventario,
@@ -24,7 +25,7 @@ class ServicioInventario:
         stock = InventarioFabrica.crear(dto.prenda_id, dto.stock_inicial, dto.stock_minimo, dto.ubicacion)
         self.inventario.guardar(stock)
         alerta = stock.generar_alerta_si_corresponde()
-        if alerta:
+        if alerta and self.alertas.buscar_pendiente_por_stock(stock.id) is None:
             self.alertas.guardar(alerta)
         return stock
 
@@ -44,7 +45,7 @@ class ServicioInventario:
         self.inventario.guardar(stock)
         self.movimientos.guardar(movimiento)
         alerta = stock.generar_alerta_si_corresponde()
-        if alerta:
+        if alerta and self.alertas.buscar_pendiente_por_stock(stock.id) is None:
             self.alertas.guardar(alerta)
         return movimiento
 
@@ -58,5 +59,5 @@ class ServicioInventario:
     def _obtener_stock(self, prenda_id: str) -> StockPrenda:
         stock = self.inventario.buscar_por_prenda(prenda_id)
         if stock is None:
-            raise ValueError("No existe stock para la prenda")
+            raise NotFoundError("No existe stock para la prenda")
         return stock

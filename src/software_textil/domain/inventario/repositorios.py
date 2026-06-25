@@ -33,3 +33,7 @@ class RepositorioAlertaStock(ABC):
     @abstractmethod
     def guardar(self, alerta: AlertaStock) -> None:
         raise NotImplementedError
+
+    @abstractmethod
+    def buscar_pendiente_por_stock(self, stock_id: str) -> AlertaStock | None:
+        raise NotImplementedError

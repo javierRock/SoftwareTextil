@@ -1,11 +1,11 @@
 """Casos de uso de autenticacion."""
 
 from datetime import datetime, timedelta
-from hashlib import sha256
 from secrets import token_urlsafe
 from uuid import uuid4
 
 from software_textil.application.dtos.comandos import LoginDTO
+from software_textil.application.ports import PasswordHasher
 from software_textil.domain.compartido.enums import EstadoUsuario, ResultadoLogin
 from software_textil.domain.usuarios.repositorios import RepositorioIntentoLogin, RepositorioSesion, RepositorioUsuario
 from software_textil.domain.usuarios.usuario import IntentoLogin, Sesion
@@ -17,10 +17,12 @@ class ServicioAutenticacion:
         usuarios: RepositorioUsuario,
         sesiones: RepositorioSesion,
         intentos: RepositorioIntentoLogin,
+        password_hasher: PasswordHasher,
     ) -> None:
         self.usuarios = usuarios
         self.sesiones = sesiones
         self.intentos = intentos
+        self.password_hasher = password_hasher
 
     def autenticar(self, dto: LoginDTO) -> tuple[ResultadoLogin, Sesion | None]:
         usuario = self.usuarios.buscar_por_email(dto.username)
@@ -30,7 +32,7 @@ class ServicioAutenticacion:
         if usuario.estado != EstadoUsuario.ACTIVO:
             self._registrar_intento(dto, False, "usuario_inactivo")
             return ResultadoLogin.USUARIO_INACTIVO, None
-        if self._hash_password(dto.password, usuario.credencial.salt) != usuario.credencial.password_hash:
+        if not self.password_hasher.verify(dto.password, usuario.credencial.password_hash, usuario.credencial.salt):
             self._registrar_intento(dto, False, "password_incorrecto")
             return ResultadoLogin.CREDENCIALES_INVALIDAS, None
 
@@ -55,10 +57,6 @@ class ServicioAutenticacion:
     def validar_sesion(self, token: str) -> bool:
         sesion = self.sesiones.buscar_por_token(token)
         return bool(sesion and sesion.esta_activa())
-
-    @staticmethod
-    def _hash_password(password: str, salt: str) -> str:
-        return sha256(f"{salt}:{password}".encode("utf-8")).hexdigest()
 
     def _registrar_intento(self, dto: LoginDTO, exitoso: bool, motivo_fallo: str | None) -> None:
         self.intentos.guardar(

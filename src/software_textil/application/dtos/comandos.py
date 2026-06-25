@@ -45,6 +45,8 @@ class CrearUsuarioDTO:
     email: str
     rol_id: str
     creado_por: str | None = None
+    password: str | None = None
+    username: str | None = None
 
 
 @dataclass(frozen=True)
@@ -79,4 +81,40 @@ class EmitirComprobanteDTO:
     tipo: str
     monto: Decimal
     igv: Decimal
+    moneda: str = "PEN"
+
+
+@dataclass(frozen=True)
+class CrearCarritoDTO:
+    cliente_id: str
+
+
+@dataclass(frozen=True)
+class AgregarItemCarritoDTO:
+    carrito_id: str
+    prenda_id: str
+    cantidad: int
+    precio_unitario: Decimal
+    moneda: str = "PEN"
+
+
+@dataclass(frozen=True)
+class ActualizarItemCarritoDTO:
+    carrito_id: str
+    prenda_id: str
+    cantidad: int
+
+
+@dataclass(frozen=True)
+class CrearPedidoDTO:
+    carrito_id: str
+    cliente_id: str
+
+
+@dataclass(frozen=True)
+class ProcesarPagoDTO:
+    pedido_id: str
+    monto: Decimal
+    metodo: str
+    referencia: str = ""
     moneda: str = "PEN"
