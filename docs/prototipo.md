@@ -1,25 +1,26 @@
 # Prototipo Del Sistema
 
-SoftwareTextil presenta una interfaz web para que el encargado de inventario registre operaciones diarias sin perder trazabilidad. A continuación se muestran las pantallas del prototipo organizadas por flujo de usuario.
+El prototipo muestra el flujo principal de SoftwareTextil desde el inicio de sesión hasta la gestión de catálogo, carrito, inventario, pedidos, despachos, facturación y reportes.
+
+---
 
 ## Flujo Principal
 
 ```mermaid
 flowchart TD
-    Login["Iniciar sesion"] --> Panel["Ver panel principal"]
-    Panel --> Catalogo["Abrir catalogo"]
-    Panel --> Inventario["Consultar inventario"]
-    Panel --> Movimientos["Registrar movimiento"]
-    Panel --> Despachos["Preparar despacho"]
-    Panel --> Reportes["Generar reporte"]
-
-    Catalogo --> RegistroPrenda["Registrar o actualizar prenda"]
-    Inventario --> StockBajo["Atender stock bajo"]
-    Movimientos --> RegistrarIngreso["Registrar ingreso"]
-    Movimientos --> RegistrarSalida["Registrar salida"]
-    Movimientos --> AjustarStock["Ajustar stock"]
-    Despachos --> Guia["Emitir guia de remision"]
-    Despachos --> ConfirmarDespacho["Confirmar despacho"]
+    Login["Iniciar sesion"] --> Panel["Panel principal"]
+    Panel --> Catalogo["Catalogo de prendas"]
+    Catalogo --> Carrito["Carrito de compras"]
+    Carrito --> Pedido["Generar pedido"]
+    Pedido --> Pago["Procesar pago"]
+    Pedido --> Despacho["Preparar despacho"]
+    Despacho --> Guia["Emitir guia de remision"]
+    Pago --> Comprobante["Generar comprobante electronico"]
+    Comprobante --> Sunat["Consultar estado SUNAT"]
+    Panel --> Inventario["Gestionar inventario"]
+    Inventario --> Ingreso["Registrar ingreso"]
+    Inventario --> Salida["Registrar salida"]
+    Panel --> Reportes["Consultar reportes"]
 ```
 
 ---
@@ -28,81 +29,81 @@ flowchart TD
 
 ### Login
 
-Pantalla de inicio de sesion para validar el acceso de usuarios registrados.
+Pantalla de inicio de sesión para validar el acceso de usuarios registrados.
 
-![Login](../assets/Prototipo/01-login.png)
+![Login](../assets/figuras_prototipo/01-login.png)
 
-### Catalogo de Productos
+### Catálogo de Productos
 
-Lista de prendas con filtros por categoria, talla y color. Permite buscar y seleccionar productos.
+Lista de prendas con filtros y datos comerciales. Permite revisar productos antes de agregarlos al carrito.
 
-![Catalogo de productos](../assets/Prototipo/02-catalogo-productos.png)
+![Catálogo de productos](../assets/figuras_prototipo/02-catalogo-productos.png)
 
 ### Carrito de Compras
 
-Vista del carrito donde el usuario revisa los productos seleccionados antes de confirmar la operacion.
+Vista para revisar productos seleccionados, cantidades y totales antes de confirmar el pedido.
 
-![Carrito de compras](../assets/Prototipo/03-carrito-compras.png)
+![Carrito de compras](../assets/figuras_prototipo/03-carrito-compras.png)
 
 ### Registrar Salida de Inventario
 
-Formulario para registrar salidas de prendas por venta, despacho, merma o ajuste.
+Formulario para descontar prendas del almacén por venta, despacho, merma o ajuste.
 
-![Registrar salida](../assets/Prototipo/04-registrar-salida.png)
+![Registrar salida](../assets/figuras_prototipo/04-registrar-salida.png)
 
 ### Registrar Ingreso de Inventario
 
-Formulario para registrar entradas de prendas por produccion, compra o devolucion.
+Formulario para registrar entradas por producción, compra o devolución.
 
-![Registrar ingreso](../assets/Prototipo/05-registrar-ingreso.png)
+![Registrar ingreso](../assets/figuras_prototipo/05-registrar-ingreso.png)
 
-### Guia de Remision
+### Guía de Remisión
 
-Pantalla para generar la guia de remision que acompaña el despacho fisico de prendas.
+Pantalla para generar el documento que acompaña el traslado físico de prendas.
 
-![Guia de remision](../assets/Prototipo/06-guia-remision.png)
+![Guía de remisión](../assets/figuras_prototipo/06-guia-remision.png)
 
-### Gestion de Pedidos (Administrador)
+### Gestión de Pedidos
 
-Vista del administrador para revisar, aprobar o rechazar pedidos pendientes.
+Vista administrativa para revisar y gestionar pedidos pendientes.
 
-![Gestion de pedidos](../assets/Prototipo/07-gestion-pedidos-admin.png)
+![Gestión de pedidos](../assets/figuras_prototipo/07-gestion-pedidos-admin.png)
 
-### Panel de Control (Administrador)
+### Panel de Control
 
-Dashboard del administrador con indicadores de stock, movimientos y despachos.
+Dashboard con indicadores de stock, pedidos, movimientos y estado operativo del sistema.
 
-![Panel de control](../assets/Prototipo/08-panel-control-admin.png)
+![Panel de control](../assets/figuras_prototipo/08-panel-control-admin.png)
 
-### Generar Comprobante Electronico
+### Generar Comprobante Electrónico
 
-Pantalla para generar comprobantes electronicos asociados a ventas o despachos.
+Formulario para generar boletas o facturas electrónicas asociadas a ventas o pedidos.
 
-![Generar comprobante electronico](../assets/Prototipo/09-generar-comprobante-electronico.png)
+![Generar comprobante electrónico](../assets/figuras_prototipo/09-generar-comprobante-electronico.png)
 
 ### Enviar a Cliente
 
 Pantalla para enviar documentos o notificaciones al cliente.
 
-![Enviar a cliente](../assets/Prototipo/10-enviar-cliente.png)
+![Enviar a cliente](../assets/figuras_prototipo/10-enviar-cliente.png)
 
 ### Estado SUNAT
 
-Vista del estado de los comprobantes ante SUNAT.
+Vista para consultar el estado de los comprobantes electrónicos enviados a SUNAT.
 
-![Estado SUNAT](../assets/Prototipo/11-estado-sunat.png)
+![Estado SUNAT](../assets/figuras_prototipo/11-estado-sunat.png)
 
 ### Reporte de Emitidos
 
-Reporte con listado de comprobantes emitidos y su estado.
+Listado de comprobantes emitidos y su estado.
 
-![Reporte de emitidos](../assets/Prototipo/12-reporte-emitidos.png)
+![Reporte de emitidos](../assets/figuras_prototipo/12-reporte-emitidos.png)
 
 ### Flujo Mobile
 
-Vista del flujo de la aplicacion en dispositivos moviles.
+Vista del flujo de navegación en dispositivos móviles.
 
-![Flujo mobile](../assets/Prototipo/13-flujo-mobile-zuren.png)
+![Flujo mobile](../assets/figuras_prototipo/13-flujo-mobile-zuren.png)
 
 ---
 
@@ -110,25 +111,27 @@ Vista del flujo de la aplicacion en dispositivos moviles.
 
 | Pantalla | Uso |
 | --- | --- |
-| Inicio de sesion | Valida el acceso de usuarios registrados |
-| Panel principal | Muestra stock bajo, movimientos y despachos pendientes |
-| Catalogo | Lista prendas con filtros por categoria, talla y color |
-| Carrito de compras | Revision de productos seleccionados |
-| Registro de salida | Registra egresos de prendas del almacen |
-| Registro de ingreso | Registra entradas de prendas al almacen |
-| Guia de remision | Genera el documento de traslado fisico |
-| Gestion de pedidos | Administra pedidos pendientes |
-| Panel de control | Dashboard con indicadores del sistema |
-| Comprobante electronico | Generacion de comprobantes de venta |
-| Estado SUNAT | Consulta de estado ante SUNAT |
-| Reportes | Consulta de comprobantes emitidos |
-| Flujo mobile | Navegacion en dispositivos moviles |
+| Inicio de sesión | Valida usuarios registrados |
+| Panel principal | Resume acciones y accesos principales |
+| Catálogo | Lista y filtra prendas disponibles |
+| Carrito | Permite revisar productos antes del pedido |
+| Gestión de pedidos | Administra pedidos pendientes |
+| Registro de ingreso | Registra entradas de stock |
+| Registro de salida | Registra egresos de stock |
+| Guía de remisión | Emite documento para traslado físico |
+| Comprobante electrónico | Genera boletas o facturas |
+| Estado SUNAT | Consulta aceptación o rechazo del comprobante |
+| Reportes | Muestra comprobantes o movimientos emitidos |
+| Flujo mobile | Representa navegación adaptada a móviles |
+
+---
 
 ## Criterios De Usabilidad
 
-| Criterio | Aplicacion |
+| Criterio | Aplicación |
 | --- | --- |
-| Claridad | La interfaz usa terminos del almacen textil |
-| Rapidez | El panel principal muestra accesos directos a operaciones frecuentes |
-| Trazabilidad | Cada movimiento conserva fecha, tipo, cantidad, motivo y usuario |
-| Control | Las alertas permiten actuar antes de quedarse sin stock |
+| Claridad | Usa términos del negocio textil |
+| Rapidez | Prioriza acciones frecuentes desde el panel principal |
+| Trazabilidad | Cada operación conserva fecha, usuario y motivo |
+| Control | Las alertas y estados permiten seguimiento operativo |
+| Adaptabilidad | El flujo considera escritorio y móvil |
