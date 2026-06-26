@@ -32,7 +32,7 @@ Sistema web para la gestión integral de una operación textil. El proyecto cubr
 
 El sistema fue modelado con UML en StarUML y organizado en Python con **Domain-Driven Design (DDD)**, arquitectura en capas, Flask, SQLAlchemy y `uv` como gestor de entorno y dependencias.
 
-Ejemplo de uso del Diagrama de modelo dominio
+Ejemplo de uso del Diagrama de Modelo Dominio
 ![image](assets/figuras_uml/figura-01-ejemplo-modelo-dominio.png "Ejemplo de Ingenieria de Sotfware")
 ---
 
