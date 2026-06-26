@@ -134,7 +134,7 @@ El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las 
 
 ### 2.5.7. Encargado de Inventario y Logística
 
-![Encargado de inventario y logística](assets/figuras_uml/figura-10-encargado-inventario-logistica.png "Alejandro")
+![Encargado de inventario y logística](assets/figuras_uml/figura-02-modelo-inventario-logistica.png "Alejandro")
 
 ---
 
