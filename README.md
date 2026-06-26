@@ -110,7 +110,7 @@ El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las 
 
 ### 2.5.1. Autenticación
 
-[![Módulo de autenticación](assets/figuras_uml/figura-04-modulo-autenticacion.png "Carlota")](www.google.com)
+![Módulo de autenticación](assets/figuras_uml/figura-04-modulo-autenticacion.png "Carlota")
 
 ### 2.5.2. Usuarios y Roles
 
