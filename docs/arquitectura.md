@@ -1,32 +1,32 @@
-# Arquitectura
+# 1. Arquitectura
 
 SoftwareTextil usa una arquitectura en capas con enfoque DDD. El sistema se organiza como un monolito modular: una sola aplicación desplegable, pero con límites internos claros para catálogo, inventario, e-commerce, despachos, contabilidad y facturación.
 
 ---
 
-## Capas
+## 1.1. Capas
 
-| Capa | Responsabilidad |
-| --- | --- |
-| Presentación | Recibe peticiones HTTP mediante controladores Flask |
-| Aplicación | Coordina casos de uso, DTOs y servicios de aplicación |
-| Dominio | Contiene entidades, agregados, objetos de valor, enums y contratos |
-| Infraestructura | Implementa persistencia, repositorios y servicios externos |
+| Capa            | Responsabilidad                                                    |
+| --------------- | ------------------------------------------------------------------ |
+| Presentación    | Recibe peticiones HTTP mediante controladores Flask                |
+| Aplicación      | Coordina casos de uso, DTOs y servicios de aplicación              |
+| Dominio         | Contiene entidades, agregados, objetos de valor, enums y contratos |
+| Infraestructura | Implementa persistencia, repositorios y servicios externos         |
 
 ---
 
-## Reglas De Dependencia
+## 1.2. Reglas De Dependencia
 
-| Regla | Aplicación |
-| --- | --- |
-| El dominio no depende de frameworks | Las entidades no importan Flask ni SQLAlchemy |
-| La aplicación depende del dominio | Los servicios coordinan agregados y repositorios abstractos |
-| La presentación depende de aplicación | Los controladores llaman servicios de aplicación |
+| Regla                                   | Aplicación                                                   |
+| --------------------------------------- | ------------------------------------------------------------ |
+| El dominio no depende de frameworks     | Las entidades no importan Flask ni SQLAlchemy                |
+| La aplicación depende del dominio       | Los servicios coordinan agregados y repositorios abstractos  |
+| La presentación depende de aplicación   | Los controladores llaman servicios de aplicación             |
 | La infraestructura implementa contratos | Los repositorios técnicos implementan interfaces del dominio |
 
 ---
 
-## Vista General
+## 1.3. Vista General
 
 ```mermaid
 flowchart TD
@@ -42,7 +42,7 @@ flowchart TD
 
 ---
 
-## Módulos Del Monolito
+## 1.4. Módulos Del Monolito
 
 ```mermaid
 flowchart TB
@@ -85,7 +85,7 @@ flowchart TB
 
 ---
 
-## Estructura De Paquetes
+## 1.5. Estructura De Paquetes
 
 ```text
 src/software_textil/
@@ -117,43 +117,43 @@ Los módulos `compras`, `pedidos` y `pagos` están definidos por el nuevo modelo
 
 ---
 
-## Controladores Flask
+## 1.6. Controladores Flask
 
-| Blueprint | Responsabilidad |
-| --- | --- |
-| `auth_controller.py` | Login, logout y validación de sesión |
-| `usuarios_controller.py` | Usuarios y roles |
-| `catalogo_controller.py` | Prendas, categorías y tipos de producto |
-| `inventario_controller.py` | Stock, ingresos, salidas y ajustes |
-| `despachos_controller.py` | Creación, preparación, confirmación y cancelación de despachos |
-| `contabilidad_controller.py` | Ingresos y egresos contables |
-| `facturacion_controller.py` | Emisión de comprobantes electrónicos |
-| `reportes_controller.py` | Reportes operativos |
-| `configuracion_controller.py` | Parámetros de configuración |
+| Blueprint                     | Responsabilidad                                                |
+| ----------------------------- | -------------------------------------------------------------- |
+| `auth_controller.py`          | Login, logout y validación de sesión                           |
+| `usuarios_controller.py`      | Usuarios y roles                                               |
+| `catalogo_controller.py`      | Prendas, categorías y tipos de producto                        |
+| `inventario_controller.py`    | Stock, ingresos, salidas y ajustes                             |
+| `despachos_controller.py`     | Creación, preparación, confirmación y cancelación de despachos |
+| `contabilidad_controller.py`  | Ingresos y egresos contables                                   |
+| `facturacion_controller.py`   | Emisión de comprobantes electrónicos                           |
+| `reportes_controller.py`      | Reportes operativos                                            |
+| `configuracion_controller.py` | Parámetros de configuración                                    |
 
 ---
 
-## Diagramas UML Relacionados
+## 1.7. Diagramas UML Relacionados
 
-### Modelo Base
+### 1.7.1. Modelo Base
 
 ![Modelo de dominio de inventario y logística](../assets/figuras_uml/figura-02-modelo-inventario-logistica.png)
 
-### Encargado de Inventario y Logística
+### 1.7.2. Encargado de Inventario y Logística
 
 ![Encargado de inventario y logística](../assets/figuras_uml/figura-10-encargado-inventario-logistica.png)
 
-### E-commerce: Compras, Pedidos y Pagos
+### 1.7.3. E-commerce: Compras, Pedidos y Pagos
 
 ![Módulos de compras pedidos y pagos](../assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png)
 
-### Sistema Contable Textil
+### 1.7.4. Sistema Contable Textil
 
 ![Sistema contable textil](../assets/figuras_uml/figura-09-sistema-contable-textil.png)
 
 ---
 
-## Flujo Registrar Salida
+## 1.8. Flujo Registrar Salida
 
 ```mermaid
 sequenceDiagram
@@ -181,12 +181,12 @@ sequenceDiagram
 
 ---
 
-## Criterios Arquitectónicos
+## 1.9. Criterios Arquitectónicos
 
-| Criterio | Decisión |
-| --- | --- |
-| Simplicidad inicial | Monolito modular en lugar de microservicios |
-| Bajo acoplamiento | Dominio independiente de Flask y SQLAlchemy |
-| Trazabilidad | Movimientos, despachos y comprobantes conservan responsables y fechas |
-| Evolución | Nuevos módulos se agregan repitiendo el patrón dominio-aplicación-presentación-infraestructura |
-| Persistencia | SQLAlchemy queda aislado en infraestructura |
+| Criterio            | Decisión                                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| Simplicidad inicial | Monolito modular en lugar de microservicios                                                    |
+| Bajo acoplamiento   | Dominio independiente de Flask y SQLAlchemy                                                    |
+| Trazabilidad        | Movimientos, despachos y comprobantes conservan responsables y fechas                          |
+| Evolución           | Nuevos módulos se agregan repitiendo el patrón dominio-aplicación-presentación-infraestructura |
+| Persistencia        | SQLAlchemy queda aislado en infraestructura                                                    |

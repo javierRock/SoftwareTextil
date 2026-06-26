@@ -1,6 +1,7 @@
 """Modelos ORM que reflejan la estructura principal del dominio."""
 
 from datetime import datetime
+from decimal import Decimal
 
 from sqlalchemy import DateTime, ForeignKey, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -108,4 +109,71 @@ class RegistroAuditoriaModel(db.Model):
     realizado_por: Mapped[str] = mapped_column(String(36), nullable=False)
     detalles: Mapped[str] = mapped_column(Text, default="")
     ip: Mapped[str] = mapped_column(String(60), default="")
+    fecha: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+
+class CarritoModel(db.Model):
+    __tablename__ = "carritos"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    cliente_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    estado: Mapped[str] = mapped_column(String(30), nullable=False)
+
+    items: Mapped[list["ItemCarritoModel"]] = relationship(
+        "ItemCarritoModel",
+        cascade="all, delete-orphan",
+        order_by="ItemCarritoModel.id",
+    )
+
+
+class ItemCarritoModel(db.Model):
+    __tablename__ = "items_carrito"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    carrito_id: Mapped[str] = mapped_column(String(36), ForeignKey("carritos.id"), nullable=False)
+    prenda_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    cantidad: Mapped[int] = mapped_column(nullable=False)
+    precio_monto: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    precio_moneda: Mapped[str] = mapped_column(String(3), default="PEN")
+
+
+class PedidoModel(db.Model):
+    __tablename__ = "pedidos"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    cliente_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    carrito_id: Mapped[str] = mapped_column(String(36), ForeignKey("carritos.id"), nullable=False)
+    total_monto: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    total_moneda: Mapped[str] = mapped_column(String(3), default="PEN")
+    estado: Mapped[str] = mapped_column(String(30), nullable=False)
+    fecha_creacion: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    detalles: Mapped[list["DetallePedidoModel"]] = relationship(
+        "DetallePedidoModel",
+        cascade="all, delete-orphan",
+        order_by="DetallePedidoModel.id",
+    )
+
+
+class DetallePedidoModel(db.Model):
+    __tablename__ = "detalles_pedido"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    pedido_id: Mapped[str] = mapped_column(String(36), ForeignKey("pedidos.id"), nullable=False)
+    prenda_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    cantidad: Mapped[int] = mapped_column(nullable=False)
+    precio_monto: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    precio_moneda: Mapped[str] = mapped_column(String(3), default="PEN")
+
+
+class PagoModel(db.Model):
+    __tablename__ = "pagos"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    pedido_id: Mapped[str] = mapped_column(String(36), ForeignKey("pedidos.id"), nullable=False)
+    monto_monto: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
+    monto_moneda: Mapped[str] = mapped_column(String(3), default="PEN")
+    metodo: Mapped[str] = mapped_column(String(30), nullable=False)
+    referencia: Mapped[str] = mapped_column(String(120), default="")
+    estado: Mapped[str] = mapped_column(String(30), nullable=False)
     fecha: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

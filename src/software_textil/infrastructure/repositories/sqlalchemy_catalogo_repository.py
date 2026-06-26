@@ -24,7 +24,6 @@ class SQLAlchemyPrendaRepository(RepositorioPrenda):
         model.registrado_por = prenda.registrado_por
         model.fecha_registro = prenda.fecha_registro
         db.session.add(model)
-        db.session.commit()
 
     def buscar_por_id(self, prenda_id: str) -> Prenda | None:
         model = db.session.get(PrendaModel, prenda_id)
@@ -37,7 +36,6 @@ class SQLAlchemyPrendaRepository(RepositorioPrenda):
 class SQLAlchemyCatalogoRepository(RepositorioCatalogo):
     def guardar_categoria(self, categoria: Categoria) -> None:
         db.session.merge(CategoriaModel(id=categoria.id, nombre=categoria.nombre, descripcion=categoria.descripcion))
-        db.session.commit()
 
     def guardar_tipo_producto(self, tipo_producto: TipoProducto) -> None:
         db.session.merge(
@@ -47,7 +45,6 @@ class SQLAlchemyCatalogoRepository(RepositorioCatalogo):
                 atributos_base=json.dumps(tipo_producto.atributos_base),
             )
         )
-        db.session.commit()
 
 
 def _prenda_from_model(model: PrendaModel) -> Prenda:

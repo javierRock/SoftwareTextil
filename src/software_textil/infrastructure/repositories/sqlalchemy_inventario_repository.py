@@ -17,7 +17,6 @@ class SQLAlchemyInventarioRepository(RepositorioInventario):
         model.unidad = stock.unidad
         model.ultima_actualizacion = stock.ultima_actualizacion
         db.session.add(model)
-        db.session.commit()
 
     def buscar_por_prenda(self, prenda_id: str) -> StockPrenda | None:
         model = StockPrendaModel.query.filter_by(prenda_id=prenda_id).first()
@@ -41,7 +40,6 @@ class SQLAlchemyMovimientoInventarioRepository(RepositorioMovimientoInventario):
                 fecha=movimiento.fecha,
             )
         )
-        db.session.commit()
 
     def listar_por_stock(self, stock_id: str) -> list[MovimientoInventario]:
         models = MovimientoInventarioModel.query.filter_by(stock_id=stock_id).all()

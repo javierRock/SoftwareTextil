@@ -30,7 +30,11 @@ def create_app(config: dict | None = None) -> Flask:
 
     db.init_app(app)
     if "services" not in app.config:
-        app.config["services"] = crear_servicios()
+        persistence_backend = app.config.get("PERSISTENCE_BACKEND", app.config.get("PERSISTENCE", "memory"))
+        app.config["services"] = crear_servicios(persistence_backend)
+    if app.config.get("CREATE_DATABASE"):
+        with app.app_context():
+            db.create_all()
     register_error_handlers(app)
 
     app.register_blueprint(auth_bp)

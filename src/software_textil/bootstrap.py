@@ -34,11 +34,20 @@ from software_textil.infrastructure.repositories.in_memory import (
     InMemorySesionRepository,
     InMemoryUsuarioRepository,
 )
+from software_textil.infrastructure.repositories.sqlalchemy_compras_repository import SQLAlchemyCarritoRepository
+from software_textil.infrastructure.repositories.sqlalchemy_pagos_repository import SQLAlchemyPagoRepository
+from software_textil.infrastructure.repositories.sqlalchemy_pedidos_repository import SQLAlchemyPedidoRepository
 from software_textil.infrastructure.security import WorkzeugPasswordHasher
+from software_textil.infrastructure.unit_of_work import InMemoryUnitOfWork, SQLAlchemyUnitOfWork
 
 
-def crear_servicios() -> dict[str, object]:
+def crear_servicios(persistence_backend: str = "memory") -> dict[str, object]:
+    if persistence_backend not in {"memory", "sqlalchemy"}:
+        raise ValueError("Backend de persistencia no soportado")
+
     password_hasher = WorkzeugPasswordHasher()
+    memory_uow = InMemoryUnitOfWork()
+    checkout_uow = SQLAlchemyUnitOfWork() if persistence_backend == "sqlalchemy" else memory_uow
     prendas = InMemoryPrendaRepository()
     catalogo = InMemoryCatalogoRepository()
     inventario = InMemoryInventarioRepository()
@@ -54,21 +63,29 @@ def crear_servicios() -> dict[str, object]:
     periodos = InMemoryPeriodoContableRepository()
     configuraciones = InMemoryConfiguracionRepository(ConfiguracionFabrica.crear_default())
     despachos = InMemoryDespachoRepository()
-    carritos = InMemoryCarritoRepository()
-    pedidos = InMemoryPedidoRepository()
-    pagos = InMemoryPagoRepository()
+
+    if persistence_backend == "sqlalchemy":
+        carritos = SQLAlchemyCarritoRepository()
+        pedidos = SQLAlchemyPedidoRepository()
+        pagos = SQLAlchemyPagoRepository()
+    else:
+        carritos = InMemoryCarritoRepository()
+        pedidos = InMemoryPedidoRepository()
+        pagos = InMemoryPagoRepository()
 
     return {
-        "catalogo": ServicioCatalogo(prendas, catalogo),
-        "inventario": ServicioInventario(inventario, movimientos, alertas),
-        "usuarios": ServicioGestionUsuarios(usuarios, roles, password_hasher),
-        "autenticacion": ServicioAutenticacion(usuarios, sesiones, intentos, password_hasher),
-        "reportes": ServicioReportes(reportes),
-        "contabilidad": ServicioContabilidad(ingresos, egresos, periodos),
+        "catalogo": ServicioCatalogo(prendas, catalogo, memory_uow),
+        "inventario": ServicioInventario(inventario, movimientos, alertas, memory_uow),
+        "usuarios": ServicioGestionUsuarios(usuarios, roles, password_hasher, memory_uow),
+        "autenticacion": ServicioAutenticacion(usuarios, sesiones, intentos, password_hasher, memory_uow),
+        "reportes": ServicioReportes(reportes, memory_uow),
+        "contabilidad": ServicioContabilidad(ingresos, egresos, periodos, memory_uow),
         "facturacion": ServicioFacturacion(SunatClient()),
-        "configuracion": ServicioConfiguracion(configuraciones),
-        "despachos": ServicioDespachos(despachos),
-        "compras": ServicioCompras(carritos),
-        "pedidos": ServicioPedidos(pedidos, carritos),
-        "pagos": ServicioPagos(pagos, pedidos),
+        "configuracion": ServicioConfiguracion(configuraciones, memory_uow),
+        "despachos": ServicioDespachos(despachos, memory_uow),
+        "compras": ServicioCompras(carritos, checkout_uow),
+        "pedidos": ServicioPedidos(pedidos, carritos, checkout_uow),
+        "pagos": ServicioPagos(pagos, pedidos, checkout_uow),
+        "unit_of_work": checkout_uow,
+        "persistence_backend": persistence_backend,
     }

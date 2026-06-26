@@ -32,6 +32,8 @@ class CarritoCompras:
 
     def agregar_item(self, prenda_id: str, cantidad: int, precio_unitario: Dinero) -> None:
         self._validar_abierto()
+        if cantidad <= 0:
+            raise ValueError("La cantidad del item debe ser mayor a cero")
         existente = self._buscar_item(prenda_id)
         if existente is None:
             self.items.append(ItemCarrito(str(uuid4()), prenda_id, cantidad, precio_unitario))

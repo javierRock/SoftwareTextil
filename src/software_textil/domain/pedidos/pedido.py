@@ -39,6 +39,8 @@ class Pedido:
         self.estado = EstadoPedido.CANCELADO
 
     def marcar_pagado(self) -> None:
+        if self.estado == EstadoPedido.PAGADO:
+            raise ValueError("El pedido ya esta pagado")
         if self.estado == EstadoPedido.CANCELADO:
             raise ValueError("No se puede pagar un pedido cancelado")
         self.estado = EstadoPedido.PAGADO
