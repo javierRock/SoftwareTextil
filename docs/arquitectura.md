@@ -1,261 +1,192 @@
-# Arquitectura
+# 1. Arquitectura
 
-SoftwareTextil usa una arquitectura en capas con DDD. El equipo trabaja con un monolito modular porque reduce la complejidad inicial y conserva limites claros entre modulos de negocio.
-
-## Capas
-
-| Capa | Responsabilidad |
-| --- | --- |
-| Presentacion | Recibe peticiones HTTP mediante controladores Flask |
-| Aplicacion | Coordina casos de uso y comandos del usuario |
-| Dominio | Contiene agregados, objetos de valor, servicios de dominio, eventos e interfaces de repositorio |
-| Infraestructura | Implementa persistencia con SQLAlchemy y conecta servicios externos |
-
-## Reglas De Dependencia
-
-| Regla | Aplicacion |
-| --- | --- |
-| El dominio evita frameworks | Las entidades no importan Flask ni SQLAlchemy |
-| La aplicacion usa el dominio | Los servicios coordinan agregados y repositorios abstractos |
-| La presentacion usa la aplicacion | Los controladores llaman casos de uso |
-| La infraestructura implementa contratos | Los repositorios concretos guardan y consultan datos |
+SoftwareTextil usa una arquitectura en capas con enfoque DDD. El sistema se organiza como un monolito modular: una sola aplicación desplegable, pero con límites internos claros para catálogo, inventario, e-commerce, despachos, contabilidad y facturación.
 
 ---
 
-## Vista General
+## 1.1. Capas
+
+| Capa            | Responsabilidad                                                    |
+| --------------- | ------------------------------------------------------------------ |
+| Presentación    | Recibe peticiones HTTP mediante controladores Flask                |
+| Aplicación      | Coordina casos de uso, DTOs y servicios de aplicación              |
+| Dominio         | Contiene entidades, agregados, objetos de valor, enums y contratos |
+| Infraestructura | Implementa persistencia, repositorios y servicios externos         |
+
+---
+
+## 1.2. Reglas De Dependencia
+
+| Regla                                   | Aplicación                                                   |
+| --------------------------------------- | ------------------------------------------------------------ |
+| El dominio no depende de frameworks     | Las entidades no importan Flask ni SQLAlchemy                |
+| La aplicación depende del dominio       | Los servicios coordinan agregados y repositorios abstractos  |
+| La presentación depende de aplicación   | Los controladores llaman servicios de aplicación             |
+| La infraestructura implementa contratos | Los repositorios técnicos implementan interfaces del dominio |
+
+---
+
+## 1.3. Vista General
 
 ```mermaid
 flowchart TD
-    UsuarioWeb["Usuario web"] --> Flask["Flask routes / controllers"]
-    Flask --> AppServices["Servicios de aplicacion"]
-    AppServices --> DomainModel["Modelo de dominio"]
-    AppServices --> Ports["Repositorios abstractos"]
-    SQLA["Repositorios SQLAlchemy"] --> Ports
-    SQLA --> DB[("Base de datos relacional")]
-    AppServices --> Events["Eventos de dominio"]
-    Events --> Reports["Reportes"]
+    Usuario["Usuario web"] --> Controllers["Controladores Flask"]
+    Controllers --> Services["Servicios de aplicacion"]
+    Services --> Domain["Modelo de dominio"]
+    Services --> Ports["Contratos de repositorio"]
+    Repositories["Repositorios SQLAlchemy / memoria"] --> Ports
+    Repositories --> DB[("Base de datos")]
+    Services --> External["Servicios externos"]
+    External --> Sunat["SUNAT"]
 ```
 
 ---
 
-## Diagrama De Paquetes
+## 1.4. Módulos Del Monolito
 
 ```mermaid
 flowchart TB
-    subgraph Root["SoftwareTextil"]
-        Docs["docs"]
-        Tests["tests"]
-
-        subgraph Src["src/software_textil"]
-            subgraph Presentation["presentation"]
-                Controllers["controllers"]
-            end
-
-            subgraph Application["application"]
-                Services["services"]
-                DTOs["dtos"]
-            end
-
-            subgraph Domain["domain"]
-                Catalogo["catalogo"]
-                Inventario["inventario"]
-                Despachos["despachos"]
-                Usuarios["usuarios"]
-                Reportes["reportes"]
-                Compartido["compartido"]
-            end
-
-            subgraph Infrastructure["infrastructure"]
-                Persistence["persistence"]
-                Repositories["repositories"]
-                External["external_services"]
-            end
-        end
+    subgraph Web["Presentacion"]
+        AuthC["auth_controller"]
+        CatalogoC["catalogo_controller"]
+        InventarioC["inventario_controller"]
+        UsuariosC["usuarios_controller"]
+        DespachosC["despachos_controller"]
+        ContabilidadC["contabilidad_controller"]
+        FacturacionC["facturacion_controller"]
     end
 
-    Controllers --> Services
-    Services --> Domain
-    Repositories --> Domain
-    Persistence --> Repositories
-    External --> Services
-    Tests --> Domain
-    Tests --> Services
+    subgraph App["Aplicacion"]
+        AuthS["servicio_autenticacion"]
+        CatalogoS["servicio_catalogo"]
+        InventarioS["servicio_inventario"]
+        UsuariosS["servicio_gestion_usuarios"]
+        DespachosS["servicio_despachos"]
+        ContabilidadS["servicio_contabilidad"]
+        FacturacionS["servicio_facturacion"]
+    end
+
+    subgraph Domain["Dominio"]
+        Catalogo["catalogo"]
+        Inventario["inventario"]
+        Compras["compras"]
+        Pedidos["pedidos"]
+        Pagos["pagos"]
+        Despachos["despachos"]
+        Usuarios["usuarios"]
+        Contabilidad["contabilidad"]
+        Facturacion["facturacion"]
+        Compartido["compartido"]
+    end
+
+    Web --> App
+    App --> Domain
 ```
 
 ---
 
-## Modelo de Dominio UML (StarUML)
+## 1.5. Estructura De Paquetes
 
-El modelo fue diseñado en StarUML. A continuacion se muestra el diagrama principal del dominio textil.
-
-![Modelo de dominio de inventario y logistica](../assets/lab05/figura-02-modelo-inventario-logistica.png)
-
-### Ejemplo de organizacion del Modelo de Dominio
-
-![Ejemplo de organizacion del Modelo de Dominio](../assets/lab05/figura-01-ejemplo-modelo-dominio.png)
-
----
-
-## Diagrama De Clases Por Capas
-
-```mermaid
-classDiagram
-    direction LR
-
-    class InventarioController {
-        +consultar_stock()
-        +registrar_ingreso()
-        +registrar_salida()
-        +ajustar_stock()
-    }
-
-    class DespachoController {
-        +crear_despacho()
-        +confirmar_despacho()
-        +cancelar_despacho()
-    }
-
-    class ServicioInventario {
-        +consultar_stock(prenda_id)
-        +registrar_ingreso(comando)
-        +registrar_salida(comando)
-        +ajustar_stock(comando)
-    }
-
-    class ServicioDespacho {
-        +crear_despacho(comando)
-        +confirmar_despacho(id)
-        +cancelar_despacho(id)
-    }
-
-    class RepositorioStockPrenda {
-        <<interface>>
-        +guardar(stock)
-        +buscar_por_prenda(prenda_id)
-        +actualizar(stock)
-    }
-
-    class RepositorioMovimiento {
-        <<interface>>
-        +guardar(movimiento)
-        +listar_por_stock(stock_id)
-    }
-
-    class RepositorioDespacho {
-        <<interface>>
-        +guardar(despacho)
-        +buscar_por_id(id)
-        +actualizar(despacho)
-    }
-
-    class StockPrenda {
-        +registrar_ingreso(cantidad, motivo)
-        +registrar_salida(cantidad, motivo)
-        +ajustar(cantidad, motivo)
-        +esta_bajo_minimo()
-    }
-
-    class MovimientoInventario {
-        +crear_ingreso(stock_id, cantidad)
-        +crear_salida(stock_id, cantidad)
-        +crear_ajuste(stock_id, cantidad)
-    }
-
-    class Despacho {
-        +preparar()
-        +confirmar()
-        +cancelar()
-        +agregar_salida(movimiento)
-    }
-
-    class StockPrendaSQLAlchemy {
-        +guardar(stock)
-        +buscar_por_prenda(prenda_id)
-        +actualizar(stock)
-    }
-
-    class MovimientoSQLAlchemy {
-        +guardar(movimiento)
-        +listar_por_stock(stock_id)
-    }
-
-    class DespachoSQLAlchemy {
-        +guardar(despacho)
-        +buscar_por_id(id)
-        +actualizar(despacho)
-    }
-
-    InventarioController --> ServicioInventario
-    DespachoController --> ServicioDespacho
-    ServicioInventario --> RepositorioStockPrenda
-    ServicioInventario --> RepositorioMovimiento
-    ServicioInventario --> StockPrenda
-    ServicioInventario --> MovimientoInventario
-    ServicioDespacho --> RepositorioDespacho
-    ServicioDespacho --> Despacho
-    StockPrendaSQLAlchemy ..|> RepositorioStockPrenda
-    MovimientoSQLAlchemy ..|> RepositorioMovimiento
-    DespachoSQLAlchemy ..|> RepositorioDespacho
+```text
+src/software_textil/
+├── __init__.py              # create_app de Flask
+├── bootstrap.py             # Composición de dependencias
+├── presentation/
+│   └── controllers/         # Blueprints Flask
+├── application/
+│   ├── dtos/                # DTOs de entrada
+│   └── services/            # Casos de uso
+├── domain/
+│   ├── catalogo/
+│   ├── inventario/
+│   ├── despachos/
+│   ├── usuarios/
+│   ├── reportes/
+│   ├── contabilidad/
+│   ├── facturacion/
+│   ├── auditoria/
+│   ├── configuracion/
+│   └── compartido/
+└── infrastructure/
+    ├── external_services/   # Integraciones externas, como SUNAT
+    ├── persistence/         # Configuración y modelos SQLAlchemy
+    └── repositories/        # Implementaciones de repositorios
 ```
 
----
-
-## Codigo Generado desde StarUML
-
-El modelo fue diseñado en StarUML y se genero codigo fuente para Python.
-
-![Codigo generado para Python](../assets/lab05/figura-03-codigo-generado-python.png)
+Los módulos `compras`, `pedidos` y `pagos` están definidos por el nuevo modelo UML e-commerce. Su incorporación al código debe seguir la misma separación: dominio puro, servicios de aplicación, controladores e infraestructura.
 
 ---
 
-## Flujo Registrar Salida
+## 1.6. Controladores Flask
+
+| Blueprint                     | Responsabilidad                                                |
+| ----------------------------- | -------------------------------------------------------------- |
+| `auth_controller.py`          | Login, logout y validación de sesión                           |
+| `usuarios_controller.py`      | Usuarios y roles                                               |
+| `catalogo_controller.py`      | Prendas, categorías y tipos de producto                        |
+| `inventario_controller.py`    | Stock, ingresos, salidas y ajustes                             |
+| `despachos_controller.py`     | Creación, preparación, confirmación y cancelación de despachos |
+| `contabilidad_controller.py`  | Ingresos y egresos contables                                   |
+| `facturacion_controller.py`   | Emisión de comprobantes electrónicos                           |
+| `reportes_controller.py`      | Reportes operativos                                            |
+| `configuracion_controller.py` | Parámetros de configuración                                    |
+
+---
+
+## 1.7. Diagramas UML Relacionados
+
+### 1.7.1. Modelo Base
+
+![Modelo de dominio de inventario y logística](../assets/figuras_uml/figura-02-modelo-inventario-logistica.png)
+
+### 1.7.2. Encargado de Inventario y Logística
+
+![Encargado de inventario y logística](../assets/figuras_uml/figura-10-encargado-inventario-logistica.png)
+
+### 1.7.3. E-commerce: Compras, Pedidos y Pagos
+
+![Módulos de compras pedidos y pagos](../assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png)
+
+### 1.7.4. Sistema Contable Textil
+
+![Sistema contable textil](../assets/figuras_uml/figura-09-sistema-contable-textil.png)
+
+---
+
+## 1.8. Flujo Registrar Salida
 
 ```mermaid
 sequenceDiagram
     actor Encargado as Encargado de inventario
     participant API as InventarioController
     participant Servicio as ServicioInventario
-    participant StockRepo as RepositorioStockPrenda
-    participant MovRepo as RepositorioMovimiento
+    participant StockRepo as RepositorioInventario
+    participant MovRepo as RepositorioMovimientoInventario
     participant Stock as StockPrenda
     participant DB as Base de datos
 
     Encargado->>API: Solicita registrar salida
-    API->>Servicio: registrar_salida(comando)
+    API->>Servicio: registrar_salida(dto)
     Servicio->>StockRepo: buscar_por_prenda(prenda_id)
     StockRepo->>DB: Consulta stock
-    DB-->>StockRepo: Devuelve stock
-    StockRepo-->>Servicio: Entrega StockPrenda
-    Servicio->>Stock: registrar_salida(cantidad, motivo)
-    Stock-->>Servicio: Devuelve movimiento y evento
-    Servicio->>StockRepo: actualizar(stock)
+    DB-->>StockRepo: Datos de stock
+    StockRepo-->>Servicio: StockPrenda
+    Servicio->>Stock: registrar_salida(cantidad, motivo, usuario_id)
+    Stock-->>Servicio: MovimientoInventario
+    Servicio->>StockRepo: guardar(stock)
     Servicio->>MovRepo: guardar(movimiento)
-    StockRepo->>DB: Actualiza stock
-    MovRepo->>DB: Inserta movimiento
-    Servicio-->>API: Confirma operacion
-    API-->>Encargado: Muestra salida registrada
+    Servicio-->>API: Movimiento registrado
+    API-->>Encargado: Confirma salida
 ```
 
 ---
 
-## Estructura De Carpetas
+## 1.9. Criterios Arquitectónicos
 
-```
-src/software_textil/
-├── presentation/     # Controladores Flask
-│   └── controllers/
-├── application/      # Casos de uso y DTOs
-│   ├── dtos/
-│   └── services/
-├── domain/           # Modelo de dominio puro
-│   ├── catalogo/
-│   ├── inventario/
-│   ├── despachos/
-│   ├── usuarios/
-│   ├── reportes/
-│   └── compartido/
-└── infrastructure/   # Implementaciones tecnicas
-    ├── external_services/
-    ├── persistence/
-    └── repositories/
-```
+| Criterio            | Decisión                                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| Simplicidad inicial | Monolito modular en lugar de microservicios                                                    |
+| Bajo acoplamiento   | Dominio independiente de Flask y SQLAlchemy                                                    |
+| Trazabilidad        | Movimientos, despachos y comprobantes conservan responsables y fechas                          |
+| Evolución           | Nuevos módulos se agregan repitiendo el patrón dominio-aplicación-presentación-infraestructura |
+| Persistencia        | SQLAlchemy queda aislado en infraestructura                                                    |

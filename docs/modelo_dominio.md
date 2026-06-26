@@ -1,236 +1,145 @@
-# Modelo De Dominio
+# 1. Modelo De Dominio
 
-SoftwareTextil modela el inventario textil con DDD. El dominio usa terminos cercanos al trabajo diario del almacen y protege las reglas mediante agregados, objetos de valor, repositorios y servicios de dominio.
-
-## Lenguaje Ubicuo
-
-| Termino | Definicion |
-| --- | --- |
-| Prenda | Producto textil terminado, como polo, pantalon, uniforme o casaca |
-| Stock | Cantidad disponible de una prenda en almacen |
-| Nivel minimo | Cantidad limite que activa una alerta de reposicion |
-| Ingreso | Entrada de prendas por produccion, compra o devolucion |
-| Salida | Egreso de prendas por venta, despacho, merma o ajuste |
-| Ajuste | Correccion manual por conteo fisico, deterioro o regularizacion |
-| Movimiento | Registro inmutable de un ingreso, salida o ajuste |
-| Despacho | Preparacion y entrega fisica de prendas a un cliente |
-| Guia de remision | Documento que acompaña el traslado fisico de las prendas |
-| Alerta de stock bajo | Aviso que aparece cuando el stock actual baja del nivel minimo |
-| Categoria | Agrupacion de prendas por linea comercial o uso |
+SoftwareTextil organiza el negocio textil con DDD. El dominio usa conceptos del trabajo real: prendas, stock, carrito, pedidos, pagos, despachos, comprobantes, ingresos, egresos y cierre contable.
 
 ---
 
-## Modelo de Dominio UML (StarUML)
+## 1.1. Lenguaje Ubicuo
 
-Modelo principal que organiza el dominio textil alrededor de inventario, movimientos, despachos y facturacion electronica.
-
-![Modelo de dominio de inventario y logistica](../assets/lab05/figura-02-modelo-inventario-logistica.png)
+| Término                 | Definición                                                  |
+| ----------------------- | ----------------------------------------------------------- |
+| Prenda                  | Producto textil terminado disponible para venta o despacho  |
+| Categoría               | Agrupación comercial de prendas                             |
+| Stock                   | Cantidad disponible de una prenda en almacén                |
+| Nivel mínimo            | Umbral que activa una alerta de reposición                  |
+| Movimiento              | Registro de ingreso, salida o ajuste de stock               |
+| Carrito                 | Selección temporal de productos antes de generar un pedido  |
+| Pedido                  | Solicitud formal de compra generada desde el carrito        |
+| Detalle de pedido       | Línea del pedido con producto, cantidad y precio unitario   |
+| Pago                    | Registro del método y procesamiento económico del pedido    |
+| Despacho                | Preparación y entrega física de prendas                     |
+| Guía de remisión        | Documento que acompaña el traslado físico                   |
+| Comprobante electrónico | Boleta o factura enviada a SUNAT                            |
+| Ingreso contable        | Entrada económica registrada en contabilidad                |
+| Egreso contable         | Salida económica por compra, proveedor, material o servicio |
+| Periodo contable        | Mes y año usados para declaraciones y cierre                |
 
 ---
 
-## Contextos Delimitados
+## 1.2. Contextos Delimitados
 
 ```mermaid
 flowchart TB
     subgraph Core["Nucleo del negocio"]
         Catalogo["Catalogo"]
         Inventario["Inventario"]
+        Compras["Compras"]
+        Pedidos["Pedidos"]
+        Pagos["Pagos"]
         Despachos["Despachos"]
     end
 
     subgraph Soporte["Contextos de soporte"]
-        Usuarios["Usuarios"]
-        Reportes["Reportes"]
+        Usuarios["Usuarios y roles"]
+        Contabilidad["Contabilidad"]
+        Facturacion["Facturacion"]
+        Configuracion["Configuracion"]
         Compartido["Compartido"]
     end
 
     Catalogo --> Inventario
-    Inventario --> Despachos
-    Inventario --> Reportes
+    Catalogo --> Compras
+    Compras --> Pedidos
+    Pedidos --> Pagos
+    Pedidos --> Despachos
+    Despachos --> Inventario
+    Pagos --> Facturacion
+    Pedidos --> Contabilidad
+    Usuarios --> Compras
     Usuarios --> Inventario
-    Usuarios --> Despachos
-    Compartido --> Catalogo
-    Compartido --> Inventario
-    Compartido --> Despachos
+    Compartido --> Core
+    Compartido --> Soporte
 ```
 
-| Contexto | Responsabilidad |
-| --- | --- |
-| Catalogo | Mantiene prendas, categorias, tallas, colores y precios |
-| Inventario | Controla stock, ingresos, salidas, ajustes y alertas |
-| Despachos | Gestiona preparacion, confirmacion y guia de remision |
-| Usuarios | Administra usuarios, roles y permisos |
-| Reportes | Consulta stock, movimientos, alertas y despachos |
-| Compartido | Objetos de valor, eventos y errores del dominio |
+| Contexto     | Responsabilidad                                          |
+| ------------ | -------------------------------------------------------- |
+| Catálogo     | Mantiene prendas, categorías y tipos de producto         |
+| Inventario   | Controla stock, movimientos, alertas y consultas         |
+| Compras      | Administra carrito e items seleccionados                 |
+| Pedidos      | Genera pedidos, detalle e historial                      |
+| Pagos        | Registra método y procesamiento de pagos                 |
+| Despachos    | Gestiona preparación, confirmación y guía de remisión    |
+| Usuarios     | Administra usuarios, roles, permisos y sesiones          |
+| Contabilidad | Registra ingresos, egresos, impuestos y cierre           |
+| Facturación  | Emite comprobantes electrónicos y conecta con SUNAT      |
+| Compartido   | Agrupa enums, objetos de valor y conceptos reutilizables |
 
 ---
 
-## Modulos del Dominio (StarUML)
+## 1.3. Agregados Principales
 
-### Autenticacion y Catalogo
-
-Entidades y servicios de autenticacion, credenciales, sesiones, catalogo, prendas y categorias.
-
-![Modulos de autenticacion y catalogo](../assets/lab05/figura-04-modulos-autenticacion-catalogo.png)
-
-### Usuarios e Inventario
-
-Modulos para usuarios, roles, permisos, inventario, stock, movimientos y alertas.
-
-![Modulos de usuarios e inventario](../assets/lab05/figura-05-modulos-usuarios-inventario.png)
-
-### Configuracion y Reportes
-
-Configuracion general del sistema, parametros y reportes de inventario o ventas.
-
-![Modulos de configuracion y reportes](../assets/lab05/figura-06-modulos-configuracion-reportes.png)
-
-### Sistema Contable Textil
-
-Contextos delimitados para autenticacion, gestion de ingresos/egresos, inventario, facturacion SUNAT, impuestos y auditoria.
-
-![Sistema contable textil](../assets/lab05/figura-07-sistema-contable-textil.png)
-
-### Dominio E-Commerce Textil
-
-Agregados y relaciones para usuarios, carrito de compras, historial, pedidos, catalogo, pagos y entregas.
-
-![Dominio e-commerce textil](../assets/lab05/figura-08-dominio-ecommerce-textil.png)
+| Agregado     | Raíz                      | Repositorio                               | Invariante principal                                      |
+| ------------ | ------------------------- | ----------------------------------------- | --------------------------------------------------------- |
+| Prenda       | `Prenda`                  | `RepositorioPrenda`                       | Una prenda pertenece a una categoría válida               |
+| Stock        | `StockPrenda`             | `RepositorioInventario`                   | No permite salidas mayores al stock disponible            |
+| Movimiento   | `MovimientoInventario`    | `RepositorioMovimientoInventario`         | Un movimiento registrado no debe modificarse              |
+| Carrito      | `CarritoCompras`          | `RepositorioCarrito`                      | El total refleja la suma de sus items                     |
+| Pedido       | `Pedido`                  | `RepositorioPedido`                       | Un pedido confirmado conserva su detalle                  |
+| Pago         | `Pago`                    | `RepositorioPago`                         | Un pago procesado conserva método y estado                |
+| Despacho     | `Despacho`                | `RepositorioDespacho`                     | Un despacho confirmado no vuelve a pendiente              |
+| Usuario      | `Usuario`                 | `RepositorioUsuario`                      | Un usuario activo debe tener rol asignado                 |
+| Contabilidad | `Ingreso`, `EgresoTextil` | `RepositorioIngreso`, `RepositorioEgreso` | Todo movimiento contable conserva monto, fecha y concepto |
+| Facturación  | `ComprobanteElectronico`  | Servicio externo SUNAT                    | Un comprobante conserva serie, número, monto e IGV        |
 
 ---
 
-## Agregados
+## 1.4. Diagramas UML Exportados
 
-| Agregado | Raiz | Repositorio | Invariante principal |
-| --- | --- | --- | --- |
-| Prenda | `Prenda` | `RepositorioPrenda` | Una prenda mantiene un codigo unico y una categoria valida |
-| Stock | `StockPrenda` | `RepositorioStockPrenda` | El stock no permite salidas mayores a la cantidad disponible |
-| Movimiento | `MovimientoInventario` | `RepositorioMovimientoInventario` | Un movimiento no cambia despues de registrarse |
-| Despacho | `Despacho` | `RepositorioDespacho` | Un despacho confirmado no vuelve a estado pendiente |
-| Usuario | `Usuario` | `RepositorioUsuario` | Un usuario activo debe tener un rol asignado |
+### 1.4.1. Modelo Base De Dominio
 
----
+![Modelo de dominio de inventario y logística](../assets/figuras_uml/figura-02-modelo-inventario-logistica.png)
 
-## Diagrama De Clases Del Dominio
+### 1.4.2. Autenticación
 
-```mermaid
-classDiagram
-    direction LR
+![Módulo de autenticación](../assets/figuras_uml/figura-04-modulo-autenticacion.png)
 
-    class Prenda {
-        <<AggregateRoot>>
-        +str id
-        +CodigoPrenda codigo
-        +str nombre
-        +Talla talla
-        +Color color
-        +Dinero precio
-        +bool activa
-        +activar()
-        +desactivar()
-    }
+### 1.4.3. Usuarios y Roles
 
-    class Categoria {
-        +str id
-        +str nombre
-        +str descripcion
-    }
+![Módulo de usuarios y roles](../assets/figuras_uml/figura-05-modulo-usuarios-roles.png)
 
-    class StockPrenda {
-        <<AggregateRoot>>
-        +str id
-        +str prenda_id
-        +Cantidad cantidad_actual
-        +Cantidad nivel_minimo
-        +registrar_ingreso(cantidad, motivo)
-        +registrar_salida(cantidad, motivo)
-        +ajustar(cantidad, motivo)
-        +esta_bajo_minimo()
-    }
+### 1.4.4. Inventario
 
-    class MovimientoInventario {
-        <<AggregateRoot>>
-        +str id
-        +TipoMovimiento tipo
-        +Cantidad cantidad
-        +datetime fecha
-        +str motivo
-        +str usuario_id
-    }
+![Módulo de inventario](../assets/figuras_uml/figura-06-modulo-inventario.png)
 
-    class Despacho {
-        <<AggregateRoot>>
-        +str id
-        +datetime fecha
-        +EstadoDespacho estado
-        +preparar()
-        +confirmar()
-        +cancelar()
-    }
+### 1.4.5. Catálogo
 
-    class GuiaRemision {
-        +str numero
-        +datetime fecha_emision
-        +str punto_partida
-        +str punto_llegada
-    }
+![Módulo de catálogo](../assets/figuras_uml/figura-07-modulo-catalogo.png)
 
-    class Cantidad {
-        <<ValueObject>>
-        +int valor
-        +str unidad
-    }
+### 1.4.6. Compras, Pedidos y Pagos
 
-    class CodigoPrenda {
-        <<ValueObject>>
-        +str valor
-    }
+![Módulos de compras pedidos y pagos](../assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png)
 
-    class PoliticaStock {
-        <<DomainService>>
-        +validar_salida(stock, cantidad)
-        +evaluar_stock_bajo(stock)
-    }
+### 1.4.7. Sistema Contable Textil
 
-    class StockDescontado {
-        <<DomainEvent>>
-        +str stock_id
-        +Cantidad cantidad
-        +datetime ocurrido_en
-    }
+![Sistema contable textil](../assets/figuras_uml/figura-09-sistema-contable-textil.png)
 
-    Categoria "1" --> "*" Prenda
-    Prenda --> CodigoPrenda
-    Prenda "1" --> "1" StockPrenda
-    StockPrenda --> Cantidad
-    StockPrenda "1" --> "*" MovimientoInventario
-    MovimientoInventario --> Cantidad
-    Despacho "1" --> "*" MovimientoInventario
-    Despacho "1" --> "0..1" GuiaRemision
-    PoliticaStock ..> StockPrenda
-    StockPrenda ..> StockDescontado
-```
+### 1.4.8. Encargado de Inventario y Logística
+
+![Encargado de inventario y logística](../assets/figuras_uml/figura-10-encargado-inventario-logistica.png)
 
 ---
 
-## Relaciones De Entidades
+## 1.5. Relación Entre Código Y Modelo
 
-```mermaid
-erDiagram
-    CATEGORIA ||--o{ PRENDA : agrupa
-    PRENDA ||--|| STOCK_PRENDA : controla
-    STOCK_PRENDA ||--o{ MOVIMIENTO_INVENTARIO : registra
-    STOCK_PRENDA ||--o{ ALERTA_STOCK_BAJO : genera
-    DESPACHO ||--o{ MOVIMIENTO_INVENTARIO : agrupa
-    DESPACHO ||--o| GUIA_REMISION : emite
-    USUARIO ||--o{ MOVIMIENTO_INVENTARIO : registra
-    ROL ||--o{ USUARIO : asigna
-```
+El código final no importa directamente los archivos generados por StarUML. Las salidas de StarUML se usan como referencia arquitectónica y se refinan a Python válido siguiendo convenciones del lenguaje:
 
----
+Los archivos generados se conservan en `assets/starUML_codigo/` como evidencia del proceso, pero el código ejecutable del proyecto vive en `src/software_textil/`.
 
-## Codigo Generado desde StarUML
-
-El modelo fue diseñado en StarUML y se genero codigo fuente para Python.
-
-![Codigo generado para Python](../assets/lab05/figura-03-codigo-generado-python.png)
+| Elemento UML            | Implementación Python            |
+| ----------------------- | -------------------------------- |
+| Entidad o agregado      | `dataclass` en `domain/`         |
+| Value Object            | `dataclass(frozen=True)`         |
+| Enumeración             | `StrEnum`                        |
+| Interfaz de repositorio | Clase abstracta con `ABC`        |
+| Servicio de aplicación  | Clase en `application/services/` |
+| Adaptador técnico       | Clase en `infrastructure/`       |
