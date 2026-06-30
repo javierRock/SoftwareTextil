@@ -1,4 +1,5 @@
 # 1. Tabla de Contenido
+
 - [1. Tabla de Contenido](#1-tabla-de-contenido)
 - [2. SoftwareTextil](#2-softwaretextil)
   - [](#)
@@ -25,15 +26,14 @@
   - [2.10. Tecnologías](#210-tecnologías)
   - [2.11. Referencias](#211-referencias)
 
-
 # 2. SoftwareTextil
 
-Sistema web para la gestión integral de una operación textil. El proyecto cubre catálogo de prendas, inventario, carrito de compras, pedidos, pagos, despachos, facturación electrónica, ingresos, egresos y cierre contable.
+Sistema web para la gestión integral de una operación textil. El proyecto cubre catálogo de prendas, inventario, pedidos, despachos, ingresos, egresos y cierre contable.
 
-El sistema fue modelado con UML en StarUML y organizado en Python con **Domain-Driven Design (DDD)**, arquitectura en capas, Flask, SQLAlchemy y `uv` como gestor de entorno y dependencias.
+El sistema fue modelado con UML en StarUML y organizado en Python con **Domain-Driven Design (DDD)**, arquitectura en capas, DJango, SQLAlchemy y `uv` como gestor de entorno y dependencias.
 
-Ejemplo de uso del Diagrama de Modelo Dominio
-![image](assets/figuras_uml/figura-01-ejemplo-modelo-dominio.png "Ejemplo de Ingenieria de Sotfware")
+![Diagrama de arquitectura en capas](assets/figuras_uml/figura-11-arquitectura-capas.png "Diagrama de clases UML implementado en python")
+
 ---
 
 ## 2.1. Integrantes
@@ -106,6 +106,7 @@ flowchart TD
 ---
 
 ## 2.5. Modelo de Dominio
+
 El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las prácticas de DDD: entidades, objetos de valor, agregados, servicios de dominio y sus relaciones.
 
 ### 2.5.1. Autenticación
@@ -126,7 +127,7 @@ El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las 
 
 ### 2.5.5. Compras, Pedidos y Pagos
 
-![Módulos de compras pedidos y pagos](assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png "Lizzy") 
+![Módulos de compras pedidos y pagos](assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png "Lizzy")
 
 ### 2.5.6. Sistema Contable Textil
 
@@ -251,6 +252,6 @@ uv run flask --app "software_textil:create_app()" routes
 
 ## 2.11. Referencias
 
-- Evans, E. *Domain-Driven Design*.
+- Evans, E. _Domain-Driven Design_.
 - [Citerus DDD Sample Core](https://github.com/citerus/dddsample-core).
 - [Modern DDD Cargo Tracker](https://github.com/eclipse-ee4j/cargotracker).
