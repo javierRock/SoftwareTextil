@@ -1,0 +1,3 @@
+"""Repositorios concretos con Django ORM para pagos. TODO: implementar."""
+
+# from apps.ventas.pagos.domain.repositorios import ...

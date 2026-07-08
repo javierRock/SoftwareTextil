@@ -1,0 +1,3 @@
+"""Repositorios concretos con Django ORM para usuarios. TODO: implementar."""
+
+# from apps.usuarios.domain.repositorios import ...

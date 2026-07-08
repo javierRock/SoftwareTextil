@@ -1,0 +1,3 @@
+"""Repositorios concretos con Django ORM para carrito. TODO: implementar."""
+
+# from apps.ventas.carrito.domain.repositorios import ...

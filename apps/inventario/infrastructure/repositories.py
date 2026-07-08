@@ -1,0 +1,3 @@
+"""Repositorios concretos con Django ORM para inventario. TODO: implementar."""
+
+# from apps.inventario.domain.repositorios import ...
