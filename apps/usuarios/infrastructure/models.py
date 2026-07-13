@@ -1,3 +1,1 @@
-"""Modelos ORM Django para usuarios. TODO: implementar."""
-
-# from django.db import models
+from apps.usuarios.models import *  # noqa
