@@ -1,3 +1,1 @@
-"""Modelos ORM Django para pagos. TODO: implementar."""
-
-# from django.db import models
+from apps.ventas.models import *  # noqa
