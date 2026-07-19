@@ -6,6 +6,14 @@ from uuid import uuid4
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoCarrito
+from apps.ventas.carrito.domain.errors import (
+    CantidadInvalida,
+    CarritoCerrado,
+    CarritoConvertido,
+    CarritoVacio,
+    ItemInexistente,
+    MonedasIncompatibles,
+)
 
 
 @dataclass
@@ -17,7 +25,7 @@ class ItemCarrito:
 
     def __post_init__(self) -> None:
         if self.cantidad <= 0:
-            raise ValueError("La cantidad del item debe ser mayor a cero")
+            raise CantidadInvalida
 
     def subtotal(self) -> Dinero:
         return Dinero(self.precio_unitario.monto * Decimal(self.cantidad), self.precio_unitario.moneda)
@@ -33,13 +41,13 @@ class CarritoCompras:
     def agregar_item(self, prenda_id: str, cantidad: int, precio_unitario: Dinero) -> None:
         self._validar_abierto()
         if cantidad <= 0:
-            raise ValueError("La cantidad del item debe ser mayor a cero")
+            raise CantidadInvalida
         existente = self._buscar_item(prenda_id)
         if existente is None:
             self.items.append(ItemCarrito(str(uuid4()), prenda_id, cantidad, precio_unitario))
             return
         if existente.precio_unitario.moneda != precio_unitario.moneda:
-            raise ValueError("No se pueden mezclar monedas en el carrito")
+            raise MonedasIncompatibles
         existente.cantidad += cantidad
         existente.precio_unitario = precio_unitario
 
@@ -67,17 +75,17 @@ class CarritoCompras:
     def marcar_convertido(self) -> None:
         self._validar_abierto()
         if not self.items:
-            raise ValueError("No se puede generar un pedido desde un carrito vacio")
+            raise CarritoVacio
         self.estado = EstadoCarrito.CONVERTIDO
 
     def cancelar(self) -> None:
         if self.estado == EstadoCarrito.CONVERTIDO:
-            raise ValueError("No se puede cancelar un carrito convertido")
+            raise CarritoConvertido
         self.estado = EstadoCarrito.CANCELADO
 
     def _validar_abierto(self) -> None:
         if self.estado != EstadoCarrito.ABIERTO:
-            raise ValueError("El carrito no esta abierto")
+            raise CarritoCerrado
 
     def _buscar_item(self, prenda_id: str) -> ItemCarrito | None:
         return next((item for item in self.items if item.prenda_id == prenda_id), None)
@@ -85,7 +93,7 @@ class CarritoCompras:
     def _obtener_item(self, prenda_id: str) -> ItemCarrito:
         item = self._buscar_item(prenda_id)
         if item is None:
-            raise ValueError("El item no existe en el carrito")
+            raise ItemInexistente
         return item
 
 

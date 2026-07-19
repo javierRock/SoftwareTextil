@@ -7,6 +7,12 @@ from uuid import uuid4
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPedido
+from apps.ventas.pedidos.domain.errors import (
+    PedidoCancelado,
+    PedidoNoCancelable,
+    PedidoSinDetalles,
+    PedidoYaPagado,
+)
 
 
 @dataclass
@@ -35,14 +41,14 @@ class Pedido:
 
     def cancelar(self) -> None:
         if self.estado == EstadoPedido.PAGADO:
-            raise ValueError("No se puede cancelar un pedido pagado")
+            raise PedidoNoCancelable
         self.estado = EstadoPedido.CANCELADO
 
     def marcar_pagado(self) -> None:
         if self.estado == EstadoPedido.PAGADO:
-            raise ValueError("El pedido ya esta pagado")
+            raise PedidoYaPagado
         if self.estado == EstadoPedido.CANCELADO:
-            raise ValueError("No se puede pagar un pedido cancelado")
+            raise PedidoCancelado
         self.estado = EstadoPedido.PAGADO
 
 
@@ -50,7 +56,7 @@ class PedidoFactory:
     @staticmethod
     def crear(cliente_id: str, carrito_id: str, detalles: list[DetallePedido]) -> Pedido:
         if not detalles:
-            raise ValueError("Un pedido debe tener al menos un detalle")
+            raise PedidoSinDetalles
         total = detalles[0].subtotal()
         for detalle in detalles[1:]:
             total = total.sumar(detalle.subtotal())

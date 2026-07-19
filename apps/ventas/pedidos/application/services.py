@@ -1,6 +1,11 @@
 """Servicios de aplicacion para pedidos."""
 
 from apps.ventas.carrito.infrastructure.repositories import DjangoRepositorioCarrito
+from apps.ventas.pedidos.domain.errors import (
+    CarritoNoEncontrado,
+    CarritoNoPerteneceACliente,
+    PedidoNoEncontrado,
+)
 from apps.ventas.pedidos.domain.pedido import DetallePedido, PedidoFactory
 from apps.ventas.pedidos.infrastructure.repositories import DjangoRepositorioPedido
 
@@ -17,9 +22,9 @@ class ServicioPedidos:
     def generar_desde_carrito(self, carrito_id: str, cliente_id: str):
         carrito = self.repo_carrito.buscar_por_id(carrito_id)
         if carrito is None:
-            raise ValueError("Carrito no encontrado")
+            raise CarritoNoEncontrado
         if carrito.cliente_id != cliente_id:
-            raise ValueError("El carrito no pertenece al cliente")
+            raise CarritoNoPerteneceACliente
 
         detalles = [
             DetallePedido(
@@ -36,7 +41,7 @@ class ServicioPedidos:
     def obtener_pedido(self, pedido_id: str):
         pedido = self.repo_pedido.buscar_por_id(pedido_id)
         if pedido is None:
-            raise ValueError("Pedido no encontrado")
+            raise PedidoNoEncontrado
         return pedido
 
     def listar_por_cliente(self, cliente_id: str):
@@ -45,7 +50,7 @@ class ServicioPedidos:
     def cancelar(self, pedido_id: str):
         pedido = self.repo_pedido.buscar_por_id(pedido_id)
         if pedido is None:
-            raise ValueError("Pedido no encontrado")
+            raise PedidoNoEncontrado
         pedido.cancelar()
         self.repo_pedido.guardar(pedido)
         return pedido

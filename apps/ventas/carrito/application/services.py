@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from apps.compartido.domain.dinero import Dinero
 from apps.ventas.carrito.domain.carrito import CarritoFactory
+from apps.ventas.carrito.domain.errors import CarritoNoEncontrado
 from apps.ventas.carrito.infrastructure.repositories import DjangoRepositorioCarrito
 
 
@@ -19,7 +20,7 @@ class ServicioCompras:
     def agregar_item(self, carrito_id: str, prenda_id: str, cantidad: int, precio_monto: str, precio_moneda: str = "PEN"):
         carrito = self.repo_carrito.buscar_por_id(carrito_id)
         if carrito is None:
-            raise ValueError("Carrito no encontrado")
+            raise CarritoNoEncontrado
         carrito.agregar_item(prenda_id, cantidad, Dinero(Decimal(precio_monto), precio_moneda))
         self.repo_carrito.guardar(carrito)
         return carrito
@@ -27,7 +28,7 @@ class ServicioCompras:
     def quitar_item(self, carrito_id: str, prenda_id: str):
         carrito = self.repo_carrito.buscar_por_id(carrito_id)
         if carrito is None:
-            raise ValueError("Carrito no encontrado")
+            raise CarritoNoEncontrado
         carrito.quitar_item(prenda_id)
         self.repo_carrito.guardar(carrito)
         return carrito
@@ -35,7 +36,7 @@ class ServicioCompras:
     def obtener_carrito(self, carrito_id: str):
         carrito = self.repo_carrito.buscar_por_id(carrito_id)
         if carrito is None:
-            raise ValueError("Carrito no encontrado")
+            raise CarritoNoEncontrado
         return carrito
 
     def listar_carritos_cliente(self, cliente_id: str):
