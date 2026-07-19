@@ -1,3 +1,0 @@
-"""Repositorios concretos con Django ORM para compartido. TODO: implementar."""
-
-# from apps.compartido.domain.repositorios import ...
