@@ -2,162 +2,197 @@
 
 - [1. Tabla de Contenido](#1-tabla-de-contenido)
 - [2. SoftwareTextil](#2-softwaretextil)
-  - [](#)
-  - [2.1. Integrantes](#21-integrantes)
-  - [2.2. Alcance](#22-alcance)
-  - [2.3. Arquitectura](#23-arquitectura)
-  - [2.4. Módulos Del Dominio](#24-módulos-del-dominio)
-  - [2.5. Modelo de Dominio](#25-modelo-de-dominio)
-    - [2.5.1. Autenticación](#251-autenticación)
-    - [2.5.2. Usuarios y Roles](#252-usuarios-y-roles)
-    - [2.5.3. Inventario](#253-inventario)
-    - [2.5.4. Catálogo](#254-catálogo)
-    - [2.5.5. Compras, Pedidos y Pagos](#255-compras-pedidos-y-pagos)
-    - [2.5.6. Sistema Contable Textil](#256-sistema-contable-textil)
-    - [2.5.7. Encargado de Inventario y Logística](#257-encargado-de-inventario-y-logística)
-  - [2.6. Estructura Del Proyecto](#26-estructura-del-proyecto)
-  - [2.7. Instalación](#27-instalación)
-    - [2.7.1. Instalar uv](#271-instalar-uv)
-    - [2.7.2. Preparar el entorno](#272-preparar-el-entorno)
-    - [2.7.3. Ejecutar la aplicación](#273-ejecutar-la-aplicación)
-    - [2.7.4. Ver rutas disponibles](#274-ver-rutas-disponibles)
-  - [2.8. API Principal](#28-api-principal)
-  - [2.9. Documentación Complementaria](#29-documentación-complementaria)
-  - [2.10. Tecnologías](#210-tecnologías)
-  - [2.11. Referencias](#211-referencias)
+  - [2.1. Equipo e Integrantes](#21-equipo-e-integrantes)
+  - [2.2. Propósito del Proyecto](#22-propósito-del-proyecto)
+  - [2.3. Funcionalidades: Casos de Uso y Prototipo](#23-funcionalidades-casos-de-uso-y-prototipo)
+  - [2.4. Modelo de Dominio](#24-modelo-de-dominio)
+    - [2.4.1. Módulos del Dominio](#241-módulos-del-dominio)
+    - [2.4.2. Diagramas de Clases por Módulo](#242-diagramas-de-clases-por-módulo)
+  - [2.5. Visión General de Arquitectura](#25-visión-general-de-arquitectura)
+    - [2.5.1. Arquitectura en Capas](#251-arquitectura-en-capas)
+    - [2.5.2. DDD Táctico en el Código](#252-ddd-táctico-en-el-código)
+    - [2.5.3. Estructura del Proyecto](#253-estructura-del-proyecto)
+  - [2.6. Prácticas de Desarrollo Aplicadas](#26-prácticas-de-desarrollo-aplicadas)
+  - [2.7. Flujo de Trabajo Git](#27-flujo-de-trabajo-git)
+  - [2.8. Instalación](#28-instalación)
+    - [2.8.1. Instalar uv](#281-instalar-uv)
+    - [2.8.2. Preparar el entorno](#282-preparar-el-entorno)
+    - [2.8.3. Ejecutar la aplicación](#283-ejecutar-la-aplicación)
+    - [2.8.4. Verificar el estado del proyecto](#284-verificar-el-estado-del-proyecto)
+  - [2.9. Tecnologías](#29-tecnologías)
+  - [2.10. Documentación Complementaria](#210-documentación-complementaria)
+  - [2.11. Trabajo Futuro](#211-trabajo-futuro)
+  - [2.12. Referencias](#212-referencias)
 
 # 2. SoftwareTextil
 
-Sistema web para la gestión integral de una operación textil. El proyecto cubre catálogo de prendas, inventario, pedidos, despachos, ingresos, egresos y cierre contable.
+Sistema web para la gestión integral de una operación textil: catálogo de prendas, inventario, carrito de compras, pedidos y pagos, con administración de usuarios y roles.
 
-El sistema fue modelado con UML en StarUML y organizado en Python con **Domain-Driven Design (DDD)**, arquitectura en capas, DJango, SQLAlchemy y `uv` como gestor de entorno y dependencias.
+El sistema fue modelado con UML en StarUML y está implementado en Python con **Domain-Driven Design (DDD)**, **arquitectura en capas**, **Django** como framework web MVC, **Django ORM** para persistencia, **Django REST Framework** para la API y `uv` como gestor de entorno y dependencias.
 
-![Diagrama de arquitectura en capas](assets/figuras_uml/figura-11-arquitectura-capas.png "Diagrama de clases UML implementado en python")
-
----
-
-## 2.1. Integrantes
-
-| Integrante                         |
-| ---------------------------------- |
-| Condori Pallardel, Emilio          |
-| Gutierrez Castilla, Carlos Enrique |
-| Huayhua Perez, Lizzy Arlette       |
-| Peñalva Humire, Javier Alonzo      |
-| Quispe Suarez, Angelo Josué        |
+![Diagrama de arquitectura en capas](assets/figuras_uml/figura-11-arquitectura-capas.png "Arquitectura en capas del sistema")
 
 ---
 
-## 2.2. Alcance
+## 2.1. Equipo e Integrantes
 
-SoftwareTextil permite administrar el flujo principal de una empresa textil desde la publicación de prendas hasta el registro contable de la operación.
+**Equipo:** SoftwareTextil — Ingeniería de Software I (2026-B)
 
-| Área           | Alcance                                                       |
-| -------------- | ------------------------------------------------------------- |
-| Catálogo       | Registro de prendas, categorías y tipos de producto           |
-| Inventario     | Control de stock, movimientos, alertas y despachos            |
-| E-commerce     | Carrito de compras, pedidos, historial y pagos                |
-| Administración | Usuarios, roles, permisos, sesiones y configuración           |
-| Contabilidad   | Ingresos, egresos, impuestos, declaraciones y cierre contable |
-| Facturación    | Comprobantes electrónicos y comunicación con SUNAT            |
+| Integrante                         | Módulo asignado       | Rama de trabajo                 |
+| ---------------------------------- | --------------------- | ------------------------------- |
+| Gutierrez Castilla, Carlos Enrique | Autenticación y Roles | `feature/autenticacion-carlos`  |
+| Huayhua Perez, Lizzy Arlette       | Catálogo              | `feature/catalogo-lizzy`        |
+| Condori Pallardel, Alejandro       | Inventario            | `feature/inventario-alejandro`  |
+| Quispe Suarez, Angelo Josué        | Pedidos               | `feature/pedidos-angelo`        |
+| Peñalva Humire, Javier Alonzo      | Pagos                 | `feature/pagos-javier`          |
+
+Cada integrante desarrolla su módulo en su rama feature siguiendo su guía en [`docs/guias/`](docs/guias/). Ver [2.6. Prácticas de Desarrollo Aplicadas](#26-prácticas-de-desarrollo-aplicadas).
 
 ---
 
-## 2.3. Arquitectura
+## 2.2. Propósito del Proyecto
 
-El proyecto usa un monolito modular. Cada módulo conserva sus reglas de negocio dentro del dominio y se comunica con las demás capas mediante servicios y contratos de repositorio.
+SoftwareTextil permite administrar el flujo principal de una empresa textil, desde la publicación de prendas hasta el pago de los pedidos.
+
+| Área           | Alcance                                             |
+| -------------- | --------------------------------------------------- |
+| Catálogo       | Registro de prendas, categorías y tipos de producto |
+| Inventario     | Control de stock, movimientos y alertas             |
+| E-commerce     | Carrito de compras, pedidos, historial y pagos      |
+| Administración | Usuarios, roles, permisos y sesiones                |
+
+---
+
+## 2.3. Funcionalidades: Casos de Uso y Prototipo
+
+Diagramas de casos de uso por actor:
+
+| Actor                       | Diagrama                                                                     |
+| --------------------------- | ---------------------------------------------------------------------------- |
+| Cliente                     | ![Cliente](assets/figuras_casos_uso/cliente.png)                             |
+| Administrador del sistema   | ![Administrador](assets/figuras_casos_uso/administrador-sistema.png)         |
+| Administrador de inventario | ![Adm. inventario](assets/figuras_casos_uso/administrador-inventario.png)    |
+
+Prototipo de interfaz (capturas completas en [`docs/prototipo.md`](docs/prototipo.md)):
+
+| Pantalla             | Captura                                                          |
+| -------------------- | ---------------------------------------------------------------- |
+| Login                | ![Login](assets/figuras_prototipo/01-login.png)                  |
+| Catálogo de prendas  | ![Catálogo](assets/figuras_prototipo/02-catalogo-productos.png)  |
+| Carrito de compras   | ![Carrito](assets/figuras_prototipo/03-carrito-compras.png)      |
+| Gestión de pedidos   | ![Pedidos](assets/figuras_prototipo/07-gestion-pedidos-admin.png) |
+
+---
+
+## 2.4. Modelo de Dominio
+
+El modelo de dominio fue diseñado como diagramas de clases UML siguiendo las prácticas de DDD: entidades, objetos de valor, agregados, servicios de dominio, fábricas y repositorios. El lenguaje ubicuo y los contextos delimitados están en [`docs/modelo_dominio.md`](docs/modelo_dominio.md).
+
+### 2.4.1. Módulos del Dominio
+
+| Módulo                | Responsabilidad principal                             | App                    |
+| --------------------- | ----------------------------------------------------- | ---------------------- |
+| Autenticación y Roles | Credenciales, sesiones, usuarios, roles y permisos    | `apps/usuarios`        |
+| Catálogo              | Prendas, categorías y tipos de producto               | `apps/catalogo`        |
+| Inventario            | Stock, movimientos, alertas y consulta de existencias | `apps/inventario`      |
+| Compras (carrito)     | Carrito de compras e items seleccionados              | `apps/ventas/carrito`  |
+| Pedidos               | Generación, detalle e historial de pedidos            | `apps/ventas/pedidos`  |
+| Pagos                 | Métodos de pago y procesamiento                       | `apps/ventas/pagos`    |
+| Compartido            | Enums, objetos de valor y conceptos comunes           | `apps/compartido`      |
+
+### 2.4.2. Diagramas de Clases por Módulo
+
+**Autenticación**
+
+![Módulo de autenticación](assets/figuras_uml/figura-04-modulo-autenticacion.png)
+
+**Usuarios y Roles**
+
+![Módulo de usuarios y roles](assets/figuras_uml/figura-05-modulo-usuarios-roles.png)
+
+**Inventario**
+
+![Módulo de inventario](assets/figuras_uml/figura-06-modulo-inventario.png)
+
+**Catálogo**
+
+![Módulo de catálogo](assets/figuras_uml/figura-07-modulo-catalogo.png)
+
+**Compras, Pedidos y Pagos**
+
+![Módulos de compras pedidos y pagos](assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png)
+
+---
+
+## 2.5. Visión General de Arquitectura
+
+### 2.5.1. Arquitectura en Capas
+
+El proyecto es un monolito modular con **Django** y **DDD**. Cada módulo conserva sus reglas de negocio en la capa de dominio y se comunica con las demás capas mediante servicios de aplicación y contratos de repositorio.
 
 ```mermaid
 flowchart TD
-    Web["Usuario web"] --> Controllers["Presentacion: controladores Flask"]
+    Web["Usuario web"] --> Controllers["Presentacion: views y serializers DRF"]
     Controllers --> Services["Aplicacion: servicios de casos de uso"]
     Services --> Domain["Dominio: agregados, entidades y value objects"]
-    Services --> Ports["Contratos de repositorio"]
-    Repositories["Infraestructura: repositorios SQLAlchemy"] --> Ports
-    Repositories --> DB[("Base de datos relacional")]
-    Services --> External["Servicios externos: SUNAT"]
+    Services --> Ports["Contratos de repositorio (ABC)"]
+    Repositories["Infraestructura: repositorios Django ORM"] --> Ports
+    Repositories --> DB[("PostgreSQL")]
 ```
 
-| Capa            | Responsabilidad                                                     |
-| --------------- | ------------------------------------------------------------------- |
-| Presentación    | Expone rutas HTTP con Flask                                         |
-| Aplicación      | Coordina casos de uso y DTOs                                        |
-| Dominio         | Contiene reglas de negocio, agregados, objetos de valor y contratos |
-| Infraestructura | Implementa persistencia, repositorios y servicios externos          |
+| Capa            | Responsabilidad                                                           | Carpeta por app   |
+| --------------- | ------------------------------------------------------------------------- | ----------------- |
+| Presentación    | Expone la API REST con Django REST Framework (views, serializers, urls)   | `presentation/`   |
+| Aplicación      | Coordina casos de uso y orquesta el dominio                               | `application/`    |
+| Dominio         | Reglas de negocio: entidades, agregados, objetos de valor y contratos     | `domain/`         |
+| Infraestructura (Repositorio) | Persistencia con Django ORM y repositorios concretos        | `infrastructure/` |
 
----
+### 2.5.2. DDD Táctico en el Código
 
-## 2.4. Módulos Del Dominio
+| Elemento DDD          | Ejemplo en el código                                                              |
+| --------------------- | --------------------------------------------------------------------------------- |
+| Entidad               | `Usuario`, `Prenda`, `Rol` (`apps/*/domain/`)                                     |
+| Objeto de Valor       | `Dinero`, `Periodo` (`apps/compartido/domain/`), `Stock` (`apps/inventario/domain/stock_prenda.py`) |
+| Agregado              | `StockPrenda`, `CarritoCompras`, `Pedido`, `Pago`                                 |
+| Servicio de Dominio/Aplicación | `ServicioAutenticacion`, `ServicioInventario`, `ServicioPedidos` (`apps/*/application/services.py`) |
+| Fábrica               | `UsuarioSistemaFabrica`, `PrendaFabrica`, `PedidoFactory`, `PagoFactory`          |
+| Repositorio           | Contratos ABC en `apps/*/domain/repositorios.py`; implementaciones Django ORM en `apps/*/infrastructure/repositories.py` |
+| Módulos               | Una app Django por contexto: `usuarios`, `catalogo`, `inventario`, `ventas/{carrito,pedidos,pagos}`, `compartido` |
 
-| Módulo           | Responsabilidad principal                             |
-| ---------------- | ----------------------------------------------------- |
-| Autenticación    | Credenciales, sesiones e intentos de inicio de sesión |
-| Usuarios y roles | Usuarios del sistema, roles y permisos                |
-| Catálogo         | Prendas, categorías y tipos de producto               |
-| Inventario       | Stock, movimientos, alertas y consulta de existencias |
-| Compras          | Carrito de compras e items seleccionados              |
-| Pedidos          | Generación, detalle e historial de pedidos            |
-| Pagos            | Métodos de pago y procesamiento                       |
-| Despachos        | Preparación, confirmación y guía de remisión          |
-| Contabilidad     | Ingresos, egresos, impuestos y cierre contable        |
-| Facturación      | Comprobantes electrónicos y envío a SUNAT             |
-| Compartido       | Enums, objetos de valor y conceptos comunes           |
-
----
-
-## 2.5. Modelo de Dominio
-
-El modelo de dominio fue diseñado como un diagrama de clases UML siguiendo las prácticas de DDD: entidades, objetos de valor, agregados, servicios de dominio y sus relaciones.
-
-### 2.5.1. Autenticación
-
-![Módulo de autenticación](assets/figuras_uml/figura-04-modulo-autenticacion.png "Carlota")
-
-### 2.5.2. Usuarios y Roles
-
-![Módulo de usuarios y roles](assets/figuras_uml/figura-05-modulo-usuarios-roles.png "Carlota")
-
-### 2.5.3. Inventario
-
-![Módulo de inventario](assets/figuras_uml/figura-06-modulo-inventario.png "Carlota")
-
-### 2.5.4. Catálogo
-
-![Módulo de catálogo](assets/figuras_uml/figura-07-modulo-catalogo.png "Carlota")
-
-### 2.5.5. Compras, Pedidos y Pagos
-
-![Módulos de compras pedidos y pagos](assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png "Lizzy")
-
-### 2.5.6. Sistema Contable Textil
-
-![Sistema contable textil](assets/figuras_uml/figura-09-sistema-contable-textil.png "Angelo")
-
-### 2.5.7. Encargado de Inventario y Logística
-
-![Encargado de inventario y logística](assets/figuras_uml/figura-02-modelo-inventario-logistica.png "Alejandro")
-
----
-
-## 2.6. Estructura Del Proyecto
+### 2.5.3. Estructura del Proyecto
 
 ```text
 SoftwareTextil/
-├── assets/
-│   ├── Diagramas_uml/          # Archivos fuente StarUML (.mdj)
-│   ├── figuras_uml/            # Exportaciones de diagramas UML
-│   ├── figuras_casos_uso/      # Diagramas de casos de uso
-│   ├── figuras_prototipo/      # Capturas del prototipo
-│   └── starUML_codigo/         # Codigo generado por StarUML como referencia
+├── manage.py                      # Entry point de Django
+├── config/                        # Proyecto Django
+│   ├── settings/
+│   │   ├── base.py                # PostgreSQL + INSTALLED_APPS + REST_FRAMEWORK
+│   │   ├── dev.py                 # SQLite temporal para desarrollo
+│   │   └── prod.py
+│   ├── urls.py                    # Rutas raíz
+│   ├── wsgi.py
+│   └── asgi.py
+├── apps/                          # Apps Django por módulo DDD
+│   ├── usuarios/                  # Login, autenticación, roles
+│   │   ├── domain/                # Entidades, agregados, VO, repositorios abstractos
+│   │   ├── application/           # Servicios de aplicación y casos de uso
+│   │   ├── infrastructure/        # Modelos Django ORM y repositorios concretos
+│   │   └── presentation/          # Serializers, views y urls DRF
+│   ├── catalogo/                  # Prendas, categorías, tipos
+│   ├── inventario/                # Stock, movimientos, alertas
+│   ├── ventas/                    # Flujo de venta
+│   │   ├── carrito/               # Carrito de compras
+│   │   ├── pedidos/               # Pedidos
+│   │   └── pagos/                 # Pagos
+│   └── compartido/                # Enums, VO y conceptos comunes
+├── templates/                     # Plantillas Django
+├── assets/                        # Diagramas UML, casos de uso y prototipo
 ├── docs/
 │   ├── arquitectura.md
 │   ├── modelo_dominio.md
-│   └── prototipo.md
-├── src/software_textil/
-│   ├── presentation/           # Controladores Flask
-│   ├── application/            # Servicios de aplicación y DTOs
-│   ├── domain/                 # Modelo de dominio puro
-│   └── infrastructure/         # Persistencia, repositorios y servicios externos
+│   ├── prototipo.md
+│   ├── flujo_git.md               # Flujo de ramas del equipo
+│   └── guias/                     # Guía de trabajo por integrante
 ├── tests/
 ├── pyproject.toml
 ├── uv.lock
@@ -166,11 +201,42 @@ SoftwareTextil/
 
 ---
 
-## 2.7. Instalación
+## 2.6. Prácticas de Desarrollo Aplicadas
+
+Cada integrante aplica y evidencia en su rama: **1 estilo de programación** (elegido por él/ella), **5+ prácticas de Clean Code** y **3+ principios SOLID**, sobre la base DDD + capas común. La evidencia (descripción + fragmento de código) se documenta en su guía:
+
+| Integrante | Módulo                | Guía de trabajo y evidencia                                            | Estilo de programación |
+| ---------- | --------------------- | ---------------------------------------------------------------------- | ---------------------- |
+| Carlos     | Autenticación y Roles | [`docs/guias/carlos-autenticacion.md`](docs/guias/carlos-autenticacion.md) | *(a declarar)*     |
+| Lizzy      | Catálogo              | [`docs/guias/lizzy-catalogo.md`](docs/guias/lizzy-catalogo.md)         | *(a declarar)*         |
+| Alejandro  | Inventario            | [`docs/guias/alejandro-inventario.md`](docs/guias/alejandro-inventario.md) | *(a declarar)*     |
+| Angelo     | Pedidos               | [`docs/guias/angelo-pedidos.md`](docs/guias/angelo-pedidos.md)         | *(a declarar)*         |
+| Javier     | Pagos                 | [`docs/guias/javier-pagos.md`](docs/guias/javier-pagos.md)             | *(a declarar)*         |
+
+Convenciones de codificación comunes a todo el equipo: PEP 8, nombres en español del lenguaje ubicuo, type hints y docstrings de módulo.
+
+---
+
+## 2.7. Flujo de Trabajo Git
+
+El equipo sigue el flujo de ramas del proyecto final (ver detalle en [`docs/flujo_git.md`](docs/flujo_git.md)):
+
+```text
+main  ←  dev  ←  feature/<modulo>-<integrante>
+```
+
+- Cada integrante trabaja **solo** en su rama `feature/*`.
+- Los cambios se integran a `dev` mediante Pull Request revisado por otro integrante.
+- `dev` se sincroniza hacia las ramas feature con merge o rebase.
+- `main` solo recibe merges desde `dev` (releases estables).
+
+---
+
+## 2.8. Instalación
 
 El proyecto usa `uv` para gestionar Python, el entorno virtual y las dependencias. `pyproject.toml` define las dependencias y `uv.lock` fija versiones reproducibles.
 
-### 2.7.1. Instalar uv
+### 2.8.1. Instalar uv
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -182,75 +248,74 @@ En Windows PowerShell:
 irm https://astral.sh/uv/install.ps1 | iex
 ```
 
-### 2.7.2. Preparar el entorno
+### 2.8.2. Preparar el entorno
 
 ```bash
 git clone git@github.com:javierRock/SoftwareTextil.git
 cd SoftwareTextil
+git checkout angel_back-end
 uv sync
 ```
 
-### 2.7.3. Ejecutar la aplicación
+### 2.8.3. Ejecutar la aplicación
 
 ```bash
-uv run flask --app "software_textil:create_app()" run --debug
+uv run python manage.py migrate
+uv run python manage.py runserver
 ```
 
-### 2.7.4. Ver rutas disponibles
+La aplicación queda disponible en `http://127.0.0.1:8000/`.
+
+### 2.8.4. Verificar el estado del proyecto
 
 ```bash
-uv run flask --app "software_textil:create_app()" routes
+uv run python manage.py check
+uv run python manage.py makemigrations
 ```
+
+> **Nota sobre la base de datos:** `config/settings/base.py` usa **PostgreSQL** como motor de producción. Para desarrollo, `config/settings/dev.py` usa **SQLite** como fallback temporal hasta que PostgreSQL esté disponible en el entorno local.
 
 ---
 
-## 2.8. API Principal
+## 2.9. Tecnologías
 
-| Método | Ruta                                 | Uso                                 |
-| ------ | ------------------------------------ | ----------------------------------- |
-| `GET`  | `/health`                            | Verifica que la aplicación responda |
-| `POST` | `/auth/login`                        | Inicia sesión                       |
-| `POST` | `/auth/logout`                       | Cierra sesión                       |
-| `POST` | `/catalogo/prendas`                  | Registra una prenda                 |
-| `POST` | `/catalogo/categorias`               | Crea una categoría                  |
-| `POST` | `/catalogo/tipos-producto`           | Crea un tipo de producto            |
-| `POST` | `/inventario/stock`                  | Crea stock inicial de una prenda    |
-| `GET`  | `/inventario/stock/<prenda_id>`      | Consulta stock por prenda           |
-| `POST` | `/inventario/ingresos`               | Registra ingreso de stock           |
-| `POST` | `/inventario/salidas`                | Registra salida de stock            |
-| `POST` | `/inventario/ajustes`                | Ajusta stock                        |
-| `POST` | `/despachos`                         | Crea un despacho                    |
-| `POST` | `/despachos/<despacho_id>/confirmar` | Confirma un despacho                |
-| `POST` | `/contabilidad/ingresos`             | Registra ingreso contable           |
-| `POST` | `/contabilidad/egresos`              | Registra egreso contable            |
-| `POST` | `/facturacion/comprobantes`          | Emite comprobante electrónico       |
+| Tecnología              | Uso                               |
+| ----------------------- | --------------------------------- |
+| Python 3.11+            | Lenguaje principal                |
+| VS Code                 | IDE                               |
+| Django 5.0              | Framework web MVC                 |
+| Django REST Framework   | API REST (serializers, viewsets)  |
+| Django ORM              | Persistencia y mapeo ORM          |
+| PostgreSQL              | Base de datos relacional          |
+| uv                      | Gestión de entorno y dependencias |
+| pytest + pytest-django  | Pruebas                           |
+| StarUML                 | Modelado UML                      |
+| Mermaid                 | Diagramas en Markdown             |
 
 ---
 
-## 2.9. Documentación Complementaria
+## 2.10. Documentación Complementaria
 
 | Documento                                          | Contenido                                          |
 | -------------------------------------------------- | -------------------------------------------------- |
 | [`docs/modelo_dominio.md`](docs/modelo_dominio.md) | Lenguaje ubicuo, contextos delimitados y agregados |
 | [`docs/arquitectura.md`](docs/arquitectura.md)     | Capas, dependencias y estructura técnica           |
 | [`docs/prototipo.md`](docs/prototipo.md)           | Pantallas del prototipo y flujo de interfaz        |
+| [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
+| [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
 
 ---
 
-## 2.10. Tecnologías
+## 2.11. Trabajo Futuro
 
-| Tecnología   | Uso                               |
-| ------------ | --------------------------------- |
-| Python 3.11+ | Lenguaje principal                |
-| Flask        | Framework web                     |
-| SQLAlchemy   | Persistencia ORM                  |
-| uv           | Gestión de entorno y dependencias |
-| StarUML      | Modelado UML                      |
-| Mermaid      | Diagramas en Markdown             |
+Módulos modelados en UML pero fuera del alcance de esta entrega: **Despachos** (guías de remisión), **Contabilidad** (ingresos, egresos, cierre contable) y **Facturación electrónica** (SUNAT). Sus diagramas de referencia:
+
+- ![Sistema contable textil](assets/figuras_uml/figura-09-sistema-contable-textil.png)
+- ![Encargado de inventario y logística](assets/figuras_uml/figura-02-modelo-inventario-logistica.png)
 
 ---
 
-## 2.11. Referencias
+## 2.12. Referencias
 
 - Evans, E. _Domain-Driven Design_.
 - [Citerus DDD Sample Core](https://github.com/citerus/dddsample-core).
