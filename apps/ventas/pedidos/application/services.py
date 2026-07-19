@@ -24,7 +24,11 @@ class ServicioPedidos:
         carrito = self._obtener_carrito_del_cliente(carrito_id, cliente_id)
         detalles = self._construir_detalles(carrito)
         pedido = PedidoFactory.crear(cliente_id=cliente_id, carrito_id=carrito_id, detalles=detalles)
+        # Cerrar el carrito antes de persistir: si ya fue convertido, esto falla aqui
+        # y evita generar un pedido duplicado del mismo carrito.
+        carrito.marcar_convertido()
         self.repo_pedido.guardar(pedido)
+        self.repo_carrito.guardar(carrito)
         return pedido
 
     def _obtener_carrito_del_cliente(self, carrito_id: str, cliente_id: str) -> CarritoCompras:
