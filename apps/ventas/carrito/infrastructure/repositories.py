@@ -5,6 +5,7 @@ from decimal import Decimal
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoCarrito
 from apps.ventas.carrito.domain.carrito import CarritoCompras, CarritoFactory, ItemCarrito
+from apps.ventas.carrito.domain.repositorios import RepositorioCarrito
 from apps.ventas.carrito.infrastructure.models import CarritoModel, ItemCarritoModel
 
 
@@ -25,7 +26,7 @@ def _carrito_from_model(model: CarritoModel) -> CarritoCompras:
     return carrito
 
 
-class DjangoRepositorioCarrito:
+class DjangoRepositorioCarrito(RepositorioCarrito):
     def guardar(self, carrito: CarritoCompras) -> None:
         model = CarritoModel.objects.filter(id=carrito.id).first()
         if model is None:

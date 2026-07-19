@@ -5,6 +5,7 @@ from decimal import Decimal
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPedido
 from apps.ventas.pedidos.domain.pedido import DetallePedido, Pedido
+from apps.ventas.pedidos.domain.repositorios import RepositorioPedido
 from apps.ventas.pedidos.infrastructure.models import DetallePedidoModel, PedidoModel
 
 
@@ -28,7 +29,7 @@ def _pedido_from_model(model: PedidoModel) -> Pedido:
     )
 
 
-class DjangoRepositorioPedido:
+class DjangoRepositorioPedido(RepositorioPedido):
     def guardar(self, pedido: Pedido) -> None:
         model = PedidoModel.objects.filter(id=pedido.id).first()
         if model is None:
