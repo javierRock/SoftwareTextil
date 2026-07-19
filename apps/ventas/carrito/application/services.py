@@ -5,11 +5,11 @@ from decimal import Decimal
 from apps.compartido.domain.dinero import Dinero
 from apps.ventas.carrito.domain.carrito import CarritoFactory
 from apps.ventas.carrito.domain.errors import CarritoNoEncontrado
-from apps.ventas.carrito.infrastructure.repositories import DjangoRepositorioCarrito
+from apps.ventas.carrito.domain.repositorios import RepositorioCarrito
 
 
 class ServicioCompras:
-    def __init__(self, repo_carrito: DjangoRepositorioCarrito) -> None:
+    def __init__(self, repo_carrito: RepositorioCarrito) -> None:
         self.repo_carrito = repo_carrito
 
     def crear_carrito(self, cliente_id: str):

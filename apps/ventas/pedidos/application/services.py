@@ -1,20 +1,20 @@
 """Servicios de aplicacion para pedidos."""
 
-from apps.ventas.carrito.infrastructure.repositories import DjangoRepositorioCarrito
+from apps.ventas.carrito.domain.repositorios import RepositorioCarrito
 from apps.ventas.pedidos.domain.errors import (
     CarritoNoEncontrado,
     CarritoNoPerteneceACliente,
     PedidoNoEncontrado,
 )
 from apps.ventas.pedidos.domain.pedido import DetallePedido, PedidoFactory
-from apps.ventas.pedidos.infrastructure.repositories import DjangoRepositorioPedido
+from apps.ventas.pedidos.domain.repositorios import RepositorioPedido
 
 
 class ServicioPedidos:
     def __init__(
         self,
-        repo_pedido: DjangoRepositorioPedido,
-        repo_carrito: DjangoRepositorioCarrito,
+        repo_pedido: RepositorioPedido,
+        repo_carrito: RepositorioCarrito,
     ) -> None:
         self.repo_pedido = repo_pedido
         self.repo_carrito = repo_carrito
