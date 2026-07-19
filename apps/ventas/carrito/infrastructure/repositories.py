@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoCarrito
-from apps.ventas.carrito.domain.carrito import CarritoCompras, CarritoFactory, ItemCarrito
+from apps.ventas.carrito.domain.carrito import CarritoCompras, ItemCarrito
 from apps.ventas.carrito.domain.repositorios import RepositorioCarrito
 from apps.ventas.carrito.infrastructure.models import CarritoModel, ItemCarritoModel
 
