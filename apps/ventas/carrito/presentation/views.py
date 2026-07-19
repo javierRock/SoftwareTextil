@@ -42,8 +42,15 @@ class CarritoViewSet(viewsets.ViewSet):
         model = CarritoModel.objects.get(id=carrito.id)
         return Response(CarritoSerializer(model).data)
 
-    @action(detail=True, methods=["post"], url_path="items")
-    def agregar_item(self, request, pk=None):
+    @action(detail=True, methods=["post", "delete"], url_path="items")
+    def items(self, request, pk=None):
+        # Una sola ruta para items/: POST agrega, DELETE quita. Antes eran dos
+        # acciones con el mismo url_path y el router solo enrutaba la primera.
+        if request.method == "DELETE":
+            return self._quitar_item(request, pk)
+        return self._agregar_item(request, pk)
+
+    def _agregar_item(self, request, pk):
         serializer = AgregarItemSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         servicio = _servicio()
@@ -60,8 +67,7 @@ class CarritoViewSet(viewsets.ViewSet):
         model = CarritoModel.objects.get(id=carrito.id)
         return Response(CarritoSerializer(model).data, status=status.HTTP_201_CREATED)
 
-    @action(detail=True, methods=["delete"], url_path="items")
-    def quitar_item(self, request, pk=None):
+    def _quitar_item(self, request, pk):
         serializer = QuitarItemSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         servicio = _servicio()
