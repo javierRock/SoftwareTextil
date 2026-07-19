@@ -19,9 +19,10 @@ class PedidoViewSet(viewsets.ViewSet):
     def list(self, request):
         cliente_id = request.query_params.get("cliente_id")
         if cliente_id:
-            pedidos = _servicio().listar_por_cliente(cliente_id)
-            return Response(PedidoSerializer(pedidos, many=True).data)
-        return Response(PedidoSerializer(PedidoModel.objects.all(), many=True).data)
+            pedidos = PedidoModel.objects.filter(cliente_id=cliente_id)
+        else:
+            pedidos = PedidoModel.objects.all()
+        return Response(PedidoSerializer(pedidos, many=True).data)
 
     def create(self, request):
         serializer = CrearPedidoSerializer(data=request.data)
@@ -34,14 +35,16 @@ class PedidoViewSet(viewsets.ViewSet):
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(PedidoSerializer(pedido).data, status=status.HTTP_201_CREATED)
+        model = PedidoModel.objects.get(id=pedido.id)
+        return Response(PedidoSerializer(model).data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         try:
             pedido = _servicio().obtener_pedido(pk)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
-        return Response(PedidoSerializer(pedido).data)
+        model = PedidoModel.objects.get(id=pedido.id)
+        return Response(PedidoSerializer(model).data)
 
     @action(detail=True, methods=["post"], url_path="cancelar")
     def cancelar(self, request, pk=None):
@@ -50,4 +53,5 @@ class PedidoViewSet(viewsets.ViewSet):
             pedido = servicio.cancelar(pk)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(PedidoSerializer(pedido).data, status=status.HTTP_200_OK)
+        model = PedidoModel.objects.get(id=pedido.id)
+        return Response(PedidoSerializer(model).data, status=status.HTTP_200_OK)

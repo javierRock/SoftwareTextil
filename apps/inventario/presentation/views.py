@@ -68,7 +68,8 @@ class StockViewSet(viewsets.ViewSet):
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(MovimientoSerializer(movimiento).data, status=status.HTTP_201_CREATED)
+        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
+        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=["post"], url_path="salidas")
     def registrar_salida(self, request):
@@ -84,7 +85,8 @@ class StockViewSet(viewsets.ViewSet):
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(MovimientoSerializer(movimiento).data, status=status.HTTP_201_CREATED)
+        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
+        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=["post"], url_path="ajustes")
     def ajustar(self, request):
@@ -100,7 +102,8 @@ class StockViewSet(viewsets.ViewSet):
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(MovimientoSerializer(movimiento).data, status=status.HTTP_201_CREATED)
+        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
+        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
 
 
 class MovimientoViewSet(viewsets.ReadOnlyModelViewSet):

@@ -18,9 +18,10 @@ class PagoViewSet(viewsets.ViewSet):
     def list(self, request):
         pedido_id = request.query_params.get("pedido_id")
         if pedido_id:
-            pagos = _servicio().listar_por_pedido(pedido_id)
-            return Response(PagoSerializer(pagos, many=True).data)
-        return Response(PagoSerializer(PagoModel.objects.all(), many=True).data)
+            pagos = PagoModel.objects.filter(pedido_id=pedido_id)
+        else:
+            pagos = PagoModel.objects.all()
+        return Response(PagoSerializer(pagos, many=True).data)
 
     def create(self, request):
         serializer = CrearPagoSerializer(data=request.data)
@@ -35,14 +36,16 @@ class PagoViewSet(viewsets.ViewSet):
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(PagoSerializer(pago).data, status=status.HTTP_201_CREATED)
+        model = PagoModel.objects.get(id=pago.id)
+        return Response(PagoSerializer(model).data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         try:
             pago = _servicio().obtener(pk)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
-        return Response(PagoSerializer(pago).data)
+        model = PagoModel.objects.get(id=pago.id)
+        return Response(PagoSerializer(model).data)
 
     @action(detail=True, methods=["post"], url_path="aprobar")
     def aprobar(self, request, pk=None):
@@ -51,7 +54,8 @@ class PagoViewSet(viewsets.ViewSet):
             pago = servicio.aprobar(pk)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(PagoSerializer(pago).data, status=status.HTTP_200_OK)
+        model = PagoModel.objects.get(id=pago.id)
+        return Response(PagoSerializer(model).data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"], url_path="rechazar")
     def rechazar(self, request, pk=None):
@@ -60,4 +64,5 @@ class PagoViewSet(viewsets.ViewSet):
             pago = servicio.rechazar(pk)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(PagoSerializer(pago).data, status=status.HTTP_200_OK)
+        model = PagoModel.objects.get(id=pago.id)
+        return Response(PagoSerializer(model).data, status=status.HTTP_200_OK)

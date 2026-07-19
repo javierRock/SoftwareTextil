@@ -23,9 +23,9 @@ class CarritoViewSet(viewsets.ViewSet):
     def list(self, request):
         cliente_id = request.query_params.get("cliente_id")
         if cliente_id:
-            carritos = _servicio().listar_carritos_cliente(cliente_id)
+            carritos = CarritoModel.objects.filter(cliente_id=cliente_id)
         else:
-            return Response(CarritoSerializer(CarritoModel.objects.all(), many=True).data)
+            carritos = CarritoModel.objects.all()
         return Response(CarritoSerializer(carritos, many=True).data)
 
     def create(self, request):
@@ -39,7 +39,8 @@ class CarritoViewSet(viewsets.ViewSet):
             carrito = _servicio().obtener_carrito(pk)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
-        return Response(CarritoSerializer(carrito).data)
+        model = CarritoModel.objects.get(id=carrito.id)
+        return Response(CarritoSerializer(model).data)
 
     @action(detail=True, methods=["post"], url_path="items")
     def agregar_item(self, request, pk=None):
@@ -56,7 +57,8 @@ class CarritoViewSet(viewsets.ViewSet):
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(CarritoSerializer(carrito).data, status=status.HTTP_201_CREATED)
+        model = CarritoModel.objects.get(id=carrito.id)
+        return Response(CarritoSerializer(model).data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["delete"], url_path="items")
     def quitar_item(self, request, pk=None):
@@ -67,4 +69,5 @@ class CarritoViewSet(viewsets.ViewSet):
             carrito = servicio.quitar_item(pk, serializer.validated_data["prenda_id"])
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(CarritoSerializer(carrito).data, status=status.HTTP_200_OK)
+        model = CarritoModel.objects.get(id=carrito.id)
+        return Response(CarritoSerializer(model).data, status=status.HTTP_200_OK)
