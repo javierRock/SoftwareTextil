@@ -1,9 +1,12 @@
 """Repositorios concretos con Django ORM para usuarios."""
 
-from datetime import timedelta
-from django.utils import timezone
-
 from apps.compartido.domain.enums import EstadoSesion, EstadoUsuario
+from apps.usuarios.domain.repositorios import (
+    RepositorioIntentoLogin,
+    RepositorioRol,
+    RepositorioSesion,
+    RepositorioUsuario,
+)
 from apps.usuarios.domain.usuario import IntentoLogin, Rol, Sesion, Usuario
 from apps.usuarios.infrastructure.models import (
     IntentoLoginModel,
@@ -23,6 +26,7 @@ def _usuario_from_model(model: UsuarioModel) -> Usuario:
         id=str(model.id),
         nombre=model.nombre,
         email=model.email,
+        username=model.username,
         rol=rol,
         estado=EstadoUsuario(model.estado),
         creado_por=model.creado_por,
@@ -30,13 +34,14 @@ def _usuario_from_model(model: UsuarioModel) -> Usuario:
     )
 
 
-class DjangoRepositorioUsuario:
+class DjangoRepositorioUsuario(RepositorioUsuario):
     def guardar(self, usuario: Usuario) -> None:
         model = UsuarioModel.objects.filter(id=usuario.id).first()
         if model is None:
             model = UsuarioModel(id=usuario.id)
         model.nombre = usuario.nombre
         model.email = usuario.email
+        model.username = usuario.username
         model.rol_id = usuario.rol.id
         model.estado = usuario.estado.value
         model.creado_por = usuario.creado_por
@@ -65,7 +70,7 @@ class DjangoRepositorioUsuario:
         return [_usuario_from_model(m) for m in UsuarioModel.objects.all()]
 
 
-class DjangoRepositorioRol:
+class DjangoRepositorioRol(RepositorioRol):
     def guardar(self, rol: Rol) -> None:
         model = RolModel.objects.filter(id=rol.id).first()
         if model is None:
@@ -82,7 +87,7 @@ class DjangoRepositorioRol:
         return [_rol_from_model(m) for m in RolModel.objects.all()]
 
 
-class DjangoRepositorioSesion:
+class DjangoRepositorioSesion(RepositorioSesion):
     def guardar(self, sesion: Sesion) -> None:
         model = SesionModel.objects.filter(id=sesion.id).first()
         if model is None:
@@ -99,8 +104,6 @@ class DjangoRepositorioSesion:
         model = SesionModel.objects.filter(token=token).first()
         if not model:
             return None
-        from apps.compartido.domain.enums import EstadoSesion
-
         return Sesion(
             id=str(model.id),
             usuario_id=str(model.usuario_id),
@@ -115,7 +118,7 @@ class DjangoRepositorioSesion:
         SesionModel.objects.filter(token=token).update(estado="cerrada")
 
 
-class DjangoRepositorioIntentoLogin:
+class DjangoRepositorioIntentoLogin(RepositorioIntentoLogin):
     def guardar(self, intento: IntentoLogin) -> None:
         IntentoLoginModel.objects.create(
             id=intento.id,

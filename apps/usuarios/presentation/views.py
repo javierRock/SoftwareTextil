@@ -1,12 +1,14 @@
 """Views DRF para usuarios y autenticacion."""
 
-from rest_framework import viewsets, status
+from django.core.exceptions import ValidationError
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.usuarios.application.services import ServicioAutenticacion, ServicioGestionUsuarios
+from apps.usuarios.domain.exceptions import ErrorUsuarios
 from apps.usuarios.infrastructure.models import RolModel, UsuarioModel
 from apps.usuarios.infrastructure.repositories import (
     DjangoRepositorioIntentoLogin,
@@ -47,14 +49,14 @@ class LoginView(APIView):
                 password=serializer.validated_data["password"],
                 ip=request.META.get("REMOTE_ADDR", ""),
             )
-        except ValueError as exc:
+        except ErrorUsuarios as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(resultado, status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):
     def post(self, request):
-        token = request.auth.key if request.auth else request.data.get("token", "")
+        token = getattr(request.auth, "token", "") if request.auth else request.data.get("token", "")
         if not token:
             return Response({"error": "Token requerido"}, status=status.HTTP_400_BAD_REQUEST)
         servicio = _servicio_auth()
@@ -78,16 +80,21 @@ class UsuarioViewSet(viewsets.ModelViewSet):
                 username=serializer.validated_data["username"],
                 password=serializer.validated_data["password"],
             )
-        except ValueError as exc:
+        except ValidationError as exc:
+            return Response({"error": exc.messages}, status=status.HTTP_400_BAD_REQUEST)
+        except ErrorUsuarios as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"id": usuario.id, "nombre": usuario.nombre, "email": usuario.email}, status=status.HTTP_201_CREATED)
+        return Response(
+            {"id": usuario.id, "nombre": usuario.nombre, "email": usuario.email},
+            status=status.HTTP_201_CREATED,
+        )
 
     @action(detail=True, methods=["post"], url_path="desactivar")
     def desactivar(self, request, pk=None):
         servicio = _servicio_usuarios()
         try:
             servicio.desactivar_usuario(pk)
-        except ValueError as exc:
+        except ErrorUsuarios as exc:
             return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
         return Response({"mensaje": "Usuario desactivado"}, status=status.HTTP_200_OK)
 

@@ -1,11 +1,25 @@
 """Servicios de aplicacion para usuarios y autenticacion."""
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from uuid import uuid4
 
 from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.password_validation import validate_password
+from django.utils import timezone
 
-from apps.compartido.domain.enums import EstadoSesion, ResultadoLogin
+from apps.compartido.domain.enums import EstadoSesion, EstadoUsuario, ResultadoLogin
+from apps.usuarios.domain.exceptions import (
+    CredencialesInvalidas,
+    RecursoDuplicado,
+    RecursoNoEncontrado,
+    UsuarioInactivo,
+)
+from apps.usuarios.domain.repositorios import (
+    RepositorioIntentoLogin,
+    RepositorioRol,
+    RepositorioSesion,
+    RepositorioUsuario,
+)
 from apps.usuarios.domain.usuario import (
     IntentoLogin,
     Rol,
@@ -13,20 +27,16 @@ from apps.usuarios.domain.usuario import (
     Usuario,
     UsuarioSistemaFabrica,
 )
-from apps.usuarios.infrastructure.repositories import (
-    DjangoRepositorioIntentoLogin,
-    DjangoRepositorioRol,
-    DjangoRepositorioSesion,
-    DjangoRepositorioUsuario,
-)
+
+DURACION_SESION = timedelta(hours=8)
 
 
 class ServicioAutenticacion:
     def __init__(
         self,
-        repo_usuario: DjangoRepositorioUsuario,
-        repo_sesion: DjangoRepositorioSesion,
-        repo_intentos: DjangoRepositorioIntentoLogin,
+        repo_usuario: RepositorioUsuario,
+        repo_sesion: RepositorioSesion,
+        repo_intentos: RepositorioIntentoLogin,
     ) -> None:
         self.repo_usuario = repo_usuario
         self.repo_sesion = repo_sesion
@@ -38,11 +48,11 @@ class ServicioAutenticacion:
 
         if usuario is None or not check_password(password, password_hash):
             self._registrar_intento(username, ip, False, ResultadoLogin.CREDENCIALES_INVALIDAS.value)
-            raise ValueError("Credenciales invalidas")
+            raise CredencialesInvalidas("Credenciales invalidas")
 
-        if usuario.estado.value == "inactivo":
+        if usuario.estado == EstadoUsuario.INACTIVO:
             self._registrar_intento(username, ip, False, ResultadoLogin.USUARIO_INACTIVO.value)
-            raise ValueError("Usuario inactivo")
+            raise UsuarioInactivo("Usuario inactivo")
 
         self._registrar_intento(username, ip, True)
 
@@ -51,8 +61,8 @@ class ServicioAutenticacion:
             id=str(uuid4()),
             usuario_id=usuario.id,
             token=token,
-            fecha_inicio=datetime.utcnow(),
-            fecha_expiracion=datetime.utcnow() + timedelta(hours=8),
+            fecha_inicio=timezone.now(),
+            fecha_expiracion=timezone.now() + DURACION_SESION,
             ip=ip,
             estado=EstadoSesion.ACTIVA,
         )
@@ -73,7 +83,7 @@ class ServicioAutenticacion:
         intento = IntentoLogin(
             id=str(uuid4()),
             username=username,
-            fecha=datetime.utcnow(),
+            fecha=timezone.now(),
             ip=ip,
             exitoso=exitoso,
             motivo_fallo=motivo,
@@ -84,26 +94,42 @@ class ServicioAutenticacion:
 class ServicioGestionUsuarios:
     def __init__(
         self,
-        repo_usuario: DjangoRepositorioUsuario,
-        repo_rol: DjangoRepositorioRol,
+        repo_usuario: RepositorioUsuario,
+        repo_rol: RepositorioRol,
     ) -> None:
         self.repo_usuario = repo_usuario
         self.repo_rol = repo_rol
 
-    def crear_usuario(self, nombre: str, email: str, rol_id: str, username: str, password: str, creado_por: str | None = None) -> Usuario:
+    def crear_usuario(
+        self,
+        nombre: str,
+        email: str,
+        rol_id: str,
+        username: str,
+        password: str,
+        creado_por: str | None = None,
+    ) -> Usuario:
         rol = self.repo_rol.buscar_por_id(rol_id)
         if rol is None:
-            raise ValueError("El rol no existe")
+            raise RecursoNoEncontrado("El rol no existe")
 
         if self.repo_usuario.buscar_por_email(email) is not None:
-            raise ValueError("Ya existe un usuario con ese email")
+            raise RecursoDuplicado("Ya existe un usuario con ese email")
 
-        usuario = UsuarioSistemaFabrica.crear(nombre=nombre, email=email, rol=rol, creado_por=creado_por)
+        if self.repo_usuario.buscar_por_username(username) is not None:
+            raise RecursoDuplicado("Ya existe un usuario con ese username")
+
+        validate_password(password)
+
+        usuario = UsuarioSistemaFabrica.crear(
+            nombre=nombre,
+            email=email,
+            username=username,
+            rol=rol,
+            creado_por=creado_por,
+        )
         self.repo_usuario.guardar(usuario)
         self.repo_usuario.set_password(usuario.id, make_password(password))
-
-        from apps.usuarios.infrastructure.models import UsuarioModel
-        UsuarioModel.objects.filter(id=usuario.id).update(username=username)
         return usuario
 
     def listar_usuarios(self) -> list[Usuario]:
@@ -115,7 +141,7 @@ class ServicioGestionUsuarios:
     def desactivar_usuario(self, usuario_id: str) -> None:
         usuario = self.repo_usuario.buscar_por_id(usuario_id)
         if usuario is None:
-            raise ValueError("Usuario no encontrado")
+            raise RecursoNoEncontrado("Usuario no encontrado")
         usuario.desactivar()
         self.repo_usuario.guardar(usuario)
 

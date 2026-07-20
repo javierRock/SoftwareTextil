@@ -1,7 +1,7 @@
 """Agregado de usuarios, roles y autenticacion."""
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from apps.compartido.domain.enums import EstadoSesion, EstadoUsuario
@@ -33,7 +33,7 @@ class Credencial:
     password_hash: str
     salt: str
     algoritmo_hash: str = "werkzeug-pbkdf2"
-    ultimo_cambio: datetime = field(default_factory=datetime.utcnow)
+    ultimo_cambio: datetime = field(default_factory=lambda: datetime.now(UTC))
 
 
 @dataclass
@@ -50,7 +50,7 @@ class Sesion:
         self.estado = EstadoSesion.CERRADA
 
     def esta_activa(self, ahora: datetime | None = None) -> bool:
-        momento = ahora or datetime.utcnow()
+        momento = ahora or datetime.now(UTC)
         return self.estado == EstadoSesion.ACTIVA and momento < self.fecha_expiracion
 
 
@@ -69,11 +69,12 @@ class Usuario:
     id: str
     nombre: str
     email: str
+    username: str
     rol: Rol
     estado: EstadoUsuario = EstadoUsuario.ACTIVO
     credencial: Credencial | None = None
     creado_por: str | None = None
-    fecha_creacion: datetime = field(default_factory=datetime.utcnow)
+    fecha_creacion: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def desactivar(self) -> None:
         self.estado = EstadoUsuario.INACTIVO
@@ -87,5 +88,12 @@ class Usuario:
 
 class UsuarioSistemaFabrica:
     @staticmethod
-    def crear(nombre: str, email: str, rol: Rol, creado_por: str | None = None) -> Usuario:
-        return Usuario(id=str(uuid4()), nombre=nombre, email=email, rol=rol, creado_por=creado_por)
+    def crear(nombre: str, email: str, username: str, rol: Rol, creado_por: str | None = None) -> Usuario:
+        return Usuario(
+            id=str(uuid4()),
+            nombre=nombre,
+            email=email,
+            username=username,
+            rol=rol,
+            creado_por=creado_por,
+        )
