@@ -1,4 +1,4 @@
-"""Modelos ORM Django para carrito de compras."""
+"""Modelos ORM de carrito, pedidos y pagos de la app ventas."""
 
 import uuid
 
@@ -17,7 +17,9 @@ class CarritoModel(models.Model):
 
 class ItemCarritoModel(models.Model):
     id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4)
-    carrito = models.ForeignKey(CarritoModel, on_delete=models.CASCADE, related_name="items")
+    carrito = models.ForeignKey(
+        CarritoModel, on_delete=models.CASCADE, related_name="items"
+    )
     prenda_id = models.CharField(max_length=36)
     cantidad = models.IntegerField()
     precio_monto = models.DecimalField(max_digits=12, decimal_places=2)
@@ -25,11 +27,6 @@ class ItemCarritoModel(models.Model):
 
     class Meta:
         db_table = "items_carrito"
-"""Modelos ORM Django para pedidos."""
-
-import uuid
-
-from django.db import models
 
 
 class PedidoModel(models.Model):
@@ -47,7 +44,9 @@ class PedidoModel(models.Model):
 
 class DetallePedidoModel(models.Model):
     id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4)
-    pedido = models.ForeignKey(PedidoModel, on_delete=models.CASCADE, related_name="detalles")
+    pedido = models.ForeignKey(
+        PedidoModel, on_delete=models.CASCADE, related_name="detalles"
+    )
     prenda_id = models.CharField(max_length=36)
     cantidad = models.IntegerField()
     precio_monto = models.DecimalField(max_digits=12, decimal_places=2)
@@ -55,11 +54,6 @@ class DetallePedidoModel(models.Model):
 
     class Meta:
         db_table = "detalles_pedido"
-"""Modelos ORM Django para pagos."""
-
-import uuid
-
-from django.db import models
 
 
 class PagoModel(models.Model):

@@ -1,48 +1,71 @@
-"""Servicios de aplicacion para pagos."""
+"""Casos de uso del modulo de pagos."""
 
 from decimal import Decimal
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import MetodoPago
-from apps.ventas.pagos.domain.pago import PagoFactory
-from apps.ventas.pagos.infrastructure.repositories import DjangoRepositorioPago
+from apps.ventas.pagos.domain.excepciones import (
+    IdentificadorPagoInvalido,
+    MontoPagoInvalido,
+    PagoNoEncontrado,
+    PedidoPagoInvalido,
+)
+from apps.ventas.pagos.domain.pago import Pago, PagoFactory
+from apps.ventas.pagos.domain.repositorios import RepositorioPago
 
 
 class ServicioPagos:
-    def __init__(self, repo_pago: DjangoRepositorioPago) -> None:
-        self.repo_pago = repo_pago
+    """Coordina los casos de uso sin depender de Django ni de DRF."""
 
-    def registrar_pago(self, pedido_id: str, monto: str, metodo: str, referencia: str = ""):
+    def __init__(self, repositorio_pago: RepositorioPago) -> None:
+        self._repositorio_pago = repositorio_pago
+
+    def registrar_pago(
+        self,
+        pedido_id: str,
+        monto: Decimal,
+        metodo: MetodoPago | str,
+        referencia: str = "",
+    ) -> Pago:
+        if not isinstance(monto, Decimal) or monto <= 0:
+            raise MontoPagoInvalido()
         pago = PagoFactory.crear(
             pedido_id=pedido_id,
-            monto=Dinero(Decimal(monto)),
-            metodo=MetodoPago(metodo),
+            monto=Dinero(monto),
+            metodo=metodo,
             referencia=referencia,
         )
-        self.repo_pago.guardar(pago)
+        self._repositorio_pago.guardar(pago)
         return pago
 
-    def aprobar(self, pago_id: str):
-        pago = self.repo_pago.buscar_por_id(pago_id)
-        if pago is None:
-            raise ValueError("Pago no encontrado")
+    def obtener(self, pago_id: str) -> Pago:
+        return self._obtener_existente(pago_id)
+
+    def listar(self) -> list[Pago]:
+        return self._repositorio_pago.listar()
+
+    def listar_por_pedido(self, pedido_id: str) -> list[Pago]:
+        if not pedido_id or not pedido_id.strip():
+            raise PedidoPagoInvalido()
+        return self._repositorio_pago.listar_por_pedido(pedido_id.strip())
+
+    def aprobar(self, pago_id: str) -> Pago:
+        pago = self._obtener_existente(pago_id)
         pago.aprobar()
-        self.repo_pago.guardar(pago)
+        self._repositorio_pago.guardar(pago)
         return pago
 
-    def rechazar(self, pago_id: str):
-        pago = self.repo_pago.buscar_por_id(pago_id)
-        if pago is None:
-            raise ValueError("Pago no encontrado")
+    def rechazar(self, pago_id: str) -> Pago:
+        pago = self._obtener_existente(pago_id)
         pago.rechazar()
-        self.repo_pago.guardar(pago)
+        self._repositorio_pago.guardar(pago)
         return pago
 
-    def listar_por_pedido(self, pedido_id: str):
-        return self.repo_pago.listar_por_pedido(pedido_id)
-
-    def obtener(self, pago_id: str):
-        pago = self.repo_pago.buscar_por_id(pago_id)
+    def _obtener_existente(self, pago_id: str) -> Pago:
+        if not pago_id or not pago_id.strip():
+            raise IdentificadorPagoInvalido()
+        identificador = pago_id.strip()
+        pago = self._repositorio_pago.buscar_por_id(identificador)
         if pago is None:
-            raise ValueError("Pago no encontrado")
+            raise PagoNoEncontrado(identificador)
         return pago
