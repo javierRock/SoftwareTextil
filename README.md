@@ -13,6 +13,7 @@
     - [2.5.2. DDD Táctico en el Código](#252-ddd-táctico-en-el-código)
     - [2.5.3. Estructura del Proyecto](#253-estructura-del-proyecto)
   - [2.6. Prácticas de Desarrollo Aplicadas](#26-prácticas-de-desarrollo-aplicadas)
+    - [2.6.1. API de Pagos](#261-api-de-pagos)
   - [2.7. Flujo de Trabajo Git](#27-flujo-de-trabajo-git)
   - [2.8. Instalación](#28-instalación)
     - [2.8.1. Instalar uv](#281-instalar-uv)
@@ -203,7 +204,7 @@ SoftwareTextil/
 
 ## 2.6. Prácticas de Desarrollo Aplicadas
 
-Cada integrante aplica y evidencia en su rama: **1 estilo de programación** (elegido por él/ella), **5+ prácticas de Clean Code** y **3+ principios SOLID**, sobre la base DDD + capas común. La evidencia (descripción + fragmento de código) se documenta en su guía:
+El Laboratorio 10 exige evidenciar **por lo menos cuatro estilos de programación**. Cada integrante documenta en su guía los requisitos que haya implementado, junto con sus prácticas de Clean Code y principios SOLID; no se presume el avance de módulos que no han sido verificados.
 
 | Integrante | Módulo                | Guía de trabajo y evidencia                                            | Estilo de programación |
 | ---------- | --------------------- | ---------------------------------------------------------------------- | ---------------------- |
@@ -211,9 +212,23 @@ Cada integrante aplica y evidencia en su rama: **1 estilo de programación** (el
 | Lizzy      | Catálogo              | [`docs/guias/lizzy-catalogo.md`](docs/guias/lizzy-catalogo.md)         | *(a declarar)*         |
 | Alejandro  | Inventario            | [`docs/guias/alejandro-inventario.md`](docs/guias/alejandro-inventario.md) | *(a declarar)*     |
 | Angelo     | Pedidos               | [`docs/guias/angelo-pedidos.md`](docs/guias/angelo-pedidos.md)         | *(a declarar)*         |
-| Javier     | Pagos                 | [`docs/guias/javier-pagos.md`](docs/guias/javier-pagos.md)             | *(a declarar)*         |
+| Javier     | Pagos                 | [`docs/guias/javier-pagos.md`](docs/guias/javier-pagos.md)             | Things, Error/Exception Handling, Persistent-Tables y RESTful |
 
 Convenciones de codificación comunes a todo el equipo: PEP 8, nombres en español del lenguaje ubicuo, type hints y docstrings de módulo.
+
+### 2.6.1. API de Pagos
+
+El módulo de Javier registra y procesa estados internos de pagos; no integra pasarelas ni recibe datos de tarjetas.
+
+| Método | Endpoint | Resultado |
+| --- | --- | --- |
+| `GET` | `/api/ventas/pagos/` | Lista todos los pagos; acepta `?pedido_id=<id>` |
+| `POST` | `/api/ventas/pagos/` | Registra un pago pendiente |
+| `GET` | `/api/ventas/pagos/<id>/` | Obtiene un pago |
+| `POST` | `/api/ventas/pagos/<id>/aprobar/` | Aprueba un pago pendiente |
+| `POST` | `/api/ventas/pagos/<id>/rechazar/` | Rechaza un pago pendiente |
+
+La evidencia de los Laboratorios 9, 10 y 11 está en la [guía de pagos de Javier](docs/guias/javier-pagos.md). El estado verificable y los pasos manuales de SonarLint están en el [reporte de pagos](docs/reportes/sonarlint-pagos.md).
 
 ---
 
@@ -303,6 +318,8 @@ uv run python manage.py makemigrations
 | [`docs/prototipo.md`](docs/prototipo.md)           | Pantallas del prototipo y flujo de interfaz        |
 | [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
 | [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
+| [`docs/reportes/sonarlint-pagos.md`](docs/reportes/sonarlint-pagos.md) | Estado y pasos de análisis SonarLint de pagos |
+| [`docs/checklists/trello-javier-pagos.md`](docs/checklists/trello-javier-pagos.md) | Checklist de pagos listo para copiar a Trello |
 
 ---
 
