@@ -6,15 +6,15 @@ El módulo `apps/inventario/` controla el stock de prendas, sus movimientos, ale
 
 ## 2. Resumen de prácticas
 
-| Categoría | Práctica aplicada | Archivo | Beneficio |
-|---|---|---|---|
-| Nombres | Excepción de dominio explícita para stock duplicado (`StockYaExiste`) | `apps/inventario/domain/excepciones.py` | Hace visible la regla de negocio y evita errores genéricos. |
-| Funciones | `crear_stock()` con guard clause y transacción atómica | `apps/inventario/application/services.py` | Reduce anidamiento, evita errores de persistencia y mejora la consistencia. |
-| Comentarios | Sustitución de un TODO genérico por una nota útil sobre el fallback SQLite | `config/settings/dev.py` | El comentario describe por qué existe la decisión, no repite código. |
-| Estructura de código fuente | Separación vertical de helpers y endpoints en presentación | `apps/inventario/presentation/views.py` | Mejora legibilidad y deja el flujo HTTP arriba, detalles abajo. |
-| Objetos y estructuras de datos | El agregado `StockPrenda` encapsula ingreso/salida/ajuste | `apps/inventario/domain/stock_prenda.py` | Evita mutaciones externas del stock y concentra invariantes del dominio. |
-| Tratamiento de errores | Traducción explícita de errores de dominio a HTTP 404/409 | `apps/inventario/presentation/views.py` | Evita fugas de errores internos y devuelve respuestas coherentes. |
-| Clases | `ServicioInventario` queda como orquestador del caso de uso | `apps/inventario/application/services.py` | Mantiene una sola responsabilidad principal por clase. |
+| Categoría                      | Práctica aplicada                                                          | Archivo                                   | Beneficio                                                                   |
+| ------------------------------ | -------------------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------- |
+| Nombres                        | Excepción de dominio explícita para stock duplicado (`StockYaExiste`)      | `apps/inventario/domain/excepciones.py`   | Hace visible la regla de negocio y evita errores genéricos.                 |
+| Funciones                      | `crear_stock()` con guard clause y transacción atómica                     | `apps/inventario/application/services.py` | Reduce anidamiento, evita errores de persistencia y mejora la consistencia. |
+| Comentarios                    | Sustitución de un TODO genérico por una nota útil sobre el fallback SQLite | `config/settings/dev.py`                  | El comentario describe por qué existe la decisión, no repite código.        |
+| Estructura de código fuente    | Separación vertical de helpers y endpoints en presentación                 | `apps/inventario/presentation/views.py`   | Mejora legibilidad y deja el flujo HTTP arriba, detalles abajo.             |
+| Objetos y estructuras de datos | El agregado `StockPrenda` encapsula ingreso/salida/ajuste                  | `apps/inventario/domain/stock_prenda.py`  | Evita mutaciones externas del stock y concentra invariantes del dominio.    |
+| Tratamiento de errores         | Traducción explícita de errores de dominio a HTTP 404/409                  | `apps/inventario/presentation/views.py`   | Evita fugas de errores internos y devuelve respuestas coherentes.           |
+| Clases                         | `ServicioInventario` queda como orquestador del caso de uso                | `apps/inventario/application/services.py` | Mantiene una sola responsabilidad principal por clase.                      |
 
 ## 3. Evidencias
 
@@ -251,17 +251,17 @@ Cada clase tiene una razón principal para cambiar y la frontera entre HTTP y ne
 
 No se pudieron recuperar diagnósticos reales desde OpenCode. El servidor LSP configurado no está instalado aquí (`basedpyright-langserver` ausente), así que no hay Rule ID verificable para citar.
 
-| Archivo / componente | Herramienta | Rule ID | Tipo | Problema | Corrección | Estado |
-|---|---|---|---|---|---|---|
-| N/A | SonarLint | No verificado | N/A | No accesible desde este entorno | Verificar en el IDE | Pendiente |
+| Archivo / componente | Herramienta | Rule ID       | Tipo | Problema                        | Corrección          | Estado    |
+| -------------------- | ----------- | ------------- | ---- | ------------------------------- | ------------------- | --------- |
+| N/A                  | SonarLint   | No verificado | N/A  | No accesible desde este entorno | Verificar en el IDE | Pendiente |
 
 ### Resultados de otras herramientas
 
-| Archivo / componente | Herramienta | Rule ID | Tipo | Problema | Corrección | Estado |
-|---|---|---|---|---|---|---|
-| `apps/inventario/*` | Revisión manual | No verificado | Mantenibilidad / Arquitectura | `create_stock()` no traducía duplicados ni prenda inexistente a errores de dominio/HTTP. | Se añadió `StockYaExiste`, se devolvió 404/409 y se protegió con transacción. | Corregido |
-| `apps/inventario/presentation/views.py` | Revisión manual | No verificado | Vulnerabilidad | El usuario responsable podía depender del payload del cliente. | Ahora se deriva de `request.user`. | Corregido |
-| `apps/inventario/infrastructure/models.py` | Revisión manual | No verificado | Code Smell | Wildcard import con `# noqa`. | Se cambiaron a imports explícitos. | Corregido |
+| Archivo / componente                       | Herramienta     | Rule ID       | Tipo                          | Problema                                                                                 | Corrección                                                                    | Estado    |
+| ------------------------------------------ | --------------- | ------------- | ----------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------- |
+| `apps/inventario/*`                        | Revisión manual | No verificado | Mantenibilidad / Arquitectura | `create_stock()` no traducía duplicados ni prenda inexistente a errores de dominio/HTTP. | Se añadió `StockYaExiste`, se devolvió 404/409 y se protegió con transacción. | Corregido |
+| `apps/inventario/presentation/views.py`    | Revisión manual | No verificado | Vulnerabilidad                | El usuario responsable podía depender del payload del cliente.                           | Ahora se deriva de `request.user`.                                            | Corregido |
+| `apps/inventario/infrastructure/models.py` | Revisión manual | No verificado | Code Smell                    | Wildcard import con `# noqa`.                                                            | Se cambiaron a imports explícitos.                                            | Corregido |
 
 ### Revisión manual
 
@@ -269,25 +269,25 @@ Hallazgos confirmados manualmente: falta de nombre de dominio para stock duplica
 
 ## 5. Bugs, code smells y vulnerabilidades corregidos
 
-| Situación anterior | Riesgo | Corrección | Archivo | Estado final |
-|---|---|---|---|---|
-| Crear stock duplicado terminaba en error técnico de base de datos. | 500, mala UX, posible inconsistencia en la capa HTTP. | Se agregó `StockYaExiste` y se tradujo a `409 Conflict`. | `apps/inventario/application/services.py`, `apps/inventario/presentation/views.py` | Corregido |
-| Crear stock con prenda inexistente no se traducía correctamente a HTTP. | 500 inesperado. | `PrendaNoEncontrada` ahora retorna `404`. | `apps/inventario/presentation/views.py` | Corregido |
-| El usuario responsable podía depender del campo enviado por el cliente. | Spoofing del auditor / trazabilidad incorrecta. | Se fuerza `request.user.id` como fuente real. | `apps/inventario/presentation/views.py` | Corregido |
-| `infrastructure/models.py` usaba wildcard import. | Mantenibilidad baja y análisis estático más débil. | Imports explícitos. | `apps/inventario/infrastructure/models.py` | Corregido |
+| Situación anterior                                                      | Riesgo                                                | Corrección                                               | Archivo                                                                            | Estado final |
+| ----------------------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------ |
+| Crear stock duplicado terminaba en error técnico de base de datos.      | 500, mala UX, posible inconsistencia en la capa HTTP. | Se agregó `StockYaExiste` y se tradujo a `409 Conflict`. | `apps/inventario/application/services.py`, `apps/inventario/presentation/views.py` | Corregido    |
+| Crear stock con prenda inexistente no se traducía correctamente a HTTP. | 500 inesperado.                                       | `PrendaNoEncontrada` ahora retorna `404`.                | `apps/inventario/presentation/views.py`                                            | Corregido    |
+| El usuario responsable podía depender del campo enviado por el cliente. | Spoofing del auditor / trazabilidad incorrecta.       | Se fuerza `request.user.id` como fuente real.            | `apps/inventario/presentation/views.py`                                            | Corregido    |
+| `infrastructure/models.py` usaba wildcard import.                       | Mantenibilidad baja y análisis estático más débil.    | Imports explícitos.                                      | `apps/inventario/infrastructure/models.py`                                         | Corregido    |
 
 ## 6. Pruebas y validación
 
 ### Comandos ejecutados
 
-| Comando | ¿Pudo ejecutarse? | Resultado | Error encontrado | ¿Fue causado por los cambios? |
-|---|---|---|---|---|
-| `python manage.py check` | No | Falló | `ModuleNotFoundError: No module named 'django'` | No |
-| `python manage.py makemigrations --check` | No | Falló | `ModuleNotFoundError: No module named 'django'` | No |
-| `python -m pytest apps/inventario -v` | No | Falló | `No module named pytest` | No |
-| `uv run python manage.py check` | Sí | OK | Ninguno | No |
-| `uv run python manage.py makemigrations --check` | Sí | OK | Ninguno | No |
-| `uv run pytest apps/inventario -v` | Sí | OK | Ninguno | No |
+| Comando                                          | ¿Pudo ejecutarse? | Resultado | Error encontrado                                | ¿Fue causado por los cambios? |
+| ------------------------------------------------ | ----------------- | --------- | ----------------------------------------------- | ----------------------------- |
+| `python manage.py check`                         | No                | Falló     | `ModuleNotFoundError: No module named 'django'` | No                            |
+| `python manage.py makemigrations --check`        | No                | Falló     | `ModuleNotFoundError: No module named 'django'` | No                            |
+| `python -m pytest apps/inventario -v`            | No                | Falló     | `No module named pytest`                        | No                            |
+| `uv run python manage.py check`                  | Sí                | OK        | Ninguno                                         | No                            |
+| `uv run python manage.py makemigrations --check` | Sí                | OK        | Ninguno                                         | No                            |
+| `uv run pytest apps/inventario -v`               | Sí                | OK        | Ninguno                                         | No                            |
 
 ### Pruebas ejecutadas
 
@@ -305,7 +305,3 @@ Hallazgos confirmados manualmente: falta de nombre de dominio para stock duplica
 
 - No se pudo usar SonarLint desde OpenCode porque el LSP configurado no está instalado.
 - No hay configuración visible de Ruff, Flake8, Pylint, Bandit o MyPy en este repositorio.
-
-## 7. Conclusiones
-
-El módulo de inventario quedó más explícito, más seguro y más predecible. El dominio ahora nombra mejor sus reglas, la aplicación traduce duplicados y faltantes a respuestas correctas, y la presentación deja de aceptar el usuario responsable desde el cliente. Además, las pruebas cubren el caso de duplicado, la reversión transaccional y los flujos principales del inventario.
