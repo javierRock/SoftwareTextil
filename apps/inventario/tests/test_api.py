@@ -139,6 +139,33 @@ def test_ingreso_con_stock_inexistente_devuelve_404(client, categoria) -> None:
 
 
 @pytest.mark.django_db
+def test_crear_stock_con_prenda_inexistente_devuelve_404(client) -> None:
+    respuesta = client.post(
+        "/api/stock/",
+        {"prenda_id": "prenda-inexistente", "stock_inicial": 5, "stock_minimo": 1, "ubicacion": "almacen"},
+        format="json",
+    )
+
+    assert respuesta.status_code == 404
+    assert respuesta.data["error"] == "La prenda no existe"
+
+
+@pytest.mark.django_db
+def test_crear_stock_duplicado_devuelve_409(client, stock, prenda) -> None:
+    respuesta = client.post(
+        "/api/stock/",
+        {"prenda_id": "prenda-1", "stock_inicial": 5, "stock_minimo": 1, "ubicacion": "almacen"},
+        format="json",
+    )
+
+    stock.refresh_from_db()
+
+    assert respuesta.status_code == 409
+    assert respuesta.data["error"] == "Ya existe stock para la prenda"
+    assert stock.cantidad_actual == 10
+
+
+@pytest.mark.django_db
 def test_salida_api_descuenta_stock_y_crea_un_movimiento(client, stock, prenda) -> None:
     respuesta = client.post(
         "/api/stock/salidas/",

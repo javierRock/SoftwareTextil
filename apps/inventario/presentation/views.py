@@ -11,6 +11,7 @@ from apps.inventario.domain.excepciones import (
     PrendaNoEncontrada,
     StockInsuficiente,
     StockNoEncontrado,
+    StockYaExiste,
     UsuarioResponsableRequerido,
 )
 from apps.inventario.application.services import ServicioInventario
@@ -38,11 +39,9 @@ def _servicio() -> ServicioInventario:
     )
 
 
-def _usuario_responsable_desde_solicitud(request, usuario_id: str | None) -> str:
+def _usuario_responsable_desde_solicitud(request) -> str:
     if getattr(request, "user", None) is not None and request.user.is_authenticated:
         return str(request.user.id)
-    if usuario_id:
-        return usuario_id
     raise UsuarioResponsableRequerido("Usuario responsable requerido")
 
 
@@ -51,6 +50,8 @@ def _manejar_error(exc: Exception) -> tuple[dict[str, str], int]:
         return {"error": str(exc)}, status.HTTP_400_BAD_REQUEST
     if isinstance(exc, (PrendaNoEncontrada, StockNoEncontrado)):
         return {"error": str(exc)}, status.HTTP_404_NOT_FOUND
+    if isinstance(exc, StockYaExiste):
+        return {"error": str(exc)}, status.HTTP_409_CONFLICT
     return {"error": str(exc)}, status.HTTP_400_BAD_REQUEST
 
 
@@ -72,8 +73,9 @@ class StockViewSet(viewsets.ViewSet):
                 stock_minimo=serializer.validated_data["stock_minimo"],
                 ubicacion=serializer.validated_data["ubicacion"],
             )
-        except CantidadInvalida as exc:
-            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        except (CantidadInvalida, PrendaNoEncontrada, StockYaExiste) as exc:
+            body, code = _manejar_error(exc)
+            return Response(body, status=code)
         return Response(StockSerializer(stock).data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
@@ -92,7 +94,7 @@ class StockViewSet(viewsets.ViewSet):
                 prenda_id=serializer.validated_data["prenda_id"],
                 cantidad=serializer.validated_data["cantidad"],
                 motivo=serializer.validated_data["motivo"],
-                usuario_id=_usuario_responsable_desde_solicitud(request, serializer.validated_data.get("usuario_id")),
+                usuario_id=_usuario_responsable_desde_solicitud(request),
             )
         except (CantidadInvalida, PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, UsuarioResponsableRequerido) as exc:
             body, code = _manejar_error(exc)
@@ -109,7 +111,7 @@ class StockViewSet(viewsets.ViewSet):
                 prenda_id=serializer.validated_data["prenda_id"],
                 cantidad=serializer.validated_data["cantidad"],
                 motivo=serializer.validated_data["motivo"],
-                usuario_id=_usuario_responsable_desde_solicitud(request, serializer.validated_data.get("usuario_id")),
+                usuario_id=_usuario_responsable_desde_solicitud(request),
             )
         except (CantidadInvalida, PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, UsuarioResponsableRequerido) as exc:
             body, code = _manejar_error(exc)
@@ -126,7 +128,7 @@ class StockViewSet(viewsets.ViewSet):
                 prenda_id=serializer.validated_data["prenda_id"],
                 nueva_cantidad=serializer.validated_data["nueva_cantidad"],
                 motivo=serializer.validated_data["motivo"],
-                usuario_id=_usuario_responsable_desde_solicitud(request, serializer.validated_data.get("usuario_id")),
+                usuario_id=_usuario_responsable_desde_solicitud(request),
             )
         except (CantidadInvalida, PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, UsuarioResponsableRequerido) as exc:
             body, code = _manejar_error(exc)
