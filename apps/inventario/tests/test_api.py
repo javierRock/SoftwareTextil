@@ -187,6 +187,29 @@ def test_salida_con_stock_insuficiente_es_rechazada_sin_cambiar_stock(client, st
 
 
 @pytest.mark.django_db
+def test_salida_con_stock_inexistente_devuelve_404(client, categoria) -> None:
+    PrendaModel.objects.create(
+        id="prenda-sin-stock-api",
+        nombre="Polo sin stock API",
+        descripcion="Sin stock",
+        precio_monto="20.00",
+        precio_moneda="PEN",
+        categoria=categoria,
+        estado="activa",
+        registrado_por="usuario-1",
+    )
+
+    respuesta = client.post(
+        "/api/stock/salidas/",
+        {"prenda_id": "prenda-sin-stock-api", "cantidad": 1, "motivo": "Salida", "usuario_id": "usuario-1"},
+        format="json",
+    )
+
+    assert respuesta.status_code == 404
+    assert respuesta.data["error"] == "No existe stock para la prenda"
+
+
+@pytest.mark.django_db
 def test_salida_con_cantidad_no_numerica_es_rechazada_por_serializer(client, stock, prenda) -> None:
     respuesta = client.post(
         "/api/stock/salidas/",

@@ -3,7 +3,7 @@
 import pytest
 
 from apps.compartido.domain.enums import TipoMovimiento
-from apps.inventario.domain.excepciones import PrendaNoEncontrada, StockInsuficiente
+from apps.inventario.domain.excepciones import PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado
 from apps.inventario.infrastructure.models import MovimientoInventarioModel
 from apps.inventario.infrastructure.repositories import DjangoRepositorioMovimiento
 
@@ -28,6 +28,25 @@ def test_stock_no_encontrado_levanta_excepcion(servicio_inventario, prenda) -> N
 
 
 @pytest.mark.django_db
+def test_salida_sin_stock_levanta_excepcion(servicio_inventario, categoria) -> None:
+    from apps.catalogo.infrastructure.models import PrendaModel
+
+    PrendaModel.objects.create(
+        id="prenda-sin-stock",
+        nombre="Polo sin stock",
+        descripcion="Prenda existente sin registro de stock",
+        precio_monto="25.00",
+        precio_moneda="PEN",
+        categoria=categoria,
+        estado="activa",
+        registrado_por="usuario-1",
+    )
+
+    with pytest.raises(StockNoEncontrado):
+        servicio_inventario.registrar_salida("prenda-sin-stock", 1, "Salida", "usuario-1")
+
+
+@pytest.mark.django_db
 def test_salida_insuficiente_no_modifica_stock(servicio_inventario, stock, prenda) -> None:
     with pytest.raises(StockInsuficiente):
         servicio_inventario.registrar_salida("prenda-1", 11, "Salida", "usuario-1")
@@ -46,6 +65,21 @@ def test_fallo_al_guardar_movimiento_revierte_stock(monkeypatch, servicio_invent
 
     with pytest.raises(RuntimeError):
         servicio_inventario.registrar_ingreso("prenda-1", 5, "Ingreso", "usuario-1")
+
+    stock.refresh_from_db()
+    assert stock.cantidad_actual == 10
+    assert MovimientoInventarioModel.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_fallo_al_guardar_movimiento_en_salida_revierte_stock(monkeypatch, servicio_inventario, stock, prenda) -> None:
+    def _fallar_guardado(self, movimiento):
+        raise RuntimeError("fallo al guardar movimiento")
+
+    monkeypatch.setattr(DjangoRepositorioMovimiento, "guardar", _fallar_guardado)
+
+    with pytest.raises(RuntimeError):
+        servicio_inventario.registrar_salida("prenda-1", 5, "Salida", "usuario-1")
 
     stock.refresh_from_db()
     assert stock.cantidad_actual == 10
