@@ -94,7 +94,7 @@ class DjangoRepositorioMovimiento(RepositorioMovimientoInventario):
         )
 
     def listar_por_stock(self, stock_id: str) -> list[MovimientoInventario]:
-        qs = MovimientoInventarioModel.objects.filter(stock_id=stock_id)
+        qs = MovimientoInventarioModel.objects.select_related("stock").filter(stock_id=stock_id)
         return [_movimiento_from_model(m) for m in qs]
 
 

@@ -22,6 +22,10 @@ class RepositorioInventario(ABC):
     def buscar_por_id(self, stock_id: str) -> StockPrenda | None:
         raise NotImplementedError
 
+    @abstractmethod
+    def listar(self) -> list[StockPrenda]:
+        raise NotImplementedError
+
 
 class RepositorioMovimientoInventario(ABC):
     @abstractmethod

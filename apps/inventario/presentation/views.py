@@ -97,8 +97,7 @@ class StockViewSet(viewsets.ViewSet):
         except (CantidadInvalida, PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, UsuarioResponsableRequerido) as exc:
             body, code = _manejar_error(exc)
             return Response(body, status=code)
-        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
-        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
+        return Response(MovimientoSerializer(movimiento).data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=["post"], url_path="salidas")
     def registrar_salida(self, request):
@@ -115,8 +114,7 @@ class StockViewSet(viewsets.ViewSet):
         except (CantidadInvalida, PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, UsuarioResponsableRequerido) as exc:
             body, code = _manejar_error(exc)
             return Response(body, status=code)
-        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
-        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
+        return Response(MovimientoSerializer(movimiento).data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=["post"], url_path="ajustes")
     def ajustar(self, request):
@@ -133,12 +131,11 @@ class StockViewSet(viewsets.ViewSet):
         except (CantidadInvalida, PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, UsuarioResponsableRequerido) as exc:
             body, code = _manejar_error(exc)
             return Response(body, status=code)
-        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
-        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
+        return Response(MovimientoSerializer(movimiento).data, status=status.HTTP_201_CREATED)
 
 
 class MovimientoViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
-    queryset = MovimientoInventarioModel.objects.all()
+    queryset = MovimientoInventarioModel.objects.select_related("stock").all()
     serializer_class = MovimientoSerializer
