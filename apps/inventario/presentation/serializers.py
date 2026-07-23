@@ -37,20 +37,20 @@ class AlertaStockSerializer(serializers.ModelSerializer):
 
 class CrearStockSerializer(serializers.Serializer):
     prenda_id = serializers.CharField()
-    stock_inicial = serializers.IntegerField()
-    stock_minimo = serializers.IntegerField()
+    stock_inicial = serializers.IntegerField(min_value=0)
+    stock_minimo = serializers.IntegerField(min_value=0)
     ubicacion = serializers.CharField(required=False, default="almacen")
 
 
 class MovimientoStockSerializer(serializers.Serializer):
     prenda_id = serializers.CharField()
-    cantidad = serializers.IntegerField()
+    cantidad = serializers.IntegerField(min_value=1)
     motivo = serializers.CharField()
-    usuario_id = serializers.CharField()
+    usuario_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
 
 class AjusteStockSerializer(serializers.Serializer):
     prenda_id = serializers.CharField()
-    nueva_cantidad = serializers.IntegerField()
+    nueva_cantidad = serializers.IntegerField(min_value=0)
     motivo = serializers.CharField()
-    usuario_id = serializers.CharField()
+    usuario_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
