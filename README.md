@@ -23,6 +23,7 @@
   - [2.10. Documentación Complementaria](#210-documentación-complementaria)
   - [2.11. Trabajo Futuro](#211-trabajo-futuro)
   - [2.12. Referencias](#212-referencias)
+  - [2.13. Clean Code en inventario](#213-clean-code-en-inventario)
 
 # 2. SoftwareTextil
 
@@ -321,3 +322,7 @@ Módulos modelados en UML pero fuera del alcance de esta entrega: **Despachos** 
 - Evans, E. _Domain-Driven Design_.
 - [Citerus DDD Sample Core](https://github.com/citerus/dddsample-core).
 - [Modern DDD Cargo Tracker](https://github.com/eclipse-ee4j/cargotracker).
+
+## 2.13. Clean Code en inventario
+
+La evidencia específica del módulo de inventario está documentada en [`docs/guias/inventario/clean-code-inventario.md`](docs/guias/inventario/clean-code-inventario.md).
