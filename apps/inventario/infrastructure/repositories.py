@@ -1,6 +1,11 @@
 """Repositorios concretos con Django ORM para inventario."""
 
 from apps.compartido.domain.enums import EstadoAlerta, TipoMovimiento
+from apps.inventario.domain.repositorios import (
+    RepositorioAlertaStock,
+    RepositorioInventario,
+    RepositorioMovimientoInventario,
+)
 from apps.inventario.domain.stock_prenda import AlertaStock, MovimientoInventario, StockPrenda
 from apps.inventario.infrastructure.models import (
     AlertaStockModel,
@@ -46,7 +51,7 @@ def _alerta_from_model(model: AlertaStockModel) -> AlertaStock:
     return alerta
 
 
-class DjangoRepositorioInventario:
+class DjangoRepositorioInventario(RepositorioInventario):
     def guardar(self, stock: StockPrenda) -> None:
         model = StockPrendaModel.objects.filter(id=stock.id).first()
         if model is None:
@@ -62,6 +67,10 @@ class DjangoRepositorioInventario:
         model = StockPrendaModel.objects.filter(prenda_id=prenda_id).first()
         return _stock_from_model(model) if model else None
 
+    def buscar_por_prenda_bloqueado(self, prenda_id: str) -> StockPrenda | None:
+        model = StockPrendaModel.objects.select_for_update().filter(prenda_id=prenda_id).first()
+        return _stock_from_model(model) if model else None
+
     def buscar_por_id(self, stock_id: str) -> StockPrenda | None:
         model = StockPrendaModel.objects.filter(id=stock_id).first()
         return _stock_from_model(model) if model else None
@@ -70,7 +79,7 @@ class DjangoRepositorioInventario:
         return [_stock_from_model(m) for m in StockPrendaModel.objects.all()]
 
 
-class DjangoRepositorioMovimiento:
+class DjangoRepositorioMovimiento(RepositorioMovimientoInventario):
     def guardar(self, movimiento: MovimientoInventario) -> None:
         MovimientoInventarioModel.objects.update_or_create(
             id=movimiento.id,
@@ -89,7 +98,7 @@ class DjangoRepositorioMovimiento:
         return [_movimiento_from_model(m) for m in qs]
 
 
-class DjangoRepositorioAlertaStock:
+class DjangoRepositorioAlertaStock(RepositorioAlertaStock):
     def guardar(self, alerta: AlertaStock) -> None:
         AlertaStockModel.objects.update_or_create(
             id=alerta.id,

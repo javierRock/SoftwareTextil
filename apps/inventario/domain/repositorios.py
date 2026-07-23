@@ -15,6 +15,10 @@ class RepositorioInventario(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def buscar_por_prenda_bloqueado(self, prenda_id: str) -> StockPrenda | None:
+        raise NotImplementedError
+
+    @abstractmethod
     def buscar_por_id(self, stock_id: str) -> StockPrenda | None:
         raise NotImplementedError
 
