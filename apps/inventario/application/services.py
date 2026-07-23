@@ -1,9 +1,9 @@
 """Servicios de aplicacion para inventario."""
 
-from django.db import transaction
+from django.db import IntegrityError, transaction
 
 from apps.catalogo.domain.repositorios import RepositorioPrenda
-from apps.inventario.domain.excepciones import PrendaNoEncontrada, StockNoEncontrado
+from apps.inventario.domain.excepciones import PrendaNoEncontrada, StockNoEncontrado, StockYaExiste
 from apps.inventario.domain.repositorios import (
     RepositorioAlertaStock,
     RepositorioInventario,
@@ -26,11 +26,21 @@ class ServicioInventario:
         self.repo_prenda = repo_prenda
 
     def crear_stock(self, prenda_id: str, stock_inicial: int, stock_minimo: int, ubicacion: str = "almacen") -> StockPrenda:
-        self._validar_prenda_existente(prenda_id)
-        stock = InventarioFabrica.crear(prenda_id, stock_inicial, stock_minimo, ubicacion)
-        self.repo_inventario.guardar(stock)
-        self._generar_alerta_si_corresponde(stock)
-        return stock
+        with transaction.atomic():
+            self._validar_prenda_existente(prenda_id)
+
+            if self.repo_inventario.buscar_por_prenda(prenda_id) is not None:
+                raise StockYaExiste("Ya existe stock para la prenda")
+
+            stock = InventarioFabrica.crear(prenda_id, stock_inicial, stock_minimo, ubicacion)
+
+            try:
+                self.repo_inventario.guardar(stock)
+            except IntegrityError as exc:
+                raise StockYaExiste("Ya existe stock para la prenda") from exc
+
+            self._generar_alerta_si_corresponde(stock)
+            return stock
 
     def consultar_stock(self, prenda_id: str) -> StockPrenda | None:
         return self.repo_inventario.buscar_por_prenda(prenda_id)

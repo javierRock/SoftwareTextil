@@ -3,7 +3,7 @@
 import pytest
 
 from apps.compartido.domain.enums import TipoMovimiento
-from apps.inventario.domain.excepciones import PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado
+from apps.inventario.domain.excepciones import PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, StockYaExiste
 from apps.inventario.infrastructure.models import MovimientoInventarioModel
 from apps.inventario.infrastructure.repositories import DjangoRepositorioMovimiento
 
@@ -19,6 +19,15 @@ def test_segundo_ingreso_se_acumula_sobre_el_stock_actual(servicio_inventario, s
     assert MovimientoInventarioModel.objects.count() == 2
     assert movimiento_1.tipo == TipoMovimiento.INGRESO
     assert movimiento_2.tipo == TipoMovimiento.INGRESO
+
+
+@pytest.mark.django_db
+def test_crear_stock_duplicado_es_rechazado_por_el_servicio(servicio_inventario, stock, prenda) -> None:
+    with pytest.raises(StockYaExiste):
+        servicio_inventario.crear_stock("prenda-1", 5, 1, "almacen")
+
+    stock.refresh_from_db()
+    assert stock.cantidad_actual == 10
 
 
 @pytest.mark.django_db
