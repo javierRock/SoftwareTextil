@@ -17,6 +17,10 @@ class StockPrendaModel(models.Model):
     class Meta:
         db_table = "stocks_prenda"
         unique_together = [("prenda_id",)]
+        constraints = [
+            models.CheckConstraint(condition=models.Q(cantidad_actual__gte=0), name="stock_cantidad_actual_no_negativa"),
+            models.CheckConstraint(condition=models.Q(nivel_minimo__gte=0), name="stock_nivel_minimo_no_negativo"),
+        ]
 
 
 class MovimientoInventarioModel(models.Model):
