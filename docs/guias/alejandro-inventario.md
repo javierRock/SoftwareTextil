@@ -15,14 +15,28 @@
 
 ## 2. Estilo de programación (a declarar)
 
-> **Estilo elegido:** _(completa aquí: nombre del estilo, distinto al del resto del equipo — ver lista en [README.md](README.md))_
+> **Estilo elegido:** **Declared Intentions**
 >
-> **Descripción de cómo lo aplicas en tu módulo:** _(2–4 líneas)_
+> **Descripción de cómo lo aplicas en tu módulo:**
+> En inventario dejo las reglas visibles en los tipos, los nombres y las excepciones específicas. Los serializers solo parsean datos de entrada y el dominio decide si una cantidad o un stock son válidos. Así el flujo se lee como una intención explícita: validar, bloquear, modificar y guardar.
 >
 > **Evidencia (fragmento de código con ruta y líneas):**
 >
 > ```python
-> # apps/inventario/...
+> # apps/inventario/domain/stock_prenda.py:63-83
+> def registrar_ingreso(self, cantidad: int, motivo: str, usuario_id: str) -> MovimientoInventario:
+>     self._validar_cantidad(cantidad)
+>     self.cantidad_actual += cantidad
+>     self.ultima_actualizacion = datetime.utcnow()
+>     return self._crear_movimiento(TipoMovimiento.INGRESO, cantidad, motivo, usuario_id)
+>
+> def registrar_salida(self, cantidad: int, motivo: str, usuario_id: str) -> MovimientoInventario:
+>     self._validar_cantidad(cantidad)
+>     if cantidad > self.cantidad_actual:
+>         raise StockInsuficiente("No hay stock suficiente para la salida")
+>     self.cantidad_actual -= cantidad
+>     self.ultima_actualizacion = datetime.utcnow()
+>     return self._crear_movimiento(TipoMovimiento.SALIDA, cantidad, motivo, usuario_id)
 > ```
 
 Sugerencia natural para este módulo: **Declared Intentions** — type hints estrictos y validación declarada de invariantes (el VO `Stock` ya es `frozen` y no-negativo: extender ese enfoque a todo el módulo) — o **Persistent Tables**, apoyándote en consultas sobre `movimientos_inventario`.
@@ -40,11 +54,11 @@ Sugerencia natural para este módulo: **Declared Intentions** — type hints est
 
 | # | Práctica | Dónde la aplicaste | Fragmento (ruta:líneas) |
 | --- | --- | --- | --- |
-| 1 | Nombres significativos (lenguaje ubicuo: `StockPrenda`, `registrar_ingreso`, `esta_bajo_minimo`) | | |
-| 2 | Funciones pequeñas, una sola responsabilidad | | |
-| 3 | Sin valores mágicos (nivel mínimo, unidades y estados de alerta como constantes/enums) | | |
-| 4 | Manejo de errores explícito (p. ej. `StockInsuficiente` al registrar una salida mayor al disponible) | | |
-| 5 | Evitar efectos ocultos (la generación de alertas es explícita: `generar_alerta_si_corresponde`) | | |
+| 1 | Nombres significativos (lenguaje ubicuo: `StockPrenda`, `registrar_ingreso`, `esta_bajo_minimo`) | Dominio de inventario | `apps/inventario/domain/stock_prenda.py:53-86` |
+| 2 | Funciones pequeñas, una sola responsabilidad | Servicio y viewset delegan; el dominio decide reglas | `apps/inventario/application/services.py:40-65` |
+| 3 | Sin valores mágicos (unidades, estados y tipo de movimiento con enums/defaults) | Tipos compartidos | `apps/compartido/domain/enums.py:6-79` |
+| 4 | Manejo de errores explícito (excepciones de dominio: `CantidadInvalida`, `StockInsuficiente`) | Reglas de negocio | `apps/inventario/domain/excepciones.py:4-23` |
+| 5 | Evitar efectos ocultos (la transacción y el guardado están encapsulados) | Caso de uso de ingreso/salida | `apps/inventario/application/services.py:40-65` |
 
 ## 5. Mapa DDD del módulo (evidencia para la rúbrica)
 
