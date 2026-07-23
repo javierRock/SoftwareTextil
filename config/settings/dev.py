@@ -5,7 +5,7 @@ from config.settings.base import *  # noqa: F401, F403
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
-# TODO: cambiar a PostgreSQL cuando este disponible
+# SQLite queda como respaldo temporal para desarrollo local hasta disponer de PostgreSQL.
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
