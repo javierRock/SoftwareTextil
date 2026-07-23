@@ -301,6 +301,7 @@ uv run python manage.py makemigrations
 | [`docs/modelo_dominio.md`](docs/modelo_dominio.md) | Lenguaje ubicuo, contextos delimitados y agregados |
 | [`docs/arquitectura.md`](docs/arquitectura.md)     | Capas, dependencias y estructura técnica           |
 | [`docs/prototipo.md`](docs/prototipo.md)           | Pantallas del prototipo y flujo de interfaz        |
+| [`docs/guias/inventario/estilos-programacion-inventario.md`](docs/guias/inventario/estilos-programacion-inventario.md) | Estilos de programación aplicados al módulo de inventario |
 | [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
 | [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
 
