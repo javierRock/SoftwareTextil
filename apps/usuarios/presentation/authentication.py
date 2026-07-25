@@ -13,6 +13,7 @@ class UsuarioAutenticado:
     """Representa al usuario autenticado sin acoplarlo al modelo auth de Django."""
 
     id: str
+    nombre: str
     username: str
     email: str
     rol: str
@@ -32,8 +33,15 @@ class SesionTokenAuthentication(authentication.BaseAuthentication):
             .filter(token=token, estado="activa")
             .first()
         )
-        if sesion is None or not sesion.fecha_expiracion or sesion.fecha_expiracion <= timezone.now():
+        if (
+            sesion is None
+            or not sesion.fecha_expiracion
+            or sesion.fecha_expiracion <= timezone.now()
+        ):
             return self._validar_sesion_expirada(sesion)
+
+        if sesion.usuario.estado != "activo":
+            raise exceptions.AuthenticationFailed("El usuario esta inactivo")
 
         usuario = self._crear_usuario_autenticado(sesion.usuario)
         return (usuario, sesion)
@@ -57,6 +65,7 @@ class SesionTokenAuthentication(authentication.BaseAuthentication):
     def _crear_usuario_autenticado(self, usuario: UsuarioModel) -> UsuarioAutenticado:
         return UsuarioAutenticado(
             id=str(usuario.id),
+            nombre=usuario.nombre,
             username=usuario.username,
             email=usuario.email,
             rol=usuario.rol.nombre,

@@ -1,21 +1,25 @@
 """Excepciones del dominio de usuarios y autenticacion."""
 
 
-class ErrorUsuarios(Exception):
+class UsuariosError(Exception):
     """Error base para casos de uso de usuarios."""
 
 
-class CredencialesInvalidas(ErrorUsuarios):
+class CredencialesInvalidasError(UsuariosError):
     """Se lanza cuando el usuario o la clave no coinciden."""
 
 
-class UsuarioInactivo(ErrorUsuarios):
+class UsuarioInactivoError(UsuariosError):
     """Se lanza cuando un usuario inactivo intenta iniciar sesion."""
 
 
-class RecursoDuplicado(ErrorUsuarios):
+class RecursoDuplicadoError(UsuariosError):
     """Se lanza cuando un campo unico ya fue registrado."""
 
 
-class RecursoNoEncontrado(ErrorUsuarios):
+class RecursoNoEncontradoError(UsuariosError):
     """Se lanza cuando una entidad requerida no existe."""
+
+
+class OperacionNoPermitidaError(UsuariosError):
+    """Se lanza cuando una regla de seguridad impide la operacion."""

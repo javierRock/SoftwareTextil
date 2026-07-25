@@ -85,10 +85,20 @@ class Usuario:
     def asignar_rol(self, rol: Rol) -> None:
         self.rol = rol
 
+    def actualizar_perfil(self, nombre: str, email: str) -> None:
+        self.nombre = nombre.strip()
+        self.email = email.strip().lower()
+
 
 class UsuarioSistemaFabrica:
     @staticmethod
-    def crear(nombre: str, email: str, username: str, rol: Rol, creado_por: str | None = None) -> Usuario:
+    def crear(
+        nombre: str,
+        email: str,
+        username: str,
+        rol: Rol,
+        creado_por: str | None = None,
+    ) -> Usuario:
         return Usuario(
             id=str(uuid4()),
             nombre=nombre,

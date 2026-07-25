@@ -52,22 +52,27 @@ class DjangoRepositorioUsuario(RepositorioUsuario):
         return _usuario_from_model(model) if model else None
 
     def buscar_por_email(self, email: str) -> Usuario | None:
-        model = UsuarioModel.objects.filter(email=email).first()
+        model = UsuarioModel.objects.filter(email__iexact=email).first()
         return _usuario_from_model(model) if model else None
 
     def buscar_por_username(self, username: str) -> Usuario | None:
-        model = UsuarioModel.objects.filter(username=username).first()
+        model = UsuarioModel.objects.filter(username__iexact=username).first()
         return _usuario_from_model(model) if model else None
 
     def set_password(self, usuario_id: str, password_hash: str) -> None:
         UsuarioModel.objects.filter(id=usuario_id).update(password_hash=password_hash)
 
     def get_password(self, username: str) -> str:
-        model = UsuarioModel.objects.filter(username=username).first()
+        model = UsuarioModel.objects.filter(username__iexact=username).first()
+        return model.password_hash if model else ""
+
+    def get_password_por_id(self, usuario_id: str) -> str:
+        model = UsuarioModel.objects.filter(id=usuario_id).first()
         return model.password_hash if model else ""
 
     def listar(self) -> list[Usuario]:
-        return [_usuario_from_model(m) for m in UsuarioModel.objects.all()]
+        modelos = UsuarioModel.objects.select_related("rol").order_by("nombre")
+        return [_usuario_from_model(model) for model in modelos]
 
 
 class DjangoRepositorioRol(RepositorioRol):
@@ -83,8 +88,12 @@ class DjangoRepositorioRol(RepositorioRol):
         model = RolModel.objects.filter(id=rol_id).first()
         return _rol_from_model(model) if model else None
 
+    def buscar_por_nombre(self, nombre: str) -> Rol | None:
+        model = RolModel.objects.filter(nombre__iexact=nombre).first()
+        return _rol_from_model(model) if model else None
+
     def listar(self) -> list[Rol]:
-        return [_rol_from_model(m) for m in RolModel.objects.all()]
+        return [_rol_from_model(model) for model in RolModel.objects.order_by("nombre")]
 
 
 class DjangoRepositorioSesion(RepositorioSesion):
@@ -116,6 +125,12 @@ class DjangoRepositorioSesion(RepositorioSesion):
 
     def cerrar_por_token(self, token: str) -> None:
         SesionModel.objects.filter(token=token).update(estado="cerrada")
+
+    def cerrar_por_usuario(self, usuario_id: str, excepto_token: str = "") -> None:
+        sesiones = SesionModel.objects.filter(usuario_id=usuario_id, estado="activa")
+        if excepto_token:
+            sesiones = sesiones.exclude(token=excepto_token)
+        sesiones.update(estado="cerrada")
 
 
 class DjangoRepositorioIntentoLogin(RepositorioIntentoLogin):

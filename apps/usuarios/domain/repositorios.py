@@ -31,6 +31,10 @@ class RepositorioUsuario(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def get_password_por_id(self, usuario_id: str) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
     def listar(self) -> list[Usuario]:
         raise NotImplementedError
 
@@ -42,6 +46,10 @@ class RepositorioRol(ABC):
 
     @abstractmethod
     def buscar_por_id(self, rol_id: str) -> Rol | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def buscar_por_nombre(self, nombre: str) -> Rol | None:
         raise NotImplementedError
 
     @abstractmethod
@@ -60,6 +68,10 @@ class RepositorioSesion(ABC):
 
     @abstractmethod
     def cerrar_por_token(self, token: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def cerrar_por_usuario(self, usuario_id: str, excepto_token: str = "") -> None:
         raise NotImplementedError
 
 
