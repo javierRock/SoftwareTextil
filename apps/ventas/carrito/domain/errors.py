@@ -1,44 +1,46 @@
 """Excepciones de dominio del modulo de carrito.
 
-Heredan de ValueError para mantener compatibilidad con la capa de presentacion,
-que traduce estos errores de negocio a respuestas HTTP 400/404.
+Cuelgan de `DominioError` para que la capa de presentacion las traduzca a
+respuestas HTTP 400/404 sin conocer cada subtipo.
 """
 
+from apps.compartido.domain.errors import DominioError
 
-class CarritoError(ValueError):
+
+class CarritoError(DominioError):
     """Error base del dominio de carrito."""
 
 
-class CarritoNoEncontrado(CarritoError):
+class CarritoNoEncontradoError(CarritoError):
     def __init__(self) -> None:
         super().__init__("Carrito no encontrado")
 
 
-class CarritoCerrado(CarritoError):
+class CarritoCerradoError(CarritoError):
     def __init__(self) -> None:
         super().__init__("El carrito no esta abierto")
 
 
-class CantidadInvalida(CarritoError):
+class CantidadInvalidaError(CarritoError):
     def __init__(self) -> None:
         super().__init__("La cantidad del item debe ser mayor a cero")
 
 
-class MonedasIncompatibles(CarritoError):
+class MonedasIncompatiblesError(CarritoError):
     def __init__(self) -> None:
         super().__init__("No se pueden mezclar monedas en el carrito")
 
 
-class ItemInexistente(CarritoError):
+class ItemInexistenteError(CarritoError):
     def __init__(self) -> None:
         super().__init__("El item no existe en el carrito")
 
 
-class CarritoVacio(CarritoError):
+class CarritoVacioError(CarritoError):
     def __init__(self) -> None:
         super().__init__("No se puede generar un pedido desde un carrito vacio")
 
 
-class CarritoConvertido(CarritoError):
+class CarritoConvertidoError(CarritoError):
     def __init__(self) -> None:
         super().__init__("No se puede cancelar un carrito convertido")

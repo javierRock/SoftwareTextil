@@ -1,4 +1,10 @@
-"""Repositorios concretos con Django ORM para pedidos."""
+"""Repositorios concretos con Django ORM para pedidos.
+
+`DjangoRepositorioPedido` hereda el contrato completo `RepositorioPedido` y
+respeta su comportamiento esperado (LSP): no agrega precondiciones ni cambia el
+tipo de retorno, por lo que puede sustituirse por cualquier otra
+implementacion (ver `memoria.py`) sin tocar los servicios.
+"""
 
 from decimal import Decimal
 
@@ -12,6 +18,7 @@ from apps.ventas.pedidos.infrastructure.models import DetallePedidoModel, Pedido
 def _pedido_from_model(model: PedidoModel) -> Pedido:
     detalles = [
         DetallePedido(
+            id=str(d.id),
             prenda_id=d.prenda_id,
             cantidad=d.cantidad,
             precio_unitario=Dinero(Decimal(d.precio_monto), d.precio_moneda),
@@ -44,6 +51,7 @@ class DjangoRepositorioPedido(RepositorioPedido):
         model.detalles.all().delete()
         for detalle in pedido.detalles:
             DetallePedidoModel.objects.create(
+                id=detalle.id,
                 pedido=model,
                 prenda_id=detalle.prenda_id,
                 cantidad=detalle.cantidad,
@@ -58,3 +66,6 @@ class DjangoRepositorioPedido(RepositorioPedido):
     def listar_por_cliente(self, cliente_id: str) -> list[Pedido]:
         qs = PedidoModel.objects.filter(cliente_id=cliente_id)
         return [_pedido_from_model(m) for m in qs]
+
+    def listar_todos(self) -> list[Pedido]:
+        return [_pedido_from_model(m) for m in PedidoModel.objects.all()]

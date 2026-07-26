@@ -1,44 +1,51 @@
 """Excepciones de dominio del modulo de pedidos.
 
-Heredan de ValueError para mantener compatibilidad con la capa de presentacion,
-que traduce estos errores de negocio a respuestas HTTP 400/404.
+Cuelgan de `DominioError` para que la capa de presentacion las traduzca a
+respuestas HTTP 400/404 sin conocer cada subtipo.
 """
 
+from apps.compartido.domain.errors import DominioError
 
-class PedidoError(ValueError):
+
+class PedidoError(DominioError):
     """Error base del dominio de pedidos."""
 
 
-class CarritoNoEncontrado(PedidoError):
+class CarritoNoEncontradoError(PedidoError):
     def __init__(self) -> None:
         super().__init__("Carrito no encontrado")
 
 
-class CarritoNoPerteneceACliente(PedidoError):
+class CarritoNoPerteneceAClienteError(PedidoError):
     def __init__(self) -> None:
         super().__init__("El carrito no pertenece al cliente")
 
 
-class PedidoSinDetalles(PedidoError):
+class PedidoSinDetallesError(PedidoError):
     def __init__(self) -> None:
         super().__init__("Un pedido debe tener al menos un detalle")
 
 
-class PedidoNoEncontrado(PedidoError):
+class CantidadDetalleInvalidaError(PedidoError):
+    def __init__(self) -> None:
+        super().__init__("La cantidad del detalle debe ser mayor a cero")
+
+
+class PedidoNoEncontradoError(PedidoError):
     def __init__(self) -> None:
         super().__init__("Pedido no encontrado")
 
 
-class PedidoNoCancelable(PedidoError):
+class PedidoNoCancelableError(PedidoError):
     def __init__(self) -> None:
         super().__init__("No se puede cancelar un pedido pagado")
 
 
-class PedidoYaPagado(PedidoError):
+class PedidoYaPagadoError(PedidoError):
     def __init__(self) -> None:
         super().__init__("El pedido ya esta pagado")
 
 
-class PedidoCancelado(PedidoError):
+class PedidoCanceladoError(PedidoError):
     def __init__(self) -> None:
         super().__init__("No se puede pagar un pedido cancelado")
