@@ -46,6 +46,9 @@ class SesionTokenAuthentication(authentication.BaseAuthentication):
         usuario = self._crear_usuario_autenticado(sesion.usuario)
         return (usuario, sesion)
 
+    def authenticate_header(self, request) -> str:
+        return self.keyword
+
     def _obtener_token(self, request) -> str:
         auth = authentication.get_authorization_header(request).decode("utf-8").split()
         if len(auth) == 2 and auth[0] in {self.keyword, "Token"}:

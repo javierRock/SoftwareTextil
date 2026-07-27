@@ -6,6 +6,8 @@ Archivos que deben analizarse en SonarQube for IDE/SonarLint:
 
 - `apps/ventas/pagos/**/*.py`
 - `apps/ventas/models.py`, limitado a `PagoModel` y a la limpieza de imports compartidos
+- `apps/ventas/migrations/0002_integridad_pago.py`
+- `apps/usuarios/presentation/authentication.py`, limitado al encabezado Bearer
 - `tests/pagos/**/*.py`
 
 ## Estado verificable
@@ -15,8 +17,8 @@ SonarLint/SonarQube for IDE no se ejecutó en esta sesión. No existe `sonar-sca
 Sí se ejecutó análisis estático independiente con Ruff:
 
 ```bash
-uvx ruff check apps/ventas/pagos tests/pagos apps/ventas/models.py
-uvx ruff format --check apps/ventas/pagos tests/pagos apps/ventas/models.py
+uv run ruff check apps/ventas/pagos tests/pagos apps/ventas/models.py apps/ventas/migrations/0002_integridad_pago.py
+uv run ruff format --check apps/ventas/pagos tests/pagos apps/ventas/models.py apps/ventas/migrations/0002_integridad_pago.py
 ```
 
 Ruff reportó `All checks passed!`; el formato se aplicó a los tres archivos que la primera revisión marcó. Ruff no sustituye el análisis de seguridad y mantenibilidad de SonarLint.
@@ -33,6 +35,11 @@ Estos hallazgos proceden de revisión manual y Ruff, no de SonarLint:
 | Dependencia del servicio sobre el repositorio Django | No atribuida | `application/services.py` | Inyección de `RepositorioPago` | Corregido |
 | Posible recepción de número de tarjeta, CVV o PIN | No atribuida | `presentation/serializers.py` | Rechazo explícito de campos sensibles | Corregido |
 | Consultas sin orden definido | No atribuida | `infrastructure/repositories.py` | Orden por `fecha` e `id` | Corregido |
+| API anónima y sin control de propiedad | No atribuida | `presentation/views.py` | Token Bearer, permisos por rol y validación del dueño | Corregido |
+| Carrera entre aprobar y rechazar | No atribuida | `application/services.py` | Unidad de trabajo, transacción y bloqueo de filas | Corregido |
+| Pago desconectado de Pedido | No atribuida | `application/ports.py`, `infrastructure/pedidos.py` | Puerto anticorrupción y actualización atómica | Corregido |
+| Listado sin límites | No atribuida | `presentation/serializers.py`, `domain/repositorios.py` | Paginación con máximo de 100 | Corregido |
+| Integridad solo en memoria | No atribuida | `apps/ventas/models.py` | Restricciones e índice mediante migración | Corregido |
 
 ## Registro de SonarLint
 

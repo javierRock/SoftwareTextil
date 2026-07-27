@@ -1,20 +1,24 @@
 """Entidad, raiz de agregado y fabrica del dominio de pagos."""
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import uuid4
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPago, MetodoPago
 from apps.ventas.pagos.domain.excepciones import (
+    EstadoPagoInvalido,
     IdentificadorPagoInvalido,
+    LongitudDatoPagoInvalida,
     MetodoPagoNoSoportado,
     MontoPagoInvalido,
     PagoYaProcesado,
     PedidoPagoInvalido,
 )
 from apps.ventas.pagos.domain.politicas import ValidadorMetodoPago
+
+LONGITUD_MAXIMA_IDENTIFICADOR = 36
 
 
 @dataclass
@@ -27,7 +31,7 @@ class Pago:
     metodo: MetodoPago
     referencia: str = ""
     estado: EstadoPago = EstadoPago.PENDIENTE
-    fecha: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    fecha: datetime = field(default_factory=lambda: datetime.now(UTC))
     validador_metodo: ValidadorMetodoPago = field(
         default_factory=ValidadorMetodoPago,
         repr=False,
@@ -35,14 +39,25 @@ class Pago:
     )
 
     def __post_init__(self) -> None:
-        if not self.id or not self.id.strip():
+        if not isinstance(self.id, str) or not self.id.strip():
             raise IdentificadorPagoInvalido()
-        if not self.pedido_id or not self.pedido_id.strip():
+        if not isinstance(self.pedido_id, str) or not self.pedido_id.strip():
             raise PedidoPagoInvalido()
+        if not isinstance(self.monto, Dinero):
+            raise MontoPagoInvalido()
         if not isinstance(self.monto.monto, Decimal) or self.monto.monto <= 0:
             raise MontoPagoInvalido()
         self.id = self.id.strip()
         self.pedido_id = self.pedido_id.strip()
+        if len(self.id) > LONGITUD_MAXIMA_IDENTIFICADOR:
+            raise LongitudDatoPagoInvalida("id", LONGITUD_MAXIMA_IDENTIFICADOR)
+        if len(self.pedido_id) > LONGITUD_MAXIMA_IDENTIFICADOR:
+            raise LongitudDatoPagoInvalida(
+                "pedido_id",
+                LONGITUD_MAXIMA_IDENTIFICADOR,
+            )
+        if not isinstance(self.estado, EstadoPago):
+            raise EstadoPagoInvalido()
         self.referencia = self.validador_metodo.validar(
             self.metodo,
             self.referencia,
@@ -68,6 +83,7 @@ class PagoFactory:
         monto: Dinero,
         metodo: MetodoPago | str,
         referencia: str = "",
+        validador_metodo: ValidadorMetodoPago | None = None,
     ) -> Pago:
         try:
             metodo_pago = MetodoPago(metodo)
@@ -79,4 +95,5 @@ class PagoFactory:
             monto=monto,
             metodo=metodo_pago,
             referencia=referencia,
+            validador_metodo=validador_metodo or ValidadorMetodoPago(),
         )

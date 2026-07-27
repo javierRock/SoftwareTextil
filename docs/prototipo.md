@@ -69,6 +69,25 @@ Vista administrativa para revisar y gestionar pedidos pendientes.
 
 ![Gestión de pedidos](../assets/figuras_prototipo/07-gestion-pedidos-admin.png)
 
+#### Prototipo de Pago del Pedido
+
+El cliente selecciona el método, ingresa únicamente la referencia de la operación y confirma el monto total calculado por el pedido. El sistema no solicita número de tarjeta, CVV ni PIN.
+
+```text
++--------------------------------------------------+
+| Pago del pedido                                  |
++--------------------------------------------------+
+| Pedido:  <identificador>                         |
+| Total:   S/ 120.50 PEN                           |
+| Metodo:  [Tarjeta v]                             |
+| Referencia de operacion: [____________________]  |
+|                                                  |
+|                      [Confirmar pago]             |
++--------------------------------------------------+
+```
+
+El administrador visualiza el pago pendiente desde Gestión de Pedidos y dispone de las acciones Aprobar y Rechazar.
+
 ### 1.2.8. Panel de Control
 
 Dashboard con indicadores de stock, pedidos, movimientos y estado operativo del sistema.
@@ -116,6 +135,7 @@ Vista del flujo de navegación en dispositivos móviles.
 | Catálogo                | Lista y filtra prendas disponibles            |
 | Carrito                 | Permite revisar productos antes del pedido    |
 | Gestión de pedidos      | Administra pedidos pendientes                 |
+| Pago del pedido         | Registra método y referencia sin datos sensibles |
 | Registro de ingreso     | Registra entradas de stock                    |
 | Registro de salida      | Registra egresos de stock                     |
 | Guía de remisión        | Emite documento para traslado físico          |

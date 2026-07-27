@@ -1,8 +1,11 @@
 """Modelos ORM de carrito, pedidos y pagos de la app ventas."""
 
 import uuid
+from typing import ClassVar
 
 from django.db import models
+
+from apps.compartido.domain.enums import EstadoPago, MetodoPago
 
 
 class CarritoModel(models.Model):
@@ -68,3 +71,31 @@ class PagoModel(models.Model):
 
     class Meta:
         db_table = "pagos"
+        constraints: ClassVar[list[object]] = [
+            models.UniqueConstraint(
+                fields=["pedido_id"],
+                name="pago_pedido_unico",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(monto_monto__gt=0),
+                name="pago_monto_positivo",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(estado__in=[estado.value for estado in EstadoPago]),
+                name="pago_estado_valido",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(metodo__in=[metodo.value for metodo in MetodoPago]),
+                name="pago_metodo_valido",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(metodo=MetodoPago.EFECTIVO.value)
+                    | ~models.Q(referencia="")
+                ),
+                name="pago_referencia_requerida",
+            ),
+        ]
+        indexes: ClassVar[list[object]] = [
+            models.Index(fields=["fecha", "id"], name="pago_fecha_id_idx"),
+        ]

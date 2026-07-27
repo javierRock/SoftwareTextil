@@ -2,22 +2,35 @@
 
 from rest_framework import serializers
 
-DATOS_SENSIBLES_PROHIBIDOS = frozenset(
-    {
-        "card_number",
-        "cvv",
-        "numero_tarjeta",
-        "pin",
-    }
-)
+from apps.compartido.domain.enums import MetodoPago
+
+TAMANO_PAGINA_PREDETERMINADO = 20
+TAMANO_PAGINA_MAXIMO = 100
 
 
-class CrearPagoSerializer(serializers.Serializer):
+class SerializerEstricto(serializers.Serializer):
+    """Rechaza claves desconocidas para no aceptar datos accidentalmente."""
+
+    def validate(self, atributos: dict[str, object]) -> dict[str, object]:
+        campos_desconocidos = set(self.initial_data) - set(self.fields)
+        if campos_desconocidos:
+            nombres = ", ".join(sorted(campos_desconocidos))
+            raise serializers.ValidationError(f"Campos no permitidos: {nombres}.")
+        return atributos
+
+
+class CrearPagoSerializer(SerializerEstricto):
     """Valida la estructura de una solicitud de registro de pago."""
 
-    pedido_id = serializers.CharField(allow_blank=False, trim_whitespace=True)
+    pedido_id = serializers.CharField(
+        allow_blank=False,
+        trim_whitespace=True,
+        max_length=36,
+    )
     monto = serializers.DecimalField(max_digits=12, decimal_places=2)
-    metodo = serializers.CharField(allow_blank=False, trim_whitespace=True)
+    metodo = serializers.ChoiceField(
+        choices=[metodo.value for metodo in MetodoPago],
+    )
     referencia = serializers.CharField(
         required=False,
         default="",
@@ -26,22 +39,22 @@ class CrearPagoSerializer(serializers.Serializer):
         max_length=120,
     )
 
-    def validate(self, atributos: dict[str, object]) -> dict[str, object]:
-        campos_recibidos = set(self.initial_data)
-        if campos_recibidos & DATOS_SENSIBLES_PROHIBIDOS:
-            raise serializers.ValidationError(
-                "No se aceptan datos sensibles de medios de pago."
-            )
-        return atributos
 
-
-class FiltroPagosSerializer(serializers.Serializer):
-    """Valida los parametros opcionales del listado."""
+class FiltroPagosSerializer(SerializerEstricto):
+    """Valida filtros y limites del listado paginado."""
 
     pedido_id = serializers.CharField(
         required=False,
         allow_blank=False,
         trim_whitespace=True,
+        max_length=36,
+    )
+    pagina = serializers.IntegerField(required=False, default=1, min_value=1)
+    tamano = serializers.IntegerField(
+        required=False,
+        default=TAMANO_PAGINA_PREDETERMINADO,
+        min_value=1,
+        max_value=TAMANO_PAGINA_MAXIMO,
     )
 
 

@@ -218,17 +218,103 @@ Convenciones de codificación comunes a todo el equipo: PEP 8, nombres en españ
 
 ### 2.6.1. API de Pagos
 
-El módulo de Javier registra y procesa estados internos de pagos; no integra pasarelas ni recibe datos de tarjetas.
+El módulo de Javier registra un pago total por pedido. El cliente solo puede crear y consultar pagos propios; el administrador puede consultarlos y aprobarlos o rechazarlos. Aprobar un pago y marcar el pedido como pagado forman una sola transacción. El módulo no integra pasarelas ni acepta datos de tarjetas.
+
+```mermaid
+flowchart LR
+    Cliente --> Registrar[Registrar pago total propio]
+    Cliente --> Consultar[Consultar pagos propios]
+    Administrador --> Listar[Listar pagos]
+    Administrador --> Aprobar[Aprobar pago]
+    Administrador --> Rechazar[Rechazar pago]
+    Aprobar --> Pedido[Marcar pedido pagado]
+```
 
 | Método | Endpoint | Resultado |
 | --- | --- | --- |
-| `GET` | `/api/ventas/pagos/` | Lista todos los pagos; acepta `?pedido_id=<id>` |
-| `POST` | `/api/ventas/pagos/` | Registra un pago pendiente |
-| `GET` | `/api/ventas/pagos/<id>/` | Obtiene un pago |
-| `POST` | `/api/ventas/pagos/<id>/aprobar/` | Aprueba un pago pendiente |
-| `POST` | `/api/ventas/pagos/<id>/rechazar/` | Rechaza un pago pendiente |
+| `GET` | `/api/ventas/pagos/` | Lista paginada; acepta `pedido_id`, `pagina` y `tamano` |
+| `POST` | `/api/ventas/pagos/` | Cliente: registra el pago total de un pedido propio |
+| `GET` | `/api/ventas/pagos/<id>/` | Cliente propietario o administrador: obtiene un pago |
+| `POST` | `/api/ventas/pagos/<id>/aprobar/` | Administrador: aprueba y marca el pedido pagado |
+| `POST` | `/api/ventas/pagos/<id>/rechazar/` | Administrador: rechaza un pago pendiente |
 
-La evidencia de los Laboratorios 9, 10 y 11 está en la [guía de pagos de Javier](docs/guias/javier-pagos.md). El estado verificable y los pasos manuales de SonarLint están en el [reporte de pagos](docs/reportes/sonarlint-pagos.md).
+La API requiere `Authorization: Bearer <token>`. Devuelve `401` sin autenticación, `403` sin autorización, `404` para recursos inexistentes y `409` para pagos duplicados o transiciones inválidas.
+
+#### Modelo y paquetes de Pagos
+
+```mermaid
+classDiagram
+    class Pago {
+        +id: str
+        +pedido_id: str
+        +monto: Dinero
+        +estado: EstadoPago
+        +aprobar()
+        +rechazar()
+    }
+    class ServicioPagos
+    class RepositorioPago
+    class RepositorioPedidoPago
+    class DjangoRepositorioPago
+    class DjangoRepositorioPedidoPago
+    ServicioPagos --> RepositorioPago
+    ServicioPagos --> RepositorioPedidoPago
+    ServicioPagos --> Pago
+    DjangoRepositorioPago ..|> RepositorioPago
+    DjangoRepositorioPedidoPago ..|> RepositorioPedidoPago
+```
+
+#### Convenciones y Clean Code
+
+Se emplean nombres del lenguaje ubicuo, type hints y funciones enfocadas. La presentación no conoce modelos ORM y el contrato expresa la intención de cada operación:
+
+```python
+class RepositorioPago(ABC):
+    @abstractmethod
+    def crear(self, pago: Pago) -> None: ...
+
+    @abstractmethod
+    def actualizar_estado(self, pago: Pago) -> None: ...
+```
+
+Los errores esperados tienen código estable y se traducen en un solo lugar:
+
+```python
+class PagoPedidoDuplicado(ErrorPago):
+    codigo = "pago_pedido_duplicado"
+```
+
+#### Principios SOLID
+
+**SRP:** cada capa posee una razón de cambio; `PagoViewSet` adapta HTTP, `ServicioPagos` coordina y `DjangoRepositorioPago` persiste.
+
+```python
+def __init__(
+    self,
+    repositorio_pago: RepositorioPago,
+    repositorio_pedido: RepositorioPedidoPago,
+    unidad_trabajo: FabricaUnidadTrabajo,
+) -> None:
+```
+
+**OCP:** una política nueva se registra sin modificar el agregado ni el servicio.
+
+```python
+class PoliticaReferenciaPago(ABC):
+    @abstractmethod
+    def validar(self, metodo: MetodoPago, referencia: str) -> str: ...
+```
+
+**LSP:** los adaptadores Django y los fakes de pruebas implementan los mismos contratos y son sustituibles.
+
+```python
+class DjangoRepositorioPago(RepositorioPago):
+    def crear(self, pago: Pago) -> None: ...
+```
+
+**DIP:** el caso de uso depende de `RepositorioPago` y `RepositorioPedidoPago`, nunca del ORM. La infraestructura concreta se ensambla únicamente en presentación.
+
+La evidencia completa de los Laboratorios 9, 10, 11 y 12 está en la [guía de pagos de Javier](docs/guias/javier-pagos.md). El estado verificable y los pasos manuales de SonarLint están en el [reporte de pagos](docs/reportes/sonarlint-pagos.md).
 
 ---
 
@@ -268,7 +354,7 @@ irm https://astral.sh/uv/install.ps1 | iex
 ```bash
 git clone git@github.com:javierRock/SoftwareTextil.git
 cd SoftwareTextil
-git checkout angel_back-end
+git checkout dev
 uv sync
 ```
 
@@ -298,12 +384,13 @@ uv run python manage.py makemigrations
 | ----------------------- | --------------------------------- |
 | Python 3.11+            | Lenguaje principal                |
 | VS Code                 | IDE                               |
-| Django 5.0              | Framework web MVC                 |
+| Django 5.2+             | Framework web MVC                 |
 | Django REST Framework   | API REST (serializers, viewsets)  |
 | Django ORM              | Persistencia y mapeo ORM          |
 | PostgreSQL              | Base de datos relacional          |
 | uv                      | Gestión de entorno y dependencias |
-| pytest + pytest-django  | Pruebas                           |
+| pytest + pytest-django + pytest-cov | Pruebas y cobertura       |
+| Ruff                    | Lint y formato                    |
 | StarUML                 | Modelado UML                      |
 | Mermaid                 | Diagramas en Markdown             |
 
@@ -319,7 +406,6 @@ uv run python manage.py makemigrations
 | [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
 | [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
 | [`docs/reportes/sonarlint-pagos.md`](docs/reportes/sonarlint-pagos.md) | Estado y pasos de análisis SonarLint de pagos |
-| [`docs/checklists/trello-javier-pagos.md`](docs/checklists/trello-javier-pagos.md) | Checklist de pagos listo para copiar a Trello |
 
 ---
 

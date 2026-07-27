@@ -67,7 +67,7 @@ flowchart TB
 | Inventario   | Controla stock, movimientos, alertas y consultas         |
 | Compras      | Administra carrito e items seleccionados                 |
 | Pedidos      | Genera pedidos, detalle e historial                      |
-| Pagos        | Registra método y procesamiento de pagos                 |
+| Pagos        | Registra un pago total y coordina el estado del pedido    |
 | Despachos    | Gestiona preparación, confirmación y guía de remisión    |
 | Usuarios     | Administra usuarios, roles, permisos y sesiones          |
 | Contabilidad | Registra ingresos, egresos, impuestos y cierre           |
@@ -85,7 +85,7 @@ flowchart TB
 | Movimiento   | `MovimientoInventario`    | `RepositorioMovimientoInventario`         | Un movimiento registrado no debe modificarse              |
 | Carrito      | `CarritoCompras`          | `RepositorioCarrito`                      | El total refleja la suma de sus items                     |
 | Pedido       | `Pedido`                  | `RepositorioPedido`                       | Un pedido confirmado conserva su detalle                  |
-| Pago         | `Pago`                    | `RepositorioPago`                         | Un pago procesado conserva método y estado                |
+| Pago         | `Pago`                    | `RepositorioPago`                         | Existe un pago total por pedido y un estado final no cambia |
 | Despacho     | `Despacho`                | `RepositorioDespacho`                     | Un despacho confirmado no vuelve a pendiente              |
 | Usuario      | `Usuario`                 | `RepositorioUsuario`                      | Un usuario activo debe tener rol asignado                 |
 | Contabilidad | `Ingreso`, `EgresoTextil` | `RepositorioIngreso`, `RepositorioEgreso` | Todo movimiento contable conserva monto, fecha y concepto |
@@ -119,6 +119,23 @@ flowchart TB
 
 ![Módulos de compras pedidos y pagos](../assets/figuras_uml/figura-08-modulos-compras-pedidos-pagos.png)
 
+El siguiente diagrama refleja las clases ejecutables actuales del contexto de pagos:
+
+```mermaid
+classDiagram
+    class Pago
+    class ServicioPagos
+    class RepositorioPago
+    class RepositorioPedidoPago
+    class DjangoRepositorioPago
+    class DjangoRepositorioPedidoPago
+    ServicioPagos --> Pago
+    ServicioPagos --> RepositorioPago
+    ServicioPagos --> RepositorioPedidoPago
+    DjangoRepositorioPago ..|> RepositorioPago
+    DjangoRepositorioPedidoPago ..|> RepositorioPedidoPago
+```
+
 ### 1.4.7. Sistema Contable Textil
 
 ![Sistema contable textil](../assets/figuras_uml/figura-09-sistema-contable-textil.png)
@@ -133,7 +150,7 @@ flowchart TB
 
 El código final no importa directamente los archivos generados por StarUML. Las salidas de StarUML se usan como referencia arquitectónica y se refinan a Python válido siguiendo convenciones del lenguaje:
 
-Los archivos generados se conservan en `assets/starUML_codigo/` como evidencia del proceso, pero el código ejecutable del proyecto vive en `src/software_textil/`.
+Los archivos generados se conservan en `assets/starUML_codigo/` como evidencia del proceso, pero el código ejecutable del proyecto vive en `apps/`.
 
 | Elemento UML            | Implementación Python            |
 | ----------------------- | -------------------------------- |

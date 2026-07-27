@@ -149,7 +149,7 @@ def test_usuario_inactivo_no_puede_iniciar_sesion(
 def test_perfil_requiere_autenticacion(api_client: APIClient) -> None:
     response = api_client.get("/api/auth/perfil/")
 
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 def test_usuario_autenticado_consulta_y_actualiza_su_perfil(
@@ -206,7 +206,7 @@ def test_logout_invalida_token_actual(
 
     assert response.status_code == 200
     assert SesionModel.objects.get(token=token).estado == "cerrada"
-    assert api_client.get("/api/auth/perfil/").status_code == 403
+    assert api_client.get("/api/auth/perfil/").status_code == 401
 
 
 def test_cliente_no_puede_administrar_usuarios(
