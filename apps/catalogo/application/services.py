@@ -8,18 +8,15 @@ from apps.catalogo.domain.prenda import (
     PrendaFabrica,
     TipoProducto,
 )
-from apps.catalogo.infrastructure.repositories import (
-    DjangoRepositorioCatalogo,
-    DjangoRepositorioPrenda,
-)
+from apps.catalogo.domain.repositorios import RepositorioCatalogo, RepositorioPrenda
 from apps.compartido.domain.dinero import Dinero
 
 
 class ServicioCatalogo:
     def __init__(
         self,
-        repo_prenda: DjangoRepositorioPrenda,
-        repo_catalogo: DjangoRepositorioCatalogo,
+        repo_prenda: RepositorioPrenda,
+        repo_catalogo: RepositorioCatalogo,
     ) -> None:
         self.repo_prenda = repo_prenda
         self.repo_catalogo = repo_catalogo

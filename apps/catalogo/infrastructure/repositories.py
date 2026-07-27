@@ -3,6 +3,7 @@
 from decimal import Decimal
 
 from apps.catalogo.domain.prenda import Categoria, Prenda, TipoProducto
+from apps.catalogo.domain.repositorios import RepositorioCatalogo, RepositorioPrenda
 from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPrenda
@@ -34,7 +35,7 @@ def _prenda_from_model(model: PrendaModel) -> Prenda:
     )
 
 
-class DjangoRepositorioPrenda:
+class DjangoRepositorioPrenda(RepositorioPrenda):
     def guardar(self, prenda: Prenda) -> None:
         model = PrendaModel.objects.filter(id=prenda.id).first()
         if model is None:
@@ -57,7 +58,7 @@ class DjangoRepositorioPrenda:
         return [_prenda_from_model(m) for m in PrendaModel.objects.all()]
 
 
-class DjangoRepositorioCatalogo:
+class DjangoRepositorioCatalogo(RepositorioCatalogo):
     def guardar_categoria(self, categoria: Categoria) -> None:
         model = CategoriaModel.objects.filter(id=categoria.id).first()
         if model is None:
