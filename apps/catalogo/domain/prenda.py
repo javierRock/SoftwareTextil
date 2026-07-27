@@ -82,6 +82,33 @@ class Prenda:
     registrado_por: str | None = None
     fecha_registro: datetime = field(default_factory=datetime.utcnow)
 
+    def __post_init__(self) -> None:
+        nombre_normalizado = self.nombre.strip() if isinstance(self.nombre, str) else ""
+        if not nombre_normalizado:
+            raise ValueError("El nombre de la prenda es obligatorio")
+        if len(nombre_normalizado) > 120:
+            raise ValueError("El nombre de la prenda no puede exceder 120 caracteres")
+        if not isinstance(self.descripcion, str):
+            raise ValueError("La descripcion de la prenda debe ser texto")
+        if not isinstance(self.precio, Dinero) or self.precio.monto <= 0:
+            raise ValueError("El precio de la prenda debe ser mayor que cero")
+        if (
+            not isinstance(self.precio.moneda, str)
+            or len(self.precio.moneda) != 3
+            or not self.precio.moneda.isalpha()
+            or not self.precio.moneda.isupper()
+        ):
+            raise ValueError("La moneda debe ser un codigo de tres letras mayusculas")
+        if not isinstance(self.categoria_id, str) or not self.categoria_id.strip():
+            raise ValueError("La categoria de la prenda es obligatoria")
+        if self.tipo_producto_id is not None and (
+            not isinstance(self.tipo_producto_id, str)
+            or not self.tipo_producto_id.strip()
+        ):
+            raise ValueError("El tipo de producto de la prenda no es valido")
+        self.nombre = nombre_normalizado
+        self.descripcion = self.descripcion.strip()
+
     def activar(self) -> None:
         self.estado = EstadoPrenda.ACTIVA
 

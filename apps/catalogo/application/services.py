@@ -1,5 +1,6 @@
 """Servicios de aplicacion para catalogo."""
 
+from decimal import Decimal, InvalidOperation
 from uuid import uuid4
 
 from apps.catalogo.domain.prenda import (
@@ -28,17 +29,26 @@ class ServicioCatalogo:
         precio_monto: str,
         precio_moneda: str,
         categoria_id: str,
-        registrado_por: str,
+        registrado_por: str | None,
         tipo_producto_id: str | None = None,
     ) -> Prenda:
         if self.repo_catalogo.buscar_categoria(categoria_id) is None:
             raise ValueError("La categoria no existe")
-        from decimal import Decimal
+        if (
+            tipo_producto_id is not None
+            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
+        ):
+            raise ValueError("El tipo de producto no existe")
+        try:
+            monto = Decimal(precio_monto)
+        except (InvalidOperation, TypeError, ValueError) as exc:
+            raise ValueError("El precio de la prenda no es valido") from exc
+        moneda = precio_moneda.strip().upper() if isinstance(precio_moneda, str) else precio_moneda
 
         prenda = PrendaFabrica.crear(
             nombre=nombre,
             descripcion=descripcion,
-            precio=Dinero(Decimal(precio_monto), precio_moneda),
+            precio=Dinero(monto, moneda),
             categoria_id=categoria_id,
             registrado_por=registrado_por,
             tipo_producto_id=tipo_producto_id,

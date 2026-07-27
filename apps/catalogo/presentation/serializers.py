@@ -1,5 +1,7 @@
 """Serializers DRF para catalogo."""
 
+from decimal import Decimal
+
 from rest_framework import serializers
 
 from apps.catalogo.infrastructure.models import PrendaModel
@@ -70,10 +72,49 @@ class PrendaSerializer(serializers.ModelSerializer):
 
 
 class CrearPrendaSerializer(serializers.Serializer):
-    nombre = serializers.CharField()
-    descripcion = serializers.CharField(required=False, default="")
-    precio_monto = serializers.DecimalField(max_digits=12, decimal_places=2)
-    precio_moneda = serializers.CharField(required=False, default="PEN")
-    categoria_id = serializers.CharField()
-    tipo_producto_id = serializers.CharField(required=False, allow_null=True)
-    registrado_por = serializers.CharField(required=False, allow_null=True)
+    nombre = serializers.CharField(max_length=120, trim_whitespace=True)
+    descripcion = serializers.CharField(
+        required=False,
+        default="",
+        allow_blank=True,
+        trim_whitespace=True,
+    )
+    precio_monto = serializers.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
+    )
+    precio_moneda = serializers.RegexField(
+        r"^[A-Za-z]{3}$",
+        required=False,
+        default="PEN",
+    )
+    categoria_id = serializers.CharField(max_length=36)
+    tipo_producto_id = serializers.CharField(
+        max_length=36,
+        required=False,
+        allow_null=True,
+    )
+    registrado_por = serializers.CharField(
+        max_length=36,
+        required=False,
+        allow_null=True,
+    )
+
+
+class PrendaCreadaSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    nombre = serializers.CharField(read_only=True)
+    descripcion = serializers.CharField(read_only=True)
+    precio_monto = serializers.DecimalField(
+        source="precio.monto",
+        max_digits=12,
+        decimal_places=2,
+        read_only=True,
+    )
+    precio_moneda = serializers.CharField(source="precio.moneda", read_only=True)
+    categoria_id = serializers.CharField(read_only=True)
+    tipo_producto_id = serializers.CharField(read_only=True, allow_null=True)
+    estado = serializers.CharField(read_only=True)
+    registrado_por = serializers.CharField(read_only=True, allow_null=True)
+    fecha_registro = serializers.DateTimeField(read_only=True)

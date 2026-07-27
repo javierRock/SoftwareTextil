@@ -14,6 +14,7 @@ from apps.catalogo.presentation.serializers import (
     CrearCategoriaSerializer,
     CrearPrendaSerializer,
     CrearTipoProductoSerializer,
+    PrendaCreadaSerializer,
     PrendaSerializer,
     TipoProductoSerializer,
 )
@@ -43,7 +44,7 @@ class PrendaViewSet(viewsets.ModelViewSet):
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"id": prenda.id, "nombre": prenda.nombre}, status=status.HTTP_201_CREATED)
+        return Response(PrendaCreadaSerializer(prenda).data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["post"], url_path="desactivar")
     def desactivar(self, request, pk=None):
