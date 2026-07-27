@@ -1,57 +1,59 @@
-"""Views DRF para pedidos."""
+"""Views DRF para pedidos.
+
+La vista tiene una sola responsabilidad (SRP): traducir HTTP a casos de uso y
+el resultado a una respuesta. No consulta el ORM ni instancia repositorios
+concretos; los recibe de las fabricas del modulo a traves de atributos de
+clase, que las pruebas pueden reemplazar por dobles en memoria (DIP).
+"""
 
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.ventas.carrito.infrastructure.repositories import DjangoRepositorioCarrito
-from apps.ventas.pedidos.application.services import ServicioPedidos
-from apps.ventas.pedidos.infrastructure.models import PedidoModel
-from apps.ventas.pedidos.infrastructure.repositories import DjangoRepositorioPedido
-from apps.ventas.pedidos.presentation.serializers import CrearPedidoSerializer, PedidoSerializer
-
-
-def _servicio() -> ServicioPedidos:
-    return ServicioPedidos(DjangoRepositorioPedido(), DjangoRepositorioCarrito())
+from apps.compartido.domain.errors import DominioError
+from apps.ventas.pedidos.infrastructure.factories import (
+    construir_consulta_pedidos,
+    construir_servicio_pedidos,
+)
+from apps.ventas.pedidos.presentation.errores import respuesta_de_error_pedido
+from apps.ventas.pedidos.presentation.serializers import (
+    CrearPedidoSerializer,
+    PedidoSerializer,
+)
 
 
 class PedidoViewSet(viewsets.ViewSet):
+    construir_servicio = staticmethod(construir_servicio_pedidos)
+    construir_consulta = staticmethod(construir_consulta_pedidos)
+
     def list(self, request):
         cliente_id = request.query_params.get("cliente_id")
-        if cliente_id:
-            pedidos = PedidoModel.objects.filter(cliente_id=cliente_id)
-        else:
-            pedidos = PedidoModel.objects.all()
+        pedidos = self.construir_consulta().listar(cliente_id)
         return Response(PedidoSerializer(pedidos, many=True).data)
 
     def create(self, request):
         serializer = CrearPedidoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        servicio = _servicio()
         try:
-            pedido = servicio.generar_desde_carrito(
+            pedido = self.construir_servicio().generar_desde_carrito(
                 carrito_id=serializer.validated_data["carrito_id"],
                 cliente_id=serializer.validated_data["cliente_id"],
             )
-        except ValueError as exc:
-            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        model = PedidoModel.objects.get(id=pedido.id)
-        return Response(PedidoSerializer(model).data, status=status.HTTP_201_CREATED)
+        except DominioError as exc:
+            return respuesta_de_error_pedido(exc)
+        return Response(PedidoSerializer(pedido).data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         try:
-            pedido = _servicio().obtener_pedido(pk)
-        except ValueError as exc:
-            return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
-        model = PedidoModel.objects.get(id=pedido.id)
-        return Response(PedidoSerializer(model).data)
+            pedido = self.construir_consulta().obtener(pk)
+        except DominioError as exc:
+            return respuesta_de_error_pedido(exc)
+        return Response(PedidoSerializer(pedido).data)
 
     @action(detail=True, methods=["post"], url_path="cancelar")
     def cancelar(self, request, pk=None):
-        servicio = _servicio()
         try:
-            pedido = servicio.cancelar(pk)
-        except ValueError as exc:
-            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        model = PedidoModel.objects.get(id=pedido.id)
-        return Response(PedidoSerializer(model).data, status=status.HTTP_200_OK)
+            pedido = self.construir_servicio().cancelar(pk)
+        except DominioError as exc:
+            return respuesta_de_error_pedido(exc)
+        return Response(PedidoSerializer(pedido).data, status=status.HTTP_200_OK)

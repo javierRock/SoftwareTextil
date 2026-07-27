@@ -1,12 +1,19 @@
 """Agregado de pedido refinado desde StarUML."""
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import uuid4
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPedido
+from apps.ventas.pedidos.domain.errors import (
+    CantidadDetalleInvalidaError,
+    PedidoCanceladoError,
+    PedidoNoCancelableError,
+    PedidoSinDetallesError,
+    PedidoYaPagadoError,
+)
 
 
 @dataclass
@@ -14,13 +21,15 @@ class DetallePedido:
     prenda_id: str
     cantidad: int
     precio_unitario: Dinero
+    id: str = field(default_factory=lambda: str(uuid4()))
 
     def __post_init__(self) -> None:
         if self.cantidad <= 0:
-            raise ValueError("La cantidad del detalle debe ser mayor a cero")
+            raise CantidadDetalleInvalidaError
 
     def subtotal(self) -> Dinero:
-        return Dinero(self.precio_unitario.monto * Decimal(self.cantidad), self.precio_unitario.moneda)
+        monto = self.precio_unitario.monto * Decimal(self.cantidad)
+        return Dinero(monto, self.precio_unitario.moneda)
 
 
 @dataclass
@@ -31,26 +40,28 @@ class Pedido:
     detalles: list[DetallePedido]
     total: Dinero
     estado: EstadoPedido = EstadoPedido.CREADO
-    fecha_creacion: datetime = field(default_factory=datetime.utcnow)
+    fecha_creacion: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def cancelar(self) -> None:
         if self.estado == EstadoPedido.PAGADO:
-            raise ValueError("No se puede cancelar un pedido pagado")
+            raise PedidoNoCancelableError
         self.estado = EstadoPedido.CANCELADO
 
     def marcar_pagado(self) -> None:
         if self.estado == EstadoPedido.PAGADO:
-            raise ValueError("El pedido ya esta pagado")
+            raise PedidoYaPagadoError
         if self.estado == EstadoPedido.CANCELADO:
-            raise ValueError("No se puede pagar un pedido cancelado")
+            raise PedidoCanceladoError
         self.estado = EstadoPedido.PAGADO
 
 
 class PedidoFactory:
     @staticmethod
-    def crear(cliente_id: str, carrito_id: str, detalles: list[DetallePedido]) -> Pedido:
+    def crear(
+        cliente_id: str, carrito_id: str, detalles: list[DetallePedido]
+    ) -> Pedido:
         if not detalles:
-            raise ValueError("Un pedido debe tener al menos un detalle")
+            raise PedidoSinDetallesError
         total = detalles[0].subtotal()
         for detalle in detalles[1:]:
             total = total.sumar(detalle.subtotal())
