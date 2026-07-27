@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from apps.inventario.domain.consultas import CategoriaStockAgrupada, PrendaStockAgrupada
+from apps.inventario.domain.consultas import CategoriaStockAgrupada, PrendaStockBajoMinimo
 from apps.inventario.infrastructure.models import (
     AlertaStockModel,
 )
@@ -76,3 +76,29 @@ class CategoriaStockAgrupadaSerializer(serializers.Serializer):
             "cantidad_total": instance.cantidad_total,
             "prendas": PrendaStockAgrupadaSerializer(instance.prendas, many=True).data,
         }
+
+
+class PrendaStockBajoMinimoSerializer(serializers.Serializer):
+    categoria_id = serializers.CharField()
+    categoria = serializers.CharField()
+    prenda_id = serializers.CharField()
+    prenda = serializers.CharField()
+    cantidad_actual = serializers.IntegerField()
+    nivel_minimo = serializers.IntegerField()
+
+    def to_representation(self, instance: PrendaStockBajoMinimo | dict) -> dict:
+        if isinstance(instance, dict):
+            return super().to_representation(instance)
+        return {
+            "categoria_id": instance.categoria_id,
+            "categoria": instance.categoria,
+            "prenda_id": instance.prenda_id,
+            "prenda": instance.prenda,
+            "cantidad_actual": instance.cantidad_actual,
+            "nivel_minimo": instance.nivel_minimo,
+        }
+
+
+class ReporteInventarioQuerySerializer(serializers.Serializer):
+    categoria_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    formato = serializers.ChoiceField(choices=["pdf", "xlsx"])
