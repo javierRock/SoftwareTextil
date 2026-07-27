@@ -18,12 +18,14 @@ def test_fabrica_crea_ficha_comercial_valida() -> None:
         precio=Dinero(Decimal("49.90"), "PEN"),
         categoria_id="categoria-1",
         tipo_producto_id="tipo-1",
+        tallas=["s", "40", "32r"],
         registrado_por="usuario-externo",
     )
 
     assert prenda.nombre == "Camisa clasica"
     assert prenda.descripcion == "Algodon"
     assert prenda.precio == Dinero(Decimal("49.90"), "PEN")
+    assert prenda.tallas == ["S", "40", "32R"]
     assert prenda.registrado_por == "usuario-externo"
 
 
@@ -51,6 +53,29 @@ def test_fabrica_rechaza_ficha_comercial_invalida(
         )
 
 
+@pytest.mark.parametrize(
+    "tallas",
+    [
+        ["UNICA"],
+        ["ÚNICA"],
+        ["40.5"],
+        ["M", "m"],
+        [""],
+        [40],
+    ],
+)
+def test_fabrica_rechaza_tallas_invalidas(tallas) -> None:
+    with pytest.raises(ValidacionError):
+        PrendaFabrica.crear(
+            nombre="Camisa",
+            descripcion="Algodon",
+            precio=Dinero(Decimal("49.90"), "PEN"),
+            categoria_id="categoria-1",
+            tallas=tallas,
+            registrado_por=None,
+        )
+
+
 def test_servicio_registra_prenda_con_categoria_y_tipo_existentes() -> None:
     servicio, repo_prenda, repo_catalogo = crear_servicio()
     repo_catalogo.guardar_categoria(Categoria(id="categoria-1", nombre="Camisas"))
@@ -63,11 +88,13 @@ def test_servicio_registra_prenda_con_categoria_y_tipo_existentes() -> None:
         precio_moneda="pen",
         categoria_id="categoria-1",
         tipo_producto_id="tipo-1",
+        tallas=["M", "L", "40", "41"],
         registrado_por="usuario-externo",
     )
 
     assert repo_prenda.prendas == {prenda.id: prenda}
     assert prenda.precio.moneda == "PEN"
+    assert prenda.tallas == ["M", "L", "40", "41"]
 
 
 def test_servicio_impide_registro_con_categoria_inexistente() -> None:

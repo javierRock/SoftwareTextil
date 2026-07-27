@@ -10,6 +10,7 @@ from apps.catalogo.infrastructure.repositories import DjangoRepositorioCatalogo,
 from apps.catalogo.presentation.errors import ManejoErroresCatalogoMixin
 from apps.catalogo.presentation.serializers import (
     ActualizarCategoriaSerializer,
+    ActualizarPrendaSerializer,
     ActualizarTipoProductoSerializer,
     BuscarPrendasSerializer,
     CategoriaSerializer,
@@ -54,8 +55,35 @@ class PrendaViewSet(ManejoErroresCatalogoMixin, viewsets.ModelViewSet):
             categoria_id=serializer.validated_data["categoria_id"],
             registrado_por=serializer.validated_data.get("registrado_por"),
             tipo_producto_id=serializer.validated_data.get("tipo_producto_id"),
+            tallas=serializer.validated_data["tallas"],
         )
         return Response(PrendaCreadaSerializer(prenda).data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        return self._actualizar(request, pk, parcial=False)
+
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        return self._actualizar(request, pk, parcial=True)
+
+    def _actualizar(self, request, pk, parcial):
+        servicio = _servicio()
+        actual = servicio.buscar_prenda(pk)
+        serializer = ActualizarPrendaSerializer(data=request.data, partial=parcial)
+        serializer.is_valid(raise_exception=True)
+        datos = serializer.validated_data
+        prenda = servicio.actualizar_prenda(
+            prenda_id=pk,
+            nombre=datos.get("nombre", actual.nombre),
+            descripcion=datos.get("descripcion", actual.descripcion),
+            precio_monto=datos.get("precio_monto", actual.precio.monto),
+            precio_moneda=datos.get("precio_moneda", actual.precio.moneda),
+            categoria_id=datos.get("categoria_id", actual.categoria_id),
+            tipo_producto_id=datos.get(
+                "tipo_producto_id",
+                actual.tipo_producto_id,
+            ),
+        )
+        return Response(PrendaCatalogoSerializer(prenda).data)
 
     @action(detail=True, methods=["post"], url_path="activar")
     def activar(self, request, pk=None):

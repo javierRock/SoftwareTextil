@@ -31,6 +31,7 @@ def test_api_devuelve_detalle_comercial_de_prenda_existente() -> None:
         "precio_moneda": "PEN",
         "categoria_id": str(categoria.id),
         "tipo_producto_id": str(tipo.id),
+        "tallas": [],
         "estado": "activa",
     }
     assert not {

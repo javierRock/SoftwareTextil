@@ -18,6 +18,7 @@ def test_repositorio_persiste_y_recupera_la_ficha_comercial() -> None:
         descripcion="Algodon",
         precio=Dinero(Decimal("49.90"), "PEN"),
         categoria_id=str(categoria.id),
+        tallas=["M", "40"],
         registrado_por="usuario-externo",
     )
     repositorio = DjangoRepositorioPrenda()
@@ -31,5 +32,6 @@ def test_repositorio_persiste_y_recupera_la_ficha_comercial() -> None:
     assert recuperada.descripcion == prenda.descripcion
     assert recuperada.precio == prenda.precio
     assert recuperada.categoria_id == prenda.categoria_id
+    assert recuperada.tallas == ["M", "40"]
     assert recuperada.registrado_por == prenda.registrado_por
     assert PrendaModel.objects.count() == 1

@@ -47,6 +47,7 @@ def test_api_serializa_datos_comerciales_de_prendas_visibles() -> None:
             "precio_moneda": "PEN",
             "categoria_id": str(categoria.id),
             "tipo_producto_id": str(tipo.id),
+            "tallas": [],
             "estado": "activa",
         }
     ]

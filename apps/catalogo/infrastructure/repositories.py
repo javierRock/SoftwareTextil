@@ -32,6 +32,7 @@ def _prenda_from_model(model: PrendaModel) -> Prenda:
         precio=Dinero(Decimal(model.precio_monto), model.precio_moneda),
         categoria_id=str(model.categoria_id),
         tipo_producto_id=str(model.tipo_producto_id) if model.tipo_producto_id else None,
+        tallas=model.tallas or [],
         estado=EstadoPrenda(model.estado),
         registrado_por=model.registrado_por,
         fecha_registro=model.fecha_registro,
@@ -49,6 +50,7 @@ class DjangoRepositorioPrenda(RepositorioPrenda):
         model.precio_moneda = prenda.precio.moneda
         model.categoria_id = prenda.categoria_id
         model.tipo_producto_id = prenda.tipo_producto_id
+        model.tallas = prenda.tallas
         model.estado = prenda.estado.value
         model.registrado_por = prenda.registrado_por
         model.save()

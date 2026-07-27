@@ -22,6 +22,7 @@ def test_api_registra_solo_la_ficha_comercial_de_la_prenda() -> None:
             "precio_moneda": "PEN",
             "categoria_id": str(categoria.id),
             "tipo_producto_id": str(tipo.id),
+            "tallas": ["M", "L", "40", "41"],
             "registrado_por": "usuario-externo",
         },
         format="json",
@@ -33,6 +34,7 @@ def test_api_registra_solo_la_ficha_comercial_de_la_prenda() -> None:
     assert respuesta.data["precio_moneda"] == "PEN"
     assert respuesta.data["categoria_id"] == str(categoria.id)
     assert respuesta.data["tipo_producto_id"] == str(tipo.id)
+    assert respuesta.data["tallas"] == ["M", "L", "40", "41"]
     assert respuesta.data["registrado_por"] == "usuario-externo"
     assert PrendaModel.objects.filter(id=respuesta.data["id"]).exists()
     assert StockPrendaModel.objects.count() == 0
@@ -97,4 +99,26 @@ def test_api_impide_registro_con_tipo_inexistente() -> None:
 
     assert respuesta.status_code == 404
     assert "error" in respuesta.data
+    assert PrendaModel.objects.count() == 0
+
+
+@pytest.mark.parametrize(
+    "tallas",
+    [["UNICA"], ["ÚNICA"], ["40.5"], ["M", "m"], [""]],
+)
+def test_api_rechaza_tallas_invalidas(tallas) -> None:
+    categoria = CategoriaModel.objects.create(nombre="Camisas")
+
+    respuesta = APIClient().post(
+        "/api/prendas/",
+        {
+            "nombre": "Camisa",
+            "precio_monto": "10.00",
+            "categoria_id": str(categoria.id),
+            "tallas": tallas,
+        },
+        format="json",
+    )
+
+    assert respuesta.status_code == 400
     assert PrendaModel.objects.count() == 0

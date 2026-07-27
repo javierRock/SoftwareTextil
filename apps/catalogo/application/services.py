@@ -36,6 +36,7 @@ class ServicioCatalogo:
         categoria_id: str,
         registrado_por: str | None,
         tipo_producto_id: str | None = None,
+        tallas: list[str] | None = None,
     ) -> Prenda:
         if self.repo_catalogo.buscar_categoria(categoria_id) is None:
             raise RecursoNoEncontradoError("La categoria no existe")
@@ -52,6 +53,7 @@ class ServicioCatalogo:
             categoria_id=categoria_id,
             registrado_por=registrado_por,
             tipo_producto_id=tipo_producto_id,
+            tallas=tallas,
         )
         self.repo_prenda.guardar(prenda)
         return prenda
@@ -87,6 +89,35 @@ class ServicioCatalogo:
         prenda = self.repo_prenda.buscar_por_id(prenda_id)
         if prenda is None:
             raise RecursoNoEncontradoError("Prenda no encontrada")
+        return prenda
+
+    def actualizar_prenda(
+        self,
+        prenda_id: str,
+        nombre: str,
+        descripcion: str,
+        precio_monto: str,
+        precio_moneda: str,
+        categoria_id: str,
+        tipo_producto_id: str | None,
+    ) -> Prenda:
+        prenda = self.buscar_prenda(prenda_id)
+        if self.repo_catalogo.buscar_categoria(categoria_id) is None:
+            raise RecursoNoEncontradoError("La categoria no existe")
+        if (
+            tipo_producto_id is not None
+            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
+        ):
+            raise RecursoNoEncontradoError("El tipo de producto no existe")
+        precio = self._crear_precio(precio_monto, precio_moneda)
+        prenda.actualizar_datos_comerciales(
+            nombre=nombre,
+            descripcion=descripcion,
+            precio=precio,
+            categoria_id=categoria_id,
+            tipo_producto_id=tipo_producto_id,
+        )
+        self.repo_prenda.guardar(prenda)
         return prenda
 
     def activar_prenda(self, prenda_id: str) -> Prenda:

@@ -1,5 +1,6 @@
 """Agregado de catalogo para prendas textiles."""
 
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import uuid4
@@ -81,6 +82,7 @@ class Prenda:
     precio: Dinero
     categoria_id: str
     tipo_producto_id: str | None = None
+    tallas: list[str] = field(default_factory=list)
     estado: EstadoPrenda = EstadoPrenda.ACTIVA
     registrado_por: str | None = None
     fecha_registro: datetime = field(default_factory=datetime.utcnow)
@@ -111,6 +113,26 @@ class Prenda:
             raise ValidacionError("El tipo de producto de la prenda no es valido")
         self.nombre = nombre_normalizado
         self.descripcion = self.descripcion.strip()
+        self.tallas = self._normalizar_tallas(self.tallas)
+
+    @staticmethod
+    def _normalizar_tallas(tallas: list[str]) -> list[str]:
+        if not isinstance(tallas, list):
+            raise ValidacionError("Las tallas de la prenda deben ser una lista")
+        normalizadas: list[str] = []
+        for talla in tallas:
+            valor = talla.strip().upper() if isinstance(talla, str) else ""
+            if (
+                not valor
+                or len(valor) > 20
+                or re.fullmatch(r"[A-Z0-9-]+", valor) is None
+                or valor == "UNICA"
+            ):
+                raise ValidacionError("La talla de la prenda no es valida")
+            if valor in normalizadas:
+                raise ValidacionError("Las tallas de la prenda no pueden repetirse")
+            normalizadas.append(valor)
+        return normalizadas
 
     def activar(self) -> None:
         self.estado = EstadoPrenda.ACTIVA
@@ -121,6 +143,32 @@ class Prenda:
     def cambiar_precio(self, precio: Dinero) -> None:
         self.precio = precio
 
+    def actualizar_datos_comerciales(
+        self,
+        nombre: str,
+        descripcion: str,
+        precio: Dinero,
+        categoria_id: str,
+        tipo_producto_id: str | None,
+    ) -> None:
+        candidata = Prenda(
+            id=self.id,
+            nombre=nombre,
+            descripcion=descripcion,
+            precio=precio,
+            categoria_id=categoria_id,
+            tipo_producto_id=tipo_producto_id,
+            tallas=self.tallas,
+            estado=self.estado,
+            registrado_por=self.registrado_por,
+            fecha_registro=self.fecha_registro,
+        )
+        self.nombre = candidata.nombre
+        self.descripcion = candidata.descripcion
+        self.precio = candidata.precio
+        self.categoria_id = candidata.categoria_id
+        self.tipo_producto_id = candidata.tipo_producto_id
+
 
 class PrendaFabrica:
     @staticmethod
@@ -129,8 +177,9 @@ class PrendaFabrica:
         descripcion: str,
         precio: Dinero,
         categoria_id: str,
-        registrado_por: str,
+        registrado_por: str | None,
         tipo_producto_id: str | None = None,
+        tallas: list[str] | None = None,
     ) -> Prenda:
         return Prenda(
             id=str(uuid4()),
@@ -139,5 +188,6 @@ class PrendaFabrica:
             precio=precio,
             categoria_id=categoria_id,
             tipo_producto_id=tipo_producto_id,
+            tallas=tallas or [],
             registrado_por=registrado_por,
         )
