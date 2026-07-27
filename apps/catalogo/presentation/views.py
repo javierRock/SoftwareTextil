@@ -6,7 +6,10 @@ from rest_framework.response import Response
 
 from apps.catalogo.application.services import ServicioCatalogo
 from apps.catalogo.infrastructure.models import PrendaModel
-from apps.catalogo.infrastructure.repositories import DjangoRepositorioCatalogo, DjangoRepositorioPrenda
+from apps.catalogo.infrastructure.repositories import (
+    DjangoRepositorioCatalogo,
+    DjangoRepositorioPrenda,
+)
 from apps.catalogo.presentation.errors import ManejoErroresCatalogoMixin
 from apps.catalogo.presentation.serializers import (
     ActualizarCategoriaSerializer,

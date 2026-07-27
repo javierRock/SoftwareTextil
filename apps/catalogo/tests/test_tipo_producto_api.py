@@ -1,8 +1,11 @@
 import pytest
 from rest_framework.test import APIClient
 
-from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
-
+from apps.catalogo.infrastructure.models import (
+    CategoriaModel,
+    PrendaModel,
+    TipoProductoModel,
+)
 
 pytestmark = pytest.mark.django_db
 

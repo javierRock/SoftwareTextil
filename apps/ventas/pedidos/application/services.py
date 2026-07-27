@@ -65,7 +65,7 @@ class ServicioPedidos:
     def _construir_detalles(carrito: CarritoCompras) -> list[DetallePedido]:
         return [
             DetallePedido(
-                prenda_id=item.prenda_id,
+                variante_id=item.variante_id,
                 cantidad=item.cantidad,
                 precio_unitario=item.precio_unitario,
             )

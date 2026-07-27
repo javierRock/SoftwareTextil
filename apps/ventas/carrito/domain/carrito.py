@@ -20,7 +20,7 @@ from apps.ventas.carrito.domain.errors import (
 @dataclass
 class ItemCarrito:
     id: str
-    prenda_id: str
+    variante_id: str
     cantidad: int
     precio_unitario: Dinero
 
@@ -42,14 +42,19 @@ class CarritoCompras:
     fecha_creacion: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def agregar_item(
-        self, prenda_id: str, cantidad: int, precio_unitario: Dinero
+        self, variante_id: str, cantidad: int, precio_unitario: Dinero
     ) -> None:
         self._validar_abierto()
         if cantidad <= 0:
             raise CantidadInvalidaError
-        existente = self._buscar_item(prenda_id)
+        existente = self._buscar_item(variante_id)
         if existente is None:
-            nuevo_item = ItemCarrito(str(uuid4()), prenda_id, cantidad, precio_unitario)
+            nuevo_item = ItemCarrito(
+                str(uuid4()),
+                variante_id,
+                cantidad,
+                precio_unitario,
+            )
             self.items.append(nuevo_item)
             return
         if existente.precio_unitario.moneda != precio_unitario.moneda:
@@ -57,17 +62,17 @@ class CarritoCompras:
         existente.cantidad += cantidad
         existente.precio_unitario = precio_unitario
 
-    def actualizar_cantidad(self, prenda_id: str, cantidad: int) -> None:
+    def actualizar_cantidad(self, variante_id: str, cantidad: int) -> None:
         self._validar_abierto()
         if cantidad <= 0:
-            self.quitar_item(prenda_id)
+            self.quitar_item(variante_id)
             return
-        item = self._obtener_item(prenda_id)
+        item = self._obtener_item(variante_id)
         item.cantidad = cantidad
 
-    def quitar_item(self, prenda_id: str) -> None:
+    def quitar_item(self, variante_id: str) -> None:
         self._validar_abierto()
-        item = self._obtener_item(prenda_id)
+        item = self._obtener_item(variante_id)
         self.items.remove(item)
 
     def total(self) -> Dinero:
@@ -93,11 +98,14 @@ class CarritoCompras:
         if self.estado != EstadoCarrito.ABIERTO:
             raise CarritoCerradoError
 
-    def _buscar_item(self, prenda_id: str) -> ItemCarrito | None:
-        return next((item for item in self.items if item.prenda_id == prenda_id), None)
+    def _buscar_item(self, variante_id: str) -> ItemCarrito | None:
+        return next(
+            (item for item in self.items if item.variante_id == variante_id),
+            None,
+        )
 
-    def _obtener_item(self, prenda_id: str) -> ItemCarrito:
-        item = self._buscar_item(prenda_id)
+    def _obtener_item(self, variante_id: str) -> ItemCarrito:
+        item = self._buscar_item(variante_id)
         if item is None:
             raise ItemInexistenteError
         return item

@@ -12,7 +12,7 @@ class DetallePedidoSerializer(serializers.Serializer):
     """Representacion de salida de `DetallePedido`."""
 
     id = serializers.CharField(read_only=True)
-    prenda_id = serializers.CharField(read_only=True)
+    variante_id = serializers.CharField(read_only=True)
     cantidad = serializers.IntegerField(read_only=True)
     precio_monto = serializers.DecimalField(
         max_digits=12,

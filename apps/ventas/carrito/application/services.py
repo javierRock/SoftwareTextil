@@ -27,20 +27,20 @@ class ServicioCompras:
     def agregar_item(
         self,
         carrito_id: str,
-        prenda_id: str,
+        variante_id: str,
         cantidad: int,
         precio_monto: str,
         precio_moneda: str = "PEN",
     ) -> CarritoCompras:
         carrito = self._obtener_carrito(carrito_id)
         precio_unitario = Dinero(Decimal(precio_monto), precio_moneda)
-        carrito.agregar_item(prenda_id, cantidad, precio_unitario)
+        carrito.agregar_item(variante_id, cantidad, precio_unitario)
         self._escritor.guardar(carrito)
         return carrito
 
-    def quitar_item(self, carrito_id: str, prenda_id: str) -> CarritoCompras:
+    def quitar_item(self, carrito_id: str, variante_id: str) -> CarritoCompras:
         carrito = self._obtener_carrito(carrito_id)
-        carrito.quitar_item(prenda_id)
+        carrito.quitar_item(variante_id)
         self._escritor.guardar(carrito)
         return carrito
 

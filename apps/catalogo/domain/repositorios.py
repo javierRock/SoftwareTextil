@@ -2,7 +2,13 @@
 
 from abc import ABC, abstractmethod
 
-from apps.catalogo.domain.prenda import Categoria, Prenda, TipoProducto
+from apps.catalogo.domain.prenda import (
+    Categoria,
+    Prenda,
+    TipoProducto,
+    VariantePrenda,
+)
+from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPrenda
 
 
@@ -31,6 +37,30 @@ class RepositorioPrenda(ABC):
         tipo_producto_id: str | None,
         estado: EstadoPrenda,
     ) -> list[Prenda]:
+        raise NotImplementedError
+
+
+class RepositorioVariante(ABC):
+    """Acceso directo a las variantes, para inventario, carrito y pedidos.
+
+    Esos contextos necesitan resolver una variante concreta sin cargar toda la
+    prenda: es la unidad sobre la que operan.
+    """
+
+    @abstractmethod
+    def buscar_por_id(self, variante_id: str) -> VariantePrenda | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def buscar_por_sku(self, sku: str) -> VariantePrenda | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def listar_por_prenda(self, prenda_id: str) -> list[VariantePrenda]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def precio_efectivo(self, variante_id: str) -> Dinero | None:
         raise NotImplementedError
 
 

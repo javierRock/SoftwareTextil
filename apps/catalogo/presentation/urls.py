@@ -2,7 +2,11 @@
 
 from rest_framework.routers import DefaultRouter
 
-from apps.catalogo.presentation.views import CategoriaViewSet, PrendaViewSet, TipoProductoViewSet
+from apps.catalogo.presentation.views import (
+    CategoriaViewSet,
+    PrendaViewSet,
+    TipoProductoViewSet,
+)
 
 router = DefaultRouter()
 router.register(r"prendas", PrendaViewSet, basename="prendas")

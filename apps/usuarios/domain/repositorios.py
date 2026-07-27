@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-from apps.usuarios.domain.usuario import IntentoLogin, Rol, Sesion, Usuario
+from apps.usuarios.domain.usuario import IntentoLogin, Permiso, Rol, Sesion, Usuario
 
 
 class RepositorioUsuario(ABC):
@@ -54,6 +54,24 @@ class RepositorioRol(ABC):
 
     @abstractmethod
     def listar(self) -> list[Rol]:
+        raise NotImplementedError
+
+
+class RepositorioPermiso(ABC):
+    @abstractmethod
+    def guardar(self, permiso: Permiso) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def buscar_por_codigo(self, codigo: str) -> Permiso | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def listar(self) -> list[Permiso]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def listar_por_rol(self, rol_id: str) -> list[Permiso]:
         raise NotImplementedError
 
 

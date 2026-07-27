@@ -3,7 +3,6 @@ from rest_framework.test import APIClient
 
 from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel
 
-
 pytestmark = pytest.mark.django_db
 
 

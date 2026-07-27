@@ -18,25 +18,43 @@ URL_PAGOS = "/api/ventas/pagos/"
 
 
 @pytest.fixture
-def cliente() -> SimpleNamespace:
-    return SimpleNamespace(id="cliente-1", rol="Cliente", is_authenticated=True)
+def cliente(crear_usuario) -> SimpleNamespace:
+    usuario = crear_usuario(nombre="Cliente uno")
+    return SimpleNamespace(
+        id=str(usuario.id),
+        modelo=usuario,
+        rol="Cliente",
+        is_authenticated=True,
+    )
 
 
 @pytest.fixture
-def otro_cliente() -> SimpleNamespace:
-    return SimpleNamespace(id="cliente-2", rol="Cliente", is_authenticated=True)
+def otro_cliente(crear_usuario) -> SimpleNamespace:
+    usuario = crear_usuario(nombre="Cliente dos")
+    return SimpleNamespace(
+        id=str(usuario.id),
+        modelo=usuario,
+        rol="Cliente",
+        is_authenticated=True,
+    )
 
 
 @pytest.fixture
-def administrador() -> SimpleNamespace:
-    return SimpleNamespace(id="admin-1", rol="Administrador", is_authenticated=True)
+def administrador(crear_usuario) -> SimpleNamespace:
+    usuario = crear_usuario(nombre="Admin", rol="Administrador")
+    return SimpleNamespace(
+        id=str(usuario.id),
+        modelo=usuario,
+        rol="Administrador",
+        is_authenticated=True,
+    )
 
 
 @pytest.fixture
-def pedido(cliente: SimpleNamespace) -> PedidoModel:
+def pedido(cliente: SimpleNamespace, crear_carrito) -> PedidoModel:
     return PedidoModel.objects.create(
-        cliente_id=cliente.id,
-        carrito_id="carrito-1",
+        cliente=cliente.modelo,
+        carrito=crear_carrito(cliente.modelo),
         total_monto=Decimal("120.50"),
         total_moneda="PEN",
     )
@@ -208,10 +226,11 @@ def test_cliente_lista_solo_sus_pagos_paginados(
     cliente: SimpleNamespace,
     otro_cliente: SimpleNamespace,
     pedido: PedidoModel,
+    crear_carrito,
 ) -> None:
     otro_pedido = PedidoModel.objects.create(
-        cliente_id=otro_cliente.id,
-        carrito_id="carrito-2",
+        cliente=otro_cliente.modelo,
+        carrito=crear_carrito(otro_cliente.modelo),
         total_monto=Decimal("120.50"),
     )
     esperado = registrar_pago(api_autenticada(cliente), pedido).data["id"]

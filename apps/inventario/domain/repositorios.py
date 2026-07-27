@@ -2,20 +2,28 @@
 
 from abc import ABC, abstractmethod
 
-from apps.inventario.domain.stock_prenda import AlertaStock, MovimientoInventario, StockPrenda
+from apps.inventario.domain.stock_prenda import (
+    AlertaStock,
+    MovimientoInventario,
+    StockVariante,
+)
 
 
 class RepositorioInventario(ABC):
     @abstractmethod
-    def guardar(self, stock: StockPrenda) -> None:
+    def guardar(self, stock: StockVariante) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    def buscar_por_prenda(self, prenda_id: str) -> StockPrenda | None:
+    def buscar_por_variante(self, variante_id: str) -> StockVariante | None:
         raise NotImplementedError
 
     @abstractmethod
-    def buscar_por_id(self, stock_id: str) -> StockPrenda | None:
+    def buscar_por_id(self, stock_id: str) -> StockVariante | None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def listar(self) -> list[StockVariante]:
         raise NotImplementedError
 
 

@@ -62,6 +62,11 @@ class FormatoReporte(StrEnum):
     XLSX = "xlsx"
 
 
+class Moneda(StrEnum):
+    PEN = "PEN"
+    USD = "USD"
+
+
 class ResultadoLogin(StrEnum):
     EXITOSO = "exitoso"
     CREDENCIALES_INVALIDAS = "credenciales_invalidas"

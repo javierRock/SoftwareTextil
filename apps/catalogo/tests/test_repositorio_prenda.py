@@ -7,19 +7,19 @@ from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel
 from apps.catalogo.infrastructure.repositories import DjangoRepositorioPrenda
 from apps.compartido.domain.dinero import Dinero
 
-
 pytestmark = pytest.mark.django_db
 
 
-def test_repositorio_persiste_y_recupera_la_ficha_comercial() -> None:
+def test_repositorio_persiste_y_recupera_la_ficha_comercial(crear_usuario) -> None:
     categoria = CategoriaModel.objects.create(nombre="Camisas")
+    usuario = crear_usuario()
     prenda = PrendaFabrica.crear(
         nombre="Camisa clasica",
         descripcion="Algodon",
         precio=Dinero(Decimal("49.90"), "PEN"),
         categoria_id=str(categoria.id),
         tallas=["M", "40"],
-        registrado_por="usuario-externo",
+        registrado_por=str(usuario.id),
     )
     repositorio = DjangoRepositorioPrenda()
 

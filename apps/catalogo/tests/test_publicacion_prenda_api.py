@@ -1,8 +1,11 @@
 import pytest
 from rest_framework.test import APIClient
 
-from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
-
+from apps.catalogo.infrastructure.models import (
+    CategoriaModel,
+    PrendaModel,
+    TipoProductoModel,
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -31,8 +34,8 @@ def test_api_desactiva_y_activa_sin_eliminar_ni_romper_referencias() -> None:
 
     prenda.refresh_from_db()
     assert prenda.estado == "inactiva"
-    assert prenda.categoria_id == str(categoria.id)
-    assert prenda.tipo_producto_id == str(tipo.id)
+    assert prenda.categoria_id == categoria.id
+    assert prenda.tipo_producto_id == tipo.id
     assert PrendaModel.objects.filter(id=prenda.id).exists()
     assert cliente.get("/api/prendas/").data == []
 
@@ -42,8 +45,8 @@ def test_api_desactiva_y_activa_sin_eliminar_ni_romper_referencias() -> None:
 
     prenda.refresh_from_db()
     assert prenda.estado == "activa"
-    assert prenda.categoria_id == str(categoria.id)
-    assert prenda.tipo_producto_id == str(tipo.id)
+    assert prenda.categoria_id == categoria.id
+    assert prenda.tipo_producto_id == tipo.id
     assert [item["id"] for item in cliente.get("/api/prendas/").data] == [
         str(prenda.id)
     ]
@@ -64,5 +67,5 @@ def test_api_no_permite_eliminacion_fisica_de_prenda() -> None:
 
     assert respuesta.status_code == 405
     prenda.refresh_from_db()
-    assert prenda.categoria_id == str(categoria.id)
-    assert prenda.tipo_producto_id == str(tipo.id)
+    assert prenda.categoria_id == categoria.id
+    assert prenda.tipo_producto_id == tipo.id

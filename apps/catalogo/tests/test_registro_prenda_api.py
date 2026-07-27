@@ -1,16 +1,24 @@
 import pytest
 from rest_framework.test import APIClient
 
-from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
-from apps.inventario.models import AlertaStockModel, MovimientoInventarioModel, StockPrendaModel
-
+from apps.catalogo.infrastructure.models import (
+    CategoriaModel,
+    PrendaModel,
+    TipoProductoModel,
+)
+from apps.inventario.models import (
+    AlertaStockModel,
+    MovimientoInventarioModel,
+    StockVarianteModel,
+)
 
 pytestmark = pytest.mark.django_db
 
 
-def test_api_registra_solo_la_ficha_comercial_de_la_prenda() -> None:
+def test_api_registra_solo_la_ficha_comercial_de_la_prenda(crear_usuario) -> None:
     categoria = CategoriaModel.objects.create(nombre="Camisas")
     tipo = TipoProductoModel.objects.create(nombre="Camisa")
+    usuario = crear_usuario()
     cliente = APIClient()
 
     respuesta = cliente.post(
@@ -23,7 +31,7 @@ def test_api_registra_solo_la_ficha_comercial_de_la_prenda() -> None:
             "categoria_id": str(categoria.id),
             "tipo_producto_id": str(tipo.id),
             "tallas": ["M", "L", "40", "41"],
-            "registrado_por": "usuario-externo",
+            "registrado_por": str(usuario.id),
         },
         format="json",
     )
@@ -35,9 +43,9 @@ def test_api_registra_solo_la_ficha_comercial_de_la_prenda() -> None:
     assert respuesta.data["categoria_id"] == str(categoria.id)
     assert respuesta.data["tipo_producto_id"] == str(tipo.id)
     assert respuesta.data["tallas"] == ["M", "L", "40", "41"]
-    assert respuesta.data["registrado_por"] == "usuario-externo"
+    assert respuesta.data["registrado_por"] == str(usuario.id)
     assert PrendaModel.objects.filter(id=respuesta.data["id"]).exists()
-    assert StockPrendaModel.objects.count() == 0
+    assert StockVarianteModel.objects.count() == 0
     assert MovimientoInventarioModel.objects.count() == 0
     assert AlertaStockModel.objects.count() == 0
 

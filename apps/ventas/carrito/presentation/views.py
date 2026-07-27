@@ -62,7 +62,7 @@ class CarritoViewSet(viewsets.ViewSet):
         try:
             carrito = self.construir_servicio().agregar_item(
                 carrito_id=pk,
-                prenda_id=serializer.validated_data["prenda_id"],
+                variante_id=serializer.validated_data["variante_id"],
                 cantidad=serializer.validated_data["cantidad"],
                 precio_monto=serializer.validated_data["precio_monto"],
                 precio_moneda=serializer.validated_data["precio_moneda"],
@@ -76,7 +76,7 @@ class CarritoViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         try:
             carrito = self.construir_servicio().quitar_item(
-                pk, serializer.validated_data["prenda_id"]
+                pk, serializer.validated_data["variante_id"]
             )
         except CarritoError as exc:
             return respuesta_de_error_carrito(exc)

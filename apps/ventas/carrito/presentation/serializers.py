@@ -12,7 +12,7 @@ class ItemCarritoSerializer(serializers.Serializer):
     """Representacion de salida de `ItemCarrito`."""
 
     id = serializers.CharField(read_only=True)
-    prenda_id = serializers.CharField(read_only=True)
+    variante_id = serializers.CharField(read_only=True)
     cantidad = serializers.IntegerField(read_only=True)
     precio_monto = serializers.DecimalField(
         max_digits=12,
@@ -40,11 +40,11 @@ class CrearCarritoSerializer(serializers.Serializer):
 
 
 class AgregarItemSerializer(serializers.Serializer):
-    prenda_id = serializers.CharField()
+    variante_id = serializers.CharField()
     cantidad = serializers.IntegerField(min_value=1)
     precio_monto = serializers.DecimalField(max_digits=12, decimal_places=2)
     precio_moneda = serializers.CharField(required=False, default="PEN")
 
 
 class QuitarItemSerializer(serializers.Serializer):
-    prenda_id = serializers.CharField()
+    variante_id = serializers.CharField()

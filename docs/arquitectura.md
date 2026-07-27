@@ -35,7 +35,7 @@ flowchart TD
     Services --> Domain["Modelo de dominio"]
     Services --> Ports["Contratos de repositorio"]
     Repositories["Repositorios Django ORM"] --> Ports
-    Repositories --> DB[("PostgreSQL / SQLite en desarrollo")]
+    Repositories --> DB[("PostgreSQL 16")]
 ```
 
 ---
@@ -87,6 +87,7 @@ apps/
 └── ventas/
     ├── carrito/
     ├── pedidos/
+    ├── despachos/
     └── pagos/
         ├── presentation/     # API, permisos y serializers
         ├── application/      # Casos de uso y puertos entre contextos
@@ -108,6 +109,7 @@ Cada módulo implementado repite la separación presentación-aplicación-domini
 | `ventas/carrito/presentation` | Carritos e items |
 | `ventas/pedidos/presentation` | Generación y consulta de pedidos |
 | `ventas/pagos/presentation` | Pagos autorizados, aprobación y rechazo |
+| `ventas/despachos/presentation` | Programación, preparación y confirmación de despachos |
 
 ---
 
@@ -168,3 +170,4 @@ sequenceDiagram
 | Trazabilidad        | Movimientos, despachos y comprobantes conservan responsables y fechas                          |
 | Evolución           | Nuevos módulos se agregan repitiendo el patrón dominio-aplicación-presentación-infraestructura |
 | Persistencia        | Django ORM queda aislado en infraestructura                                                    |
+| Integridad          | Los invariantes expresables en SQL se declaran en el esquema (ver [`modelo_datos.md`](modelo_datos.md)) |

@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.inventario.application.services import ServicioInventario
-from apps.inventario.infrastructure.models import MovimientoInventarioModel, StockPrendaModel
+from apps.inventario.infrastructure.models import MovimientoInventarioModel
 from apps.inventario.infrastructure.repositories import (
     DjangoRepositorioAlertaStock,
     DjangoRepositorioInventario,
@@ -36,13 +36,13 @@ class StockViewSet(viewsets.ViewSet):
     def create(self, request):
         serializer = CrearStockSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        servicio = _servicio()
+        datos = serializer.validated_data
         try:
-            stock = servicio.crear_stock(
-                prenda_id=serializer.validated_data["prenda_id"],
-                stock_inicial=serializer.validated_data["stock_inicial"],
-                stock_minimo=serializer.validated_data["stock_minimo"],
-                ubicacion=serializer.validated_data["ubicacion"],
+            stock = _servicio().crear_stock(
+                variante_id=str(datos["variante_id"]),
+                stock_inicial=datos["stock_inicial"],
+                stock_minimo=datos["stock_minimo"],
+                ubicacion=datos["ubicacion"],
             )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
@@ -51,59 +51,77 @@ class StockViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         stock = _servicio().consultar_stock(pk)
         if stock is None:
-            return Response({"error": "Stock no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Stock no encontrado"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         return Response(StockSerializer(stock).data)
 
     @action(detail=False, methods=["post"], url_path="ingresos")
     def registrar_ingreso(self, request):
-        serializer = MovimientoStockSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        servicio = _servicio()
-        try:
-            movimiento = servicio.registrar_ingreso(
-                prenda_id=serializer.validated_data["prenda_id"],
-                cantidad=serializer.validated_data["cantidad"],
-                motivo=serializer.validated_data["motivo"],
-                usuario_id=serializer.validated_data["usuario_id"],
-            )
-        except ValueError as exc:
-            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
-        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
+        return self._registrar_movimiento(
+            request,
+            MovimientoStockSerializer,
+            self._aplicar_ingreso,
+        )
 
     @action(detail=False, methods=["post"], url_path="salidas")
     def registrar_salida(self, request):
-        serializer = MovimientoStockSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        servicio = _servicio()
-        try:
-            movimiento = servicio.registrar_salida(
-                prenda_id=serializer.validated_data["prenda_id"],
-                cantidad=serializer.validated_data["cantidad"],
-                motivo=serializer.validated_data["motivo"],
-                usuario_id=serializer.validated_data["usuario_id"],
-            )
-        except ValueError as exc:
-            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-        model = MovimientoInventarioModel.objects.get(id=movimiento.id)
-        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
+        return self._registrar_movimiento(
+            request,
+            MovimientoStockSerializer,
+            self._aplicar_salida,
+        )
 
     @action(detail=False, methods=["post"], url_path="ajustes")
     def ajustar(self, request):
-        serializer = AjusteStockSerializer(data=request.data)
+        return self._registrar_movimiento(
+            request,
+            AjusteStockSerializer,
+            self._aplicar_ajuste,
+        )
+
+    @staticmethod
+    def _aplicar_ingreso(servicio: ServicioInventario, datos: dict):
+        return servicio.registrar_ingreso(
+            variante_id=str(datos["variante_id"]),
+            cantidad=datos["cantidad"],
+            motivo=datos["motivo"],
+            usuario_id=str(datos["usuario_id"]),
+        )
+
+    @staticmethod
+    def _aplicar_salida(servicio: ServicioInventario, datos: dict):
+        return servicio.registrar_salida(
+            variante_id=str(datos["variante_id"]),
+            cantidad=datos["cantidad"],
+            motivo=datos["motivo"],
+            usuario_id=str(datos["usuario_id"]),
+        )
+
+    @staticmethod
+    def _aplicar_ajuste(servicio: ServicioInventario, datos: dict):
+        return servicio.ajustar_stock(
+            variante_id=str(datos["variante_id"]),
+            nueva_cantidad=datos["nueva_cantidad"],
+            motivo=datos["motivo"],
+            usuario_id=str(datos["usuario_id"]),
+        )
+
+    @staticmethod
+    def _registrar_movimiento(request, clase_serializer, aplicar):
+        """Las tres acciones comparten validar, aplicar y devolver 201."""
+        serializer = clase_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        servicio = _servicio()
         try:
-            movimiento = servicio.ajustar_stock(
-                prenda_id=serializer.validated_data["prenda_id"],
-                nueva_cantidad=serializer.validated_data["nueva_cantidad"],
-                motivo=serializer.validated_data["motivo"],
-                usuario_id=serializer.validated_data["usuario_id"],
-            )
+            movimiento = aplicar(_servicio(), serializer.validated_data)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         model = MovimientoInventarioModel.objects.get(id=movimiento.id)
-        return Response(MovimientoSerializer(model).data, status=status.HTTP_201_CREATED)
+        return Response(
+            MovimientoSerializer(model).data,
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class MovimientoViewSet(viewsets.ReadOnlyModelViewSet):

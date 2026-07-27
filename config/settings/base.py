@@ -5,6 +5,25 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+
+def _cargar_env(ruta: Path) -> None:
+    """Vuelca `.env` en el entorno, sin dependencias externas.
+
+    Las variables ya definidas en el entorno tienen prioridad, de modo que la
+    configuracion del despliegue siempre gana sobre el archivo local.
+    """
+    if not ruta.is_file():
+        return
+    for cruda in ruta.read_text(encoding="utf-8").splitlines():
+        linea = cruda.strip()
+        if not linea or linea.startswith("#") or "=" not in linea:
+            continue
+        clave, _, valor = linea.partition("=")
+        os.environ.setdefault(clave.strip(), valor.strip().strip("\"'"))
+
+
+_cargar_env(BASE_DIR / ".env")
+
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-insecure-key-change-me")
 DEBUG = False
 ALLOWED_HOSTS: list[str] = []

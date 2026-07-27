@@ -1,14 +1,12 @@
-"""Settings de desarrollo. Usa SQLite como fallback temporal hasta tener PostgreSQL."""
+"""Settings de desarrollo. Usa el mismo PostgreSQL que produccion.
 
-from config.settings.base import *  # noqa: F401, F403
+Compartir motor con produccion es lo que permite que las restricciones del
+esquema (CHECK, indices parciales y unicidad sobre `Lower(...)`) se validen en
+las pruebas y no recien al desplegar. El contenedor se levanta con
+`docker compose up -d`.
+"""
+
+from config.settings.base import *  # noqa: F403
 
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
-
-# TODO: cambiar a PostgreSQL cuando este disponible
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",  # noqa: F405
-    }
-}

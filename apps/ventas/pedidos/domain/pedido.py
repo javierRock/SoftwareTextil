@@ -18,7 +18,7 @@ from apps.ventas.pedidos.domain.errors import (
 
 @dataclass
 class DetallePedido:
-    prenda_id: str
+    variante_id: str
     cantidad: int
     precio_unitario: Dinero
     id: str = field(default_factory=lambda: str(uuid4()))

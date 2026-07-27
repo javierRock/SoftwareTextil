@@ -12,14 +12,16 @@
     - [2.5.1. Arquitectura en Capas](#251-arquitectura-en-capas)
     - [2.5.2. DDD Táctico en el Código](#252-ddd-táctico-en-el-código)
     - [2.5.3. Estructura del Proyecto](#253-estructura-del-proyecto)
+    - [2.5.4. Modelo de Datos](#254-modelo-de-datos)
   - [2.6. Prácticas de Desarrollo Aplicadas](#26-prácticas-de-desarrollo-aplicadas)
     - [2.6.1. API de Pagos](#261-api-de-pagos)
   - [2.7. Flujo de Trabajo Git](#27-flujo-de-trabajo-git)
   - [2.8. Instalación](#28-instalación)
     - [2.8.1. Instalar uv](#281-instalar-uv)
     - [2.8.2. Preparar el entorno](#282-preparar-el-entorno)
-    - [2.8.3. Ejecutar la aplicación](#283-ejecutar-la-aplicación)
-    - [2.8.4. Verificar el estado del proyecto](#284-verificar-el-estado-del-proyecto)
+    - [2.8.3. Levantar la base de datos](#283-levantar-la-base-de-datos)
+    - [2.8.4. Ejecutar la aplicación](#284-ejecutar-la-aplicación)
+    - [2.8.5. Verificar el estado del proyecto](#285-verificar-el-estado-del-proyecto)
   - [2.9. Tecnologías](#29-tecnologías)
   - [2.10. Documentación Complementaria](#210-documentación-complementaria)
   - [2.11. Trabajo Futuro](#211-trabajo-futuro)
@@ -168,7 +170,7 @@ SoftwareTextil/
 ├── config/                        # Proyecto Django
 │   ├── settings/
 │   │   ├── base.py                # PostgreSQL + INSTALLED_APPS + REST_FRAMEWORK
-│   │   ├── dev.py                 # SQLite temporal para desarrollo
+│   │   ├── dev.py                 # PostgreSQL local (docker compose)
 │   │   └── prod.py
 │   ├── urls.py                    # Rutas raíz
 │   ├── wsgi.py
@@ -184,13 +186,19 @@ SoftwareTextil/
 │   ├── ventas/                    # Flujo de venta
 │   │   ├── carrito/               # Carrito de compras
 │   │   ├── pedidos/               # Pedidos
-│   │   └── pagos/                 # Pagos
-│   └── compartido/                # Enums, VO y conceptos comunes
+│   │   ├── pagos/                 # Pagos
+│   │   └── despachos/             # Despachos y guías de remisión
+│   └── compartido/                # Enums, VO y base ORM comunes
+│       ├── domain/                # Dinero, Periodo, DatosAuditoria, enums
+│       └── infrastructure/        # ModeloBase, fábricas de campos y mapeo
 ├── templates/                     # Plantillas Django
 ├── assets/                        # Diagramas UML, casos de uso y prototipo
+├── docker-compose.yml             # PostgreSQL 16 para todo el equipo
+├── conftest.py                    # Fixtures compartidas de la suite
 ├── docs/
 │   ├── arquitectura.md
 │   ├── modelo_dominio.md
+│   ├── modelo_datos.md            # Esquema PostgreSQL y reglas de diseño
 │   ├── prototipo.md
 │   ├── flujo_git.md               # Flujo de ramas del equipo
 │   └── guias/                     # Guía de trabajo por integrante
@@ -199,6 +207,24 @@ SoftwareTextil/
 ├── uv.lock
 └── README.md
 ```
+
+---
+
+### 2.5.4. Modelo de Datos
+
+El esquema vive en PostgreSQL y está documentado por completo en [`docs/modelo_datos.md`](docs/modelo_datos.md): diagrama entidad-relación, diccionario de datos y las siete reglas que lo ordenan.
+
+El principio que lo gobierna es que **todo invariante del dominio que pueda expresarse en SQL, se expresa en SQL**. El código protege el negocio; la base de datos lo respalda.
+
+| Decisión | Efecto |
+| --- | --- |
+| Clave foránea en infraestructura, `str` en el dominio | Integridad referencial sin que el dominio importe Django |
+| `UUIDField` como clave primaria (`ModeloBase`) | Identidad generada en las fábricas del dominio, índices compactos |
+| `CheckConstraint` derivado de cada `StrEnum` | Los estados válidos se declaran una sola vez |
+| Unicidad **parcial** por estado | Un carrito abierto por cliente; una alerta pendiente por stock |
+| `variantes_prenda` como unidad de stock | Permite responder cuánto queda de la talla M en azul |
+
+La evidencia de que estas restricciones existen en la base y no solo en Python está en `tests/compartido/test_integridad_esquema.py`: cada prueba intenta escribir una fila prohibida y verifica que PostgreSQL la rechaza.
 
 ---
 
@@ -356,22 +382,36 @@ git clone git@github.com:javierRock/SoftwareTextil.git
 cd SoftwareTextil
 git checkout dev
 uv sync
+cp .env.example .env
 ```
 
-### 2.8.3. Ejecutar la aplicación
+### 2.8.3. Levantar la base de datos
+
+El proyecto usa PostgreSQL tanto en desarrollo como en producción, para que los
+`CHECK`, los índices parciales y la unicidad sobre `Lower(...)` se validen desde
+las pruebas y no recién al desplegar.
+
+```bash
+docker compose up -d
+```
+
+### 2.8.4. Ejecutar la aplicación
 
 ```bash
 uv run python manage.py migrate
+uv run python manage.py crear_admin --nombre "Admin" --email admin@textil.pe --username admin
 uv run python manage.py runserver
 ```
 
 La aplicación queda disponible en `http://127.0.0.1:8000/`.
 
-### 2.8.4. Verificar el estado del proyecto
+### 2.8.5. Verificar el estado del proyecto
 
 ```bash
 uv run python manage.py check
-uv run python manage.py makemigrations
+uv run python manage.py makemigrations --check --dry-run   # sin migraciones pendientes
+uv run pytest                                              # suite sobre PostgreSQL
+uv run ruff check .                                        # análisis estático
 ```
 
 > **Nota sobre la base de datos:** `config/settings/base.py` usa **PostgreSQL** como motor de producción. Para desarrollo, `config/settings/dev.py` usa **SQLite** como fallback temporal hasta que PostgreSQL esté disponible en el entorno local.
@@ -387,7 +427,8 @@ uv run python manage.py makemigrations
 | Django 5.2+             | Framework web MVC                 |
 | Django REST Framework   | API REST (serializers, viewsets)  |
 | Django ORM              | Persistencia y mapeo ORM          |
-| PostgreSQL              | Base de datos relacional          |
+| PostgreSQL 16           | Base de datos relacional          |
+| Docker Compose          | PostgreSQL reproducible en el equipo |
 | uv                      | Gestión de entorno y dependencias |
 | pytest + pytest-django + pytest-cov | Pruebas y cobertura       |
 | Ruff                    | Lint y formato                    |
@@ -402,6 +443,7 @@ uv run python manage.py makemigrations
 | -------------------------------------------------- | -------------------------------------------------- |
 | [`docs/modelo_dominio.md`](docs/modelo_dominio.md) | Lenguaje ubicuo, contextos delimitados y agregados |
 | [`docs/arquitectura.md`](docs/arquitectura.md)     | Capas, dependencias y estructura técnica           |
+| [`docs/modelo_datos.md`](docs/modelo_datos.md)     | Esquema PostgreSQL: DER, diccionario de datos y reglas de diseño |
 | [`docs/prototipo.md`](docs/prototipo.md)           | Pantallas del prototipo y flujo de interfaz        |
 | [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
 | [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
@@ -411,7 +453,7 @@ uv run python manage.py makemigrations
 
 ## 2.11. Trabajo Futuro
 
-Módulos modelados en UML pero fuera del alcance de esta entrega: **Despachos** (guías de remisión), **Contabilidad** (ingresos, egresos, cierre contable) y **Facturación electrónica** (SUNAT). Sus diagramas de referencia:
+Módulos modelados en UML pero fuera del alcance de esta entrega: **Contabilidad** (ingresos, egresos, cierre contable) y **Facturación electrónica** (SUNAT). Su diseño de tablas está esbozado en [`docs/modelo_datos.md`](docs/modelo_datos.md). Sus diagramas de referencia:
 
 - ![Sistema contable textil](assets/figuras_uml/figura-09-sistema-contable-textil.png)
 - ![Encargado de inventario y logística](assets/figuras_uml/figura-02-modelo-inventario-logistica.png)

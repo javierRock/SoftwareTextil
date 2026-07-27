@@ -37,7 +37,11 @@ package = false
 [tool.ruff]
 target-version = "py311"
 line-length = 88
-extend-exclude = ["*/migrations/*"]
+# Se excluye lo que no es codigo fuente del proyecto: las migraciones las
+# genera Django y `assets/starUML_codigo/` es la exportacion cruda de StarUML,
+# conservada solo como evidencia del proceso de modelado (ver
+# `docs/modelo_dominio.md`). El codigo ejecutable vive en `apps/`.
+extend-exclude = ["*/migrations/*", "assets/starUML_codigo/*"]
 
 [tool.ruff.lint]
 select = [
@@ -61,8 +65,12 @@ select = [
 
 [tool.ruff.lint.per-file-ignores]
 # Los tests usan assert (S101) y comparan contra valores literales (PLR2004):
-# es justamente lo que se espera de una prueba.
-"tests/**" = ["S101", "PLR2004"]
+# es justamente lo que se espera de una prueba. El patron cubre tanto la suite
+# raiz `tests/` como las suites por modulo (`apps/catalogo/tests/`).
+"**/tests/**" = ["S101", "PLR2004", "PLR0913", "PLR0917"]
+# El parametro `db` de pytest-django no se usa como valor: su sola presencia
+# habilita el acceso a la base de datos en la fixture (de ahi ARG001).
+"conftest.py" = ["S101", "PLR2004", "ARG001"]
 # DRF impone la firma `(self, request, pk=None)` en las acciones del ViewSet,
 # aunque una accion concreta no lea el request.
 "**/presentation/views.py" = ["ARG002"]

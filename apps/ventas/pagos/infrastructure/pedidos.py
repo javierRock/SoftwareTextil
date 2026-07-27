@@ -1,7 +1,7 @@
 """Adaptador entre pagos y el contexto de pedidos."""
 
-from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPedido
+from apps.compartido.infrastructure.mapeo import a_dinero, uuid_valido
 from apps.ventas.models import PedidoModel
 from apps.ventas.pagos.application.ports import PedidoParaPago, RepositorioPedidoPago
 from apps.ventas.pagos.domain.excepciones import PedidoNoAdmitePago
@@ -10,8 +10,8 @@ from apps.ventas.pagos.domain.excepciones import PedidoNoAdmitePago
 def pedido_para_pago_desde_modelo(modelo: PedidoModel) -> PedidoParaPago:
     return PedidoParaPago(
         id=str(modelo.id),
-        cliente_id=modelo.cliente_id,
-        total=Dinero(modelo.total_monto, modelo.total_moneda),
+        cliente_id=str(modelo.cliente_id),
+        total=a_dinero(modelo.total_monto, modelo.total_moneda),
         estado=EstadoPedido(modelo.estado),
     )
 
@@ -20,6 +20,8 @@ class DjangoRepositorioPedidoPago(RepositorioPedidoPago):
     """Consulta y actualiza solo los datos de Pedido requeridos por Pagos."""
 
     def buscar_por_id(self, pedido_id: str) -> PedidoParaPago | None:
+        if uuid_valido(pedido_id) is None:
+            return None
         modelo = PedidoModel.objects.filter(id=pedido_id).first()
         return pedido_para_pago_desde_modelo(modelo) if modelo else None
 
@@ -27,10 +29,14 @@ class DjangoRepositorioPedidoPago(RepositorioPedidoPago):
         self,
         pedido_id: str,
     ) -> PedidoParaPago | None:
+        if uuid_valido(pedido_id) is None:
+            return None
         modelo = PedidoModel.objects.select_for_update().filter(id=pedido_id).first()
         return pedido_para_pago_desde_modelo(modelo) if modelo else None
 
     def listar_ids_por_cliente(self, cliente_id: str) -> frozenset[str]:
+        if uuid_valido(cliente_id) is None:
+            return frozenset()
         identificadores = PedidoModel.objects.filter(cliente_id=cliente_id).values_list(
             "id",
             flat=True,
@@ -38,6 +44,8 @@ class DjangoRepositorioPedidoPago(RepositorioPedidoPago):
         return frozenset(str(identificador) for identificador in identificadores)
 
     def marcar_pagado(self, pedido_id: str) -> None:
+        if uuid_valido(pedido_id) is None:
+            raise PedidoNoAdmitePago()
         actualizados = PedidoModel.objects.filter(
             id=pedido_id,
             estado=EstadoPedido.CREADO.value,
