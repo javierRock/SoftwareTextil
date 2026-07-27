@@ -5,6 +5,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from apps.compartido.domain.enums import EstadoAlerta, TipoMovimiento
+from apps.inventario.domain.excepciones import CantidadInvalida, StockInsuficiente
 
 
 @dataclass(frozen=True)
@@ -14,7 +15,7 @@ class Stock:
 
     def __post_init__(self) -> None:
         if self.cantidad < 0:
-            raise ValueError("La cantidad no puede ser negativa")
+            raise CantidadInvalida("La cantidad no puede ser negativa")
 
 
 @dataclass
@@ -68,14 +69,14 @@ class StockPrenda:
     def registrar_salida(self, cantidad: int, motivo: str, usuario_id: str) -> MovimientoInventario:
         self._validar_cantidad(cantidad)
         if cantidad > self.cantidad_actual:
-            raise ValueError("No hay stock suficiente para la salida")
+            raise StockInsuficiente("No hay stock suficiente para la salida")
         self.cantidad_actual -= cantidad
         self.ultima_actualizacion = datetime.utcnow()
         return self._crear_movimiento(TipoMovimiento.SALIDA, cantidad, motivo, usuario_id)
 
     def ajustar(self, nueva_cantidad: int, motivo: str, usuario_id: str) -> MovimientoInventario:
         if nueva_cantidad < 0:
-            raise ValueError("La cantidad ajustada no puede ser negativa")
+            raise CantidadInvalida("La cantidad ajustada no puede ser negativa")
         diferencia = abs(nueva_cantidad - self.cantidad_actual)
         self.cantidad_actual = nueva_cantidad
         self.ultima_actualizacion = datetime.utcnow()
@@ -113,16 +114,16 @@ class StockPrenda:
     @staticmethod
     def _validar_cantidad(cantidad: int) -> None:
         if cantidad <= 0:
-            raise ValueError("La cantidad debe ser mayor a cero")
+            raise CantidadInvalida("La cantidad debe ser mayor a cero")
 
 
 class InventarioFabrica:
     @staticmethod
     def crear(prenda_id: str, stock_inicial: int, stock_minimo: int, ubicacion: str) -> StockPrenda:
         if stock_inicial < 0:
-            raise ValueError("El stock inicial no puede ser negativo")
+            raise CantidadInvalida("El stock inicial no puede ser negativo")
         if stock_minimo < 0:
-            raise ValueError("El stock minimo no puede ser negativo")
+            raise CantidadInvalida("El stock minimo no puede ser negativo")
         return StockPrenda(
             id=str(uuid4()),
             prenda_id=prenda_id,

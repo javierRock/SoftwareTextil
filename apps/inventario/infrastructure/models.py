@@ -1,1 +1,1 @@
-from apps.inventario.models import *  # noqa
+from apps.inventario.models import AlertaStockModel, MovimientoInventarioModel, StockPrendaModel

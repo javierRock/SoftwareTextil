@@ -24,6 +24,7 @@
   - [2.10. Documentación Complementaria](#210-documentación-complementaria)
   - [2.11. Trabajo Futuro](#211-trabajo-futuro)
   - [2.12. Referencias](#212-referencias)
+  - [2.13. Clean Code en inventario](#213-clean-code-en-inventario)
 
 # 2. SoftwareTextil
 
@@ -403,6 +404,7 @@ uv run python manage.py makemigrations
 | [`docs/modelo_dominio.md`](docs/modelo_dominio.md) | Lenguaje ubicuo, contextos delimitados y agregados |
 | [`docs/arquitectura.md`](docs/arquitectura.md)     | Capas, dependencias y estructura técnica           |
 | [`docs/prototipo.md`](docs/prototipo.md)           | Pantallas del prototipo y flujo de interfaz        |
+| [`docs/guias/inventario/estilos-programacion-inventario.md`](docs/guias/inventario/estilos-programacion-inventario.md) | Estilos de programación aplicados al módulo de inventario |
 | [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
 | [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
 | [`docs/reportes/sonarlint-pagos.md`](docs/reportes/sonarlint-pagos.md) | Estado y pasos de análisis SonarLint de pagos |
@@ -423,3 +425,7 @@ Módulos modelados en UML pero fuera del alcance de esta entrega: **Despachos** 
 - Evans, E. _Domain-Driven Design_.
 - [Citerus DDD Sample Core](https://github.com/citerus/dddsample-core).
 - [Modern DDD Cargo Tracker](https://github.com/eclipse-ee4j/cargotracker).
+
+## 2.13. Clean Code en inventario
+
+La evidencia específica del módulo de inventario está documentada en [`docs/guias/inventario/clean-code-inventario.md`](docs/guias/inventario/clean-code-inventario.md).
