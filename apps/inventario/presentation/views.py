@@ -6,8 +6,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from apps.catalogo.infrastructure.repositories import DjangoRepositorioPrenda
+from apps.catalogo.infrastructure.repositories import DjangoRepositorioCatalogo
 from apps.inventario.domain.excepciones import (
     CantidadInvalida,
+    CategoriaNoEncontrada,
     PrendaNoEncontrada,
     StockInsuficiente,
     StockNoEncontrado,
@@ -23,6 +25,7 @@ from apps.inventario.infrastructure.repositories import (
 )
 from apps.inventario.presentation.serializers import (
     AjusteStockSerializer,
+    CategoriaStockAgrupadaSerializer,
     CrearStockSerializer,
     MovimientoSerializer,
     MovimientoStockSerializer,
@@ -36,6 +39,7 @@ def _servicio() -> ServicioInventario:
         DjangoRepositorioMovimiento(),
         DjangoRepositorioAlertaStock(),
         DjangoRepositorioPrenda(),
+        DjangoRepositorioCatalogo(),
     )
 
 
@@ -48,7 +52,7 @@ def _usuario_responsable_desde_solicitud(request) -> str:
 def _manejar_error(exc: Exception) -> tuple[dict[str, str], int]:
     if isinstance(exc, (CantidadInvalida, StockInsuficiente, UsuarioResponsableRequerido)):
         return {"error": str(exc)}, status.HTTP_400_BAD_REQUEST
-    if isinstance(exc, (PrendaNoEncontrada, StockNoEncontrado)):
+    if isinstance(exc, (PrendaNoEncontrada, StockNoEncontrado, CategoriaNoEncontrada)):
         return {"error": str(exc)}, status.HTTP_404_NOT_FOUND
     if isinstance(exc, StockYaExiste):
         return {"error": str(exc)}, status.HTTP_409_CONFLICT
@@ -61,6 +65,17 @@ class StockViewSet(viewsets.ViewSet):
     def list(self, request):
         stock_list = _servicio().listar_stock()
         return Response(StockSerializer(stock_list, many=True).data)
+
+    @action(detail=False, methods=["get"], url_path="por-categoria")
+    def por_categoria(self, request):
+        categoria_id = request.query_params.get("categoria_id") or None
+        servicio = _servicio()
+        try:
+            resumen = servicio.listar_stock_por_categoria(categoria_id)
+        except CategoriaNoEncontrada as exc:
+            body, code = _manejar_error(exc)
+            return Response(body, status=code)
+        return Response(CategoriaStockAgrupadaSerializer(resumen, many=True).data)
 
     def create(self, request):
         serializer = CrearStockSerializer(data=request.data)

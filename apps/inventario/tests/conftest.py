@@ -7,7 +7,7 @@ import pytest
 from rest_framework.test import APIClient
 
 from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel
-from apps.catalogo.infrastructure.repositories import DjangoRepositorioPrenda
+from apps.catalogo.infrastructure.repositories import DjangoRepositorioCatalogo, DjangoRepositorioPrenda
 from apps.inventario.application.services import ServicioInventario
 from apps.inventario.infrastructure.models import StockPrendaModel
 from apps.inventario.infrastructure.repositories import (
@@ -55,6 +55,7 @@ def servicio_inventario() -> ServicioInventario:
         DjangoRepositorioMovimiento(),
         DjangoRepositorioAlertaStock(),
         DjangoRepositorioPrenda(),
+        DjangoRepositorioCatalogo(),
     )
 
 

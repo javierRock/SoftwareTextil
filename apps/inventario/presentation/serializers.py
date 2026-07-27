@@ -2,6 +2,7 @@
 
 from rest_framework import serializers
 
+from apps.inventario.domain.consultas import CategoriaStockAgrupada, PrendaStockAgrupada
 from apps.inventario.infrastructure.models import (
     AlertaStockModel,
 )
@@ -52,3 +53,26 @@ class AjusteStockSerializer(serializers.Serializer):
     nueva_cantidad = serializers.IntegerField(min_value=0)
     motivo = serializers.CharField()
     usuario_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+
+
+class PrendaStockAgrupadaSerializer(serializers.Serializer):
+    prenda_id = serializers.CharField()
+    nombre = serializers.CharField()
+    cantidad = serializers.IntegerField()
+
+
+class CategoriaStockAgrupadaSerializer(serializers.Serializer):
+    categoria_id = serializers.CharField()
+    categoria = serializers.CharField()
+    cantidad_total = serializers.IntegerField()
+    prendas = PrendaStockAgrupadaSerializer(many=True)
+
+    def to_representation(self, instance: CategoriaStockAgrupada | dict) -> dict:
+        if isinstance(instance, dict):
+            return super().to_representation(instance)
+        return {
+            "categoria_id": instance.categoria_id,
+            "categoria": instance.categoria,
+            "cantidad_total": instance.cantidad_total,
+            "prendas": PrendaStockAgrupadaSerializer(instance.prendas, many=True).data,
+        }
