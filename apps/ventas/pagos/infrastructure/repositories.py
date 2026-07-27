@@ -1,42 +1,76 @@
-"""Repositorios concretos con Django ORM para pagos."""
+"""Adaptador de persistencia de pagos basado en Django ORM."""
 
-from decimal import Decimal
+from django.db import IntegrityError
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPago, MetodoPago
+from apps.ventas.pagos.domain.excepciones import PagoPedidoDuplicado
 from apps.ventas.pagos.domain.pago import Pago
+from apps.ventas.pagos.domain.repositorios import PaginaPagos, RepositorioPago
 from apps.ventas.pagos.infrastructure.models import PagoModel
 
 
-def _pago_from_model(model: PagoModel) -> Pago:
+def pago_desde_modelo(modelo: PagoModel) -> Pago:
+    """Convierte un registro ORM en un agregado de dominio."""
+
     return Pago(
-        id=str(model.id),
-        pedido_id=model.pedido_id,
-        monto=Dinero(Decimal(model.monto_monto), model.monto_moneda),
-        metodo=MetodoPago(model.metodo),
-        referencia=model.referencia,
-        estado=EstadoPago(model.estado),
-        fecha=model.fecha,
+        id=str(modelo.id),
+        pedido_id=modelo.pedido_id,
+        monto=Dinero(modelo.monto_monto, modelo.monto_moneda),
+        metodo=MetodoPago(modelo.metodo),
+        referencia=modelo.referencia,
+        estado=EstadoPago(modelo.estado),
+        fecha=modelo.fecha,
     )
 
 
-class DjangoRepositorioPago:
-    def guardar(self, pago: Pago) -> None:
-        model = PagoModel.objects.filter(id=pago.id).first()
-        if model is None:
-            model = PagoModel(id=pago.id)
-        model.pedido_id = pago.pedido_id
-        model.monto_monto = pago.monto.monto
-        model.monto_moneda = pago.monto.moneda
-        model.metodo = pago.metodo.value
-        model.referencia = pago.referencia
-        model.estado = pago.estado.value
-        model.save()
+class DjangoRepositorioPago(RepositorioPago):
+    """Implementa el contrato de pagos encapsulando Django ORM."""
+
+    def crear(self, pago: Pago) -> None:
+        try:
+            modelo = PagoModel.objects.create(
+                id=pago.id,
+                pedido_id=pago.pedido_id,
+                monto_monto=pago.monto.monto,
+                monto_moneda=pago.monto.moneda,
+                metodo=pago.metodo.value,
+                referencia=pago.referencia,
+                estado=pago.estado.value,
+            )
+        except IntegrityError as error:
+            raise PagoPedidoDuplicado() from error
+        pago.fecha = modelo.fecha
+
+    def actualizar_estado(self, pago: Pago) -> None:
+        PagoModel.objects.filter(id=pago.id).update(estado=pago.estado.value)
 
     def buscar_por_id(self, pago_id: str) -> Pago | None:
-        model = PagoModel.objects.filter(id=pago_id).first()
-        return _pago_from_model(model) if model else None
+        modelo = PagoModel.objects.filter(id=pago_id).first()
+        return pago_desde_modelo(modelo) if modelo is not None else None
 
-    def listar_por_pedido(self, pedido_id: str) -> list[Pago]:
-        qs = PagoModel.objects.filter(pedido_id=pedido_id)
-        return [_pago_from_model(m) for m in qs]
+    def buscar_por_id_para_actualizar(self, pago_id: str) -> Pago | None:
+        modelo = PagoModel.objects.select_for_update().filter(id=pago_id).first()
+        return pago_desde_modelo(modelo) if modelo is not None else None
+
+    def existe_por_pedido(self, pedido_id: str) -> bool:
+        return PagoModel.objects.filter(pedido_id=pedido_id).exists()
+
+    def listar_pagina(
+        self,
+        limite: int,
+        desplazamiento: int,
+        pedido_ids: frozenset[str] | None = None,
+    ) -> PaginaPagos:
+        modelos = PagoModel.objects.all()
+        if pedido_ids is not None:
+            if not pedido_ids:
+                return PaginaPagos([], 0)
+            modelos = modelos.filter(pedido_id__in=pedido_ids)
+        modelos = modelos.order_by("fecha", "id")
+        total = modelos.count()
+        pagina = modelos[desplazamiento : desplazamiento + limite]
+        return PaginaPagos(
+            pagos=[pago_desde_modelo(modelo) for modelo in pagina],
+            total=total,
+        )

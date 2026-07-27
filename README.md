@@ -13,6 +13,7 @@
     - [2.5.2. DDD Táctico en el Código](#252-ddd-táctico-en-el-código)
     - [2.5.3. Estructura del Proyecto](#253-estructura-del-proyecto)
   - [2.6. Prácticas de Desarrollo Aplicadas](#26-prácticas-de-desarrollo-aplicadas)
+    - [2.6.1. API de Pagos](#261-api-de-pagos)
   - [2.7. Flujo de Trabajo Git](#27-flujo-de-trabajo-git)
   - [2.8. Instalación](#28-instalación)
     - [2.8.1. Instalar uv](#281-instalar-uv)
@@ -204,7 +205,7 @@ SoftwareTextil/
 
 ## 2.6. Prácticas de Desarrollo Aplicadas
 
-Cada integrante aplica y evidencia en su rama: **1 estilo de programación** (elegido por él/ella), **5+ prácticas de Clean Code** y **3+ principios SOLID**, sobre la base DDD + capas común. La evidencia (descripción + fragmento de código) se documenta en su guía:
+El Laboratorio 10 exige evidenciar **por lo menos cuatro estilos de programación**. Cada integrante documenta en su guía los requisitos que haya implementado, junto con sus prácticas de Clean Code y principios SOLID; no se presume el avance de módulos que no han sido verificados.
 
 | Integrante | Módulo                | Guía de trabajo y evidencia                                            | Estilo de programación |
 | ---------- | --------------------- | ---------------------------------------------------------------------- | ---------------------- |
@@ -212,9 +213,109 @@ Cada integrante aplica y evidencia en su rama: **1 estilo de programación** (el
 | Lizzy      | Catálogo              | [`docs/guias/lizzy-catalogo.md`](docs/guias/lizzy-catalogo.md)         | *(a declarar)*         |
 | Alejandro  | Inventario            | [`docs/guias/alejandro-inventario.md`](docs/guias/alejandro-inventario.md) | *(a declarar)*     |
 | Angelo     | Pedidos               | [`docs/guias/angelo-pedidos.md`](docs/guias/angelo-pedidos.md)         | *(a declarar)*         |
-| Javier     | Pagos                 | [`docs/guias/javier-pagos.md`](docs/guias/javier-pagos.md)             | *(a declarar)*         |
+| Javier     | Pagos                 | [`docs/guias/javier-pagos.md`](docs/guias/javier-pagos.md)             | Things, Error/Exception Handling, Persistent-Tables y RESTful |
 
 Convenciones de codificación comunes a todo el equipo: PEP 8, nombres en español del lenguaje ubicuo, type hints y docstrings de módulo.
+
+### 2.6.1. API de Pagos
+
+El módulo de Javier registra un pago total por pedido. El cliente solo puede crear y consultar pagos propios; el administrador puede consultarlos y aprobarlos o rechazarlos. Aprobar un pago y marcar el pedido como pagado forman una sola transacción. El módulo no integra pasarelas ni acepta datos de tarjetas.
+
+```mermaid
+flowchart LR
+    Cliente --> Registrar[Registrar pago total propio]
+    Cliente --> Consultar[Consultar pagos propios]
+    Administrador --> Listar[Listar pagos]
+    Administrador --> Aprobar[Aprobar pago]
+    Administrador --> Rechazar[Rechazar pago]
+    Aprobar --> Pedido[Marcar pedido pagado]
+```
+
+| Método | Endpoint | Resultado |
+| --- | --- | --- |
+| `GET` | `/api/ventas/pagos/` | Lista paginada; acepta `pedido_id`, `pagina` y `tamano` |
+| `POST` | `/api/ventas/pagos/` | Cliente: registra el pago total de un pedido propio |
+| `GET` | `/api/ventas/pagos/<id>/` | Cliente propietario o administrador: obtiene un pago |
+| `POST` | `/api/ventas/pagos/<id>/aprobar/` | Administrador: aprueba y marca el pedido pagado |
+| `POST` | `/api/ventas/pagos/<id>/rechazar/` | Administrador: rechaza un pago pendiente |
+
+La API requiere `Authorization: Bearer <token>`. Devuelve `401` sin autenticación, `403` sin autorización, `404` para recursos inexistentes y `409` para pagos duplicados o transiciones inválidas.
+
+#### Modelo y paquetes de Pagos
+
+```mermaid
+classDiagram
+    class Pago {
+        +id: str
+        +pedido_id: str
+        +monto: Dinero
+        +estado: EstadoPago
+        +aprobar()
+        +rechazar()
+    }
+    class ServicioPagos
+    class RepositorioPago
+    class RepositorioPedidoPago
+    class DjangoRepositorioPago
+    class DjangoRepositorioPedidoPago
+    ServicioPagos --> RepositorioPago
+    ServicioPagos --> RepositorioPedidoPago
+    ServicioPagos --> Pago
+    DjangoRepositorioPago ..|> RepositorioPago
+    DjangoRepositorioPedidoPago ..|> RepositorioPedidoPago
+```
+
+#### Convenciones y Clean Code
+
+Se emplean nombres del lenguaje ubicuo, type hints y funciones enfocadas. La presentación no conoce modelos ORM y el contrato expresa la intención de cada operación:
+
+```python
+class RepositorioPago(ABC):
+    @abstractmethod
+    def crear(self, pago: Pago) -> None: ...
+
+    @abstractmethod
+    def actualizar_estado(self, pago: Pago) -> None: ...
+```
+
+Los errores esperados tienen código estable y se traducen en un solo lugar:
+
+```python
+class PagoPedidoDuplicado(ErrorPago):
+    codigo = "pago_pedido_duplicado"
+```
+
+#### Principios SOLID
+
+**SRP:** cada capa posee una razón de cambio; `PagoViewSet` adapta HTTP, `ServicioPagos` coordina y `DjangoRepositorioPago` persiste.
+
+```python
+def __init__(
+    self,
+    repositorio_pago: RepositorioPago,
+    repositorio_pedido: RepositorioPedidoPago,
+    unidad_trabajo: FabricaUnidadTrabajo,
+) -> None:
+```
+
+**OCP:** una política nueva se registra sin modificar el agregado ni el servicio.
+
+```python
+class PoliticaReferenciaPago(ABC):
+    @abstractmethod
+    def validar(self, metodo: MetodoPago, referencia: str) -> str: ...
+```
+
+**LSP:** los adaptadores Django y los fakes de pruebas implementan los mismos contratos y son sustituibles.
+
+```python
+class DjangoRepositorioPago(RepositorioPago):
+    def crear(self, pago: Pago) -> None: ...
+```
+
+**DIP:** el caso de uso depende de `RepositorioPago` y `RepositorioPedidoPago`, nunca del ORM. La infraestructura concreta se ensambla únicamente en presentación.
+
+La evidencia completa de los Laboratorios 9, 10, 11 y 12 está en la [guía de pagos de Javier](docs/guias/javier-pagos.md). El estado verificable y los pasos manuales de SonarLint están en el [reporte de pagos](docs/reportes/sonarlint-pagos.md).
 
 ---
 
@@ -254,7 +355,7 @@ irm https://astral.sh/uv/install.ps1 | iex
 ```bash
 git clone git@github.com:javierRock/SoftwareTextil.git
 cd SoftwareTextil
-git checkout angel_back-end
+git checkout dev
 uv sync
 ```
 
@@ -284,12 +385,13 @@ uv run python manage.py makemigrations
 | ----------------------- | --------------------------------- |
 | Python 3.11+            | Lenguaje principal                |
 | VS Code                 | IDE                               |
-| Django 5.0              | Framework web MVC                 |
+| Django 5.2+             | Framework web MVC                 |
 | Django REST Framework   | API REST (serializers, viewsets)  |
 | Django ORM              | Persistencia y mapeo ORM          |
 | PostgreSQL              | Base de datos relacional          |
 | uv                      | Gestión de entorno y dependencias |
-| pytest + pytest-django  | Pruebas                           |
+| pytest + pytest-django + pytest-cov | Pruebas y cobertura       |
+| Ruff                    | Lint y formato                    |
 | StarUML                 | Modelado UML                      |
 | Mermaid                 | Diagramas en Markdown             |
 
@@ -305,6 +407,7 @@ uv run python manage.py makemigrations
 | [`docs/guias/inventario/estilos-programacion-inventario.md`](docs/guias/inventario/estilos-programacion-inventario.md) | Estilos de programación aplicados al módulo de inventario |
 | [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
 | [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
+| [`docs/reportes/sonarlint-pagos.md`](docs/reportes/sonarlint-pagos.md) | Estado y pasos de análisis SonarLint de pagos |
 
 ---
 

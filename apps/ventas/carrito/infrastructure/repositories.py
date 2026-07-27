@@ -1,10 +1,17 @@
-"""Repositorios concretos con Django ORM para carrito de compras."""
+"""Repositorios concretos con Django ORM para carrito de compras.
+
+`DjangoRepositorioCarrito` hereda el contrato completo `RepositorioCarrito` y
+respeta su comportamiento esperado (LSP): no agrega precondiciones ni cambia el
+tipo de retorno, por lo que puede sustituirse por cualquier otra
+implementacion (ver `memoria.py`) sin tocar los servicios.
+"""
 
 from decimal import Decimal
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoCarrito
-from apps.ventas.carrito.domain.carrito import CarritoCompras, CarritoFactory, ItemCarrito
+from apps.ventas.carrito.domain.carrito import CarritoCompras, ItemCarrito
+from apps.ventas.carrito.domain.repositorios import RepositorioCarrito
 from apps.ventas.carrito.infrastructure.models import CarritoModel, ItemCarritoModel
 
 
@@ -13,19 +20,22 @@ def _carrito_from_model(model: CarritoModel) -> CarritoCompras:
         id=str(model.id),
         cliente_id=model.cliente_id,
         estado=EstadoCarrito(model.estado),
+        fecha_creacion=model.fecha_creacion,
     )
     for item_model in model.items.all():
         item = ItemCarrito(
             id=str(item_model.id),
             prenda_id=item_model.prenda_id,
             cantidad=item_model.cantidad,
-            precio_unitario=Dinero(Decimal(item_model.precio_monto), item_model.precio_moneda),
+            precio_unitario=Dinero(
+                Decimal(item_model.precio_monto), item_model.precio_moneda
+            ),
         )
         carrito.items.append(item)
     return carrito
 
 
-class DjangoRepositorioCarrito:
+class DjangoRepositorioCarrito(RepositorioCarrito):
     def guardar(self, carrito: CarritoCompras) -> None:
         model = CarritoModel.objects.filter(id=carrito.id).first()
         if model is None:
@@ -52,3 +62,6 @@ class DjangoRepositorioCarrito:
     def listar_por_cliente(self, cliente_id: str) -> list[CarritoCompras]:
         qs = CarritoModel.objects.filter(cliente_id=cliente_id)
         return [_carrito_from_model(m) for m in qs]
+
+    def listar_todos(self) -> list[CarritoCompras]:
+        return [_carrito_from_model(m) for m in CarritoModel.objects.all()]
