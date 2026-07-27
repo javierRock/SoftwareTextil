@@ -17,6 +17,13 @@ class RepositorioPrendaEnMemoria(RepositorioPrenda):
     def listar(self) -> list[Prenda]:
         return list(self.prendas.values())
 
+    def listar_visibles(self) -> list[Prenda]:
+        return [
+            prenda
+            for prenda in self.prendas.values()
+            if prenda.estado == EstadoPrenda.ACTIVA
+        ]
+
 
 class RepositorioCatalogoEnMemoria(RepositorioCatalogo):
     def __init__(self) -> None:

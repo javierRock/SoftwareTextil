@@ -71,6 +71,22 @@ class PrendaSerializer(serializers.ModelSerializer):
         ]
 
 
+class PrendaCatalogoSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    nombre = serializers.CharField(read_only=True)
+    descripcion = serializers.CharField(read_only=True)
+    precio_monto = serializers.DecimalField(
+        source="precio.monto",
+        max_digits=12,
+        decimal_places=2,
+        read_only=True,
+    )
+    precio_moneda = serializers.CharField(source="precio.moneda", read_only=True)
+    categoria_id = serializers.CharField(read_only=True)
+    tipo_producto_id = serializers.CharField(read_only=True, allow_null=True)
+    estado = serializers.CharField(read_only=True)
+
+
 class CrearPrendaSerializer(serializers.Serializer):
     nombre = serializers.CharField(max_length=120, trim_whitespace=True)
     descripcion = serializers.CharField(

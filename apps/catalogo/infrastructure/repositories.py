@@ -58,6 +58,10 @@ class DjangoRepositorioPrenda(RepositorioPrenda):
     def listar(self) -> list[Prenda]:
         return [_prenda_from_model(m) for m in PrendaModel.objects.all()]
 
+    def listar_visibles(self) -> list[Prenda]:
+        modelos = PrendaModel.objects.filter(estado=EstadoPrenda.ACTIVA.value)
+        return [_prenda_from_model(modelo) for modelo in modelos]
+
 
 class DjangoRepositorioCatalogo(RepositorioCatalogo):
     def guardar_categoria(self, categoria: Categoria) -> None:

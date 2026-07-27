@@ -59,6 +59,9 @@ class ServicioCatalogo:
     def listar_prendas(self) -> list[Prenda]:
         return self.repo_prenda.listar()
 
+    def listar_catalogo(self) -> list[Prenda]:
+        return self.repo_prenda.listar_visibles()
+
     def buscar_prenda(self, prenda_id: str) -> Prenda | None:
         return self.repo_prenda.buscar_por_id(prenda_id)
 

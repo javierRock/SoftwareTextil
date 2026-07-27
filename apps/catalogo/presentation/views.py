@@ -14,6 +14,7 @@ from apps.catalogo.presentation.serializers import (
     CrearCategoriaSerializer,
     CrearPrendaSerializer,
     CrearTipoProductoSerializer,
+    PrendaCatalogoSerializer,
     PrendaCreadaSerializer,
     PrendaSerializer,
     TipoProductoSerializer,
@@ -27,6 +28,10 @@ def _servicio() -> ServicioCatalogo:
 class PrendaViewSet(viewsets.ModelViewSet):
     queryset = PrendaModel.objects.all()
     serializer_class = PrendaSerializer
+
+    def list(self, request, *args, **kwargs):
+        prendas = _servicio().listar_catalogo()
+        return Response(PrendaCatalogoSerializer(prendas, many=True).data)
 
     def create(self, request, *args, **kwargs):
         serializer = CrearPrendaSerializer(data=request.data)

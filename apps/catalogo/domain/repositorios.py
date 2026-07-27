@@ -18,6 +18,10 @@ class RepositorioPrenda(ABC):
     def listar(self) -> list[Prenda]:
         raise NotImplementedError
 
+    @abstractmethod
+    def listar_visibles(self) -> list[Prenda]:
+        raise NotImplementedError
+
 
 class RepositorioCatalogo(ABC):
     @abstractmethod
