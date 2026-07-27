@@ -1,11 +1,160 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>SoftwareTextil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Acceso seguro al sistema de gestion textil Zuren">
+    <title>Zuren | Acceso</title>
+    <link rel="stylesheet" href="{% static 'usuarios/auth.css' %}">
 </head>
 <body>
-    <h1>SoftwareTextil - Back-end</h1>
-    <p>Esqueleto Django + DRF + PostgreSQL (MVP en construccion).</p>
+    <div class="app-shell">
+        <aside class="brand-panel" aria-label="Zuren">
+            <div class="brand-mark" aria-hidden="true">Z</div>
+            <div class="brand-copy">
+                <p class="brand-name">ZUREN</p>
+                <h1>Gestion textil,<br>con acceso bajo control.</h1>
+                <p>Una cuenta. Tu operacion completa.</p>
+            </div>
+            <div class="fabric-grid" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+            </div>
+            <p class="brand-footer">SoftwareTextil</p>
+        </aside>
+
+        <main class="main-panel">
+            <section id="auth-view" class="auth-view">
+                <div class="auth-header">
+                    <div class="mobile-brand"><span>Z</span> ZUREN</div>
+                    <p class="eyebrow">Portal de acceso</p>
+                    <h2 id="auth-title">Bienvenido de nuevo</h2>
+                    <p id="auth-subtitle">Ingresa tus credenciales para continuar.</p>
+                </div>
+
+                <div class="tabs" role="tablist" aria-label="Acceso y registro">
+                    <button class="tab active" id="login-tab" role="tab" aria-selected="true">Ingresar</button>
+                    <button class="tab" id="register-tab" role="tab" aria-selected="false">Crear cuenta</button>
+                </div>
+
+                <form id="login-form" class="form-stack">
+                    <label>
+                        Usuario
+                        <input name="username" autocomplete="username" maxlength="120" required placeholder="tu.usuario">
+                    </label>
+                    <label>
+                        Contrasena
+                        <span class="password-field">
+                            <input name="password" type="password" autocomplete="current-password" maxlength="128" required placeholder="Ingresa tu contrasena">
+                            <button type="button" class="reveal" title="Mostrar contrasena" aria-label="Mostrar contrasena">&#9673;</button>
+                        </span>
+                    </label>
+                    <button class="primary-button" type="submit">
+                        <span>Ingresar</span><span aria-hidden="true">&rarr;</span>
+                    </button>
+                </form>
+
+                <form id="register-form" class="form-stack hidden">
+                    <label>
+                        Nombre completo
+                        <input name="nombre" autocomplete="name" maxlength="120" required placeholder="Nombres y apellidos">
+                    </label>
+                    <label>
+                        Correo electronico
+                        <input name="email" type="email" autocomplete="email" maxlength="160" required placeholder="nombre@empresa.com">
+                    </label>
+                    <label>
+                        Usuario
+                        <input name="username" autocomplete="username" maxlength="120" pattern="[A-Za-z0-9._-]+" required placeholder="tu.usuario">
+                    </label>
+                    <label>
+                        Contrasena
+                        <span class="password-field">
+                            <input name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required placeholder="Minimo 8 caracteres">
+                            <button type="button" class="reveal" title="Mostrar contrasena" aria-label="Mostrar contrasena">&#9673;</button>
+                        </span>
+                    </label>
+                    <button class="primary-button" type="submit">
+                        <span>Crear cuenta</span><span aria-hidden="true">&rarr;</span>
+                    </button>
+                </form>
+                <div id="auth-message" class="message hidden" role="alert"></div>
+            </section>
+
+            <section id="account-view" class="account-view hidden">
+                <header class="account-header">
+                    <div>
+                        <p class="eyebrow">Cuenta activa</p>
+                        <h2 id="welcome-name">Mi cuenta</h2>
+                    </div>
+                    <button id="logout-button" class="secondary-button" type="button">Cerrar sesion</button>
+                </header>
+
+                <div class="account-meta">
+                    <span id="user-initials" class="avatar">ZU</span>
+                    <div><strong id="profile-name">Usuario</strong><small id="profile-identity"></small></div>
+                    <span id="profile-role" class="role-badge">Cliente</span>
+                </div>
+
+                <nav class="section-tabs" aria-label="Configuracion de cuenta">
+                    <button class="section-tab active" data-section="profile-section">Perfil</button>
+                    <button class="section-tab" data-section="security-section">Seguridad</button>
+                    <button class="section-tab admin-only hidden" data-section="users-section">Usuarios</button>
+                </nav>
+
+                <div id="account-message" class="message hidden" role="alert"></div>
+
+                <section id="profile-section" class="account-section">
+                    <div class="section-heading"><h3>Informacion personal</h3><p>Manten tus datos de contacto actualizados.</p></div>
+                    <form id="profile-form" class="form-grid">
+                        <label>Nombre completo<input name="nombre" maxlength="120" required></label>
+                        <label>Correo electronico<input name="email" type="email" maxlength="160" required></label>
+                        <label>Usuario<input name="username" disabled></label>
+                        <label>Rol<input name="rol" disabled></label>
+                        <button class="primary-button compact" type="submit">Guardar cambios</button>
+                    </form>
+                </section>
+
+                <section id="security-section" class="account-section hidden">
+                    <div class="section-heading"><h3>Seguridad</h3><p>Actualiza tu contrasena y controla tus accesos.</p></div>
+                    <form id="password-form" class="form-stack narrow">
+                        <label>Contrasena actual<input name="password_actual" type="password" autocomplete="current-password" required></label>
+                        <label>Nueva contrasena<input name="password_nuevo" type="password" autocomplete="new-password" minlength="8" required></label>
+                        <button class="primary-button compact" type="submit">Actualizar contrasena</button>
+                    </form>
+                    <div class="session-action">
+                        <div><strong>Otras sesiones</strong><p>Cierra los accesos abiertos en otros dispositivos.</p></div>
+                        <button id="close-sessions-button" class="secondary-button" type="button">Cerrar otras sesiones</button>
+                    </div>
+                </section>
+
+                <section id="users-section" class="account-section hidden">
+                    <div class="section-heading users-heading">
+                        <div><h3>Usuarios</h3><p>Administra el estado y acceso del equipo.</p></div>
+                        <button id="refresh-users-button" class="secondary-button" type="button">Actualizar</button>
+                    </div>
+                    <details class="user-creator">
+                        <summary>Nuevo usuario</summary>
+                        <form id="admin-user-form" class="form-grid">
+                            <label>Nombre completo<input name="nombre" maxlength="120" required></label>
+                            <label>Correo electronico<input name="email" type="email" maxlength="160" required></label>
+                            <label>Usuario<input name="username" maxlength="120" pattern="[A-Za-z0-9._-]+" required></label>
+                            <label>Rol<select name="rol_id" required><option value="">Selecciona un rol</option></select></label>
+                            <label>Contrasena<input name="password" type="password" minlength="8" maxlength="128" required></label>
+                            <button class="primary-button compact" type="submit">Crear usuario</button>
+                        </form>
+                    </details>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th><span class="sr-only">Accion</span></th></tr></thead>
+                            <tbody id="users-table"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+    <script src="{% static 'usuarios/auth.js' %}" defer></script>
 </body>
 </html>
