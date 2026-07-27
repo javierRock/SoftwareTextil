@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 
+from apps.inventario.domain.consultas import CategoriaStockAgrupada, PrendaStockBajoMinimo
 from apps.inventario.domain.stock_prenda import AlertaStock, MovimientoInventario, StockPrenda
 
 
@@ -24,6 +25,14 @@ class RepositorioInventario(ABC):
 
     @abstractmethod
     def listar(self) -> list[StockPrenda]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def listar_por_categoria(self, categoria_id: str | None = None) -> list[CategoriaStockAgrupada]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def listar_bajo_minimo(self) -> list[PrendaStockBajoMinimo]:
         raise NotImplementedError
 
 

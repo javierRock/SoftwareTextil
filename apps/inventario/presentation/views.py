@@ -1,13 +1,16 @@
 """Views DRF para inventario."""
 
+from django.http import HttpResponse
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from apps.catalogo.infrastructure.repositories import DjangoRepositorioPrenda
+from apps.catalogo.infrastructure.repositories import DjangoRepositorioCatalogo
 from apps.inventario.domain.excepciones import (
     CantidadInvalida,
+    CategoriaNoEncontrada,
     PrendaNoEncontrada,
     StockInsuficiente,
     StockNoEncontrado,
@@ -15,7 +18,8 @@ from apps.inventario.domain.excepciones import (
     UsuarioResponsableRequerido,
 )
 from apps.inventario.application.services import ServicioInventario
-from apps.inventario.infrastructure.models import MovimientoInventarioModel, StockPrendaModel
+from apps.inventario.application.reportes import ServicioReporteInventario
+from apps.inventario.infrastructure.models import MovimientoInventarioModel
 from apps.inventario.infrastructure.repositories import (
     DjangoRepositorioAlertaStock,
     DjangoRepositorioInventario,
@@ -23,9 +27,12 @@ from apps.inventario.infrastructure.repositories import (
 )
 from apps.inventario.presentation.serializers import (
     AjusteStockSerializer,
+    CategoriaStockAgrupadaSerializer,
     CrearStockSerializer,
     MovimientoSerializer,
     MovimientoStockSerializer,
+    PrendaStockBajoMinimoSerializer,
+    ReporteInventarioQuerySerializer,
     StockSerializer,
 )
 
@@ -36,7 +43,12 @@ def _servicio() -> ServicioInventario:
         DjangoRepositorioMovimiento(),
         DjangoRepositorioAlertaStock(),
         DjangoRepositorioPrenda(),
+        DjangoRepositorioCatalogo(),
     )
+
+
+def _servicio_reporte() -> ServicioReporteInventario:
+    return ServicioReporteInventario(_servicio(), DjangoRepositorioPrenda())
 
 
 def _usuario_responsable_desde_solicitud(request) -> str:
@@ -48,7 +60,7 @@ def _usuario_responsable_desde_solicitud(request) -> str:
 def _manejar_error(exc: Exception) -> tuple[dict[str, str], int]:
     if isinstance(exc, (CantidadInvalida, StockInsuficiente, UsuarioResponsableRequerido)):
         return {"error": str(exc)}, status.HTTP_400_BAD_REQUEST
-    if isinstance(exc, (PrendaNoEncontrada, StockNoEncontrado)):
+    if isinstance(exc, (PrendaNoEncontrada, StockNoEncontrado, CategoriaNoEncontrada)):
         return {"error": str(exc)}, status.HTTP_404_NOT_FOUND
     if isinstance(exc, StockYaExiste):
         return {"error": str(exc)}, status.HTTP_409_CONFLICT
@@ -61,6 +73,41 @@ class StockViewSet(viewsets.ViewSet):
     def list(self, request):
         stock_list = _servicio().listar_stock()
         return Response(StockSerializer(stock_list, many=True).data)
+
+    @action(detail=False, methods=["get"], url_path="por-categoria")
+    def por_categoria(self, request):
+        categoria_id = request.query_params.get("categoria_id") or None
+        servicio = _servicio()
+        try:
+            resumen = servicio.listar_stock_por_categoria(categoria_id)
+        except CategoriaNoEncontrada as exc:
+            body, code = _manejar_error(exc)
+            return Response(body, status=code)
+        return Response(CategoriaStockAgrupadaSerializer(resumen, many=True).data)
+
+    @action(detail=False, methods=["get"], url_path="bajo-minimo")
+    def bajo_minimo(self, request):
+        alertas = _servicio().listar_stock_bajo_minimo()
+        return Response(PrendaStockBajoMinimoSerializer(alertas, many=True).data)
+
+    @action(detail=False, methods=["get"], url_path="reporte")
+    def reporte(self, request):
+        serializer = ReporteInventarioQuerySerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+
+        servicio = _servicio_reporte()
+        try:
+            archivo = servicio.generar_archivo(
+                formato=serializer.validated_data["formato"],
+                categoria_id=serializer.validated_data.get("categoria_id") or None,
+            )
+        except (CategoriaNoEncontrada, ValueError) as exc:
+            body, code = _manejar_error(exc)
+            return Response(body, status=code)
+
+        respuesta = HttpResponse(archivo.contenido, content_type=archivo.content_type)
+        respuesta["Content-Disposition"] = f'attachment; filename="{archivo.nombre_archivo}"'
+        return respuesta
 
     def create(self, request):
         serializer = CrearStockSerializer(data=request.data)

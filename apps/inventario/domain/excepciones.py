@@ -27,3 +27,7 @@ class StockYaExiste(ErrorInventario):
 
 class UsuarioResponsableRequerido(ErrorInventario):
     """No fue posible determinar el usuario responsable."""
+
+
+class CategoriaNoEncontrada(ErrorInventario):
+    """La categoria solicitada no existe."""
