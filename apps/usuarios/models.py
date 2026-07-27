@@ -1,6 +1,7 @@
 """Modelos ORM Django para usuarios."""
 
 import uuid
+from typing import ClassVar
 
 from django.db import models
 
@@ -12,6 +13,12 @@ class RolModel(models.Model):
 
     class Meta:
         db_table = "roles"
+        constraints: ClassVar[list[object]] = [
+            models.UniqueConstraint(
+                models.functions.Lower("nombre"),
+                name="rol_nombre_unico_ci",
+            )
+        ]
 
 
 class UsuarioModel(models.Model):
@@ -27,6 +34,9 @@ class UsuarioModel(models.Model):
 
     class Meta:
         db_table = "usuarios"
+        indexes: ClassVar[list[object]] = [
+            models.Index(fields=["estado"], name="usuario_estado_idx"),
+        ]
 
 
 class SesionModel(models.Model):
@@ -40,6 +50,13 @@ class SesionModel(models.Model):
 
     class Meta:
         db_table = "sesiones"
+        indexes: ClassVar[list[object]] = [
+            models.Index(
+                fields=["usuario", "estado"],
+                name="sesion_usuario_estado_idx",
+            ),
+            models.Index(fields=["fecha_expiracion"], name="sesion_expira_idx"),
+        ]
 
 
 class IntentoLoginModel(models.Model):
@@ -52,3 +69,9 @@ class IntentoLoginModel(models.Model):
 
     class Meta:
         db_table = "intentos_login"
+        indexes: ClassVar[list[object]] = [
+            models.Index(
+                fields=["username", "fecha"],
+                name="intento_usuario_fecha_idx",
+            ),
+        ]
