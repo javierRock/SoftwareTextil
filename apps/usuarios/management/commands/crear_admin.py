@@ -25,12 +25,10 @@ class Command(BaseCommand):
             help="Omitir para ingresar la contrasena de forma interactiva",
         )
 
-    def handle(self, *args, **options):
+    def handle(self, *_args, **options):
         password = options["password"] or getpass("Contrasena: ")
         confirmacion = (
-            password
-            if options["password"]
-            else getpass("Confirma la contrasena: ")
+            password if options["password"] else getpass("Confirma la contrasena: ")
         )
         if password != confirmacion:
             raise CommandError("Las contrasenas no coinciden")

@@ -7,6 +7,8 @@ from rest_framework import authentication, exceptions
 
 from apps.usuarios.infrastructure.models import SesionModel, UsuarioModel
 
+CANTIDAD_PARTES_TOKEN = 2
+
 
 @dataclass(frozen=True)
 class UsuarioAutenticado:
@@ -46,9 +48,12 @@ class SesionTokenAuthentication(authentication.BaseAuthentication):
         usuario = self._crear_usuario_autenticado(sesion.usuario)
         return (usuario, sesion)
 
+    def authenticate_header(self, _request) -> str:
+        return self.keyword
+
     def _obtener_token(self, request) -> str:
         auth = authentication.get_authorization_header(request).decode("utf-8").split()
-        if len(auth) == 2 and auth[0] in {self.keyword, "Token"}:
+        if len(auth) == CANTIDAD_PARTES_TOKEN and auth[0] in {self.keyword, "Token"}:
             return auth[1].strip()
         return ""
 
