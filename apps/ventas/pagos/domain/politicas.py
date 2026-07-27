@@ -44,7 +44,7 @@ class ReferenciaOpcional(PoliticaReferenciaPago):
     def metodos(self) -> frozenset[MetodoPago]:
         return frozenset({MetodoPago.EFECTIVO})
 
-    def validar(self, metodo: MetodoPago, referencia: str) -> str:
+    def validar(self, _metodo: MetodoPago, referencia: str) -> str:
         return _normalizar_referencia(referencia)
 
 

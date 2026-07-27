@@ -18,6 +18,7 @@ class TipoProductoModel(models.Model):
     id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4)
     nombre = models.CharField(max_length=120)
     atributos_base = models.JSONField(default=dict)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         db_table = "tipos_producto"
@@ -31,6 +32,7 @@ class PrendaModel(models.Model):
     precio_moneda = models.CharField(max_length=3, default="PEN")
     categoria = models.ForeignKey(CategoriaModel, on_delete=models.PROTECT)
     tipo_producto = models.ForeignKey(TipoProductoModel, on_delete=models.SET_NULL, null=True, blank=True)
+    tallas = models.JSONField(default=list)
     estado = models.CharField(max_length=30, default="activa")
     registrado_por = models.CharField(max_length=36, null=True, blank=True)
     fecha_registro = models.DateTimeField(auto_now_add=True)

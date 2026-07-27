@@ -169,8 +169,8 @@ def test_aprobacion_revierte_pago_si_falla_actualizacion_del_pedido(
     pago_id = registrar_pago(api_autenticada(cliente), pedido).data["id"]
 
     def fallar_actualizacion(
-        repositorio: DjangoRepositorioPedidoPago,
-        pedido_id: str,
+        _repositorio: DjangoRepositorioPedidoPago,
+        _pedido_id: str,
     ) -> None:
         raise PedidoNoAdmitePago()
 

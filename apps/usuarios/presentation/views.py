@@ -1,5 +1,7 @@
 """Endpoints REST para autenticacion, perfil y administracion de usuarios."""
 
+from typing import ClassVar
+
 from django.core.exceptions import ValidationError
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -59,7 +61,7 @@ def _token_actual(request) -> str:
 
 
 class LoginView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes: ClassVar[list[object]] = [AllowAny]
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -78,7 +80,7 @@ class LoginView(APIView):
 
 
 class RegistroView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes: ClassVar[list[object]] = [AllowAny]
 
     def post(self, request):
         serializer = RegistroSerializer(data=request.data)
@@ -104,7 +106,7 @@ class RegistroView(APIView):
 
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes: ClassVar[list[object]] = [IsAuthenticated]
 
     def post(self, request):
         _servicio_auth().logout(_token_actual(request))
@@ -112,7 +114,7 @@ class LogoutView(APIView):
 
 
 class PerfilView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes: ClassVar[list[object]] = [IsAuthenticated]
 
     def get(self, request):
         usuario = UsuarioModel.objects.select_related("rol").get(id=request.user.id)
@@ -135,7 +137,7 @@ class PerfilView(APIView):
 
 
 class CambiarPasswordView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes: ClassVar[list[object]] = [IsAuthenticated]
 
     def post(self, request):
         serializer = CambiarPasswordSerializer(data=request.data)
@@ -157,7 +159,7 @@ class CambiarPasswordView(APIView):
 
 
 class CerrarOtrasSesionesView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes: ClassVar[list[object]] = [IsAuthenticated]
 
     def post(self, request):
         _servicio_auth().cerrar_otras_sesiones(
@@ -170,7 +172,7 @@ class CerrarOtrasSesionesView(APIView):
 class UsuarioViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = UsuarioModel.objects.select_related("rol").order_by("nombre")
     serializer_class = UsuarioSerializer
-    permission_classes = [EsAdministrador]
+    permission_classes: ClassVar[list[object]] = [EsAdministrador]
 
     def create(self, request, *args, **kwargs):
         serializer = CrearUsuarioSerializer(data=request.data)
@@ -213,7 +215,7 @@ class UsuarioViewSet(viewsets.ReadOnlyModelViewSet):
 class RolViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = RolModel.objects.order_by("nombre")
     serializer_class = RolSerializer
-    permission_classes = [EsAdministrador]
+    permission_classes: ClassVar[list[object]] = [EsAdministrador]
 
     def create(self, request, *args, **kwargs):
         serializer = CrearRolSerializer(data=request.data)

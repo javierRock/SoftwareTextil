@@ -1,5 +1,7 @@
 """Serializers DRF para usuarios."""
 
+from typing import ClassVar
+
 from rest_framework import serializers
 
 from apps.usuarios.infrastructure.models import RolModel, UsuarioModel
@@ -8,7 +10,7 @@ from apps.usuarios.infrastructure.models import RolModel, UsuarioModel
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
         model = RolModel
-        fields = ["id", "nombre", "descripcion"]
+        fields: ClassVar[list[str]] = ["id", "nombre", "descripcion"]
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -16,7 +18,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UsuarioModel
-        fields = [
+        fields: ClassVar[list[str]] = [
             "id",
             "nombre",
             "email",

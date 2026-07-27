@@ -2,7 +2,10 @@
 
 from decimal import Decimal
 
+from django.db.models import Q
+
 from apps.catalogo.domain.prenda import Categoria, Prenda, TipoProducto
+from apps.catalogo.domain.repositorios import RepositorioCatalogo, RepositorioPrenda
 from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPrenda
@@ -17,6 +20,7 @@ def _tipo_from_model(model: TipoProductoModel) -> TipoProducto:
         id=str(model.id),
         nombre=model.nombre,
         atributos_base=model.atributos_base or {},
+        activo=model.activo,
     )
 
 
@@ -28,13 +32,14 @@ def _prenda_from_model(model: PrendaModel) -> Prenda:
         precio=Dinero(Decimal(model.precio_monto), model.precio_moneda),
         categoria_id=str(model.categoria_id),
         tipo_producto_id=str(model.tipo_producto_id) if model.tipo_producto_id else None,
+        tallas=model.tallas or [],
         estado=EstadoPrenda(model.estado),
         registrado_por=model.registrado_por,
         fecha_registro=model.fecha_registro,
     )
 
 
-class DjangoRepositorioPrenda:
+class DjangoRepositorioPrenda(RepositorioPrenda):
     def guardar(self, prenda: Prenda) -> None:
         model = PrendaModel.objects.filter(id=prenda.id).first()
         if model is None:
@@ -45,6 +50,7 @@ class DjangoRepositorioPrenda:
         model.precio_moneda = prenda.precio.moneda
         model.categoria_id = prenda.categoria_id
         model.tipo_producto_id = prenda.tipo_producto_id
+        model.tallas = prenda.tallas
         model.estado = prenda.estado.value
         model.registrado_por = prenda.registrado_por
         model.save()
@@ -56,8 +62,30 @@ class DjangoRepositorioPrenda:
     def listar(self) -> list[Prenda]:
         return [_prenda_from_model(m) for m in PrendaModel.objects.all()]
 
+    def listar_visibles(self) -> list[Prenda]:
+        modelos = PrendaModel.objects.filter(estado=EstadoPrenda.ACTIVA.value)
+        return [_prenda_from_model(modelo) for modelo in modelos]
 
-class DjangoRepositorioCatalogo:
+    def buscar(
+        self,
+        texto: str | None,
+        categoria_id: str | None,
+        tipo_producto_id: str | None,
+        estado: EstadoPrenda,
+    ) -> list[Prenda]:
+        modelos = PrendaModel.objects.filter(estado=estado.value)
+        if texto:
+            modelos = modelos.filter(
+                Q(nombre__icontains=texto) | Q(descripcion__icontains=texto)
+            )
+        if categoria_id:
+            modelos = modelos.filter(categoria_id=categoria_id)
+        if tipo_producto_id:
+            modelos = modelos.filter(tipo_producto_id=tipo_producto_id)
+        return [_prenda_from_model(modelo) for modelo in modelos]
+
+
+class DjangoRepositorioCatalogo(RepositorioCatalogo):
     def guardar_categoria(self, categoria: Categoria) -> None:
         model = CategoriaModel.objects.filter(id=categoria.id).first()
         if model is None:
@@ -72,6 +100,7 @@ class DjangoRepositorioCatalogo:
             model = TipoProductoModel(id=tipo_producto.id)
         model.nombre = tipo_producto.nombre
         model.atributos_base = tipo_producto.atributos_base
+        model.activo = tipo_producto.activo
         model.save()
 
     def listar_categorias(self) -> list[Categoria]:
@@ -79,6 +108,10 @@ class DjangoRepositorioCatalogo:
 
     def listar_tipos(self) -> list[TipoProducto]:
         return [_tipo_from_model(m) for m in TipoProductoModel.objects.all()]
+
+    def buscar_tipo(self, tipo_producto_id: str) -> TipoProducto | None:
+        model = TipoProductoModel.objects.filter(id=tipo_producto_id).first()
+        return _tipo_from_model(model) if model else None
 
     def buscar_categoria(self, categoria_id: str) -> Categoria | None:
         model = CategoriaModel.objects.filter(id=categoria_id).first()
