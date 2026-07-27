@@ -124,7 +124,7 @@ class ServicioGestionUsuarios:
         self.repo_usuario = repo_usuario
         self.repo_rol = repo_rol
 
-    def crear_usuario(
+    def crear_usuario(  # noqa: PLR0913, PLR0917
         self,
         nombre: str,
         email: str,
