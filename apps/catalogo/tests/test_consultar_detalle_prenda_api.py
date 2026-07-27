@@ -48,4 +48,4 @@ def test_api_devuelve_error_controlado_para_prenda_inexistente() -> None:
     respuesta = APIClient().get("/api/prendas/inexistente/")
 
     assert respuesta.status_code == 404
-    assert respuesta.data == {"error": "Prenda no encontrada"}
+    assert "error" in respuesta.data

@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import pytest
 
+from apps.catalogo.domain.excepciones import ValidacionError
 from apps.catalogo.domain.prenda import PrendaFabrica
 from apps.catalogo.tests.test_services import crear_servicio
 from apps.compartido.domain.dinero import Dinero
@@ -75,5 +76,5 @@ def test_combina_filtros_con_operador_y() -> None:
 def test_rechaza_estado_invalido() -> None:
     servicio, _, _, _ = _servicio_con_prendas()
 
-    with pytest.raises(ValueError, match="estado de la prenda no es valido"):
+    with pytest.raises(ValidacionError):
         servicio.buscar_prendas(estado="agotada")

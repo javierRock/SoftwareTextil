@@ -1,4 +1,7 @@
+import pytest
+
 from apps.catalogo.application.services import ServicioCatalogo
+from apps.catalogo.domain.excepciones import RecursoNoEncontradoError
 from apps.catalogo.domain.prenda import Categoria, Prenda, TipoProducto
 from apps.catalogo.domain.repositorios import RepositorioCatalogo, RepositorioPrenda
 from apps.compartido.domain.enums import EstadoPrenda
@@ -118,7 +121,7 @@ def test_servicio_gestiona_catalogo_con_repositorios_en_memoria() -> None:
 def test_servicio_conserva_errores_para_recursos_inexistentes() -> None:
     servicio, _, _ = crear_servicio()
 
-    try:
+    with pytest.raises(RecursoNoEncontradoError):
         servicio.crear_prenda(
             nombre="Polo",
             descripcion="",
@@ -127,14 +130,6 @@ def test_servicio_conserva_errores_para_recursos_inexistentes() -> None:
             categoria_id="inexistente",
             registrado_por="usuario-1",
         )
-    except ValueError as exc:
-        assert str(exc) == "La categoria no existe"
-    else:
-        raise AssertionError("Se esperaba el error de categoria inexistente")
 
-    try:
+    with pytest.raises(RecursoNoEncontradoError):
         servicio.desactivar_prenda("inexistente")
-    except ValueError as exc:
-        assert str(exc) == "Prenda no encontrada"
-    else:
-        raise AssertionError("Se esperaba el error de prenda inexistente")

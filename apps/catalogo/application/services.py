@@ -3,6 +3,10 @@
 from decimal import Decimal, InvalidOperation
 from uuid import uuid4
 
+from apps.catalogo.domain.excepciones import (
+    RecursoNoEncontradoError,
+    ValidacionError,
+)
 from apps.catalogo.domain.prenda import (
     Categoria,
     Prenda,
@@ -34,22 +38,17 @@ class ServicioCatalogo:
         tipo_producto_id: str | None = None,
     ) -> Prenda:
         if self.repo_catalogo.buscar_categoria(categoria_id) is None:
-            raise ValueError("La categoria no existe")
+            raise RecursoNoEncontradoError("La categoria no existe")
         if (
             tipo_producto_id is not None
             and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
         ):
-            raise ValueError("El tipo de producto no existe")
-        try:
-            monto = Decimal(precio_monto)
-        except (InvalidOperation, TypeError, ValueError) as exc:
-            raise ValueError("El precio de la prenda no es valido") from exc
-        moneda = precio_moneda.strip().upper() if isinstance(precio_moneda, str) else precio_moneda
+            raise RecursoNoEncontradoError("El tipo de producto no existe")
 
         prenda = PrendaFabrica.crear(
             nombre=nombre,
             descripcion=descripcion,
-            precio=Dinero(monto, moneda),
+            precio=self._crear_precio(precio_monto, precio_moneda),
             categoria_id=categoria_id,
             registrado_por=registrado_por,
             tipo_producto_id=tipo_producto_id,
@@ -76,7 +75,7 @@ class ServicioCatalogo:
         try:
             estado_prenda = EstadoPrenda(estado) if estado else EstadoPrenda.ACTIVA
         except ValueError as exc:
-            raise ValueError("El estado de la prenda no es valido") from exc
+            raise ValidacionError("El estado de la prenda no es valido") from exc
         return self.repo_prenda.buscar(
             texto=texto,
             categoria_id=categoria_id,
@@ -87,7 +86,7 @@ class ServicioCatalogo:
     def buscar_prenda(self, prenda_id: str) -> Prenda:
         prenda = self.repo_prenda.buscar_por_id(prenda_id)
         if prenda is None:
-            raise ValueError("Prenda no encontrada")
+            raise RecursoNoEncontradoError("Prenda no encontrada")
         return prenda
 
     def activar_prenda(self, prenda_id: str) -> Prenda:
@@ -113,7 +112,7 @@ class ServicioCatalogo:
     def buscar_categoria(self, categoria_id: str) -> Categoria:
         categoria = self.repo_catalogo.buscar_categoria(categoria_id)
         if categoria is None:
-            raise ValueError("Categoria no encontrada")
+            raise RecursoNoEncontradoError("Categoria no encontrada")
         return categoria
 
     def actualizar_categoria(
@@ -146,7 +145,7 @@ class ServicioCatalogo:
     def buscar_tipo(self, tipo_producto_id: str) -> TipoProducto:
         tipo = self.repo_catalogo.buscar_tipo(tipo_producto_id)
         if tipo is None:
-            raise ValueError("Tipo de producto no encontrado")
+            raise RecursoNoEncontradoError("Tipo de producto no encontrado")
         return tipo
 
     def actualizar_tipo_producto(
@@ -171,3 +170,15 @@ class ServicioCatalogo:
         tipo.desactivar()
         self.repo_catalogo.guardar_tipo_producto(tipo)
         return tipo
+
+    @staticmethod
+    def _crear_precio(precio_monto: str, precio_moneda: str) -> Dinero:
+        moneda = (
+            precio_moneda.strip().upper()
+            if isinstance(precio_moneda, str)
+            else precio_moneda
+        )
+        try:
+            return Dinero(Decimal(precio_monto), moneda)
+        except (InvalidOperation, TypeError, ValueError) as exc:
+            raise ValidacionError("El precio de la prenda no es valido") from exc

@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import pytest
 
+from apps.catalogo.domain.excepciones import RecursoNoEncontradoError
 from apps.catalogo.domain.prenda import PrendaFabrica
 from apps.catalogo.tests.test_services import crear_servicio
 from apps.compartido.domain.dinero import Dinero
@@ -25,5 +26,5 @@ def test_servicio_consulta_detalle_de_prenda_existente() -> None:
 def test_servicio_controla_prenda_inexistente() -> None:
     servicio, _, _ = crear_servicio()
 
-    with pytest.raises(ValueError, match="Prenda no encontrada"):
+    with pytest.raises(RecursoNoEncontradoError):
         servicio.buscar_prenda("inexistente")

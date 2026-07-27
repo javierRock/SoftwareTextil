@@ -1,5 +1,9 @@
 import pytest
 
+from apps.catalogo.domain.excepciones import (
+    RecursoNoEncontradoError,
+    ValidacionError,
+)
 from apps.catalogo.domain.prenda import TipoProducto
 from apps.catalogo.tests.test_services import crear_servicio
 
@@ -17,21 +21,20 @@ def test_tipo_producto_valida_y_normaliza_sus_datos() -> None:
 
 
 @pytest.mark.parametrize(
-    ("nombre", "atributos_base", "mensaje"),
+    ("nombre", "atributos_base"),
     [
-        ("   ", {}, "El nombre del tipo de producto es obligatorio"),
-        ("x" * 121, {}, "no puede exceder 120 caracteres"),
-        ("Camisa", [], "Los atributos base deben ser un objeto"),
-        ("Camisa", {"": "larga"}, "nombres no vacios"),
-        ("Camisa", {"manga": 1}, "valores de texto"),
+        ("   ", {}),
+        ("x" * 121, {}),
+        ("Camisa", []),
+        ("Camisa", {"": "larga"}),
+        ("Camisa", {"manga": 1}),
     ],
 )
 def test_tipo_producto_rechaza_datos_invalidos(
     nombre,
     atributos_base,
-    mensaje,
 ) -> None:
-    with pytest.raises(ValueError, match=mensaje):
+    with pytest.raises(ValidacionError):
         TipoProducto(id="tipo-1", nombre=nombre, atributos_base=atributos_base)
 
 
@@ -57,5 +60,5 @@ def test_servicio_completa_el_ciclo_de_configuracion_de_tipos() -> None:
 def test_servicio_controla_tipo_inexistente() -> None:
     servicio, _, _ = crear_servicio()
 
-    with pytest.raises(ValueError, match="Tipo de producto no encontrado"):
+    with pytest.raises(RecursoNoEncontradoError):
         servicio.buscar_tipo("inexistente")

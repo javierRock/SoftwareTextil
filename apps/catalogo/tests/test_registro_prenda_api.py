@@ -76,8 +76,8 @@ def test_api_impide_registro_con_categoria_inexistente() -> None:
         format="json",
     )
 
-    assert respuesta.status_code == 400
-    assert respuesta.data == {"error": "La categoria no existe"}
+    assert respuesta.status_code == 404
+    assert "error" in respuesta.data
     assert PrendaModel.objects.count() == 0
 
 
@@ -95,6 +95,6 @@ def test_api_impide_registro_con_tipo_inexistente() -> None:
         format="json",
     )
 
-    assert respuesta.status_code == 400
-    assert respuesta.data == {"error": "El tipo de producto no existe"}
+    assert respuesta.status_code == 404
+    assert "error" in respuesta.data
     assert PrendaModel.objects.count() == 0

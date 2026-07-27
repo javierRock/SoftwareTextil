@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from uuid import uuid4
 
+from apps.catalogo.domain.excepciones import ValidacionError
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPrenda
 
@@ -23,11 +24,11 @@ class Categoria:
     def _asignar_datos(self, nombre: str, descripcion: str) -> None:
         nombre_normalizado = nombre.strip() if isinstance(nombre, str) else ""
         if not nombre_normalizado:
-            raise ValueError("El nombre de la categoria es obligatorio")
+            raise ValidacionError("El nombre de la categoria es obligatorio")
         if len(nombre_normalizado) > 120:
-            raise ValueError("El nombre de la categoria no puede exceder 120 caracteres")
+            raise ValidacionError("El nombre de la categoria no puede exceder 120 caracteres")
         if not isinstance(descripcion, str):
-            raise ValueError("La descripcion de la categoria debe ser texto")
+            raise ValidacionError("La descripcion de la categoria debe ser texto")
         self.nombre = nombre_normalizado
         self.descripcion = descripcion.strip()
 
@@ -54,18 +55,20 @@ class TipoProducto:
     def _asignar_datos(self, nombre: str, atributos_base: dict[str, str]) -> None:
         nombre_normalizado = nombre.strip() if isinstance(nombre, str) else ""
         if not nombre_normalizado:
-            raise ValueError("El nombre del tipo de producto es obligatorio")
+            raise ValidacionError("El nombre del tipo de producto es obligatorio")
         if len(nombre_normalizado) > 120:
-            raise ValueError("El nombre del tipo de producto no puede exceder 120 caracteres")
+            raise ValidacionError("El nombre del tipo de producto no puede exceder 120 caracteres")
         if not isinstance(atributos_base, dict):
-            raise ValueError("Los atributos base deben ser un objeto")
+            raise ValidacionError("Los atributos base deben ser un objeto")
         if any(
             not isinstance(clave, str)
             or not clave.strip()
             or not isinstance(valor, str)
             for clave, valor in atributos_base.items()
         ):
-            raise ValueError("Los atributos base deben tener nombres no vacios y valores de texto")
+            raise ValidacionError(
+                "Los atributos base deben tener nombres no vacios y valores de texto"
+            )
         self.nombre = nombre_normalizado
         self.atributos_base = dict(atributos_base)
 
@@ -85,27 +88,27 @@ class Prenda:
     def __post_init__(self) -> None:
         nombre_normalizado = self.nombre.strip() if isinstance(self.nombre, str) else ""
         if not nombre_normalizado:
-            raise ValueError("El nombre de la prenda es obligatorio")
+            raise ValidacionError("El nombre de la prenda es obligatorio")
         if len(nombre_normalizado) > 120:
-            raise ValueError("El nombre de la prenda no puede exceder 120 caracteres")
+            raise ValidacionError("El nombre de la prenda no puede exceder 120 caracteres")
         if not isinstance(self.descripcion, str):
-            raise ValueError("La descripcion de la prenda debe ser texto")
+            raise ValidacionError("La descripcion de la prenda debe ser texto")
         if not isinstance(self.precio, Dinero) or self.precio.monto <= 0:
-            raise ValueError("El precio de la prenda debe ser mayor que cero")
+            raise ValidacionError("El precio de la prenda debe ser mayor que cero")
         if (
             not isinstance(self.precio.moneda, str)
             or len(self.precio.moneda) != 3
             or not self.precio.moneda.isalpha()
             or not self.precio.moneda.isupper()
         ):
-            raise ValueError("La moneda debe ser un codigo de tres letras mayusculas")
+            raise ValidacionError("La moneda debe ser un codigo de tres letras mayusculas")
         if not isinstance(self.categoria_id, str) or not self.categoria_id.strip():
-            raise ValueError("La categoria de la prenda es obligatoria")
+            raise ValidacionError("La categoria de la prenda es obligatoria")
         if self.tipo_producto_id is not None and (
             not isinstance(self.tipo_producto_id, str)
             or not self.tipo_producto_id.strip()
         ):
-            raise ValueError("El tipo de producto de la prenda no es valido")
+            raise ValidacionError("El tipo de producto de la prenda no es valido")
         self.nombre = nombre_normalizado
         self.descripcion = self.descripcion.strip()
 
