@@ -64,14 +64,27 @@ class PrendaViewSet(viewsets.ModelViewSet):
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(PrendaCreadaSerializer(prenda).data, status=status.HTTP_201_CREATED)
 
-    @action(detail=True, methods=["post"], url_path="desactivar")
-    def desactivar(self, request, pk=None):
-        servicio = _servicio()
+    @action(detail=True, methods=["post"], url_path="activar")
+    def activar(self, request, pk=None):
         try:
-            servicio.desactivar_prenda(pk)
+            prenda = _servicio().activar_prenda(pk)
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
-        return Response({"mensaje": "Prenda desactivada"}, status=status.HTTP_200_OK)
+        return Response(PrendaCatalogoSerializer(prenda).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="desactivar")
+    def desactivar(self, request, pk=None):
+        try:
+            prenda = _servicio().desactivar_prenda(pk)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        return Response(PrendaCatalogoSerializer(prenda).data, status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        return Response(
+            {"error": "La eliminacion fisica de prendas no esta permitida"},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
 
 
 class CategoriaViewSet(viewsets.ViewSet):

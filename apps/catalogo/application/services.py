@@ -90,12 +90,17 @@ class ServicioCatalogo:
             raise ValueError("Prenda no encontrada")
         return prenda
 
-    def desactivar_prenda(self, prenda_id: str) -> None:
-        prenda = self.repo_prenda.buscar_por_id(prenda_id)
-        if prenda is None:
-            raise ValueError("Prenda no encontrada")
+    def activar_prenda(self, prenda_id: str) -> Prenda:
+        prenda = self.buscar_prenda(prenda_id)
+        prenda.activar()
+        self.repo_prenda.guardar(prenda)
+        return prenda
+
+    def desactivar_prenda(self, prenda_id: str) -> Prenda:
+        prenda = self.buscar_prenda(prenda_id)
         prenda.desactivar()
         self.repo_prenda.guardar(prenda)
+        return prenda
 
     def crear_categoria(self, nombre: str, descripcion: str = "") -> Categoria:
         categoria = Categoria(id=str(uuid4()), nombre=nombre, descripcion=descripcion)
