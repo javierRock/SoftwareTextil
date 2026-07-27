@@ -2,8 +2,9 @@
 
 import pytest
 
-from apps.compartido.domain.enums import TipoMovimiento
+from apps.compartido.domain.enums import EstadoAlerta, TipoMovimiento
 from apps.inventario.domain.excepciones import PrendaNoEncontrada, StockInsuficiente, StockNoEncontrado, StockYaExiste
+from apps.inventario.infrastructure.models import AlertaStockModel
 from apps.inventario.infrastructure.models import MovimientoInventarioModel
 from apps.inventario.infrastructure.repositories import DjangoRepositorioMovimiento
 
@@ -102,3 +103,52 @@ def test_salida_exacta_deja_stock_en_cero(servicio_inventario, stock, prenda) ->
     stock.refresh_from_db()
     assert stock.cantidad_actual == 0
     assert MovimientoInventarioModel.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_alerta_se_crea_al_bajar_del_minimo(servicio_inventario, stock, prenda) -> None:
+    servicio_inventario.registrar_salida("prenda-1", 8, "Salida", "usuario-1")
+
+    alerta = AlertaStockModel.objects.get(stock_id=stock.id)
+    stock.refresh_from_db()
+
+    assert stock.cantidad_actual == 2
+    assert AlertaStockModel.objects.count() == 1
+    assert alerta.nivel_actual == 2
+    assert alerta.estado == EstadoAlerta.PENDIENTE.value
+
+
+@pytest.mark.django_db
+def test_alerta_no_se_duplica_si_el_stock_sigue_bajo_y_cambia(servicio_inventario, stock, prenda) -> None:
+    servicio_inventario.registrar_salida("prenda-1", 8, "Salida", "usuario-1")
+    servicio_inventario.registrar_salida("prenda-1", 1, "Salida", "usuario-1")
+
+    alerta = AlertaStockModel.objects.get(stock_id=stock.id)
+    stock.refresh_from_db()
+
+    assert stock.cantidad_actual == 1
+    assert AlertaStockModel.objects.count() == 1
+    assert alerta.nivel_actual == 1
+    assert alerta.estado == EstadoAlerta.PENDIENTE.value
+
+
+@pytest.mark.django_db
+def test_alerta_se_atiende_al_recuperar_stock_y_vuelve_a_crearse_si_baja_otra_vez(servicio_inventario, stock, prenda) -> None:
+    servicio_inventario.registrar_salida("prenda-1", 8, "Salida", "usuario-1")
+    servicio_inventario.registrar_ingreso("prenda-1", 5, "Ingreso", "usuario-1")
+
+    alertas = list(AlertaStockModel.objects.filter(stock_id=stock.id).order_by("fecha"))
+    stock.refresh_from_db()
+
+    assert stock.cantidad_actual == 7
+    assert len(alertas) == 1
+    assert alertas[0].estado == EstadoAlerta.ATENDIDA.value
+
+    servicio_inventario.registrar_salida("prenda-1", 6, "Salida", "usuario-1")
+
+    alertas = list(AlertaStockModel.objects.filter(stock_id=stock.id).order_by("fecha"))
+    stock.refresh_from_db()
+
+    assert stock.cantidad_actual == 1
+    assert len(alertas) == 2
+    assert alertas[-1].estado == EstadoAlerta.PENDIENTE.value

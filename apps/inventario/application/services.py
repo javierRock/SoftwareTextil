@@ -11,7 +11,7 @@ from apps.inventario.domain.repositorios import (
     RepositorioMovimientoInventario,
 )
 from apps.inventario.domain.stock_prenda import InventarioFabrica, MovimientoInventario, StockPrenda
-from apps.inventario.domain.consultas import CategoriaStockAgrupada
+from apps.inventario.domain.consultas import CategoriaStockAgrupada, PrendaStockBajoMinimo
 
 
 class ServicioInventario:
@@ -57,6 +57,9 @@ class ServicioInventario:
             raise CategoriaNoEncontrada("La categoria no existe")
         return self.repo_inventario.listar_por_categoria(categoria_id)
 
+    def listar_stock_bajo_minimo(self) -> list[PrendaStockBajoMinimo]:
+        return self.repo_inventario.listar_bajo_minimo()
+
     def registrar_ingreso(self, prenda_id: str, cantidad: int, motivo: str, usuario_id: str) -> MovimientoInventario:
         with transaction.atomic():
             stock = self._obtener_stock_bloqueado(prenda_id)
@@ -88,9 +91,24 @@ class ServicioInventario:
         return self.repo_movimientos.listar_por_stock(stock_id)
 
     def _generar_alerta_si_corresponde(self, stock: StockPrenda) -> None:
-        alerta = stock.generar_alerta_si_corresponde()
-        if alerta and self.repo_alertas.buscar_pendiente_por_stock(stock.id) is None:
-            self.repo_alertas.guardar(alerta)
+        alerta_pendiente = self.repo_alertas.buscar_pendiente_por_stock(stock.id)
+
+        if stock.esta_bajo_minimo():
+            if alerta_pendiente is None:
+                alerta = stock.generar_alerta_si_corresponde()
+                if alerta is not None:
+                    self.repo_alertas.guardar(alerta)
+                return
+
+            if alerta_pendiente.nivel_actual != stock.cantidad_actual or alerta_pendiente.nivel_minimo != stock.nivel_minimo:
+                alerta_pendiente.nivel_actual = stock.cantidad_actual
+                alerta_pendiente.nivel_minimo = stock.nivel_minimo
+                self.repo_alertas.guardar(alerta_pendiente)
+            return
+
+        if alerta_pendiente is not None:
+            alerta_pendiente.atender()
+            self.repo_alertas.guardar(alerta_pendiente)
 
     def _obtener_stock_bloqueado(self, prenda_id: str) -> StockPrenda:
         if self.repo_prenda is not None and self.repo_prenda.buscar_por_id(prenda_id) is None:
