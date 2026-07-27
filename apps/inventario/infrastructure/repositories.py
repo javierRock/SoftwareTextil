@@ -1,8 +1,10 @@
 """Repositorios concretos con Django ORM para inventario."""
 
+from django.db.models import F
+
 from apps.catalogo.infrastructure.models import PrendaModel
 from apps.compartido.domain.enums import EstadoAlerta, TipoMovimiento
-from apps.inventario.domain.consultas import CategoriaStockAgrupada, PrendaStockAgrupada
+from apps.inventario.domain.consultas import CategoriaStockAgrupada, PrendaStockAgrupada, PrendaStockBajoMinimo
 from apps.inventario.domain.repositorios import (
     RepositorioAlertaStock,
     RepositorioInventario,
@@ -139,6 +141,34 @@ class DjangoRepositorioInventario(RepositorioInventario):
             for datos in sorted(agrupados.values(), key=lambda item: str(item["categoria"]))
             if datos["prendas"]
         ]
+
+    def listar_bajo_minimo(self) -> list[PrendaStockBajoMinimo]:
+        stocks = list(StockPrendaModel.objects.filter(cantidad_actual__lt=F("nivel_minimo")))
+        if not stocks:
+            return []
+
+        prendas = PrendaModel.objects.select_related("categoria").filter(id__in=[stock.prenda_id for stock in stocks])
+        prendas_por_id = {str(prenda.id): prenda for prenda in prendas}
+
+        alertas: list[PrendaStockBajoMinimo] = []
+        for stock in stocks:
+            prenda = prendas_por_id.get(stock.prenda_id)
+            if prenda is None:
+                continue
+
+            categoria = prenda.categoria
+            alertas.append(
+                PrendaStockBajoMinimo(
+                    categoria_id=str(categoria.id),
+                    categoria=categoria.nombre,
+                    prenda_id=str(prenda.id),
+                    prenda=prenda.nombre,
+                    cantidad_actual=stock.cantidad_actual,
+                    nivel_minimo=stock.nivel_minimo,
+                )
+            )
+
+        return sorted(alertas, key=lambda item: (item.categoria, item.prenda))
 
 
 class DjangoRepositorioMovimiento(RepositorioMovimientoInventario):
