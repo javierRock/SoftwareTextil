@@ -20,3 +20,39 @@ DJANGO_SETTINGS_MODULE = "config.settings.dev"
 
 [tool.uv]
 package = false
+
+# Analisis estatico reproducible: las mismas reglas que SonarLint marca en el
+# IDE quedan fijadas aqui para que cualquier integrante obtenga el mismo
+# resultado en consola (`uvx ruff check .`).
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle: estilo PEP 8
+    "F",        # pyflakes: errores reales (nombres e imports)
+    "I",        # isort: orden de imports
+    "N",        # pep8-naming: convenciones de nombres
+    "UP",       # pyupgrade: sintaxis moderna de Python
+    "B",        # flake8-bugbear: bugs y code smells frecuentes
+    "A",        # flake8-builtins: nombres que tapan builtins
+    "C4",       # flake8-comprehensions
+    "SIM",      # flake8-simplify: complejidad innecesaria
+    "RET",      # flake8-return: retornos redundantes
+    "ARG",      # flake8-unused-arguments: parametros muertos
+    "DTZ",      # flake8-datetimez: fechas sin zona horaria
+    "PT",       # flake8-pytest-style
+    "PL",       # pylint: complejidad y valores magicos
+    "RUF",      # reglas propias de ruff
+    "S",        # flake8-bandit: vulnerabilidades
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Los tests usan assert (S101) y comparan contra valores literales (PLR2004):
+# es justamente lo que se espera de una prueba.
+"tests/**" = ["S101", "PLR2004"]
+# DRF impone la firma `(self, request, pk=None)` en las acciones del ViewSet,
+# aunque una accion concreta no lea el request.
+"**/presentation/views.py" = ["ARG002"]

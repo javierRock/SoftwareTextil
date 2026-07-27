@@ -1,11 +1,20 @@
 """Agregado de carrito de compras refinado desde StarUML."""
 
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import uuid4
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoCarrito
+from apps.ventas.carrito.domain.errors import (
+    CantidadInvalidaError,
+    CarritoCerradoError,
+    CarritoConvertidoError,
+    CarritoVacioError,
+    ItemInexistenteError,
+    MonedasIncompatiblesError,
+)
 
 
 @dataclass
@@ -17,10 +26,11 @@ class ItemCarrito:
 
     def __post_init__(self) -> None:
         if self.cantidad <= 0:
-            raise ValueError("La cantidad del item debe ser mayor a cero")
+            raise CantidadInvalidaError
 
     def subtotal(self) -> Dinero:
-        return Dinero(self.precio_unitario.monto * Decimal(self.cantidad), self.precio_unitario.moneda)
+        monto = self.precio_unitario.monto * Decimal(self.cantidad)
+        return Dinero(monto, self.precio_unitario.moneda)
 
 
 @dataclass
@@ -29,17 +39,21 @@ class CarritoCompras:
     cliente_id: str
     estado: EstadoCarrito = EstadoCarrito.ABIERTO
     items: list[ItemCarrito] = field(default_factory=list)
+    fecha_creacion: datetime = field(default_factory=lambda: datetime.now(UTC))
 
-    def agregar_item(self, prenda_id: str, cantidad: int, precio_unitario: Dinero) -> None:
+    def agregar_item(
+        self, prenda_id: str, cantidad: int, precio_unitario: Dinero
+    ) -> None:
         self._validar_abierto()
         if cantidad <= 0:
-            raise ValueError("La cantidad del item debe ser mayor a cero")
+            raise CantidadInvalidaError
         existente = self._buscar_item(prenda_id)
         if existente is None:
-            self.items.append(ItemCarrito(str(uuid4()), prenda_id, cantidad, precio_unitario))
+            nuevo_item = ItemCarrito(str(uuid4()), prenda_id, cantidad, precio_unitario)
+            self.items.append(nuevo_item)
             return
         if existente.precio_unitario.moneda != precio_unitario.moneda:
-            raise ValueError("No se pueden mezclar monedas en el carrito")
+            raise MonedasIncompatiblesError
         existente.cantidad += cantidad
         existente.precio_unitario = precio_unitario
 
@@ -58,7 +72,7 @@ class CarritoCompras:
 
     def total(self) -> Dinero:
         if not self.items:
-            return Dinero(Decimal("0"))
+            return Dinero(Decimal(0))
         total = self.items[0].subtotal()
         for item in self.items[1:]:
             total = total.sumar(item.subtotal())
@@ -67,17 +81,17 @@ class CarritoCompras:
     def marcar_convertido(self) -> None:
         self._validar_abierto()
         if not self.items:
-            raise ValueError("No se puede generar un pedido desde un carrito vacio")
+            raise CarritoVacioError
         self.estado = EstadoCarrito.CONVERTIDO
 
     def cancelar(self) -> None:
         if self.estado == EstadoCarrito.CONVERTIDO:
-            raise ValueError("No se puede cancelar un carrito convertido")
+            raise CarritoConvertidoError
         self.estado = EstadoCarrito.CANCELADO
 
     def _validar_abierto(self) -> None:
         if self.estado != EstadoCarrito.ABIERTO:
-            raise ValueError("El carrito no esta abierto")
+            raise CarritoCerradoError
 
     def _buscar_item(self, prenda_id: str) -> ItemCarrito | None:
         return next((item for item in self.items if item.prenda_id == prenda_id), None)
@@ -85,7 +99,7 @@ class CarritoCompras:
     def _obtener_item(self, prenda_id: str) -> ItemCarrito:
         item = self._buscar_item(prenda_id)
         if item is None:
-            raise ValueError("El item no existe en el carrito")
+            raise ItemInexistenteError
         return item
 
 

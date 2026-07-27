@@ -2,6 +2,10 @@
 
 from dataclasses import dataclass
 
+PRIMER_MES = 1
+ULTIMO_MES = 12
+ANIO_MINIMO = 2000
+
 
 @dataclass(frozen=True)
 class Periodo:
@@ -9,9 +13,9 @@ class Periodo:
     anio: int
 
     def __post_init__(self) -> None:
-        if self.mes < 1 or self.mes > 12:
+        if not PRIMER_MES <= self.mes <= ULTIMO_MES:
             raise ValueError("El mes debe estar entre 1 y 12")
-        if self.anio < 2000:
+        if self.anio < ANIO_MINIMO:
             raise ValueError("El anio debe ser valido")
 
     @property
