@@ -34,7 +34,7 @@ class ProgramarDespachoSerializer(serializers.Serializer):
 
 
 class PrepararDespachoSerializer(serializers.Serializer):
-    responsable_id = serializers.UUIDField()
+    """El responsable se deriva de la sesion autenticada."""
 
 
 class ConfirmarDespachoSerializer(GuiaRemisionSerializer):

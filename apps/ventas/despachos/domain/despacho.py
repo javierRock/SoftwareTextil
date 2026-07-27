@@ -6,6 +6,7 @@ from uuid import uuid4
 
 from apps.compartido.domain.enums import EstadoDespacho
 from apps.ventas.despachos.domain.errors import (
+    DespachoCanceladoError,
     DespachoConfirmadoError,
     DespachoNoPreparadoError,
     DireccionDespachoInvalidaError,
@@ -64,14 +65,14 @@ class Despacho:
         self.direccion_entrega = direccion
 
     def preparar(self, responsable_id: str) -> None:
-        self._validar_no_confirmado()
+        self._validar_modificable()
         self.estado = EstadoDespacho.PREPARADO
         self.responsable_id = responsable_id
         self.fecha_preparacion = _ahora()
 
     def confirmar(self, guia: GuiaRemision) -> None:
         """Solo se confirma lo que ya fue preparado y lleva guia."""
-        self._validar_no_confirmado()
+        self._validar_modificable()
         if self.estado != EstadoDespacho.PREPARADO:
             raise DespachoNoPreparadoError
         self.guia = guia
@@ -79,12 +80,14 @@ class Despacho:
         self.fecha_confirmacion = _ahora()
 
     def cancelar(self) -> None:
-        self._validar_no_confirmado()
+        self._validar_modificable()
         self.estado = EstadoDespacho.CANCELADO
 
-    def _validar_no_confirmado(self) -> None:
+    def _validar_modificable(self) -> None:
         if self.estado == EstadoDespacho.CONFIRMADO:
             raise DespachoConfirmadoError
+        if self.estado == EstadoDespacho.CANCELADO:
+            raise DespachoCanceladoError
 
 
 class DespachoFabrica:

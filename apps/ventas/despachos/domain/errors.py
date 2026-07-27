@@ -10,6 +10,11 @@ class DespachoConfirmadoError(DominioError):
         super().__init__("El despacho ya fue confirmado")
 
 
+class DespachoCanceladoError(DominioError):
+    def __init__(self) -> None:
+        super().__init__("El despacho esta cancelado")
+
+
 class DespachoNoPreparadoError(DominioError):
     """No se confirma un despacho que aun no fue preparado."""
 
@@ -30,3 +35,23 @@ class GuiaRemisionInvalidaError(DominioError):
 class DespachoNoEncontradoError(DominioError):
     def __init__(self) -> None:
         super().__init__("Despacho no encontrado")
+
+
+class PedidoDespachoNoEncontradoError(DominioError):
+    def __init__(self) -> None:
+        super().__init__("Pedido no encontrado")
+
+
+class PedidoNoPagadoError(DominioError):
+    def __init__(self) -> None:
+        super().__init__("Solo se puede despachar un pedido pagado")
+
+
+class DespachoYaExisteError(DominioError):
+    def __init__(self) -> None:
+        super().__init__("El pedido ya tiene un despacho")
+
+
+class GuiaRemisionDuplicadaError(DominioError):
+    def __init__(self) -> None:
+        super().__init__("La serie y numero de la guia ya existen")

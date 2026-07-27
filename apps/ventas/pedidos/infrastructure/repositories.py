@@ -6,6 +6,8 @@ tipo de retorno, por lo que puede sustituirse por cualquier otra
 implementacion (ver `memoria.py`) sin tocar los servicios.
 """
 
+from django.db import transaction
+
 from apps.compartido.domain.enums import EstadoPedido
 from apps.compartido.infrastructure.mapeo import a_dinero, de_dinero, uuid_valido
 from apps.ventas.pedidos.domain.pedido import DetallePedido, Pedido
@@ -35,6 +37,7 @@ def _pedido_from_model(model: PedidoModel) -> Pedido:
 
 
 class DjangoRepositorioPedido(RepositorioPedido):
+    @transaction.atomic
     def guardar(self, pedido: Pedido) -> None:
         model = PedidoModel.objects.filter(id=pedido.id).first()
         if model is None:
@@ -61,6 +64,12 @@ class DjangoRepositorioPedido(RepositorioPedido):
         if uuid_valido(pedido_id) is None:
             return None
         model = self._consulta().filter(id=pedido_id).first()
+        return _pedido_from_model(model) if model else None
+
+    def buscar_por_id_para_actualizar(self, pedido_id: str) -> Pedido | None:
+        if uuid_valido(pedido_id) is None:
+            return None
+        model = self._consulta().select_for_update().filter(id=pedido_id).first()
         return _pedido_from_model(model) if model else None
 
     def listar_por_cliente(self, cliente_id: str) -> list[Pedido]:

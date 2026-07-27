@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+FRONTEND_DIST_DIR = BASE_DIR / "frontend" / "inventario" / "dist"
 
 
 def _cargar_env(ruta: Path) -> None:
@@ -58,7 +59,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        # El build de React tiene prioridad sobre la antigua plantilla de
+        # autenticacion. `templates/` se conserva para vistas Django auxiliares.
+        "DIRS": [FRONTEND_DIST_DIR, BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -100,8 +103,13 @@ TIME_ZONE = "America/Lima"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    ("zuren", FRONTEND_DIST_DIR),
+]
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -120,6 +128,6 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ],
 }

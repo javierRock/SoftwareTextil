@@ -1,6 +1,6 @@
-# Inventario React
+# Zuren SPA
 
-Módulo independiente en React para visualizar el stock agrupado por categoría.
+SPA React 19/Vite para tienda, inventario, catálogo y operaciones de Zuren.
 
 ## Instalación
 
@@ -13,6 +13,17 @@ npm install
 ```bash
 npm run dev
 ```
+
+Para usar un solo servidor, genera el build y arranca Django desde la raíz del
+repositorio:
+
+```bash
+npm run build
+cd ../..
+uv run python manage.py runserver
+```
+
+Django sirve la SPA y todas sus rutas en `http://127.0.0.1:8000/`.
 
 ## Build
 
@@ -40,26 +51,15 @@ Configura la URL base del backend con:
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-Si no se define, el frontend usa el origen actual del navegador.
+Si no se define, el frontend usa el origen actual del navegador, que es la
+opción recomendada para el build servido por Django.
 
-## Endpoint consumido
-
-`GET /api/stock/por-categoria/`
-
-Filtro opcional:
-
-`GET /api/stock/por-categoria/?categoria_id=<id>`
+Vite redirige `/api` y `/media` a `http://localhost:8000` durante desarrollo. La sesión se persiste en `localStorage` bajo `zuren_session` y el cliente central agrega el token Bearer automáticamente.
 
 ## Estructura
 
-- `src/App.jsx`: composición principal del panel.
-- `src/hooks/useInventory.js`: estado, carga, filtro y actualización.
-- `src/services/inventoryApi.js`: cliente HTTP del inventario.
-- `src/components/`: filtros, tarjetas y estados.
-- `src/styles/global.css`: tema visual y layout.
-
-## Integración futura
-
-El panel escucha el evento del navegador `inventory:changed`. Cuando otros módulos registren ingresos o salidas, pueden disparar ese evento con `window.dispatchEvent(new CustomEvent('inventory:changed'))` o usar `notifyInventoryChanged()`.
-
-Para integrarlo en el frontend general, conviene mantener este módulo como microfrontend estático y montarlo en una ruta propia antes de unificar navegación.
+- `src/services/api.js`: HTTP, errores, autenticación y descargas.
+- `src/auth/`: sesión y perfil.
+- `src/pages/`: tienda, cliente, inventario y administración.
+- `src/components/`: shell, navegación y componentes compartidos.
+- `src/styles/global.css`: sistema visual responsive.

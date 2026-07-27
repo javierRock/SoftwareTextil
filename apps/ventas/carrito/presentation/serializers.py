@@ -36,14 +36,17 @@ class CarritoSerializer(serializers.Serializer):
 
 
 class CrearCarritoSerializer(serializers.Serializer):
-    cliente_id = serializers.CharField()
+    """El cliente siempre se toma de la sesion autenticada."""
 
 
 class AgregarItemSerializer(serializers.Serializer):
     variante_id = serializers.CharField()
     cantidad = serializers.IntegerField(min_value=1)
-    precio_monto = serializers.DecimalField(max_digits=12, decimal_places=2)
-    precio_moneda = serializers.CharField(required=False, default="PEN")
+    # Compatibilidad de entrada: se aceptan pero el backend nunca los utiliza.
+    precio_monto = serializers.DecimalField(
+        max_digits=12, decimal_places=2, required=False, write_only=True
+    )
+    precio_moneda = serializers.CharField(required=False, write_only=True)
 
 
 class QuitarItemSerializer(serializers.Serializer):

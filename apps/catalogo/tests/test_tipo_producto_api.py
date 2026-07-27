@@ -1,5 +1,4 @@
 import pytest
-from rest_framework.test import APIClient
 
 from apps.catalogo.infrastructure.models import (
     CategoriaModel,
@@ -10,8 +9,10 @@ from apps.catalogo.infrastructure.models import (
 pytestmark = pytest.mark.django_db
 
 
-def test_api_configura_tipo_producto_sin_acceder_directamente_al_orm() -> None:
-    cliente = APIClient()
+def test_api_configura_tipo_producto_sin_acceder_directamente_al_orm(
+    cliente_admin,
+) -> None:
+    cliente, _ = cliente_admin
 
     creacion = cliente.post(
         "/api/tipos-producto/",
@@ -48,8 +49,8 @@ def test_api_configura_tipo_producto_sin_acceder_directamente_al_orm() -> None:
     assert [tipo["id"] for tipo in listado.data] == [tipo_id]
 
 
-def test_api_rechaza_entradas_invalidas() -> None:
-    cliente = APIClient()
+def test_api_rechaza_entradas_invalidas(cliente_admin) -> None:
+    cliente, _ = cliente_admin
 
     respuesta = cliente.post(
         "/api/tipos-producto/",
@@ -61,8 +62,8 @@ def test_api_rechaza_entradas_invalidas() -> None:
     assert TipoProductoModel.objects.count() == 0
 
 
-def test_api_controla_tipo_inexistente() -> None:
-    cliente = APIClient()
+def test_api_controla_tipo_inexistente(cliente_admin) -> None:
+    cliente, _ = cliente_admin
 
     assert cliente.get("/api/tipos-producto/inexistente/").status_code == 404
     assert (
@@ -73,10 +74,13 @@ def test_api_controla_tipo_inexistente() -> None:
         ).status_code
         == 404
     )
-    assert cliente.post("/api/tipos-producto/inexistente/desactivar/").status_code == 404
+    respuesta = cliente.post("/api/tipos-producto/inexistente/desactivar/")
+    assert respuesta.status_code == 404
 
 
-def test_api_no_permite_eliminacion_fisica_de_tipos_referenciados() -> None:
+def test_api_no_permite_eliminacion_fisica_de_tipos_referenciados(
+    cliente_admin,
+) -> None:
     tipo = TipoProductoModel.objects.create(nombre="Camisa")
     categoria = CategoriaModel.objects.create(nombre="Ropa")
     PrendaModel.objects.create(
@@ -85,7 +89,7 @@ def test_api_no_permite_eliminacion_fisica_de_tipos_referenciados() -> None:
         categoria=categoria,
         tipo_producto=tipo,
     )
-    cliente = APIClient()
+    cliente, _ = cliente_admin
 
     respuesta = cliente.delete(f"/api/tipos-producto/{tipo.id}/")
 

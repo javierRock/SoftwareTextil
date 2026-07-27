@@ -12,6 +12,7 @@ from apps.ventas.pedidos.domain.errors import (
     PedidoCanceladoError,
     PedidoNoCancelableError,
     PedidoSinDetallesError,
+    PedidoYaCanceladoError,
     PedidoYaPagadoError,
 )
 
@@ -45,6 +46,8 @@ class Pedido:
     def cancelar(self) -> None:
         if self.estado == EstadoPedido.PAGADO:
             raise PedidoNoCancelableError
+        if self.estado == EstadoPedido.CANCELADO:
+            raise PedidoYaCanceladoError
         self.estado = EstadoPedido.CANCELADO
 
     def marcar_pagado(self) -> None:

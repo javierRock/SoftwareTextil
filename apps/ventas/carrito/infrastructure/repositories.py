@@ -6,6 +6,8 @@ tipo de retorno, por lo que puede sustituirse por cualquier otra
 implementacion (ver `memoria.py`) sin tocar los servicios.
 """
 
+from django.db import transaction
+
 from apps.compartido.domain.enums import EstadoCarrito
 from apps.compartido.infrastructure.mapeo import a_dinero, de_dinero, uuid_valido
 from apps.ventas.carrito.domain.carrito import CarritoCompras, ItemCarrito
@@ -35,6 +37,7 @@ def _carrito_from_model(model: CarritoModel) -> CarritoCompras:
 
 
 class DjangoRepositorioCarrito(RepositorioCarrito):
+    @transaction.atomic
     def guardar(self, carrito: CarritoCompras) -> None:
         model = CarritoModel.objects.filter(id=carrito.id).first()
         if model is None:
@@ -59,6 +62,14 @@ class DjangoRepositorioCarrito(RepositorioCarrito):
         if uuid_valido(carrito_id) is None:
             return None
         model = self._consulta().filter(id=carrito_id).first()
+        return _carrito_from_model(model) if model else None
+
+    def buscar_por_id_para_actualizar(
+        self, carrito_id: str
+    ) -> CarritoCompras | None:
+        if uuid_valido(carrito_id) is None:
+            return None
+        model = self._consulta().select_for_update().filter(id=carrito_id).first()
         return _carrito_from_model(model) if model else None
 
     def listar_por_cliente(self, cliente_id: str) -> list[CarritoCompras]:

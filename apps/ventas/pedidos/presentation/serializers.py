@@ -42,4 +42,3 @@ class PedidoSerializer(serializers.Serializer):
 
 class CrearPedidoSerializer(serializers.Serializer):
     carrito_id = serializers.CharField()
-    cliente_id = serializers.CharField()

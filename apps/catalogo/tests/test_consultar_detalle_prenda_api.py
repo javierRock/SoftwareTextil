@@ -36,6 +36,10 @@ def test_api_devuelve_detalle_comercial_de_prenda_existente() -> None:
         "tipo_producto_id": str(tipo.id),
         "tallas": [],
         "estado": "activa",
+        "imagen": None,
+        "variantes": [],
+        "registrado_por": None,
+        "fecha_registro": respuesta.data["fecha_registro"],
     }
     assert not {
         "stock",

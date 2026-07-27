@@ -403,11 +403,26 @@ docker compose up -d
 
 ```bash
 uv run python manage.py migrate
-uv run python manage.py crear_admin --nombre "Admin" --email admin@textil.pe --username admin
+uv run python manage.py sembrar_demo
+cd frontend/inventario && npm install && npm run build && cd ../..
 uv run python manage.py runserver
 ```
 
-La aplicación queda disponible en `http://127.0.0.1:8000/`.
+Con el build generado, Django sirve la SPA completa en
+`http://127.0.0.1:8000/`, incluyendo las rutas internas como `/catalogo`,
+`/pedidos` e `/inventario`.
+
+Para trabajar con recarga en caliente, en otra terminal también puedes iniciar
+Vite:
+
+```bash
+cd frontend/inventario
+npm install
+npm run dev
+```
+
+Vite queda disponible en `http://127.0.0.1:5173/` y redirige `/api` y `/media`
+hacia Django.
 
 ### 2.8.5. Verificar el estado del proyecto
 
@@ -418,7 +433,10 @@ uv run pytest                                              # suite sobre Postgre
 uv run ruff check .                                        # análisis estático
 ```
 
-> **Nota sobre la base de datos:** `config/settings/base.py` usa **PostgreSQL** como motor de producción. Para desarrollo, `config/settings/dev.py` usa **SQLite** como fallback temporal hasta que PostgreSQL esté disponible en el entorno local.
+> **Nota sobre la base de datos:** desarrollo y producción usan PostgreSQL. El
+> comando `sembrar_demo` es idempotente y permite recorrer todos los flujos con
+> los usuarios `admin`, `inventario` y `cliente`; su contraseña se puede cambiar
+> con `--password`.
 
 ---
 
@@ -433,7 +451,7 @@ uv run ruff check .                                        # análisis estático
 | Django ORM              | Persistencia y mapeo ORM          |
 | PostgreSQL 16           | Base de datos relacional          |
 | Docker Compose          | PostgreSQL reproducible en el equipo |
-| React + Vite            | Panel de inventario (`frontend/inventario`) |
+| React + Vite            | SPA de clientes, administración e inventario (`frontend/inventario`) |
 | uv                      | Gestión de entorno y dependencias |
 | pytest + pytest-django + pytest-cov | Pruebas y cobertura       |
 | Ruff                    | Lint y formato                    |

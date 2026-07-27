@@ -17,6 +17,10 @@ class LectorPedido(ABC):
     def buscar_por_id(self, pedido_id: str) -> Pedido | None:
         raise NotImplementedError
 
+    @abstractmethod
+    def buscar_por_id_para_actualizar(self, pedido_id: str) -> Pedido | None:
+        raise NotImplementedError
+
 
 class CatalogoPedidos(ABC):
     """Consultas de coleccion sobre pedidos."""

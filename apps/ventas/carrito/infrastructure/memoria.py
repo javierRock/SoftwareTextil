@@ -27,6 +27,11 @@ class MemoriaRepositorioCarrito(RepositorioCarrito):
         carrito = self._carritos.get(carrito_id)
         return deepcopy(carrito) if carrito is not None else None
 
+    def buscar_por_id_para_actualizar(
+        self, carrito_id: str
+    ) -> CarritoCompras | None:
+        return self.buscar_por_id(carrito_id)
+
     def listar_por_cliente(self, cliente_id: str) -> list[CarritoCompras]:
         return [
             deepcopy(carrito)

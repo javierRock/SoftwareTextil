@@ -1,4 +1,5 @@
 import pytest
+from rest_framework.permissions import AllowAny
 from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework.views import APIView
 
@@ -13,6 +14,7 @@ from apps.catalogo.presentation.errors import ManejoErroresCatalogoMixin
 
 class VistaErrorCatalogo(ManejoErroresCatalogoMixin, APIView):
     excepcion = CatalogoError
+    permission_classes = [AllowAny]
 
     def get(self, request):
         raise self.excepcion("Error de prueba")

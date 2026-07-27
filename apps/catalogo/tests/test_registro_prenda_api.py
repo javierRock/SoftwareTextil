@@ -1,5 +1,4 @@
 import pytest
-from rest_framework.test import APIClient
 
 from apps.catalogo.infrastructure.models import (
     CategoriaModel,
@@ -15,11 +14,10 @@ from apps.inventario.models import (
 pytestmark = pytest.mark.django_db
 
 
-def test_api_registra_solo_la_ficha_comercial_de_la_prenda(crear_usuario) -> None:
+def test_api_registra_solo_la_ficha_comercial_de_la_prenda(cliente_admin) -> None:
     categoria = CategoriaModel.objects.create(nombre="Camisas")
     tipo = TipoProductoModel.objects.create(nombre="Camisa")
-    usuario = crear_usuario()
-    cliente = APIClient()
+    cliente, usuario = cliente_admin
 
     respuesta = cliente.post(
         "/api/prendas/",
@@ -59,7 +57,7 @@ def test_api_registra_solo_la_ficha_comercial_de_la_prenda(crear_usuario) -> Non
         {"precio_moneda": "SOLES"},
     ],
 )
-def test_api_rechaza_datos_comerciales_invalidos(cambio) -> None:
+def test_api_rechaza_datos_comerciales_invalidos(cambio, cliente_admin) -> None:
     categoria = CategoriaModel.objects.create(nombre="Camisas")
     datos = {
         "nombre": "Camisa",
@@ -69,14 +67,16 @@ def test_api_rechaza_datos_comerciales_invalidos(cambio) -> None:
     }
     datos.update(cambio)
 
-    respuesta = APIClient().post("/api/prendas/", datos, format="json")
+    cliente, _ = cliente_admin
+    respuesta = cliente.post("/api/prendas/", datos, format="json")
 
     assert respuesta.status_code == 400
     assert PrendaModel.objects.count() == 0
 
 
-def test_api_impide_registro_con_categoria_inexistente() -> None:
-    respuesta = APIClient().post(
+def test_api_impide_registro_con_categoria_inexistente(cliente_admin) -> None:
+    cliente, _ = cliente_admin
+    respuesta = cliente.post(
         "/api/prendas/",
         {
             "nombre": "Camisa",
@@ -91,10 +91,11 @@ def test_api_impide_registro_con_categoria_inexistente() -> None:
     assert PrendaModel.objects.count() == 0
 
 
-def test_api_impide_registro_con_tipo_inexistente() -> None:
+def test_api_impide_registro_con_tipo_inexistente(cliente_admin) -> None:
     categoria = CategoriaModel.objects.create(nombre="Camisas")
+    cliente, _ = cliente_admin
 
-    respuesta = APIClient().post(
+    respuesta = cliente.post(
         "/api/prendas/",
         {
             "nombre": "Camisa",
@@ -114,10 +115,11 @@ def test_api_impide_registro_con_tipo_inexistente() -> None:
     "tallas",
     [["UNICA"], ["ÚNICA"], ["40.5"], ["M", "m"], [""]],
 )
-def test_api_rechaza_tallas_invalidas(tallas) -> None:
+def test_api_rechaza_tallas_invalidas(tallas, cliente_admin) -> None:
     categoria = CategoriaModel.objects.create(nombre="Camisas")
+    cliente, _ = cliente_admin
 
-    respuesta = APIClient().post(
+    respuesta = cliente.post(
         "/api/prendas/",
         {
             "nombre": "Camisa",

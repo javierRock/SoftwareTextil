@@ -7,14 +7,20 @@ con agregar su fila a `ESTADOS_HTTP`; las vistas no se modifican.
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.compartido.presentation.errores import EstadosHttp, respuesta_de_error
-from apps.ventas.carrito.domain.errors import CarritoError, CarritoNoEncontradoError
+from apps.compartido.presentation.errores import EstadosHttp
+from apps.ventas.carrito.domain.errors import (
+    CarritoError,
+    CarritoNoEncontradoError,
+    CarritoNoPerteneceAClienteError,
+)
+from apps.ventas.presentation.errores import respuesta_error
 
 ESTADOS_HTTP: EstadosHttp = {
     CarritoNoEncontradoError: status.HTTP_404_NOT_FOUND,
+    CarritoNoPerteneceAClienteError: status.HTTP_403_FORBIDDEN,
     CarritoError: status.HTTP_400_BAD_REQUEST,
 }
 
 
 def respuesta_de_error_carrito(error: CarritoError) -> Response:
-    return respuesta_de_error(error, ESTADOS_HTTP)
+    return respuesta_error(error, ESTADOS_HTTP)

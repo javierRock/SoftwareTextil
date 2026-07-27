@@ -123,6 +123,10 @@ class StockVariante:
             raise ReservaInvalidaError(
                 "El ajuste no puede dejar menos stock del reservado"
             )
+        if nueva_cantidad == self.cantidad_actual:
+            raise CantidadInvalidaError(
+                "El ajuste debe modificar la cantidad actual"
+            )
         diferencia = abs(nueva_cantidad - self.cantidad_actual)
         self.cantidad_actual = nueva_cantidad
         self.ultima_actualizacion = _ahora()
@@ -145,6 +149,28 @@ class StockVariante:
             raise ReservaInvalidaError("No se puede liberar mas de lo reservado")
         self.cantidad_reservada -= cantidad
         self.ultima_actualizacion = _ahora()
+
+    def despachar_reserva(
+        self,
+        cantidad: int,
+        motivo: str,
+        usuario_id: str,
+    ) -> MovimientoInventario:
+        """Retira unidades que ya estaban comprometidas por un pedido."""
+        self._validar_cantidad(cantidad)
+        if cantidad > self.cantidad_reservada:
+            raise ReservaInvalidaError(
+                "No existe una reserva suficiente para confirmar el despacho"
+            )
+        self.cantidad_reservada -= cantidad
+        self.cantidad_actual -= cantidad
+        self.ultima_actualizacion = _ahora()
+        return self._crear_movimiento(
+            TipoMovimiento.SALIDA,
+            cantidad,
+            motivo,
+            usuario_id,
+        )
 
     def esta_bajo_minimo(self) -> bool:
         return self.cantidad_actual < self.nivel_minimo

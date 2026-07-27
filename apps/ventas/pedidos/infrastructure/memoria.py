@@ -27,6 +27,9 @@ class MemoriaRepositorioPedido(RepositorioPedido):
         pedido = self._pedidos.get(pedido_id)
         return deepcopy(pedido) if pedido is not None else None
 
+    def buscar_por_id_para_actualizar(self, pedido_id: str) -> Pedido | None:
+        return self.buscar_por_id(pedido_id)
+
     def listar_por_cliente(self, cliente_id: str) -> list[Pedido]:
         return [
             deepcopy(pedido)

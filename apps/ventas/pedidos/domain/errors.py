@@ -36,6 +36,11 @@ class PedidoNoEncontradoError(PedidoError):
         super().__init__("Pedido no encontrado")
 
 
+class PedidoNoPerteneceAClienteError(PedidoError):
+    def __init__(self) -> None:
+        super().__init__("El pedido no pertenece al cliente")
+
+
 class PedidoNoCancelableError(PedidoError):
     def __init__(self) -> None:
         super().__init__("No se puede cancelar un pedido pagado")
@@ -49,3 +54,8 @@ class PedidoYaPagadoError(PedidoError):
 class PedidoCanceladoError(PedidoError):
     def __init__(self) -> None:
         super().__init__("No se puede pagar un pedido cancelado")
+
+
+class PedidoYaCanceladoError(PedidoError):
+    def __init__(self) -> None:
+        super().__init__("El pedido ya fue cancelado")

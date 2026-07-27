@@ -52,6 +52,10 @@ def test_api_serializa_datos_comerciales_de_prendas_visibles() -> None:
             "tipo_producto_id": str(tipo.id),
             "tallas": [],
             "estado": "activa",
+            "imagen": None,
+            "variantes": [],
+            "registrado_por": None,
+            "fecha_registro": respuesta.data[0]["fecha_registro"],
         }
     ]
     assert not {

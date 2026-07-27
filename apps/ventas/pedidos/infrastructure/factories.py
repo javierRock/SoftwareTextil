@@ -5,6 +5,9 @@ Unico lugar del modulo que conoce implementaciones concretas de persistencia
 ORM. Cambiar de adaptador (Django, memoria, otro motor) se resuelve aqui.
 """
 
+from django.db import transaction
+
+from apps.inventario.infrastructure.repositories import DjangoRepositorioInventario
 from apps.ventas.carrito.infrastructure.repositories import DjangoRepositorioCarrito
 from apps.ventas.pedidos.application.consultas import ConsultaPedidos
 from apps.ventas.pedidos.application.services import ServicioPedidos
@@ -19,6 +22,8 @@ def construir_servicio_pedidos() -> ServicioPedidos:
         escritor_pedido=repositorio_pedido,
         lector_carrito=repositorio_carrito,
         escritor_carrito=repositorio_carrito,
+        inventario=DjangoRepositorioInventario(),
+        unidad_trabajo=transaction.atomic,
     )
 
 

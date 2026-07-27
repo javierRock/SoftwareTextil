@@ -1,5 +1,7 @@
 """Adaptador de persistencia de despachos basado en Django ORM."""
 
+from django.db import transaction
+
 from apps.compartido.domain.enums import EstadoDespacho
 from apps.compartido.infrastructure.mapeo import a_texto, uuid_valido
 from apps.ventas.despachos.domain.despacho import Despacho, GuiaRemision
@@ -36,6 +38,7 @@ def _despacho_from_model(model: DespachoModel) -> Despacho:
 
 
 class DjangoRepositorioDespacho(RepositorioDespacho):
+    @transaction.atomic
     def guardar(self, despacho: Despacho) -> None:
         model = DespachoModel.objects.filter(id=despacho.id).first()
         if model is None:
@@ -53,6 +56,18 @@ class DjangoRepositorioDespacho(RepositorioDespacho):
         if uuid_valido(despacho_id) is None:
             return None
         model = self._consulta().filter(id=despacho_id).first()
+        return _despacho_from_model(model) if model else None
+
+    def buscar_por_id_para_actualizar(
+        self, despacho_id: str
+    ) -> Despacho | None:
+        if uuid_valido(despacho_id) is None:
+            return None
+        model = (
+            DespachoModel.objects.select_for_update()
+            .filter(id=despacho_id)
+            .first()
+        )
         return _despacho_from_model(model) if model else None
 
     def buscar_por_pedido(self, pedido_id: str) -> Despacho | None:

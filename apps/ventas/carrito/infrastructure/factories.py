@@ -5,14 +5,22 @@ Unico lugar del modulo que conoce implementaciones concretas de persistencia
 ORM. Cambiar de adaptador (Django, memoria, otro motor) se resuelve aqui.
 """
 
+from django.db import transaction
+
 from apps.ventas.carrito.application.consultas import ConsultaCarritos
 from apps.ventas.carrito.application.services import ServicioCompras
+from apps.ventas.carrito.infrastructure.catalogo import obtener_precio_disponible
 from apps.ventas.carrito.infrastructure.repositories import DjangoRepositorioCarrito
 
 
 def construir_servicio_compras() -> ServicioCompras:
     repositorio = DjangoRepositorioCarrito()
-    return ServicioCompras(lector=repositorio, escritor=repositorio)
+    return ServicioCompras(
+        lector=repositorio,
+        escritor=repositorio,
+        resolver_precio=obtener_precio_disponible,
+        unidad_trabajo=transaction.atomic,
+    )
 
 
 def construir_consulta_carritos() -> ConsultaCarritos:

@@ -76,8 +76,8 @@ class ServicioInventario:
             self._generar_alerta_si_corresponde(stock)
             return stock
 
-    def consultar_stock(self, variante_id: str) -> StockVariante | None:
-        return self.repo_inventario.buscar_por_variante(variante_id)
+    def consultar_stock(self, stock_id: str) -> StockVariante | None:
+        return self.repo_inventario.buscar_por_id(stock_id)
 
     def listar_stock(self) -> list[StockVariante]:
         return self.repo_inventario.listar()

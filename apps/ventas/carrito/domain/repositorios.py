@@ -17,6 +17,12 @@ class LectorCarrito(ABC):
     def buscar_por_id(self, carrito_id: str) -> CarritoCompras | None:
         raise NotImplementedError
 
+    @abstractmethod
+    def buscar_por_id_para_actualizar(
+        self, carrito_id: str
+    ) -> CarritoCompras | None:
+        raise NotImplementedError
+
 
 class CatalogoCarritos(ABC):
     """Consultas de coleccion sobre carritos."""

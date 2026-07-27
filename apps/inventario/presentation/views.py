@@ -5,7 +5,6 @@ from typing import ClassVar
 from django.http import HttpResponse
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.catalogo.infrastructure.repositories import (
@@ -35,6 +34,7 @@ from apps.inventario.presentation.serializers import (
     StockSerializer,
     VarianteStockBajoMinimoSerializer,
 )
+from apps.usuarios.presentation.permissions import EsPersonalInventario
 
 
 def _servicio() -> ServicioInventario:
@@ -64,7 +64,7 @@ def _responsable(request) -> str:
 
 
 class StockViewSet(viewsets.ViewSet):
-    permission_classes: ClassVar[list] = [IsAuthenticated]
+    permission_classes: ClassVar[list] = [EsPersonalInventario]
 
     def list(self, request):
         return Response(StockSerializer(_servicio().listar_stock(), many=True).data)
@@ -197,7 +197,7 @@ class StockViewSet(viewsets.ViewSet):
 
 
 class MovimientoViewSet(viewsets.ViewSet):
-    permission_classes: ClassVar[list] = [IsAuthenticated]
+    permission_classes: ClassVar[list] = [EsPersonalInventario]
 
     def list(self, request):
         stock_id = request.query_params.get("stock_id")

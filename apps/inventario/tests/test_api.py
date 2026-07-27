@@ -4,6 +4,7 @@ import pytest
 from rest_framework.test import APIClient
 
 from apps.inventario.infrastructure.models import MovimientoInventarioModel
+from apps.usuarios.presentation.authentication import UsuarioAutenticado
 
 pytestmark = pytest.mark.django_db
 
@@ -22,6 +23,50 @@ def test_anonimo_no_puede_registrar_movimientos(variante_id) -> None:
     )
 
     assert respuesta.status_code in {401, 403}
+    assert MovimientoInventarioModel.objects.count() == 0
+
+
+def test_cliente_no_puede_consultar_ni_modificar_inventario(
+    crear_usuario,
+    variante_id,
+) -> None:
+    usuario = crear_usuario(nombre="Cliente", rol="Cliente")
+    cliente = APIClient()
+    cliente.force_authenticate(
+        user=UsuarioAutenticado(
+            id=str(usuario.id),
+            nombre=usuario.nombre,
+            username=usuario.username,
+            email=usuario.email,
+            rol=usuario.rol.nombre,
+        )
+    )
+
+    assert cliente.get(URL_STOCK).status_code == 403
+    respuesta = cliente.post(
+        URL_INGRESOS,
+        {"variante_id": variante_id, "cantidad": 1, "motivo": "Ingreso"},
+        format="json",
+    )
+    assert respuesta.status_code == 403
+
+
+def test_ajuste_sin_cambio_se_rechaza_sin_crear_movimiento(
+    client,
+    stock,
+    variante_id,
+) -> None:
+    respuesta = client.post(
+        "/api/stock/ajustes/",
+        {
+            "variante_id": variante_id,
+            "nueva_cantidad": stock.cantidad_actual,
+            "motivo": "Conteo sin diferencia",
+        },
+        format="json",
+    )
+
+    assert respuesta.status_code == 400
     assert MovimientoInventarioModel.objects.count() == 0
 
 
@@ -161,6 +206,17 @@ def test_crear_stock_duplicado_devuelve_409(client, stock, variante_id) -> None:
     assert respuesta.status_code == 409
     assert respuesta.data["error"] == "Ya existe stock para la variante"
     assert stock.cantidad_actual == 10
+
+
+def test_detalle_stock_usa_el_id_publicado_por_el_listado(client, stock) -> None:
+    listado = client.get(URL_STOCK)
+
+    assert listado.status_code == 200
+    stock_id = listado.data[0]["id"]
+    respuesta = client.get(f"{URL_STOCK}{stock_id}/")
+
+    assert respuesta.status_code == 200
+    assert respuesta.data["id"] == str(stock.id)
 
 
 def test_salida_api_descuenta_stock_y_crea_un_movimiento(

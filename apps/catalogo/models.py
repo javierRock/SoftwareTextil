@@ -5,13 +5,14 @@ from typing import ClassVar
 from django.db import models
 from django.db.models.functions import Lower
 
-from apps.compartido.domain.enums import EstadoPrenda
+from apps.compartido.domain.enums import EstadoPrenda, Moneda
 from apps.compartido.infrastructure.campos import (
     campo_estado,
     campo_moneda,
     campo_monto,
     check_enum,
     check_monto_positivo,
+    opciones,
 )
 from apps.compartido.infrastructure.models import ModeloBase
 
@@ -48,6 +49,7 @@ class PrendaModel(ModeloBase):
     descripcion = models.TextField(default="")
     precio_monto = campo_monto()
     precio_moneda = campo_moneda()
+    imagen = models.ImageField(upload_to="catalogo/", null=True, blank=True)
     categoria = models.ForeignKey(
         CategoriaModel,
         on_delete=models.PROTECT,
@@ -100,7 +102,13 @@ class VariantePrendaModel(ModeloBase):
     color = models.CharField(max_length=40, default="")
     # Sin precio propio, la variante hereda el de la prenda.
     precio_monto = campo_monto(null=True, blank=True)
-    precio_moneda = campo_moneda(null=True, blank=True)
+    precio_moneda = models.CharField(
+        max_length=3,
+        choices=opciones(Moneda),
+        null=True,
+        blank=True,
+        default=None,
+    )
     activa = models.BooleanField(default=True)
 
     class Meta:

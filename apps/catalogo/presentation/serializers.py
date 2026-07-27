@@ -1,10 +1,12 @@
 """Serializers DRF para catalogo."""
 
 from decimal import Decimal
+from typing import ClassVar
 
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
-from apps.catalogo.infrastructure.models import PrendaModel
+from apps.catalogo.infrastructure.models import PrendaModel, VariantePrendaModel
 
 
 class CrearCategoriaSerializer(serializers.Serializer):
@@ -51,25 +53,108 @@ class TipoProductoSerializer(serializers.Serializer):
     activo = serializers.BooleanField(read_only=True)
 
 
+class VarianteCatalogoSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
+    prenda_id = serializers.PrimaryKeyRelatedField(
+        source="prenda",
+        queryset=PrendaModel.objects.all(),
+        pk_field=serializers.UUIDField(format="hex_verbose"),
+    )
+    precio_efectivo = serializers.SerializerMethodField()
+    moneda = serializers.SerializerMethodField()
+    stock_disponible = serializers.SerializerMethodField()
+
+    class Meta:
+        model = VariantePrendaModel
+        fields: ClassVar[list[str]] = [
+            "id",
+            "prenda_id",
+            "sku",
+            "talla",
+            "color",
+            "activa",
+            "precio_monto",
+            "precio_moneda",
+            "precio_efectivo",
+            "moneda",
+            "stock_disponible",
+        ]
+        read_only_fields: ClassVar[list[str]] = [
+            "id",
+            "precio_efectivo",
+            "moneda",
+            "stock_disponible",
+        ]
+
+    def validate(self, attrs):
+        monto = attrs.get(
+            "precio_monto",
+            self.instance.precio_monto if self.instance else None,
+        )
+        moneda = attrs.get(
+            "precio_moneda",
+            self.instance.precio_moneda if self.instance else None,
+        )
+        if (monto is None) != (moneda is None):
+            raise serializers.ValidationError(
+                "El precio propio requiere monto y moneda; omita ambos para heredarlo."
+            )
+        return attrs
+
+    @staticmethod
+    def get_precio_efectivo(obj):
+        monto = obj.precio_monto
+        if monto is None:
+            monto = obj.prenda.precio_monto
+        return f"{monto:.2f}"
+
+    @staticmethod
+    def get_moneda(obj):
+        return obj.precio_moneda or obj.prenda.precio_moneda
+
+    @staticmethod
+    def get_stock_disponible(obj):
+        try:
+            stock = obj.stock
+        except ObjectDoesNotExist:
+            return None
+        return stock.cantidad_actual - stock.cantidad_reservada
+
+
 class PrendaSerializer(serializers.ModelSerializer):
-    categoria_nombre = serializers.CharField(source="categoria.nombre", read_only=True)
+    id = serializers.CharField(read_only=True)
+    categoria_id = serializers.CharField(read_only=True)
+    tipo_producto_id = serializers.CharField(read_only=True, allow_null=True)
+    registrado_por = serializers.CharField(
+        source="registrado_por_id",
+        read_only=True,
+        allow_null=True,
+    )
+    tallas = serializers.SerializerMethodField()
+    variantes = VarianteCatalogoSerializer(many=True, read_only=True)
 
     class Meta:
         model = PrendaModel
-        fields = [
+        fields: ClassVar[list[str]] = [
             "id",
             "nombre",
             "descripcion",
             "precio_monto",
             "precio_moneda",
-            "categoria",
-            "categoria_nombre",
-            "tipo_producto",
+            "categoria_id",
+            "tipo_producto_id",
             "tallas",
             "estado",
+            "imagen",
+            "variantes",
             "registrado_por",
             "fecha_registro",
         ]
+        read_only_fields: ClassVar[list[str]] = fields
+
+    @staticmethod
+    def get_tallas(obj):
+        return [variante.talla for variante in obj.variantes.all()]
 
 
 class PrendaCatalogoSerializer(serializers.Serializer):
@@ -93,7 +178,11 @@ class PrendaCatalogoSerializer(serializers.Serializer):
 
 
 class BuscarPrendasSerializer(serializers.Serializer):
-    texto = serializers.CharField(required=False, allow_blank=True, trim_whitespace=True)
+    texto = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        trim_whitespace=True,
+    )
     categoria_id = serializers.CharField(
         max_length=36,
         required=False,
@@ -114,7 +203,22 @@ class BuscarPrendasSerializer(serializers.Serializer):
         desconocidos = set(self.initial_data) - set(self.fields)
         if desconocidos:
             raise serializers.ValidationError(
-                f"Parametros de consulta no permitidos: {', '.join(sorted(desconocidos))}"
+                "Parametros de consulta no permitidos: "
+                f"{', '.join(sorted(desconocidos))}"
+            )
+        return attrs
+
+
+class FiltrarVariantesSerializer(serializers.Serializer):
+    prenda_id = serializers.UUIDField(required=False)
+    activa = serializers.BooleanField(required=False)
+
+    def validate(self, attrs):
+        desconocidos = set(self.initial_data) - set(self.fields)
+        if desconocidos:
+            raise serializers.ValidationError(
+                "Parametros de consulta no permitidos: "
+                f"{', '.join(sorted(desconocidos))}"
             )
         return attrs
 
@@ -148,8 +252,7 @@ class CrearPrendaSerializer(serializers.Serializer):
         required=False,
         default=list,
     )
-    registrado_por = serializers.CharField(
-        max_length=36,
+    imagen = serializers.ImageField(
         required=False,
         allow_null=True,
     )
@@ -169,6 +272,7 @@ class ActualizarPrendaSerializer(serializers.Serializer):
         max_length=36,
         allow_null=True,
     )
+    imagen = serializers.ImageField(required=False, allow_null=True)
 
 
 class PrendaCreadaSerializer(serializers.Serializer):

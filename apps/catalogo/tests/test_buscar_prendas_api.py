@@ -58,7 +58,7 @@ def prendas_busqueda():
         ({"texto": "algodon"}, ["camisa", "polo"]),
         ({"categoria_id": "categoria"}, ["camisa"]),
         ({"tipo_producto_id": "tipo"}, ["camisa"]),
-        ({"estado": "inactiva"}, ["inactiva"]),
+        ({"estado": "inactiva"}, []),
     ],
 )
 def test_api_busca_por_cada_criterio(prendas_busqueda, parametros, esperados) -> None:

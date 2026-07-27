@@ -15,6 +15,12 @@ class RepositorioDespacho(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def buscar_por_id_para_actualizar(
+        self, despacho_id: str
+    ) -> Despacho | None:
+        raise NotImplementedError
+
+    @abstractmethod
     def buscar_por_pedido(self, pedido_id: str) -> Despacho | None:
         raise NotImplementedError
 

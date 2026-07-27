@@ -8,18 +8,27 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from apps.compartido.domain.errors import DominioError
-from apps.compartido.presentation.errores import EstadosHttp, respuesta_de_error
+from apps.compartido.presentation.errores import EstadosHttp
 from apps.ventas.despachos.domain.errors import (
+    DespachoCanceladoError,
     DespachoConfirmadoError,
     DespachoNoEncontradoError,
+    DespachoYaExisteError,
+    GuiaRemisionDuplicadaError,
+    PedidoDespachoNoEncontradoError,
 )
+from apps.ventas.presentation.errores import respuesta_error
 
 ESTADOS_HTTP: EstadosHttp = {
     DespachoNoEncontradoError: status.HTTP_404_NOT_FOUND,
+    PedidoDespachoNoEncontradoError: status.HTTP_404_NOT_FOUND,
     DespachoConfirmadoError: status.HTTP_409_CONFLICT,
+    DespachoCanceladoError: status.HTTP_409_CONFLICT,
+    DespachoYaExisteError: status.HTTP_409_CONFLICT,
+    GuiaRemisionDuplicadaError: status.HTTP_409_CONFLICT,
     DominioError: status.HTTP_400_BAD_REQUEST,
 }
 
 
 def respuesta_de_error_despacho(error: DominioError) -> Response:
-    return respuesta_de_error(error, ESTADOS_HTTP)
+    return respuesta_error(error, ESTADOS_HTTP)

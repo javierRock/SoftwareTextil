@@ -16,6 +16,11 @@ class CarritoNoEncontradoError(CarritoError):
         super().__init__("Carrito no encontrado")
 
 
+class CarritoNoPerteneceAClienteError(CarritoError):
+    def __init__(self) -> None:
+        super().__init__("El carrito no pertenece al cliente")
+
+
 class CarritoCerradoError(CarritoError):
     def __init__(self) -> None:
         super().__init__("El carrito no esta abierto")
@@ -44,3 +49,13 @@ class CarritoVacioError(CarritoError):
 class CarritoConvertidoError(CarritoError):
     def __init__(self) -> None:
         super().__init__("No se puede cancelar un carrito convertido")
+
+
+class VarianteNoDisponibleError(CarritoError):
+    def __init__(self) -> None:
+        super().__init__("La variante no esta disponible para la venta")
+
+
+class StockInsuficienteError(CarritoError):
+    def __init__(self) -> None:
+        super().__init__("No hay stock disponible para la cantidad solicitada")
