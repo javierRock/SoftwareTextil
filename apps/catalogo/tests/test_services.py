@@ -24,6 +24,30 @@ class RepositorioPrendaEnMemoria(RepositorioPrenda):
             if prenda.estado == EstadoPrenda.ACTIVA
         ]
 
+    def buscar(
+        self,
+        texto: str | None,
+        categoria_id: str | None,
+        tipo_producto_id: str | None,
+        estado: EstadoPrenda,
+    ) -> list[Prenda]:
+        texto_normalizado = texto.casefold() if texto else None
+        return [
+            prenda
+            for prenda in self.prendas.values()
+            if prenda.estado == estado
+            and (
+                texto_normalizado is None
+                or texto_normalizado in prenda.nombre.casefold()
+                or texto_normalizado in prenda.descripcion.casefold()
+            )
+            and (categoria_id is None or prenda.categoria_id == categoria_id)
+            and (
+                tipo_producto_id is None
+                or prenda.tipo_producto_id == tipo_producto_id
+            )
+        ]
+
 
 class RepositorioCatalogoEnMemoria(RepositorioCatalogo):
     def __init__(self) -> None:

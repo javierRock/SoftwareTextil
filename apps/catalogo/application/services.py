@@ -11,6 +11,7 @@ from apps.catalogo.domain.prenda import (
 )
 from apps.catalogo.domain.repositorios import RepositorioCatalogo, RepositorioPrenda
 from apps.compartido.domain.dinero import Dinero
+from apps.compartido.domain.enums import EstadoPrenda
 
 
 class ServicioCatalogo:
@@ -62,8 +63,32 @@ class ServicioCatalogo:
     def listar_catalogo(self) -> list[Prenda]:
         return self.repo_prenda.listar_visibles()
 
-    def buscar_prenda(self, prenda_id: str) -> Prenda | None:
-        return self.repo_prenda.buscar_por_id(prenda_id)
+    def buscar_prendas(
+        self,
+        texto: str | None = None,
+        categoria_id: str | None = None,
+        tipo_producto_id: str | None = None,
+        estado: str | None = None,
+    ) -> list[Prenda]:
+        texto = texto.strip() if texto else None
+        categoria_id = categoria_id.strip() if categoria_id else None
+        tipo_producto_id = tipo_producto_id.strip() if tipo_producto_id else None
+        try:
+            estado_prenda = EstadoPrenda(estado) if estado else EstadoPrenda.ACTIVA
+        except ValueError as exc:
+            raise ValueError("El estado de la prenda no es valido") from exc
+        return self.repo_prenda.buscar(
+            texto=texto,
+            categoria_id=categoria_id,
+            tipo_producto_id=tipo_producto_id,
+            estado=estado_prenda,
+        )
+
+    def buscar_prenda(self, prenda_id: str) -> Prenda:
+        prenda = self.repo_prenda.buscar_por_id(prenda_id)
+        if prenda is None:
+            raise ValueError("Prenda no encontrada")
+        return prenda
 
     def desactivar_prenda(self, prenda_id: str) -> None:
         prenda = self.repo_prenda.buscar_por_id(prenda_id)

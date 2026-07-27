@@ -2,6 +2,8 @@
 
 from decimal import Decimal
 
+from django.db.models import Q
+
 from apps.catalogo.domain.prenda import Categoria, Prenda, TipoProducto
 from apps.catalogo.domain.repositorios import RepositorioCatalogo, RepositorioPrenda
 from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
@@ -60,6 +62,24 @@ class DjangoRepositorioPrenda(RepositorioPrenda):
 
     def listar_visibles(self) -> list[Prenda]:
         modelos = PrendaModel.objects.filter(estado=EstadoPrenda.ACTIVA.value)
+        return [_prenda_from_model(modelo) for modelo in modelos]
+
+    def buscar(
+        self,
+        texto: str | None,
+        categoria_id: str | None,
+        tipo_producto_id: str | None,
+        estado: EstadoPrenda,
+    ) -> list[Prenda]:
+        modelos = PrendaModel.objects.filter(estado=estado.value)
+        if texto:
+            modelos = modelos.filter(
+                Q(nombre__icontains=texto) | Q(descripcion__icontains=texto)
+            )
+        if categoria_id:
+            modelos = modelos.filter(categoria_id=categoria_id)
+        if tipo_producto_id:
+            modelos = modelos.filter(tipo_producto_id=tipo_producto_id)
         return [_prenda_from_model(modelo) for modelo in modelos]
 
 

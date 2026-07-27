@@ -87,6 +87,33 @@ class PrendaCatalogoSerializer(serializers.Serializer):
     estado = serializers.CharField(read_only=True)
 
 
+class BuscarPrendasSerializer(serializers.Serializer):
+    texto = serializers.CharField(required=False, allow_blank=True, trim_whitespace=True)
+    categoria_id = serializers.CharField(
+        max_length=36,
+        required=False,
+        allow_blank=True,
+    )
+    tipo_producto_id = serializers.CharField(
+        max_length=36,
+        required=False,
+        allow_blank=True,
+    )
+    estado = serializers.ChoiceField(
+        choices=["activa", "inactiva"],
+        required=False,
+        allow_blank=True,
+    )
+
+    def validate(self, attrs):
+        desconocidos = set(self.initial_data) - set(self.fields)
+        if desconocidos:
+            raise serializers.ValidationError(
+                f"Parametros de consulta no permitidos: {', '.join(sorted(desconocidos))}"
+            )
+        return attrs
+
+
 class CrearPrendaSerializer(serializers.Serializer):
     nombre = serializers.CharField(max_length=120, trim_whitespace=True)
     descripcion = serializers.CharField(

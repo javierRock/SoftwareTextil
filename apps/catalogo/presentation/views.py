@@ -10,6 +10,7 @@ from apps.catalogo.infrastructure.repositories import DjangoRepositorioCatalogo,
 from apps.catalogo.presentation.serializers import (
     ActualizarCategoriaSerializer,
     ActualizarTipoProductoSerializer,
+    BuscarPrendasSerializer,
     CategoriaSerializer,
     CrearCategoriaSerializer,
     CrearPrendaSerializer,
@@ -30,8 +31,20 @@ class PrendaViewSet(viewsets.ModelViewSet):
     serializer_class = PrendaSerializer
 
     def list(self, request, *args, **kwargs):
-        prendas = _servicio().listar_catalogo()
+        parametros = BuscarPrendasSerializer(data=request.query_params)
+        parametros.is_valid(raise_exception=True)
+        try:
+            prendas = _servicio().buscar_prendas(**parametros.validated_data)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(PrendaCatalogoSerializer(prendas, many=True).data)
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        try:
+            prenda = _servicio().buscar_prenda(pk)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        return Response(PrendaCatalogoSerializer(prenda).data)
 
     def create(self, request, *args, **kwargs):
         serializer = CrearPrendaSerializer(data=request.data)
