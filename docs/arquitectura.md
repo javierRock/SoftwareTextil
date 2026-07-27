@@ -78,6 +78,9 @@ flowchart TB
 
 ## 1.5. Estructura De Paquetes
 
+El panel React de inventario vive en `frontend/inventario/` y consume la API
+por HTTP; no comparte codigo con el backend.
+
 ```text
 apps/
 ├── usuarios/
@@ -105,7 +108,7 @@ Cada módulo implementado repite la separación presentación-aplicación-domini
 | --- | --- |
 | `usuarios/presentation` | Login, sesiones, perfiles, usuarios y roles |
 | `catalogo/presentation` | Prendas y categorías |
-| `inventario/presentation` | Stock, ingresos, salidas y ajustes |
+| `inventario/presentation` | Stock, ingresos, salidas, ajustes y resumen agrupado por categoria |
 | `ventas/carrito/presentation` | Carritos e items |
 | `ventas/pedidos/presentation` | Generación y consulta de pedidos |
 | `ventas/pagos/presentation` | Pagos autorizados, aprobación y rechazo |

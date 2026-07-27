@@ -1,7 +1,14 @@
 """Repositorios concretos con Django ORM para inventario."""
 
+from collections.abc import Iterable
+
 from apps.compartido.domain.enums import EstadoAlerta, TipoMovimiento
 from apps.compartido.infrastructure.mapeo import uuid_valido
+from apps.inventario.domain.consultas import (
+    CategoriaStockAgrupada,
+    PrendaStockAgrupada,
+    VarianteStockAgrupada,
+)
 from apps.inventario.domain.repositorios import (
     RepositorioAlertaStock,
     RepositorioInventario,
@@ -55,6 +62,66 @@ def _alerta_from_model(model: AlertaStockModel) -> AlertaStock:
     )
 
 
+def _agrupar_por_categoria(
+    modelos: Iterable[StockVarianteModel],
+) -> list[CategoriaStockAgrupada]:
+    """Pliega las filas de stock en categoria -> prendas -> variantes.
+
+    Recibe el resultado de una consulta ya resuelta con `select_related`, de
+    modo que recorrerlo no dispara consultas adicionales.
+    """
+    categorias: dict[str, dict] = {}
+    prendas: dict[tuple[str, str], dict] = {}
+
+    for stock in modelos:
+        variante = stock.variante
+        prenda = variante.prenda
+        categoria = prenda.categoria
+        clave_categoria = str(categoria.id)
+        clave_prenda = (clave_categoria, str(prenda.id))
+
+        grupo = categorias.setdefault(
+            clave_categoria,
+            {"nombre": categoria.nombre, "cantidad_total": 0, "prendas": []},
+        )
+        grupo["cantidad_total"] += stock.cantidad_actual
+
+        ficha = prendas.get(clave_prenda)
+        if ficha is None:
+            ficha = {"nombre": prenda.nombre, "cantidad": 0, "variantes": []}
+            prendas[clave_prenda] = ficha
+            grupo["prendas"].append((str(prenda.id), ficha))
+        ficha["cantidad"] += stock.cantidad_actual
+        ficha["variantes"].append(
+            VarianteStockAgrupada(
+                variante_id=str(variante.id),
+                sku=variante.sku,
+                talla=variante.talla,
+                color=variante.color,
+                cantidad=stock.cantidad_actual,
+                cantidad_reservada=stock.cantidad_reservada,
+            )
+        )
+
+    return [
+        CategoriaStockAgrupada(
+            categoria_id=categoria_id,
+            categoria=datos["nombre"],
+            cantidad_total=datos["cantidad_total"],
+            prendas=[
+                PrendaStockAgrupada(
+                    prenda_id=prenda_id,
+                    nombre=ficha["nombre"],
+                    cantidad=ficha["cantidad"],
+                    variantes=ficha["variantes"],
+                )
+                for prenda_id, ficha in datos["prendas"]
+            ],
+        )
+        for categoria_id, datos in categorias.items()
+    ]
+
+
 class DjangoRepositorioInventario(RepositorioInventario):
     def guardar(self, stock: StockVariante) -> None:
         model = StockVarianteModel.objects.filter(id=stock.id).first()
@@ -74,6 +141,21 @@ class DjangoRepositorioInventario(RepositorioInventario):
         model = StockVarianteModel.objects.filter(variante_id=variante_id).first()
         return _stock_from_model(model) if model else None
 
+    def buscar_por_variante_bloqueada(self, variante_id: str) -> StockVariante | None:
+        """`select_for_update` serializa los movimientos sobre una variante.
+
+        Sin el bloqueo, dos salidas simultaneas leen el mismo saldo y la
+        segunda pisa a la primera: el stock termina mas alto de lo real.
+        """
+        if uuid_valido(variante_id) is None:
+            return None
+        model = (
+            StockVarianteModel.objects.select_for_update()
+            .filter(variante_id=variante_id)
+            .first()
+        )
+        return _stock_from_model(model) if model else None
+
     def buscar_por_id(self, stock_id: str) -> StockVariante | None:
         if uuid_valido(stock_id) is None:
             return None
@@ -82,6 +164,25 @@ class DjangoRepositorioInventario(RepositorioInventario):
 
     def listar(self) -> list[StockVariante]:
         return [_stock_from_model(m) for m in StockVarianteModel.objects.all()]
+
+    def listar_por_categoria(
+        self,
+        categoria_id: str | None = None,
+    ) -> list[CategoriaStockAgrupada]:
+        """Resumen en tres niveles resuelto con una sola consulta.
+
+        Las claves foraneas permiten recorrer stock -> variante -> prenda ->
+        categoria con `select_related`, en vez de encadenar consultas por
+        cada nivel.
+        """
+        if categoria_id is not None and uuid_valido(categoria_id) is None:
+            return []
+        modelos = StockVarianteModel.objects.select_related(
+            "variante__prenda__categoria"
+        ).order_by("variante__prenda__nombre", "variante__talla", "variante__color")
+        if categoria_id:
+            modelos = modelos.filter(variante__prenda__categoria_id=categoria_id)
+        return _agrupar_por_categoria(modelos)
 
 
 class DjangoRepositorioMovimiento(RepositorioMovimientoInventario):

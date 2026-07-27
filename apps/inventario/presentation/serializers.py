@@ -1,59 +1,67 @@
-"""Serializers DRF para inventario."""
+"""Serializers DRF para inventario.
 
-from typing import ClassVar
+Proyectan los objetos del dominio, no los modelos ORM: la capa de presentacion
+no deberia conocer la forma de las tablas.
+"""
 
 from rest_framework import serializers
 
-from apps.inventario.infrastructure.models import (
-    AlertaStockModel,
-    MovimientoInventarioModel,
-    StockVarianteModel,
-)
+
+class StockSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    variante_id = serializers.CharField(read_only=True)
+    cantidad_actual = serializers.IntegerField(read_only=True)
+    cantidad_reservada = serializers.IntegerField(read_only=True)
+    cantidad_disponible = serializers.IntegerField(read_only=True)
+    nivel_minimo = serializers.IntegerField(read_only=True)
+    ubicacion = serializers.CharField(read_only=True)
+    unidad = serializers.CharField(read_only=True)
+    ultima_actualizacion = serializers.DateTimeField(read_only=True)
 
 
-class StockSerializer(serializers.ModelSerializer):
+class MovimientoSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    stock_id = serializers.CharField(read_only=True)
+    tipo = serializers.CharField(read_only=True)
+    cantidad = serializers.IntegerField(read_only=True)
+    motivo = serializers.CharField(read_only=True)
+    registrado_por = serializers.CharField(read_only=True)
+    fecha = serializers.DateTimeField(read_only=True)
+
+
+class AlertaStockSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    stock_id = serializers.CharField(read_only=True)
+    nivel_actual = serializers.IntegerField(read_only=True)
+    nivel_minimo = serializers.IntegerField(read_only=True)
+    estado = serializers.CharField(read_only=True)
+    fecha = serializers.DateTimeField(read_only=True)
+
+
+class VarianteStockAgrupadaSerializer(serializers.Serializer):
+    variante_id = serializers.CharField(read_only=True)
+    sku = serializers.CharField(read_only=True)
+    talla = serializers.CharField(read_only=True)
+    color = serializers.CharField(read_only=True)
+    cantidad = serializers.IntegerField(read_only=True)
+    cantidad_reservada = serializers.IntegerField(read_only=True)
     cantidad_disponible = serializers.IntegerField(read_only=True)
 
-    class Meta:
-        model = StockVarianteModel
-        fields: ClassVar[list[str]] = [
-            "id",
-            "variante_id",
-            "cantidad_actual",
-            "cantidad_reservada",
-            "cantidad_disponible",
-            "nivel_minimo",
-            "ubicacion",
-            "unidad",
-            "ultima_actualizacion",
-        ]
+
+class PrendaStockAgrupadaSerializer(serializers.Serializer):
+    prenda_id = serializers.CharField(read_only=True)
+    nombre = serializers.CharField(read_only=True)
+    cantidad = serializers.IntegerField(read_only=True)
+    variantes = VarianteStockAgrupadaSerializer(many=True, read_only=True)
 
 
-class MovimientoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MovimientoInventarioModel
-        fields: ClassVar[list[str]] = [
-            "id",
-            "stock",
-            "tipo",
-            "cantidad",
-            "motivo",
-            "registrado_por",
-            "fecha",
-        ]
+class CategoriaStockAgrupadaSerializer(serializers.Serializer):
+    """Resumen en tres niveles: categoria, sus prendas y sus variantes."""
 
-
-class AlertaStockSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AlertaStockModel
-        fields: ClassVar[list[str]] = [
-            "id",
-            "stock",
-            "nivel_actual",
-            "nivel_minimo",
-            "estado",
-            "fecha",
-        ]
+    categoria_id = serializers.CharField(read_only=True)
+    categoria = serializers.CharField(read_only=True)
+    cantidad_total = serializers.IntegerField(read_only=True)
+    prendas = PrendaStockAgrupadaSerializer(many=True, read_only=True)
 
 
 class CrearStockSerializer(serializers.Serializer):
@@ -63,18 +71,19 @@ class CrearStockSerializer(serializers.Serializer):
     ubicacion = serializers.CharField(
         required=False,
         default="almacen",
+        max_length=120,
     )
 
 
 class MovimientoStockSerializer(serializers.Serializer):
+    """El responsable sale de la sesion, nunca del cuerpo de la peticion."""
+
     variante_id = serializers.UUIDField()
     cantidad = serializers.IntegerField(min_value=1)
     motivo = serializers.CharField()
-    usuario_id = serializers.UUIDField()
 
 
 class AjusteStockSerializer(serializers.Serializer):
     variante_id = serializers.UUIDField()
     nueva_cantidad = serializers.IntegerField(min_value=0)
     motivo = serializers.CharField()
-    usuario_id = serializers.UUIDField()

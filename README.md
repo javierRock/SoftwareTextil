@@ -26,6 +26,7 @@
   - [2.10. Documentación Complementaria](#210-documentación-complementaria)
   - [2.11. Trabajo Futuro](#211-trabajo-futuro)
   - [2.12. Referencias](#212-referencias)
+  - [2.13. Clean Code en inventario](#213-clean-code-en-inventario)
 
 # 2. SoftwareTextil
 
@@ -191,6 +192,8 @@ SoftwareTextil/
 │   └── compartido/                # Enums, VO y base ORM comunes
 │       ├── domain/                # Dinero, Periodo, DatosAuditoria, enums
 │       └── infrastructure/        # ModeloBase, fábricas de campos y mapeo
+├── frontend/
+│   └── inventario/                # Panel React de existencias (Vite)
 ├── templates/                     # Plantillas Django
 ├── assets/                        # Diagramas UML, casos de uso y prototipo
 ├── docker-compose.yml             # PostgreSQL 16 para todo el equipo
@@ -199,6 +202,7 @@ SoftwareTextil/
 │   ├── arquitectura.md
 │   ├── modelo_dominio.md
 │   ├── modelo_datos.md            # Esquema PostgreSQL y reglas de diseño
+│   ├── historias/                 # Historias de usuario (SDGT-*)
 │   ├── prototipo.md
 │   ├── flujo_git.md               # Flujo de ramas del equipo
 │   └── guias/                     # Guía de trabajo por integrante
@@ -236,7 +240,7 @@ El Laboratorio 10 exige evidenciar **por lo menos cuatro estilos de programació
 | ---------- | --------------------- | ---------------------------------------------------------------------- | ---------------------- |
 | Carlos     | Autenticación y Roles | [`docs/guias/carlos-autenticacion.md`](docs/guias/carlos-autenticacion.md) | *(a declarar)*     |
 | Lizzy      | Catálogo              | [`docs/guias/lizzy-catalogo.md`](docs/guias/lizzy-catalogo.md)         | *(a declarar)*         |
-| Alejandro  | Inventario            | [`docs/guias/alejandro-inventario.md`](docs/guias/alejandro-inventario.md) | *(a declarar)*     |
+| Alejandro  | Inventario            | [`docs/guias/inventario/alejandro-inventario.md`](docs/guias/inventario/alejandro-inventario.md) | *(a declarar)*     |
 | Angelo     | Pedidos               | [`docs/guias/angelo-pedidos.md`](docs/guias/angelo-pedidos.md)         | *(a declarar)*         |
 | Javier     | Pagos                 | [`docs/guias/javier-pagos.md`](docs/guias/javier-pagos.md)             | Things, Error/Exception Handling, Persistent-Tables y RESTful |
 
@@ -429,6 +433,7 @@ uv run ruff check .                                        # análisis estático
 | Django ORM              | Persistencia y mapeo ORM          |
 | PostgreSQL 16           | Base de datos relacional          |
 | Docker Compose          | PostgreSQL reproducible en el equipo |
+| React + Vite            | Panel de inventario (`frontend/inventario`) |
 | uv                      | Gestión de entorno y dependencias |
 | pytest + pytest-django + pytest-cov | Pruebas y cobertura       |
 | Ruff                    | Lint y formato                    |
@@ -445,8 +450,10 @@ uv run ruff check .                                        # análisis estático
 | [`docs/arquitectura.md`](docs/arquitectura.md)     | Capas, dependencias y estructura técnica           |
 | [`docs/modelo_datos.md`](docs/modelo_datos.md)     | Esquema PostgreSQL: DER, diccionario de datos y reglas de diseño |
 | [`docs/prototipo.md`](docs/prototipo.md)           | Pantallas del prototipo y flujo de interfaz        |
+| [`docs/guias/inventario/estilos-programacion-inventario.md`](docs/guias/inventario/estilos-programacion-inventario.md) | Estilos de programación aplicados al módulo de inventario |
 | [`docs/flujo_git.md`](docs/flujo_git.md)           | Flujo de ramas, convenciones de commits y PRs      |
 | [`docs/guias/`](docs/guias/)                       | Guía de trabajo y evidencia por integrante         |
+| [`docs/historias/`](docs/historias/)               | Historias de usuario del tablero (SDGT-58 a SDGT-61) |
 | [`docs/reportes/sonarlint-pagos.md`](docs/reportes/sonarlint-pagos.md) | Estado y pasos de análisis SonarLint de pagos |
 
 ---
@@ -465,3 +472,7 @@ Módulos modelados en UML pero fuera del alcance de esta entrega: **Contabilidad
 - Evans, E. _Domain-Driven Design_.
 - [Citerus DDD Sample Core](https://github.com/citerus/dddsample-core).
 - [Modern DDD Cargo Tracker](https://github.com/eclipse-ee4j/cargotracker).
+
+## 2.13. Clean Code en inventario
+
+La evidencia específica del módulo de inventario está documentada en [`docs/guias/inventario/clean-code-inventario.md`](docs/guias/inventario/clean-code-inventario.md).

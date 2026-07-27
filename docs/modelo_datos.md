@@ -146,6 +146,22 @@ Las columnas `password_hash`, `password_salt`, `password_algoritmo` y `password_
 | `despachos` | FK `pedido` (PROTECT, 1:1), FK `responsable` (SET_NULL) | `despacho_estado_valido`, `despacho_confirmado_con_fecha` | Un despacho confirmado deja constancia de cuándo lo fue |
 | `guias_remision` | FK `despacho` (CASCADE, 1:1) | `guia_serie_numero_unica` | Una guía conserva serie y número irrepetibles |
 
+### Consultas que habilita el esquema
+
+El recorrido `stocks_variante -> variantes_prenda -> prendas -> categorias` es
+de claves foraneas, asi que el resumen de existencias por categoria se resuelve
+con **una sola consulta** (`select_related`), sin el problema N+1:
+
+```
+GET /api/stock/por-categoria/?categoria_id=<uuid>
+
+categoria -> prendas -> variantes (sku, talla, color, cantidad)
+```
+
+`apps/inventario/infrastructure/repositories.py::listar_por_categoria` la
+implementa y `apps/inventario/tests/test_stock_por_categoria.py` verifica que
+el numero de consultas no crece con la cantidad de prendas.
+
 ---
 
 ## 1.4. Puesta En Marcha

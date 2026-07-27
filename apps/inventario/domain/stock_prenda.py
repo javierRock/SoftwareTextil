@@ -9,6 +9,11 @@ from datetime import UTC, datetime
 from uuid import uuid4
 
 from apps.compartido.domain.enums import EstadoAlerta, TipoMovimiento
+from apps.inventario.domain.excepciones import (
+    CantidadInvalidaError,
+    ReservaInvalidaError,
+    StockInsuficienteError,
+)
 
 UBICACION_POR_DEFECTO = "almacen"
 UNIDAD_POR_DEFECTO = "unidad"
@@ -25,7 +30,7 @@ class Stock:
 
     def __post_init__(self) -> None:
         if self.cantidad < 0:
-            raise ValueError("La cantidad no puede ser negativa")
+            raise CantidadInvalidaError("La cantidad no puede ser negativa")
 
 
 @dataclass
@@ -99,7 +104,7 @@ class StockVariante:
     ) -> MovimientoInventario:
         self._validar_cantidad(cantidad)
         if cantidad > self.cantidad_disponible:
-            raise ValueError("No hay stock suficiente para la salida")
+            raise StockInsuficienteError("No hay stock suficiente para la salida")
         self.cantidad_actual -= cantidad
         self.ultima_actualizacion = _ahora()
         return self._crear_movimiento(
@@ -113,9 +118,11 @@ class StockVariante:
         usuario_id: str,
     ) -> MovimientoInventario:
         if nueva_cantidad < 0:
-            raise ValueError("La cantidad ajustada no puede ser negativa")
+            raise CantidadInvalidaError("La cantidad ajustada no puede ser negativa")
         if nueva_cantidad < self.cantidad_reservada:
-            raise ValueError("El ajuste no puede dejar menos stock del reservado")
+            raise ReservaInvalidaError(
+                "El ajuste no puede dejar menos stock del reservado"
+            )
         diferencia = abs(nueva_cantidad - self.cantidad_actual)
         self.cantidad_actual = nueva_cantidad
         self.ultima_actualizacion = _ahora()
@@ -127,7 +134,7 @@ class StockVariante:
         """Compromete unidades para un pedido sin sacarlas del almacen."""
         self._validar_cantidad(cantidad)
         if cantidad > self.cantidad_disponible:
-            raise ValueError("No hay stock disponible para reservar")
+            raise StockInsuficienteError("No hay stock disponible para reservar")
         self.cantidad_reservada += cantidad
         self.ultima_actualizacion = _ahora()
 
@@ -135,7 +142,7 @@ class StockVariante:
         """Devuelve al disponible unidades reservadas que ya no se usaran."""
         self._validar_cantidad(cantidad)
         if cantidad > self.cantidad_reservada:
-            raise ValueError("No se puede liberar mas de lo reservado")
+            raise ReservaInvalidaError("No se puede liberar mas de lo reservado")
         self.cantidad_reservada -= cantidad
         self.ultima_actualizacion = _ahora()
 
@@ -171,7 +178,7 @@ class StockVariante:
     @staticmethod
     def _validar_cantidad(cantidad: int) -> None:
         if cantidad <= 0:
-            raise ValueError("La cantidad debe ser mayor a cero")
+            raise CantidadInvalidaError("La cantidad debe ser mayor a cero")
 
 
 class InventarioFabrica:
@@ -183,9 +190,9 @@ class InventarioFabrica:
         ubicacion: str = UBICACION_POR_DEFECTO,
     ) -> StockVariante:
         if stock_inicial < 0:
-            raise ValueError("El stock inicial no puede ser negativo")
+            raise CantidadInvalidaError("El stock inicial no puede ser negativo")
         if stock_minimo < 0:
-            raise ValueError("El stock minimo no puede ser negativo")
+            raise CantidadInvalidaError("El stock minimo no puede ser negativo")
         return StockVariante(
             id=str(uuid4()),
             variante_id=variante_id,

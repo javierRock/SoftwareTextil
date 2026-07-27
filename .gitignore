@@ -17,3 +17,8 @@ build/
 db.sqlite3
 *.log
 .DS_Store
+
+# Dependencias del frontend React (frontend/inventario)
+node_modules/
+dist/
+.vite/

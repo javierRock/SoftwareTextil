@@ -66,8 +66,10 @@ select = [
 [tool.ruff.lint.per-file-ignores]
 # Los tests usan assert (S101) y comparan contra valores literales (PLR2004):
 # es justamente lo que se espera de una prueba. El patron cubre tanto la suite
-# raiz `tests/` como las suites por modulo (`apps/catalogo/tests/`).
-"**/tests/**" = ["S101", "PLR2004", "PLR0913", "PLR0917"]
+# raiz `tests/` como las suites por modulo (`apps/catalogo/tests/`). Los dobles
+# de prueba ademas respetan la firma que reemplazan aunque no usen todos sus
+# parametros (ARG001), y la prueba de concurrencia hereda de `TestCase` (PT009).
+"**/tests/**" = ["S101", "PLR2004", "PLR0913", "PLR0917", "ARG001", "PT009"]
 # El parametro `db` de pytest-django no se usa como valor: su sola presencia
 # habilita el acceso a la base de datos en la fixture (de ahi ARG001).
 "conftest.py" = ["S101", "PLR2004", "ARG001"]
