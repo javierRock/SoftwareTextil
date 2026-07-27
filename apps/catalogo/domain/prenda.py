@@ -20,6 +20,37 @@ class TipoProducto:
     id: str
     nombre: str
     atributos_base: dict[str, str] = field(default_factory=dict)
+    activo: bool = True
+
+    def __post_init__(self) -> None:
+        self._asignar_datos(self.nombre, self.atributos_base)
+
+    def actualizar(self, nombre: str, atributos_base: dict[str, str]) -> None:
+        self._asignar_datos(nombre, atributos_base)
+
+    def activar(self) -> None:
+        self.activo = True
+
+    def desactivar(self) -> None:
+        self.activo = False
+
+    def _asignar_datos(self, nombre: str, atributos_base: dict[str, str]) -> None:
+        nombre_normalizado = nombre.strip() if isinstance(nombre, str) else ""
+        if not nombre_normalizado:
+            raise ValueError("El nombre del tipo de producto es obligatorio")
+        if len(nombre_normalizado) > 120:
+            raise ValueError("El nombre del tipo de producto no puede exceder 120 caracteres")
+        if not isinstance(atributos_base, dict):
+            raise ValueError("Los atributos base deben ser un objeto")
+        if any(
+            not isinstance(clave, str)
+            or not clave.strip()
+            or not isinstance(valor, str)
+            for clave, valor in atributos_base.items()
+        ):
+            raise ValueError("Los atributos base deben tener nombres no vacios y valores de texto")
+        self.nombre = nombre_normalizado
+        self.atributos_base = dict(atributos_base)
 
 
 @dataclass

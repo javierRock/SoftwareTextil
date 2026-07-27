@@ -5,11 +5,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.catalogo.application.services import ServicioCatalogo
-from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
+from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel
 from apps.catalogo.infrastructure.repositories import DjangoRepositorioCatalogo, DjangoRepositorioPrenda
 from apps.catalogo.presentation.serializers import (
+    ActualizarTipoProductoSerializer,
     CategoriaSerializer,
     CrearPrendaSerializer,
+    CrearTipoProductoSerializer,
     PrendaSerializer,
     TipoProductoSerializer,
 )
@@ -64,14 +66,68 @@ class CategoriaViewSet(viewsets.ModelViewSet):
         return Response(CategoriaSerializer(categoria).data, status=status.HTTP_201_CREATED)
 
 
-class TipoProductoViewSet(viewsets.ModelViewSet):
-    queryset = TipoProductoModel.objects.all()
-    serializer_class = TipoProductoSerializer
+class TipoProductoViewSet(viewsets.ViewSet):
+    def list(self, request):
+        tipos = _servicio().listar_tipos()
+        return Response(TipoProductoSerializer(tipos, many=True).data)
+
+    def retrieve(self, request, pk=None):
+        try:
+            tipo = _servicio().buscar_tipo(pk)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        return Response(TipoProductoSerializer(tipo).data)
 
     def create(self, request, *args, **kwargs):
-        servicio = _servicio()
-        tipo = servicio.crear_tipo_producto(
-            nombre=request.data.get("nombre", ""),
-            atributos_base=request.data.get("atributos_base"),
-        )
+        serializer = CrearTipoProductoSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            tipo = _servicio().crear_tipo_producto(**serializer.validated_data)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(TipoProductoSerializer(tipo).data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, pk=None):
+        return self._actualizar(request, pk, parcial=False)
+
+    def partial_update(self, request, pk=None):
+        return self._actualizar(request, pk, parcial=True)
+
+    def _actualizar(self, request, pk, parcial):
+        servicio = _servicio()
+        try:
+            actual = servicio.buscar_tipo(pk)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ActualizarTipoProductoSerializer(data=request.data, partial=parcial)
+        serializer.is_valid(raise_exception=True)
+        datos = serializer.validated_data
+        try:
+            tipo = servicio.actualizar_tipo_producto(
+                pk,
+                nombre=datos.get("nombre", actual.nombre),
+                atributos_base=datos.get("atributos_base", actual.atributos_base),
+            )
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(TipoProductoSerializer(tipo).data)
+
+    @action(detail=True, methods=["post"])
+    def activar(self, request, pk=None):
+        return self._cambiar_estado(pk, activar=True)
+
+    @action(detail=True, methods=["post"])
+    def desactivar(self, request, pk=None):
+        return self._cambiar_estado(pk, activar=False)
+
+    def _cambiar_estado(self, pk, activar):
+        servicio = _servicio()
+        try:
+            if activar:
+                tipo = servicio.activar_tipo_producto(pk)
+            else:
+                tipo = servicio.desactivar_tipo_producto(pk)
+        except ValueError as exc:
+            return Response({"error": str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        return Response(TipoProductoSerializer(tipo).data)

@@ -67,10 +67,47 @@ class ServicioCatalogo:
     def listar_categorias(self) -> list[Categoria]:
         return self.repo_catalogo.listar_categorias()
 
-    def crear_tipo_producto(self, nombre: str, atributos_base: dict | None = None) -> TipoProducto:
-        tipo = TipoProducto(id=str(uuid4()), nombre=nombre, atributos_base=atributos_base or {})
+    def crear_tipo_producto(
+        self,
+        nombre: str,
+        atributos_base: dict[str, str] | None = None,
+    ) -> TipoProducto:
+        tipo = TipoProducto(
+            id=str(uuid4()),
+            nombre=nombre,
+            atributos_base={} if atributos_base is None else atributos_base,
+        )
         self.repo_catalogo.guardar_tipo_producto(tipo)
         return tipo
 
     def listar_tipos(self) -> list[TipoProducto]:
         return self.repo_catalogo.listar_tipos()
+
+    def buscar_tipo(self, tipo_producto_id: str) -> TipoProducto:
+        tipo = self.repo_catalogo.buscar_tipo(tipo_producto_id)
+        if tipo is None:
+            raise ValueError("Tipo de producto no encontrado")
+        return tipo
+
+    def actualizar_tipo_producto(
+        self,
+        tipo_producto_id: str,
+        nombre: str,
+        atributos_base: dict[str, str],
+    ) -> TipoProducto:
+        tipo = self.buscar_tipo(tipo_producto_id)
+        tipo.actualizar(nombre, atributos_base)
+        self.repo_catalogo.guardar_tipo_producto(tipo)
+        return tipo
+
+    def activar_tipo_producto(self, tipo_producto_id: str) -> TipoProducto:
+        tipo = self.buscar_tipo(tipo_producto_id)
+        tipo.activar()
+        self.repo_catalogo.guardar_tipo_producto(tipo)
+        return tipo
+
+    def desactivar_tipo_producto(self, tipo_producto_id: str) -> TipoProducto:
+        tipo = self.buscar_tipo(tipo_producto_id)
+        tipo.desactivar()
+        self.repo_catalogo.guardar_tipo_producto(tipo)
+        return tipo

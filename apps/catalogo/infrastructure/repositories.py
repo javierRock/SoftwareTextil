@@ -18,6 +18,7 @@ def _tipo_from_model(model: TipoProductoModel) -> TipoProducto:
         id=str(model.id),
         nombre=model.nombre,
         atributos_base=model.atributos_base or {},
+        activo=model.activo,
     )
 
 
@@ -73,6 +74,7 @@ class DjangoRepositorioCatalogo(RepositorioCatalogo):
             model = TipoProductoModel(id=tipo_producto.id)
         model.nombre = tipo_producto.nombre
         model.atributos_base = tipo_producto.atributos_base
+        model.activo = tipo_producto.activo
         model.save()
 
     def listar_categorias(self) -> list[Categoria]:
@@ -80,6 +82,10 @@ class DjangoRepositorioCatalogo(RepositorioCatalogo):
 
     def listar_tipos(self) -> list[TipoProducto]:
         return [_tipo_from_model(m) for m in TipoProductoModel.objects.all()]
+
+    def buscar_tipo(self, tipo_producto_id: str) -> TipoProducto | None:
+        model = TipoProductoModel.objects.filter(id=tipo_producto_id).first()
+        return _tipo_from_model(model) if model else None
 
     def buscar_categoria(self, categoria_id: str) -> Categoria | None:
         model = CategoriaModel.objects.filter(id=categoria_id).first()

@@ -35,6 +35,9 @@ class RepositorioCatalogoEnMemoria(RepositorioCatalogo):
     def listar_tipos(self) -> list[TipoProducto]:
         return list(self.tipos.values())
 
+    def buscar_tipo(self, tipo_producto_id: str) -> TipoProducto | None:
+        return self.tipos.get(tipo_producto_id)
+
     def buscar_categoria(self, categoria_id: str) -> Categoria | None:
         return self.categorias.get(categoria_id)
 

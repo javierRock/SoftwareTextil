@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel, TipoProductoModel
+from apps.catalogo.infrastructure.models import CategoriaModel, PrendaModel
 
 
 class CategoriaSerializer(serializers.ModelSerializer):
@@ -11,10 +11,27 @@ class CategoriaSerializer(serializers.ModelSerializer):
         fields = ["id", "nombre", "descripcion"]
 
 
-class TipoProductoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TipoProductoModel
-        fields = ["id", "nombre", "atributos_base"]
+class CrearTipoProductoSerializer(serializers.Serializer):
+    nombre = serializers.CharField(max_length=120, trim_whitespace=True)
+    atributos_base = serializers.DictField(
+        child=serializers.CharField(allow_blank=True),
+        required=False,
+        default=dict,
+    )
+
+
+class ActualizarTipoProductoSerializer(serializers.Serializer):
+    nombre = serializers.CharField(max_length=120, trim_whitespace=True)
+    atributos_base = serializers.DictField(
+        child=serializers.CharField(allow_blank=True),
+    )
+
+
+class TipoProductoSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    nombre = serializers.CharField(read_only=True)
+    atributos_base = serializers.DictField(read_only=True)
+    activo = serializers.BooleanField(read_only=True)
 
 
 class PrendaSerializer(serializers.ModelSerializer):

@@ -37,5 +37,9 @@ class RepositorioCatalogo(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def buscar_tipo(self, tipo_producto_id: str) -> TipoProducto | None:
+        raise NotImplementedError
+
+    @abstractmethod
     def buscar_categoria(self, categoria_id: str) -> Categoria | None:
         raise NotImplementedError

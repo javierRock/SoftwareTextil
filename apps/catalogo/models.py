@@ -18,6 +18,7 @@ class TipoProductoModel(models.Model):
     id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4)
     nombre = models.CharField(max_length=120)
     atributos_base = models.JSONField(default=dict)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         db_table = "tipos_producto"
