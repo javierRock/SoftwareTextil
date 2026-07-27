@@ -2,12 +2,15 @@
 
 from collections.abc import Iterable
 
+from django.db.models import F
+
 from apps.compartido.domain.enums import EstadoAlerta, TipoMovimiento
 from apps.compartido.infrastructure.mapeo import uuid_valido
 from apps.inventario.domain.consultas import (
     CategoriaStockAgrupada,
     PrendaStockAgrupada,
     VarianteStockAgrupada,
+    VarianteStockBajoMinimo,
 )
 from apps.inventario.domain.repositorios import (
     RepositorioAlertaStock,
@@ -183,6 +186,33 @@ class DjangoRepositorioInventario(RepositorioInventario):
         if categoria_id:
             modelos = modelos.filter(variante__prenda__categoria_id=categoria_id)
         return _agrupar_por_categoria(modelos)
+
+    def listar_bajo_minimo(self) -> list[VarianteStockBajoMinimo]:
+        """La reposicion se decide por variante: falta la M, no la camisa."""
+        modelos = (
+            StockVarianteModel.objects.select_related("variante__prenda__categoria")
+            .filter(cantidad_actual__lt=F("nivel_minimo"))
+            .order_by(
+                "variante__prenda__categoria__nombre",
+                "variante__prenda__nombre",
+                "variante__talla",
+            )
+        )
+        return [
+            VarianteStockBajoMinimo(
+                categoria_id=str(stock.variante.prenda.categoria_id),
+                categoria=stock.variante.prenda.categoria.nombre,
+                prenda_id=str(stock.variante.prenda_id),
+                prenda=stock.variante.prenda.nombre,
+                variante_id=str(stock.variante_id),
+                sku=stock.variante.sku,
+                talla=stock.variante.talla,
+                color=stock.variante.color,
+                cantidad_actual=stock.cantidad_actual,
+                nivel_minimo=stock.nivel_minimo,
+            )
+            for stock in modelos
+        ]
 
 
 class DjangoRepositorioMovimiento(RepositorioMovimientoInventario):

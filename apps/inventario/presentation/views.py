@@ -2,6 +2,7 @@
 
 from typing import ClassVar
 
+from django.http import HttpResponse
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -9,8 +10,10 @@ from rest_framework.response import Response
 
 from apps.catalogo.infrastructure.repositories import (
     DjangoRepositorioCatalogo,
+    DjangoRepositorioPrenda,
     DjangoRepositorioVariante,
 )
+from apps.inventario.application.reportes import ServicioReporteInventario
 from apps.inventario.application.services import ServicioInventario
 from apps.inventario.domain.excepciones import (
     InventarioError,
@@ -28,7 +31,9 @@ from apps.inventario.presentation.serializers import (
     CrearStockSerializer,
     MovimientoSerializer,
     MovimientoStockSerializer,
+    ReporteInventarioQuerySerializer,
     StockSerializer,
+    VarianteStockBajoMinimoSerializer,
 )
 
 
@@ -40,6 +45,10 @@ def _servicio() -> ServicioInventario:
         DjangoRepositorioVariante(),
         DjangoRepositorioCatalogo(),
     )
+
+
+def _servicio_reporte() -> ServicioReporteInventario:
+    return ServicioReporteInventario(_servicio(), DjangoRepositorioPrenda())
 
 
 def _responsable(request) -> str:
@@ -68,6 +77,33 @@ class StockViewSet(viewsets.ViewSet):
         except InventarioError as error:
             return respuesta_de_error_inventario(error)
         return Response(CategoriaStockAgrupadaSerializer(resumen, many=True).data)
+
+    @action(detail=False, methods=["get"], url_path="bajo-minimo")
+    def bajo_minimo(self, request):
+        alertas = _servicio().listar_stock_bajo_minimo()
+        return Response(VarianteStockBajoMinimoSerializer(alertas, many=True).data)
+
+    @action(detail=False, methods=["get"], url_path="reporte")
+    def reporte(self, request):
+        serializer = ReporteInventarioQuerySerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        try:
+            archivo = _servicio_reporte().generar_archivo(
+                formato=serializer.validated_data["formato"],
+                categoria_id=serializer.validated_data.get("categoria_id") or None,
+            )
+        except InventarioError as error:
+            return respuesta_de_error_inventario(error)
+        except ValueError as error:
+            return Response(
+                {"error": str(error)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        respuesta = HttpResponse(archivo.contenido, content_type=archivo.content_type)
+        respuesta["Content-Disposition"] = (
+            f'attachment; filename="{archivo.nombre_archivo}"'
+        )
+        return respuesta
 
     def create(self, request):
         serializer = CrearStockSerializer(data=request.data)

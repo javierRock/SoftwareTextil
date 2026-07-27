@@ -2,7 +2,10 @@
 
 from abc import ABC, abstractmethod
 
-from apps.inventario.domain.consultas import CategoriaStockAgrupada
+from apps.inventario.domain.consultas import (
+    CategoriaStockAgrupada,
+    VarianteStockBajoMinimo,
+)
 from apps.inventario.domain.stock_prenda import (
     AlertaStock,
     MovimientoInventario,
@@ -42,6 +45,11 @@ class RepositorioInventario(ABC):
         categoria_id: str | None = None,
     ) -> list[CategoriaStockAgrupada]:
         """Resumen de existencias: categoria, sus prendas y sus variantes."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def listar_bajo_minimo(self) -> list[VarianteStockBajoMinimo]:
+        """Variantes cuyo stock cayo por debajo de su nivel minimo."""
         raise NotImplementedError
 
 

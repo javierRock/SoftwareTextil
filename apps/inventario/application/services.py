@@ -3,7 +3,10 @@
 from django.db import IntegrityError, transaction
 
 from apps.catalogo.domain.repositorios import RepositorioCatalogo, RepositorioVariante
-from apps.inventario.domain.consultas import CategoriaStockAgrupada
+from apps.inventario.domain.consultas import (
+    CategoriaStockAgrupada,
+    VarianteStockBajoMinimo,
+)
 from apps.inventario.domain.excepciones import (
     CategoriaNoEncontradaError,
     StockNoEncontradoError,
@@ -90,6 +93,10 @@ class ServicioInventario:
         ):
             raise CategoriaNoEncontradaError("La categoria no existe")
         return self.repo_inventario.listar_por_categoria(categoria_id)
+
+    def listar_stock_bajo_minimo(self) -> list[VarianteStockBajoMinimo]:
+        """Variantes que hay que reponer, no prendas: falta la talla concreta."""
+        return self.repo_inventario.listar_bajo_minimo()
 
     def registrar_ingreso(
         self,

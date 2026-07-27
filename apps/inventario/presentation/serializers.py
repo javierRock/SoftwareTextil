@@ -87,3 +87,28 @@ class AjusteStockSerializer(serializers.Serializer):
     variante_id = serializers.UUIDField()
     nueva_cantidad = serializers.IntegerField(min_value=0)
     motivo = serializers.CharField()
+
+
+class VarianteStockBajoMinimoSerializer(serializers.Serializer):
+    """Alerta de reposicion, con la talla y el SKU que hay que pedir."""
+
+    categoria_id = serializers.CharField(read_only=True)
+    categoria = serializers.CharField(read_only=True)
+    prenda_id = serializers.CharField(read_only=True)
+    prenda = serializers.CharField(read_only=True)
+    variante_id = serializers.CharField(read_only=True)
+    sku = serializers.CharField(read_only=True)
+    talla = serializers.CharField(read_only=True)
+    color = serializers.CharField(read_only=True)
+    cantidad_actual = serializers.IntegerField(read_only=True)
+    nivel_minimo = serializers.IntegerField(read_only=True)
+    faltante = serializers.IntegerField(read_only=True)
+
+
+class ReporteInventarioQuerySerializer(serializers.Serializer):
+    categoria_id = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+    )
+    formato = serializers.ChoiceField(choices=["pdf", "xlsx"])
