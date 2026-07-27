@@ -1,22 +1,38 @@
-"""Serializers DRF para carrito de compras."""
+"""Serializers DRF para carrito de compras.
+
+Serializan el agregado de dominio, no el modelo del ORM: asi la presentacion
+depende de la abstraccion del dominio y no de la tecnologia de persistencia
+(DIP). Los serializers de entrada solo validan el contrato HTTP.
+"""
 
 from rest_framework import serializers
 
-from apps.ventas.carrito.infrastructure.models import CarritoModel, ItemCarritoModel
+
+class ItemCarritoSerializer(serializers.Serializer):
+    """Representacion de salida de `ItemCarrito`."""
+
+    id = serializers.CharField(read_only=True)
+    prenda_id = serializers.CharField(read_only=True)
+    cantidad = serializers.IntegerField(read_only=True)
+    precio_monto = serializers.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        source="precio_unitario.monto",
+        read_only=True,
+    )
+    precio_moneda = serializers.CharField(
+        source="precio_unitario.moneda", read_only=True
+    )
 
 
-class ItemCarritoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ItemCarritoModel
-        fields = ["id", "prenda_id", "cantidad", "precio_monto", "precio_moneda"]
+class CarritoSerializer(serializers.Serializer):
+    """Representacion de salida de `CarritoCompras`."""
 
-
-class CarritoSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(read_only=True)
+    cliente_id = serializers.CharField(read_only=True)
+    estado = serializers.CharField(source="estado.value", read_only=True)
+    fecha_creacion = serializers.DateTimeField(read_only=True)
     items = ItemCarritoSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = CarritoModel
-        fields = ["id", "cliente_id", "estado", "fecha_creacion", "items"]
 
 
 class CrearCarritoSerializer(serializers.Serializer):

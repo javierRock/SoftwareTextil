@@ -1,7 +1,7 @@
 """Excepciones del dominio de pagos."""
 
 
-class ErrorPago(Exception):
+class ErrorPago(Exception):  # noqa: N818 - nombre del lenguaje ubicuo del proyecto
     """Error base controlado del modulo de pagos."""
 
     codigo = "error_pago"

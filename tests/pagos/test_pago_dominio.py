@@ -28,7 +28,7 @@ class ReferenciaTransferenciaPersonalizada(PoliticaReferenciaPago):
     def metodos(self) -> frozenset[MetodoPago]:
         return frozenset({MetodoPago.TRANSFERENCIA})
 
-    def validar(self, metodo: MetodoPago, referencia: str) -> str:
+    def validar(self, _metodo: MetodoPago, referencia: str) -> str:
         return f"EXT-{referencia.strip()}"
 
 

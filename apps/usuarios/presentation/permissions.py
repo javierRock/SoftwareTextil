@@ -6,7 +6,7 @@ from rest_framework.permissions import BasePermission
 class EsAdministrador(BasePermission):
     """Permite el acceso a usuarios con rol de administrador."""
 
-    def has_permission(self, request, view) -> bool:
+    def has_permission(self, request, _view) -> bool:
         return bool(
             request.user
             and request.user.is_authenticated
@@ -17,7 +17,7 @@ class EsAdministrador(BasePermission):
 class EsCliente(BasePermission):
     """Permite el acceso a usuarios con rol de cliente."""
 
-    def has_permission(self, request, view) -> bool:
+    def has_permission(self, request, _view) -> bool:
         return bool(
             request.user
             and request.user.is_authenticated
