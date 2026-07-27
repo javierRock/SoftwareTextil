@@ -67,6 +67,23 @@ class ServicioCatalogo:
     def listar_categorias(self) -> list[Categoria]:
         return self.repo_catalogo.listar_categorias()
 
+    def buscar_categoria(self, categoria_id: str) -> Categoria:
+        categoria = self.repo_catalogo.buscar_categoria(categoria_id)
+        if categoria is None:
+            raise ValueError("Categoria no encontrada")
+        return categoria
+
+    def actualizar_categoria(
+        self,
+        categoria_id: str,
+        nombre: str,
+        descripcion: str,
+    ) -> Categoria:
+        categoria = self.buscar_categoria(categoria_id)
+        categoria.actualizar(nombre, descripcion)
+        self.repo_catalogo.guardar_categoria(categoria)
+        return categoria
+
     def crear_tipo_producto(
         self,
         nombre: str,

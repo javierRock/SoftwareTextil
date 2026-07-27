@@ -14,6 +14,23 @@ class Categoria:
     nombre: str
     descripcion: str = ""
 
+    def __post_init__(self) -> None:
+        self._asignar_datos(self.nombre, self.descripcion)
+
+    def actualizar(self, nombre: str, descripcion: str) -> None:
+        self._asignar_datos(nombre, descripcion)
+
+    def _asignar_datos(self, nombre: str, descripcion: str) -> None:
+        nombre_normalizado = nombre.strip() if isinstance(nombre, str) else ""
+        if not nombre_normalizado:
+            raise ValueError("El nombre de la categoria es obligatorio")
+        if len(nombre_normalizado) > 120:
+            raise ValueError("El nombre de la categoria no puede exceder 120 caracteres")
+        if not isinstance(descripcion, str):
+            raise ValueError("La descripcion de la categoria debe ser texto")
+        self.nombre = nombre_normalizado
+        self.descripcion = descripcion.strip()
+
 
 @dataclass
 class TipoProducto:
