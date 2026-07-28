@@ -856,6 +856,7 @@ Jira organiza el trabajo con **epics** para capacidades mayores, **historias** p
 | Catálogo | Pagos |
 | --- | --- |
 | ![Jira de Lizzy con historia y subtareas](assets/CapturaJira/jira_Lizzy.png) | ![Jira de Javier con historia y subtareas](assets/CapturaJira/jira_javier.png) |
+| ![Jira de Angelo con historias y subtareas](assets/CapturaJira/jira_angelo.png)|
 
 ### Mapa de tickets a evidencia
 
