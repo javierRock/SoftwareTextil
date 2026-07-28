@@ -36,7 +36,7 @@ Sistema web académico para gestionar una operación textil de extremo a extremo
 | Gestión del proyecto | [Gestión con Jira](#gestion) | Epics, historias, subtareas, responsables, estados y capturas |
 | Calidad | [Pruebas y calidad](#calidad) | Pruebas, integridad PostgreSQL, Ruff, ESLint y build reproducible |
 
-<a id="equipo"></a>
+<a id="equipo"></a> --->
 ## 1. Equipo de trabajo
 
 **Nombre del equipo:** SoftwareTextil
@@ -53,7 +53,7 @@ Sistema web académico para gestionar una operación textil de extremo a extremo
 
 La asignación se materializa en apps Django por contexto y se documenta en [`docs/guias/`](docs/guias/). Las ramas se integran mediante Pull Request (PR) hacia `dev`; `main` representa la versión estable.
 
-<a id="proposito"></a> -->
+<a id="proposito"></a> 
 ## 2. Propósito del proyecto
 
 ### Objetivo y problema
