@@ -37,6 +37,9 @@ Sistema web académico para gestionar una operación textil de extremo a extremo
 | Calidad | [Pruebas y calidad](#calidad) | Pruebas, integridad PostgreSQL, Ruff, ESLint y build reproducible |
 
 <a id="equipo"></a> --->
+
+# WAZA!!!!!!!!!!!!!!
+
 ## 1. Equipo de trabajo
 
 **Nombre del equipo:** SoftwareTextil
