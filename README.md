@@ -38,8 +38,6 @@ Sistema web académico para gestionar una operación textil de extremo a extremo
 
 <a id="equipo"></a> --->
 
-# WAZA!!!!!!!!!!!!!!
-
 ## 1. Equipo de trabajo
 
 **Nombre del equipo:** SoftwareTextil
