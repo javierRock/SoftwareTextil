@@ -23,7 +23,7 @@ Sistema web académico para gestionar una operación textil de extremo a extremo
 - [12. Tecnologías](#tecnologias)
 - [13. Referencias](#referencias)
 
-### Matriz de evidencia para la evaluación
+<!-- ### Matriz de evidencia para la evaluación
 
 | Criterio | Evidencia directa en este README | Cobertura documentada |
 | --- | --- | --- |
@@ -53,7 +53,7 @@ Sistema web académico para gestionar una operación textil de extremo a extremo
 
 La asignación se materializa en apps Django por contexto y se documenta en [`docs/guias/`](docs/guias/). Las ramas se integran mediante Pull Request (PR) hacia `dev`; `main` representa la versión estable.
 
-<a id="proposito"></a>
+<a id="proposito"></a> -->
 ## 2. Propósito del proyecto
 
 ### Objetivo y problema
