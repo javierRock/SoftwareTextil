@@ -32,6 +32,24 @@ show_missing = true
 [tool.uv]
 package = false
 
+[tool.software-textil.release]
+format = "zip"
+output-dir = "dist"
+entries = [
+    "apps",
+    "build/staticfiles",
+    "config",
+    "frontend/inventario/dist",
+    "static",
+    "templates",
+    ".env.example",
+    ".python-version",
+    "manage.py",
+    "pyproject.toml",
+    "README.md",
+    "uv.lock",
+]
+
 # Analisis estatico reproducible: las mismas reglas que SonarLint marca en el
 # IDE quedan fijadas aqui para que cualquier integrante obtenga el mismo
 # resultado en consola (`uvx ruff check .`).
