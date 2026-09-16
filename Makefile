@@ -6,7 +6,7 @@ FRONTEND_DIR := frontend/inventario
 BUILD_SETTINGS := config.settings.build
 DEV_SETTINGS := config.settings.dev
 
-.PHONY: help prerequisites deps db-ready frontend-check frontend check test static package verify-release build clean
+.PHONY: help prerequisites deps db-ready frontend-check frontend check test static invalidate-release package verify-release build clean
 
 help: ## Muestra los objetivos disponibles.
 	@awk 'BEGIN {FS = ":.*## "; printf "Uso: make <objetivo>\n\n"} /^[a-zA-Z0-9_-]+:.*## / {printf "  %-18s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -49,7 +49,10 @@ static: test ## Recolecta archivos estáticos en build/staticfiles.
 	rm -rf build/staticfiles
 	DJANGO_SETTINGS_MODULE=$(BUILD_SETTINGS) uv run --locked python manage.py collectstatic --noinput --clear
 
-package: static ## Genera el ZIP, manifiesto y checksum SHA-256.
+invalidate-release:
+	@rm -f dist/*.zip dist/*.zip.sha256
+
+package: invalidate-release static ## Genera el ZIP, manifiesto y checksum SHA-256.
 	uv run --locked python -m scripts.package_release
 
 verify-release: package ## Verifica checksum, contenido y ejecución desde una extracción temporal.
