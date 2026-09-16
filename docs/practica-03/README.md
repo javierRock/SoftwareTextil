@@ -14,6 +14,8 @@ por ese modelo y no una configuración paralela.
   - `5fca1ce` — settings de construcción y `STATIC_ROOT`.
   - `5766030` — empaquetado, verificación y pruebas.
   - `41e2d94` — orquestación con GNU Make.
+  - `9ecb152` — tutorial, índice y evidencias de ejecución.
+  - `2148eb2` — invalidación preventiva de artefactos anteriores.
 - La rama no se publica automáticamente. Véase [evidencias](evidencias.md).
 
 ## Entregable 2. Modelo de construcción
