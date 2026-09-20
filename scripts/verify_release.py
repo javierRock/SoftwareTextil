@@ -17,6 +17,18 @@ from scripts.package_release import (
     load_config,
 )
 
+REQUIRED_ARCHIVE_FILES = {
+    MANIFEST_NAME,
+    "manage.py",
+    "pyproject.toml",
+    "uv.lock",
+    "frontend/inventario/dist/index.html",
+    "frontend/inventario/dist/assets/app.js",
+    "frontend/inventario/dist/assets/app.css",
+    "build/staticfiles/zuren/assets/app.js",
+    "build/staticfiles/zuren/assets/app.css",
+}
+
 
 def _validate_member(name: str) -> None:
     path = PurePosixPath(name)
@@ -38,6 +50,13 @@ def _verify_checksum(archive: Path, checksum_path: Path) -> None:
         raise ValueError("El checksum SHA-256 no coincide")
 
 
+def _validate_required_files(names: set[str]) -> None:
+    missing = REQUIRED_ARCHIVE_FILES - names
+    if missing:
+        missing_list = ", ".join(sorted(missing))
+        raise ValueError(f"Faltan entradas obligatorias: {missing_list}")
+
+
 def verify_release() -> Path:
     config = load_config()
     archive = config.archive
@@ -46,32 +65,22 @@ def verify_release() -> Path:
         raise FileNotFoundError("No se encontraron el ZIP y su checksum")
     _verify_checksum(archive, checksum_path)
 
-    required = {
-        MANIFEST_NAME,
-        "manage.py",
-        "pyproject.toml",
-        "uv.lock",
-        "frontend/inventario/dist/index.html",
-        "frontend/inventario/dist/assets/app.js",
-        "build/staticfiles/zuren/assets/app.js",
-    }
     extraction_root = Path(tempfile.mkdtemp(prefix="software-textil-release-"))
     with zipfile.ZipFile(archive) as package:
         names = set(package.namelist())
         for name in names:
             _validate_member(name)
-        missing = required - names
-        if missing:
-            missing_list = ", ".join(sorted(missing))
-            raise ValueError(f"Faltan entradas obligatorias: {missing_list}")
+        _validate_required_files(names)
         manifest = json.loads(package.read(MANIFEST_NAME))
         if set(manifest["files"]) != names - {MANIFEST_NAME}:
             raise ValueError("El inventario del manifiesto no coincide con el ZIP")
         package.extractall(extraction_root)
 
     index = extraction_root / "frontend" / "inventario" / "dist" / "index.html"
-    if "/static/zuren/assets/app.js" not in index.read_text(encoding="utf-8"):
-        raise ValueError("La SPA extraída no referencia el recurso esperado")
+    index_content = index.read_text(encoding="utf-8")
+    for asset in ("app.js", "app.css"):
+        if f"/static/zuren/assets/{asset}" not in index_content:
+            raise ValueError(f"La SPA extraída no referencia {asset}")
 
     uv = shutil.which("uv")
     if uv is None:

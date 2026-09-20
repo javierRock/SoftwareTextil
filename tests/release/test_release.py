@@ -6,7 +6,12 @@ from pathlib import Path
 import pytest
 
 from scripts.package_release import _safe_relative_path, load_config
-from scripts.verify_release import _validate_member, _verify_checksum
+from scripts.verify_release import (
+    REQUIRED_ARCHIVE_FILES,
+    _validate_member,
+    _validate_required_files,
+    _verify_checksum,
+)
 
 
 def test_configuracion_release_usa_metadatos_del_proyecto() -> None:
@@ -41,3 +46,15 @@ def test_checksum_detecta_un_artefacto_modificado(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="no coincide"):
         _verify_checksum(archive, checksum)
+
+
+@pytest.mark.parametrize(
+    "asset",
+    [
+        "frontend/inventario/dist/assets/app.css",
+        "build/staticfiles/zuren/assets/app.css",
+    ],
+)
+def test_verificacion_rechaza_css_faltante(asset: str) -> None:
+    with pytest.raises(ValueError, match="Faltan entradas obligatorias"):
+        _validate_required_files(REQUIRED_ARCHIVE_FILES - {asset})

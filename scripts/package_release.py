@@ -90,15 +90,25 @@ def collect_files(config: ReleaseConfig) -> list[Path]:
 def _validate_frontend() -> None:
     index = ROOT / "frontend" / "inventario" / "dist" / "index.html"
     app_js = ROOT / "frontend" / "inventario" / "dist" / "assets" / "app.js"
+    app_css = ROOT / "frontend" / "inventario" / "dist" / "assets" / "app.css"
     collected_js = ROOT / "build" / "staticfiles" / "zuren" / "assets" / "app.js"
-    if not index.is_file() or not app_js.is_file():
+    collected_css = ROOT / "build" / "staticfiles" / "zuren" / "assets" / "app.css"
+    if not index.is_file() or not app_js.is_file() or not app_css.is_file():
         raise FileNotFoundError(
-            "El build frontend no contiene index.html y assets/app.js"
+            "El build frontend no contiene index.html, assets/app.js y assets/app.css"
         )
-    if "/static/zuren/assets/app.js" not in index.read_text(encoding="utf-8"):
-        raise ValueError("index.html no referencia /static/zuren/assets/app.js")
-    if not collected_js.is_file():
-        raise FileNotFoundError("collectstatic no produjo zuren/assets/app.js")
+    index_content = index.read_text(encoding="utf-8")
+    referenced_assets = (
+        "/static/zuren/assets/app.js",
+        "/static/zuren/assets/app.css",
+    )
+    for asset in referenced_assets:
+        if asset not in index_content:
+            raise ValueError(f"index.html no referencia {asset}")
+    if not collected_js.is_file() or not collected_css.is_file():
+        raise FileNotFoundError(
+            "collectstatic no produjo zuren/assets/app.js y zuren/assets/app.css"
+        )
 
 
 def _command_output(command: list[str]) -> str:
