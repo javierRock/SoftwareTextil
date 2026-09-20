@@ -17,6 +17,7 @@ por ese modelo y no una configuración paralela.
   - `9ecb152` — tutorial, índice y evidencias de ejecución.
   - `2148eb2` — invalidación preventiva de artefactos anteriores.
   - `d6538e6` — verificación de los recursos CSS del frontend.
+  - `b1391e3` — cobertura de recursos frontend obligatorios.
 - La rama no se publica automáticamente. Véase [evidencias](evidencias.md).
 
 ## Entregable 2. Modelo de construcción
