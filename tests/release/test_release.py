@@ -51,10 +51,12 @@ def test_checksum_detecta_un_artefacto_modificado(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "asset",
     [
+        "frontend/inventario/dist/assets/app.js",
         "frontend/inventario/dist/assets/app.css",
+        "build/staticfiles/zuren/assets/app.js",
         "build/staticfiles/zuren/assets/app.css",
     ],
 )
-def test_verificacion_rechaza_css_faltante(asset: str) -> None:
+def test_verificacion_rechaza_recurso_frontend_faltante(asset: str) -> None:
     with pytest.raises(ValueError, match="Faltan entradas obligatorias"):
         _validate_required_files(REQUIRED_ARCHIVE_FILES - {asset})
