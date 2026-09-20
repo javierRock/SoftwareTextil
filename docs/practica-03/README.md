@@ -4,6 +4,10 @@ Este directorio reúne los tres entregables de la práctica. El modelo principal
 es el [`Makefile`](../../Makefile); los scripts Python son auxiliares invocados
 por ese modelo y no una configuración paralela.
 
+El informe académico que contrasta el trabajo con el PDF está en
+[informe.md](informe.md). El procedimiento reproducible y las evidencias
+operativas permanecen separados en el tutorial y el registro de ejecución.
+
 ## Entregable 1. Proyecto GitHub
 
 - Rama de trabajo: `doc/automatic`.
