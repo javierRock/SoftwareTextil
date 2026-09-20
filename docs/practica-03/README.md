@@ -8,6 +8,8 @@ El informe académico que contrasta el trabajo con el PDF está en
 [informe.md](informe.md). El procedimiento reproducible y las evidencias
 operativas permanecen separados en el tutorial y el registro de ejecución.
 
+También está disponible en formato PDF: [informe.pdf](informe.pdf).
+
 ## Entregable 1. Proyecto GitHub
 
 - Rama de trabajo: `doc/automatic`.
