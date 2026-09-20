@@ -12,7 +12,7 @@ Fecha: 16-09-2026. Rama: `doc/automatic`. Base:
 | `npm run lint` | Aprobado. |
 | `npm run build` | Vite 7.3.6; generó `index.html`, `assets/app.css` y `assets/app.js`. |
 | Ruff sobre `scripts`, `tests/release` y `config/settings/build.py` | Aprobado. |
-| `pytest tests/release/test_release.py -q` | 8 pruebas aprobadas. |
+| `pytest tests/release/test_release.py -q` | 10 pruebas aprobadas. |
 | `manage.py check` con settings de build | 0 incidencias. |
 | `makemigrations --check --dry-run` | No detectó cambios; avisó que `software_textil` no existía. |
 | `collectstatic --noinput --clear` | 159 archivos copiados a `build/staticfiles`. |

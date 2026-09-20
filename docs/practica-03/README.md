@@ -16,6 +16,7 @@ por ese modelo y no una configuración paralela.
   - `41e2d94` — orquestación con GNU Make.
   - `9ecb152` — tutorial, índice y evidencias de ejecución.
   - `2148eb2` — invalidación preventiva de artefactos anteriores.
+  - `d6538e6` — verificación de los recursos CSS del frontend.
 - La rama no se publica automáticamente. Véase [evidencias](evidencias.md).
 
 ## Entregable 2. Modelo de construcción
