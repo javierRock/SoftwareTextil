@@ -1,0 +1,1591 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inventario · Stock Manager</title>
+  <style>
+    /* ─── TOKENS ──────────────────────────────────────────────── */
+    :root {
+      /* Typography */
+      --font-sans: 'Geist Sans', 'SF Pro Display', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Geist Mono', 'SF Mono', 'JetBrains Mono', ui-monospace, monospace;
+      --text-xs:   0.6875rem; /* 11px */
+      --text-xs-lh: 1rem;
+      --text-sm:   0.8125rem; /* 13px */
+      --text-sm-lh: 1.25rem;
+      --text-base:   0.9375rem; /* 15px */
+      --text-base-lh: 1.5rem;
+      --text-lg:   1.125rem; /* 18px */
+      --text-lg-lh: 1.5rem;
+      --text-xl:   1.375rem; /* 22px */
+      --text-xl-lh: 1.3;
+
+      /* Color */
+      --bg-canvas:  #F7F6F3;
+      --bg-surface: #FFFFFF;
+      --bg-hover:   #F3F2EF;
+      --bg-selected:#EDECEA;
+      --bg-sidebar: #FBFBFA;
+      --bg-row-low: #FEF5F5;
+      --text-primary:   #111111;
+      --text-secondary: #787774;
+      --text-tertiary:  #A8A6A1;
+      --border-default: #EAEAEA;
+      --border-focus:   #111111;
+      --accent-red-bg:    #FDEBEC;
+      --accent-red-text:  #9F2F2D;
+      --accent-green-bg:  #EDF3EC;
+      --accent-green-text:#346538;
+      --accent-blue-bg:   #E1F3FE;
+      --accent-blue-text: #1F6C9F;
+      --accent-yellow-bg: #FBF3DB;
+      --accent-yellow-text:#956400;
+      --btn-primary-bg:    #111111;
+      --btn-primary-text:  #FFFFFF;
+      --btn-primary-hover: #333333;
+      --btn-secondary-bg:    #F3F2EF;
+      --btn-secondary-text:  #111111;
+      --btn-secondary-hover: #EAEAEA;
+
+      /* Derived / one-off */
+      --bg-low-hover: #fef0ef;
+      --bg-detail: #FAFAF9;
+      --icon-muted: #D4D2CE;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --radius-xl: 12px;
+      --radius-pill: 9999px;
+
+      /* Shadows */
+      --shadow-card: none;
+      --shadow-card-hover: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-drawer: -4px 0 24px rgba(0,0,0,0.06);
+
+      /* Spacing */
+      --space-section: 48px;
+      --space-card-internal: 24px;
+      --space-table-cell: 12px 16px;
+      --space-gap-grid: 16px;
+      --space-gap-stack: 8px;
+
+      /* Layout */
+      --sidebar-width: 240px;
+      --sidebar-collapsed: 48px;
+      --header-height: 48px;
+      --footer-height: 56px;
+      --drawer-width: 400px;
+    }
+
+    /* ─── RESET ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      line-height: var(--text-base-lh);
+      color: var(--text-primary);
+      background: var(--bg-canvas);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow: hidden;
+      height: 100vh;
+    }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+    input, textarea, select { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── LAYOUT GRID ─────────────────────────────────────────── */
+    .dashboard {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      grid-template-rows: var(--header-height) 1fr var(--footer-height);
+      height: 100vh;
+      transition: grid-template-columns 250ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .dashboard.sidebar-collapsed {
+      grid-template-columns: var(--sidebar-collapsed) 1fr;
+    }
+
+    /* ─── HEADER ──────────────────────────────────────────────── */
+    .header {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-default);
+      z-index: 20;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.02em; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-bell { position: relative; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--radius-sm); color: var(--text-secondary); }
+    .header-bell:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .header-bell svg { width: 18px; height: 18px; }
+    .badge-dot {
+      position: absolute; top: 4px; right: 4px;
+      width: 8px; height: 8px;
+      background: var(--accent-red-text);
+      border-radius: var(--radius-pill);
+    }
+    .badge-count {
+      position: absolute; top: -2px; right: -4px;
+      background: var(--accent-red-bg);
+      color: var(--accent-red-text);
+      font-size: var(--text-xs);
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    .profile-btn { display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: var(--radius-sm); font-size: var(--text-sm); color: var(--text-secondary); }
+    .profile-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .hamburger { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-sm); color: var(--text-secondary); }
+    .hamburger:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .hamburger svg { width: 16px; height: 16px; }
+
+    /* ─── SIDEBAR ─────────────────────────────────────────────── */
+    .sidebar {
+      grid-row: 2;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-default);
+      padding: 16px 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-label {
+      padding: 8px 16px;
+      font-size: var(--text-xs);
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 16px;
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background-color 120ms ease-out;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .sidebar-item:hover { background: var(--bg-hover); }
+    .sidebar-item.active { background: var(--bg-selected); color: var(--text-primary); font-weight: 500; border-left-color: var(--text-primary); }
+    .sidebar-item .count { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-tertiary); margin-left: auto; padding-left: 8px; }
+    .dashboard.sidebar-collapsed .sidebar-label,
+    .dashboard.sidebar-collapsed .sidebar-item span:not(.count),
+    .dashboard.sidebar-collapsed .sidebar-item .count { display: none; }
+
+    /* ─── MAIN CONTENT ────────────────────────────────────────── */
+    .main {
+      grid-row: 2;
+      overflow-y: auto;
+      overflow-x: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap-grid);
+    }
+
+    /* ─── KPI CARDS ───────────────────────────────────────────── */
+    .kpi-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-gap-grid); }
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow 200ms ease-out;
+    }
+    .kpi-card:hover { box-shadow: var(--shadow-card-hover); }
+    .kpi-label { font-size: var(--text-xs); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .kpi-value { font-family: var(--font-mono); font-size: var(--text-lg); color: var(--text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .kpi-sub { font-size: var(--text-sm); color: var(--text-secondary); margin-top: 2px; }
+    .kpi-value.positive { color: var(--accent-green-text); }
+
+    /* ─── ALERT PANEL ─────────────────────────────────────────── */
+    .alert-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .alert-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-sidebar);
+      cursor: pointer;
+      user-select: none;
+    }
+    .alert-header:hover { background: var(--bg-hover); }
+    .alert-header-left { display: flex; align-items: center; gap: 8px; font-size: var(--text-sm); font-weight: 500; }
+    .alert-badge {
+      display: inline-flex; align-items: center;
+      background: var(--accent-red-bg);
+      color: var(--accent-red-text);
+      border-radius: var(--radius-pill);
+      padding: 2px 8px;
+      font-size: var(--text-xs);
+      font-weight: 600;
+    }
+    .alert-chevron { color: var(--text-tertiary); transition: transform 250ms cubic-bezier(0.23, 1, 0.32, 1); }
+    .alert-panel.open .alert-chevron { transform: rotate(180deg); }
+    .alert-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 250ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .alert-panel.open .alert-body { max-height: 300px; }
+    .alert-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-default);
+      transition: opacity 200ms ease-out, max-height 200ms ease-out;
+    }
+    .alert-row:last-child { border-bottom: none; }
+    .alert-row.dismissing { opacity: 0; max-height: 0; padding: 0 16px; overflow: hidden; }
+    .alert-row-left { display: flex; flex-direction: column; gap: 2px; }
+    .alert-row-product { font-size: var(--text-sm); color: var(--text-primary); font-weight: 500; }
+    .alert-row-meta { font-size: var(--text-xs); color: var(--text-secondary); font-family: var(--font-mono); }
+    .alert-row-actions { display: flex; gap: 6px; }
+    .btn-dismiss { color: var(--text-secondary); font-size: var(--text-xs); padding: 4px 8px; border-radius: var(--radius-sm); }
+    .btn-dismiss:hover { background: var(--bg-hover); }
+    .btn-reorder { color: var(--accent-blue-text); background: var(--accent-blue-bg); font-size: var(--text-xs); padding: 4px 8px; border-radius: var(--radius-sm); font-weight: 500; }
+    .btn-reorder:hover { opacity: 0.85; }
+    .alert-empty { padding: 32px 16px; text-align: center; color: var(--accent-green-text); font-size: var(--text-sm); display: none; }
+    .alert-panel.empty .alert-empty { display: block; }
+    .alert-panel.empty .alert-header .alert-badge { display: none; }
+    .alert-panel.empty .alert-body { display: none; }
+
+    /* ─── TOOLBAR ─────────────────────────────────────────────── */
+    .toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .search-wrap { position: relative; }
+    .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-tertiary); pointer-events: none; }
+    .search-input {
+      width: 320px; padding: 8px 12px 8px 36px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      color: var(--text-primary);
+      transition: border-color 150ms ease-out;
+    }
+    .search-input:focus { outline: none; border-color: var(--border-focus); }
+    .search-input::placeholder { color: var(--text-tertiary); }
+    .btn-export {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px;
+      background: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      transition: background-color 150ms ease-out, transform 120ms ease-out;
+    }
+    .btn-export:hover { background: var(--btn-secondary-hover); }
+    .btn-export:active { transform: scale(0.97); }
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+    .toggle-label { font-size: var(--text-sm); color: var(--text-secondary); }
+    .toggle-track {
+      width: 36px; height: 20px;
+      background: var(--border-default);
+      border-radius: var(--radius-pill);
+      position: relative;
+      cursor: pointer;
+      transition: background-color 200ms ease;
+    }
+    .toggle-track.active { background: var(--accent-red-text); }
+    .toggle-thumb {
+      width: 16px; height: 16px;
+      background: var(--bg-surface);
+      border-radius: var(--radius-pill);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: absolute; top: 2px; left: 2px;
+      transition: transform 200ms ease;
+    }
+    .toggle-track.active .toggle-thumb { transform: translateX(16px); }
+
+    /* ─── TABLE ───────────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; }
+    .stock-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+    .stock-table thead { position: sticky; top: 0; z-index: 2; }
+    .stock-table th {
+      background: var(--bg-sidebar);
+      border-bottom: 1px solid var(--border-default);
+      padding: 10px 16px;
+      text-align: left;
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    .stock-table th:hover { color: var(--text-primary); }
+    .stock-table th .sort-arrow { display: inline-block; margin-left: 4px; opacity: 0.3; }
+    .stock-table th.sorted .sort-arrow { opacity: 1; color: var(--text-primary); }
+    .stock-table th.sorted.desc .sort-arrow { transform: rotate(180deg); display: inline-block; }
+    .stock-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--bg-hover);
+      color: var(--text-primary);
+      font-size: var(--text-sm);
+      white-space: nowrap;
+    }
+    .stock-table tbody tr { cursor: pointer; transition: background-color 150ms ease; }
+    .stock-table tbody tr:hover { background: var(--bg-hover); }
+    .stock-table tbody tr.low-stock { background: var(--bg-row-low); }
+    .stock-table tbody tr.low-stock:hover { background: var(--bg-low-hover); }
+    .stock-table tbody tr:focus-visible { outline: 2px solid var(--border-focus); outline-offset: -2px; border-radius: var(--radius-sm); }
+    .stock-table .col-stock { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+    .stock-table .col-time { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-tertiary); }
+    .stock-badge {
+      display: inline-block;
+      background: var(--accent-red-bg);
+      color: var(--accent-red-text);
+      font-size: var(--text-xs);
+      border-radius: var(--radius-pill);
+      padding: 1px 6px;
+      margin-left: 4px;
+    }
+    .stock-table .row-detail {
+      display: none;
+      background: var(--bg-detail);
+    }
+    .stock-table .row-detail.open {
+      display: table-row;
+    }
+    .stock-table .row-detail td {
+      padding: 16px 24px;
+      border-bottom: 2px solid var(--border-default);
+    }
+    .movements-list { font-size: var(--text-xs); }
+    .movements-list .mov-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--bg-hover);
+    }
+    .movements-list .mov-item:last-child { border-bottom: none; }
+    .mov-type {
+      display: inline-flex; align-items: center;
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+      font-size: var(--text-xs);
+      font-weight: 500;
+    }
+    .mov-type.in { background: var(--accent-green-bg); color: var(--accent-green-text); }
+    .mov-type.out { background: var(--accent-red-bg); color: var(--accent-red-text); }
+    .mov-qty { font-family: var(--font-mono); }
+    .mov-date { color: var(--text-tertiary); font-family: var(--font-mono); margin-left: auto; }
+
+    /* ─── SKELETON ────────────────────────────────────────────── */
+    .skeleton-table { display: none; }
+    .skeleton-table.active { display: table-row-group; }
+    .skeleton-row td { padding: 10px 16px; border-bottom: 1px solid var(--bg-hover); }
+    .skeleton-bar {
+      height: 14px;
+      background: var(--bg-hover);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(90deg, var(--bg-hover) 0%, var(--border-default) 50%, var(--bg-hover) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ─── EMPTY / ERROR STATES ────────────────────────────────── */
+    .empty-state { display: none; padding: 64px 24px; text-align: center; }
+    .empty-state.active { display: block; }
+    .empty-state svg { width: 32px; height: 32px; color: var(--icon-muted); margin-bottom: 12px; }
+    .empty-state h3 { font-size: var(--text-base); color: var(--text-secondary); font-weight: 500; margin-bottom: 4px; }
+    .empty-state p { font-size: var(--text-sm); color: var(--text-tertiary); }
+    .error-state { display: none; padding: 64px 24px; text-align: center; }
+    .error-state.active { display: block; }
+    .error-state svg { width: 32px; height: 32px; color: var(--accent-red-text); margin-bottom: 12px; }
+
+    /* ─── FOOTER ──────────────────────────────────────────────── */
+    .footer {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+      padding: 0 24px;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-default);
+    }
+
+    /* ─── BUTTONS ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      transition: background-color 150ms ease-out, transform 120ms ease-out;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { background: var(--border-default); color: var(--text-tertiary); cursor: not-allowed; transform: none; }
+    .btn:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+    .btn-primary { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
+    .btn-primary:hover:not(:disabled) { background: var(--btn-primary-hover); }
+    .btn-secondary { background: var(--btn-secondary-bg); color: var(--btn-secondary-text); }
+    .btn-secondary:hover:not(:disabled) { background: var(--btn-secondary-hover); }
+    .btn-ghost { color: var(--text-secondary); padding: 6px 0; background: transparent; }
+    .btn-ghost:hover { color: var(--text-primary); }
+
+    /* ─── DRAWER OVERLAY ──────────────────────────────────────── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.2);
+      z-index: 30;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease-out;
+    }
+    .overlay.active { opacity: 1; pointer-events: auto; }
+
+    /* ─── DRAWER ──────────────────────────────────────────────── */
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: var(--drawer-width);
+      background: var(--bg-surface);
+      box-shadow: var(--shadow-drawer);
+      z-index: 31;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer.closing { transition-duration: 250ms; }
+    .drawer-header {
+      height: 56px; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border-default);
+      flex-shrink: 0;
+    }
+    .drawer-title { font-size: var(--text-lg); font-weight: 500; }
+    .drawer-close {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 18px;
+    }
+    .drawer-close:hover { background: var(--bg-hover); }
+    .drawer-body { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-gap-stack); }
+    .drawer-body.section { gap: 16px; }
+    .drawer-footer {
+      height: 64px; padding: 0 24px;
+      display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+      border-top: 1px solid var(--border-default);
+      flex-shrink: 0;
+    }
+
+    /* ─── FORM FIELDS ─────────────────────────────────────────── */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label {
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .input {
+      height: 40px; padding: 0 12px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      font-size: var(--text-sm);
+      color: var(--text-primary);
+      transition: border-color 120ms ease-out;
+    }
+    .input:focus { outline: none; border-color: var(--border-focus); }
+    .input.error { border-color: var(--accent-red-text); }
+    .input-qty { width: 120px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+    .input-qty::-webkit-inner-spin-button, .input-qty::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .input-qty[type=number] { -moz-appearance: textfield; }
+    .textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      font-size: var(--text-sm);
+      color: var(--text-primary);
+      resize: vertical;
+      min-height: 72px;
+      line-height: var(--text-base-lh);
+    }
+    .textarea:focus { outline: none; border-color: var(--border-focus); }
+    .field-error {
+      font-size: var(--text-xs);
+      color: var(--accent-red-text);
+      margin-top: 4px;
+      animation: errIn 150ms ease-out;
+    }
+    @keyframes errIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .qty-hint { font-size: var(--text-xs); color: var(--text-secondary); margin-top: 4px; }
+
+    /* ─── AUTOCOMPLETE ────────────────────────────────────────── */
+    .autocomplete { position: relative; }
+    .autocomplete-dropdown {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 35;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: all 150ms ease-out;
+      pointer-events: none;
+    }
+    .autocomplete-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .autocomplete-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--bg-hover);
+    }
+    .autocomplete-item:last-child { border-bottom: none; }
+    .autocomplete-item:hover, .autocomplete-item.highlighted { background: var(--bg-hover); }
+    .autocomplete-item .ac-code { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-tertiary); min-width: 50px; }
+    .autocomplete-item .ac-name { font-size: var(--text-sm); color: var(--text-primary); }
+
+    /* ─── PRE-CONFIRM SUMMARY ─────────────────────────────────── */
+    .summary-box {
+      background: var(--bg-sidebar);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-top: 8px;
+      font-size: var(--text-sm);
+    }
+    .summary-row { display: flex; align-items: center; gap: 8px; }
+    .summary-arrow { color: var(--text-secondary); font-family: var(--font-mono); margin: 0 4px; }
+    .summary-result.green { color: var(--accent-green-text); font-weight: 600; }
+    .summary-result.red { color: var(--accent-red-text); font-weight: 600; }
+
+    /* ─── GUÍA DE REMISIÓN ────────────────────────────────────── */
+    .guide-preview {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .guide-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .guide-title { font-size: var(--text-lg); font-weight: 600; }
+    .guide-num { font-size: var(--text-xs); font-family: var(--font-mono); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .guide-date { font-size: var(--text-xs); font-family: var(--font-mono); color: var(--text-secondary); text-align: right; }
+    .guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+    .guide-field { display: flex; flex-direction: column; gap: 4px; }
+    .guide-field label { font-size: var(--text-xs); color: var(--text-tertiary); text-transform: uppercase; }
+    .guide-field .guide-value {
+      font-size: var(--text-sm); color: var(--text-primary);
+      border-bottom: 1px solid var(--border-default);
+      padding-bottom: 4px;
+    }
+    .guide-field .guide-value:focus { outline: none; border-bottom-color: var(--border-focus); }
+    .guide-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-default); }
+    .guide-actions-left { display: flex; gap: 8px; }
+
+    /* ─── TOAST ───────────────────────────────────────────────── */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      display: flex; flex-direction: column; gap: 8px;
+      z-index: 40;
+    }
+    .toast {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      min-width: 280px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      animation: toastIn 300ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .toast.error { background: var(--accent-red-text); }
+    .toast.out { animation: toastOut 200ms ease-out forwards; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateY(-4px); } }
+    .toast-icon { flex-shrink: 0; }
+    .toast-msg { flex: 1; font-size: var(--text-sm); }
+    .toast-action { color: inherit; font-size: var(--text-xs); text-decoration: underline; cursor: pointer; white-space: nowrap; padding: 2px 4px; }
+    .toast-action:hover { opacity: 0.8; }
+
+    /* ─── FLASH / SHAKE ───────────────────────────────────────── */
+    .row-updated { animation: stockFlash 1200ms ease-out; }
+    @keyframes stockFlash { 0% { background-color: rgba(52,101,56,0.08); } 100% { background-color: transparent; } }
+    .cell-rollback { animation: rollbackShake 300ms ease-out; }
+    @keyframes rollbackShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+
+    /* ─── MODAL ───────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.2);
+      z-index: 50;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 150ms ease-out;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--bg-surface);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      transform: scale(0.95);
+      transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .modal-overlay.active .modal { transform: scale(1); }
+    .modal h3 { font-size: var(--text-base); font-weight: 600; margin-bottom: 8px; }
+    .modal p { font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: 20px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+    /* ─── REDUCED MOTION ──────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ─── FOCUS RING ──────────────────────────────────────────── */
+    :focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+    .drawer input:focus-visible, .drawer textarea:focus-visible { outline-offset: 0; }
+    td:focus-visible, th:focus-visible { outline-offset: -2px; }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 920px) {
+      .dashboard { grid-template-columns: var(--sidebar-collapsed) 1fr; }
+      .kpi-strip { grid-template-columns: 1fr; }
+      .search-input { width: 200px; }
+      .drawer { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard" id="dashboard">
+    <!-- HEADER -->
+    <header class="header" data-od-id="header">
+      <div class="header-left">
+        <button class="hamburger" id="hamburger" aria-label="Alternar barra lateral" title="Alternar sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <span class="header-title">Inventario</span>
+      </div>
+      <div class="header-right">
+        <button class="header-bell" id="bellBtn" aria-label="Alertas (3)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge-count" id="bellBadge">3</span>
+        </button>
+        <button class="profile-btn">Encargado <span style="font-size:10px">▼</span></button>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar" role="navigation" aria-label="Categorías de productos" data-od-id="sidebar">
+      <span class="sidebar-label">Categorías</span>
+      <div class="sidebar-item active" data-cat="all">
+        <span>Todos</span><span class="count">319</span>
+      </div>
+      <div class="sidebar-item" data-cat="Abrigos">
+        <span>Abrigos</span><span class="count">32</span>
+      </div>
+      <div class="sidebar-item" data-cat="Camisas">
+        <span>Camisas</span><span class="count">128</span>
+      </div>
+      <div class="sidebar-item" data-cat="Jeans">
+        <span>Jeans</span><span class="count">95</span>
+      </div>
+      <div class="sidebar-item" data-cat="Accesorios">
+        <span>Accesorios</span><span class="count">64</span>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main" data-od-id="main">
+      <!-- KPI STRIP -->
+      <div class="kpi-strip" data-od-id="kpi-strip">
+        <div class="kpi-card">
+          <div class="kpi-label">Total en stock</div>
+          <div class="kpi-value" id="kpiTotal">847</div>
+          <div class="kpi-sub">productos</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Bajo nivel mínimo</div>
+          <div class="kpi-value" style="color: var(--accent-red-text)" id="kpiLow">12</div>
+          <div class="kpi-sub">productos</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Movimientos hoy</div>
+          <div class="kpi-value positive" id="kpiMoves">+34</div>
+          <div class="kpi-sub">últimas 24h</div>
+        </div>
+      </div>
+
+      <!-- ALERT PANEL -->
+      <div class="alert-panel open" id="alertPanel" role="region" aria-label="Alertas de stock" aria-live="polite" data-od-id="alert-panel">
+        <div class="alert-header" id="alertHeader">
+          <div class="alert-header-left">
+            <span>Alertas de stock bajo</span>
+            <span class="alert-badge" id="alertBadge">3</span>
+          </div>
+          <span class="alert-chevron">▾</span>
+        </div>
+        <div class="alert-body" id="alertBody">
+          <div class="alert-row" data-alert-id="1">
+            <div class="alert-row-left">
+              <span class="alert-row-product">Camisa Oxford</span>
+              <span class="alert-row-meta">Stock: 3 — Mín: 15</span>
+            </div>
+            <div class="alert-row-actions">
+              <button class="btn-dismiss" onclick="dismissAlert(this)">Descartar</button>
+              <button class="btn-reorder">Solicitar reposición</button>
+            </div>
+          </div>
+          <div class="alert-row" data-alert-id="2">
+            <div class="alert-row-left">
+              <span class="alert-row-product">Polo básico</span>
+              <span class="alert-row-meta">Stock: 0 — Mín: 20</span>
+            </div>
+            <div class="alert-row-actions">
+              <button class="btn-dismiss" onclick="dismissAlert(this)">Descartar</button>
+              <button class="btn-reorder">Solicitar reposición</button>
+            </div>
+          </div>
+          <div class="alert-row" data-alert-id="3">
+            <div class="alert-row-left">
+              <span class="alert-row-product">Chompa cuello V</span>
+              <span class="alert-row-meta">Stock: 4 — Mín: 12</span>
+            </div>
+            <div class="alert-row-actions">
+              <button class="btn-dismiss" onclick="dismissAlert(this)">Descartar</button>
+              <button class="btn-reorder">Solicitar reposición</button>
+            </div>
+          </div>
+        </div>
+        <div class="alert-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green-text)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          <p>Sin alertas — todo el stock está por encima del nivel mínimo.</p>
+        </div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar" data-od-id="toolbar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Buscar producto, categoría…" aria-label="Buscar productos">
+        </div>
+        <button class="btn-export" aria-label="Exportar a CSV">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Exportar
+        </button>
+        <div class="toggle-wrap">
+          <span class="toggle-label">Solo bajo mínimo</span>
+          <div class="toggle-track" id="lowStockToggle" role="switch" aria-checked="false" tabindex="0" onclick="toggleLowStock()" onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); toggleLowStock(); }">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrap" data-od-id="table">
+        <table class="stock-table" id="stockTable" role="grid" aria-label="Inventario de productos">
+          <thead>
+            <tr role="row">
+              <th role="columnheader" data-col="producto" onclick="sortTable('producto')" tabindex="0" aria-sort="none">Producto <span class="sort-arrow">↑</span></th>
+              <th role="columnheader" data-col="categoria" onclick="sortTable('categoria')" tabindex="0" aria-sort="none">Categoría <span class="sort-arrow">↑</span></th>
+              <th role="columnheader" data-col="stock" onclick="sortTable('stock')" tabindex="0" aria-sort="none" class="col-stock">Stock <span class="sort-arrow">↑</span></th>
+              <th role="columnheader" data-col="minimo" onclick="sortTable('minimo')" tabindex="0" aria-sort="none" class="col-stock">Mínimo <span class="sort-arrow">↑</span></th>
+              <th role="columnheader" data-col="updated" onclick="sortTable('updated')" tabindex="0" aria-sort="none">Últ. Actualización <span class="sort-arrow">↑</span></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+          <tbody class="skeleton-table active" id="skeletonBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <h3>Sin resultados</h3>
+          <p>No se encontraron productos con ese criterio de búsqueda.</p>
+          <button class="btn btn-secondary" style="margin-top:16px" onclick="clearSearch()">Limpiar búsqueda</button>
+        </div>
+        <div class="error-state" id="errorState">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <h3>Error de conexión</h3>
+          <p id="errorMsg">No se pudieron cargar los datos del inventario.</p>
+          <button class="btn btn-primary" style="margin-top:16px" onclick="retryLoad()">Reintentar</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" data-od-id="footer">
+      <button class="btn btn-primary" id="btnIngreso" aria-label="Registrar ingreso de mercadería (Ctrl+I)" onclick="openDrawer('ingreso')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
+        Registrar Ingreso
+      </button>
+      <button class="btn btn-secondary" id="btnSalida" aria-label="Registrar salida de mercadería (Ctrl+S)" onclick="openDrawer('salida')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M5 12h14M12 5l-7 7 7 7"/></svg>
+        Registrar Salida
+      </button>
+    </footer>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+
+  <!-- DRAWER -->
+  <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Registrar ingreso">
+    <div class="drawer-header">
+      <span class="drawer-title" id="drawerTitle">Registrar Ingreso</span>
+      <button class="drawer-close" onclick="closeDrawer()" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="drawer-body" id="drawerBody">
+      <!-- STEP 1: Form -->
+      <div id="drawerStepForm">
+        <div class="field autocomplete">
+          <label for="drawerProduct">Producto</label>
+          <input type="text" class="input" id="drawerProduct" placeholder="Buscar producto…" autocomplete="off">
+          <div class="autocomplete-dropdown" id="acDropdown"></div>
+        </div>
+        <div class="field">
+          <label for="drawerQty">Cantidad</label>
+          <input type="number" class="input input-qty" id="drawerQty" min="1" value="1">
+          <span class="qty-hint" id="qtyHint"></span>
+        </div>
+        <div class="field">
+          <label for="drawerDate">Fecha</label>
+          <input type="date" class="input" id="drawerDate">
+        </div>
+        <div class="field">
+          <label for="drawerNote">Nota</label>
+          <textarea class="textarea" id="drawerNote" placeholder="Opcional — motivo, referencia, observación…" rows="2"></textarea>
+        </div>
+        <div class="summary-box" id="summaryBox" style="display:none">
+          <div class="summary-row" style="margin-bottom:4px">Resumen de operación</div>
+          <div class="summary-row">
+            <span id="summaryProduct">—</span>
+            <span class="summary-arrow">→</span>
+            <span id="summaryOldQty" class="num">—</span>
+            <span class="summary-arrow">→</span>
+            <span id="summaryNewQty" class="summary-result green">—</span>
+          </div>
+        </div>
+      </div>
+      <!-- STEP 2: Guía de Remisión -->
+      <div id="drawerStepGuide" style="display:none">
+        <div class="guide-preview">
+          <div class="guide-header">
+            <div>
+              <div class="guide-title">GUÍA DE REMISIÓN</div>
+              <div class="guide-num">Nº GR-2026-0042</div>
+            </div>
+            <div class="guide-date" id="guideDate">24/05/2026</div>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-field"><label>Destinatario</label><div class="guide-value" contenteditable="true">Tienda El Sol</div></div>
+            <div class="guide-field"><label>Producto</label><div class="guide-value" id="guideProduct">—</div></div>
+            <div class="guide-field"><label>Cantidad</label><div class="guide-value" id="guideQty">—</div></div>
+            <div class="guide-field"><label>Motivo</label><div class="guide-value" contenteditable="true">Venta</div></div>
+            <div class="guide-field"><label>Dirección</label><div class="guide-value" contenteditable="true">Av. Ejército 452, Arequipa</div></div>
+            <div class="guide-field"><label>Transporte</label><div class="guide-value" contenteditable="true">Olva Courier</div></div>
+            <div class="guide-field"><label>Tracking</label><div class="guide-value" contenteditable="true">OLV-99827341</div></div>
+            <div></div>
+          </div>
+          <div class="guide-actions">
+            <div class="guide-actions-left">
+              <button class="btn btn-secondary" style="padding:8px 14px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="width:14px;height:14px"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 18h12M6 18v4h12v-4M8 18v-4h4v4"/></svg>
+                Imprimir
+              </button>
+            </div>
+            <div class="guide-actions-left">
+              <button class="btn btn-ghost" onclick="soloRegistrarSalida()" id="btnSoloSalida">Solo registrar salida</button>
+              <button class="btn btn-primary" onclick="generarGuia()" id="btnGenerarGuia">Generar Guía</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drawer-footer" id="drawerFooter">
+      <button class="btn btn-secondary" onclick="closeDrawer()">Cancelar</button>
+      <button class="btn btn-primary" id="drawerConfirmBtn" onclick="confirmDrawer()" disabled>Confirmar Ingreso</button>
+      <button class="btn btn-primary" id="drawerNextBtn" style="display:none" onclick="showGuideStep()">Siguiente</button>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- CONCURRENCY MODAL -->
+  <div class="modal-overlay" id="concurrencyModal">
+    <div class="modal">
+      <h3>Conflicto de concurrencia</h3>
+      <p>Otro operario modificó el stock de este producto mientras realizabas la operación. Los datos han sido revertidos al estado actual.</p>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="closeModal()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ─── DATA ────────────────────────────────────────────────── */
+    const products = [
+      { id: 'PRD-001', name: 'Camisa Oxford', cat: 'Camisas', stock: 3, min: 15, updated: '10:32', movements: [
+        { type: 'in', qty: 20, date: '22/05', note: 'Reposición trimestral' },
+        { type: 'out', qty: 5, date: '21/05', note: 'Venta — Tienda Centro' },
+        { type: 'out', qty: 8, date: '18/05', note: 'Venta — Tienda El Sol' },
+        { type: 'in', qty: 10, date: '15/05', note: 'Devolución cliente' },
+        { type: 'out', qty: 12, date: '10/05', note: 'Transferencia sucursal' }
+      ]},
+      { id: 'PRD-002', name: 'Polo básico', cat: 'Camisas', stock: 0, min: 20, updated: '09:15', movements: [
+        { type: 'out', qty: 15, date: '21/05', note: 'Venta mayorista' },
+        { type: 'out', qty: 5, date: '19/05', note: 'Venta — Tienda Sur' }
+      ]},
+      { id: 'PRD-003', name: 'Jeans slim', cat: 'Jeans', stock: 45, min: 10, updated: '11:01', movements: [
+        { type: 'in', qty: 50, date: '20/05', note: 'Nueva colección' },
+        { type: 'out', qty: 3, date: '19/05', note: 'Venta online' },
+        { type: 'out', qty: 2, date: '17/05', note: 'Merma — defecto' }
+      ]},
+      { id: 'PRD-004', name: 'Chompa cuello V', cat: 'Abrigos', stock: 4, min: 12, updated: '09:42', movements: [
+        { type: 'in', qty: 20, date: '01/05', note: 'Pedido invierno' },
+        { type: 'out', qty: 8, date: '15/05', note: 'Venta — Tienda Centro' },
+        { type: 'out', qty: 6, date: '12/05', note: 'Venta online' },
+        { type: 'out', qty: 2, date: '08/05', note: 'Venta — Tienda Sur' }
+      ]},
+      { id: 'PRD-005', name: 'Camisa denim', cat: 'Camisas', stock: 28, min: 10, updated: '10:05', movements: [
+        { type: 'in', qty: 30, date: '18/05', note: 'Reposición' },
+        { type: 'out', qty: 2, date: '17/05', note: 'Venta online' }
+      ]},
+      { id: 'PRD-006', name: 'Jeans bootcut', cat: 'Jeans', stock: 18, min: 8, updated: '11:22', movements: [
+        { type: 'in', qty: 25, date: '16/05', note: 'Nuevo lote' },
+        { type: 'out', qty: 7, date: '12/05', note: 'Venta — Tienda El Sol' }
+      ]},
+      { id: 'PRD-007', name: 'Blazer lino', cat: 'Abrigos', stock: 12, min: 6, updated: '08:50', movements: [
+        { type: 'in', qty: 15, date: '14/05', note: 'Colección verano' },
+        { type: 'out', qty: 3, date: '10/05', note: 'Venta — Tienda Centro' }
+      ]},
+      { id: 'PRD-008', name: 'Camisa lino', cat: 'Camisas', stock: 56, min: 12, updated: '09:30', movements: [
+        { type: 'in', qty: 60, date: '19/05', note: 'Pedido verano' },
+        { type: 'out', qty: 4, date: '17/05', note: 'Venta online' }
+      ]},
+      { id: 'PRD-009', name: 'Cinturón cuero', cat: 'Accesorios', stock: 34, min: 15, updated: '11:45', movements: [
+        { type: 'in', qty: 40, date: '10/05', note: 'Reposición' },
+        { type: 'out', qty: 6, date: '05/05', note: 'Venta — Tienda Sur' }
+      ]},
+      { id: 'PRD-010', name: 'Gorra clásica', cat: 'Accesorios', stock: 22, min: 10, updated: '10:18', movements: [
+        { type: 'in', qty: 25, date: '12/05', note: 'Nuevo pedido' },
+        { type: 'out', qty: 3, date: '08/05', note: 'Venta online' }
+      ]},
+      { id: 'PRD-011', name: 'Bufanda lana', cat: 'Accesorios', stock: 8, min: 12, updated: '08:30', movements: [
+        { type: 'in', qty: 15, date: '03/05', note: 'Pedido invierno' },
+        { type: 'out', qty: 4, date: '01/05', note: 'Venta — Tienda Centro' },
+        { type: 'out', qty: 3, date: '28/04', note: 'Venta online' }
+      ]},
+      { id: 'PRD-012', name: 'Jeans relaxed', cat: 'Jeans', stock: 32, min: 10, updated: '12:01', movements: [
+        { type: 'in', qty: 35, date: '20/05', note: 'Nueva colección' },
+        { type: 'out', qty: 3, date: '18/05', note: 'Venta online' }
+      ]}
+    ];
+
+    let filteredProducts = [...products];
+    let expandedRow = null;
+    let selectedProduct = null;
+    let drawerMode = 'ingreso';
+    let lastAction = null; // for undo
+    let errorCount = 0;
+    let lowStockOnly = false;
+
+    /* ─── RENDER ──────────────────────────────────────────────── */
+    function renderTable() {
+      const tbody = document.getElementById('tableBody');
+      const emptyState = document.getElementById('emptyState');
+      tbody.innerHTML = '';
+
+      if (filteredProducts.length === 0 && !document.getElementById('skeletonBody').classList.contains('active')) {
+        emptyState.classList.add('active');
+        document.getElementById('errorState').classList.remove('active');
+        return;
+      }
+      emptyState.classList.remove('active');
+      document.getElementById('errorState').classList.remove('active');
+
+      filteredProducts.forEach((p, idx) => {
+        const isLow = p.stock < p.min;
+        const tr = document.createElement('tr');
+        tr.className = isLow ? 'low-stock' : '';
+        tr.setAttribute('role', 'row');
+        tr.setAttribute('tabindex', '0');
+        tr.setAttribute('data-idx', idx);
+        tr.setAttribute('data-id', p.id);
+        tr.innerHTML = `
+          <td>${p.name}</td>
+          <td style="color:var(--text-secondary)">${p.cat}</td>
+          <td class="col-stock">${p.stock}${isLow ? '<span class="stock-badge">!</span>' : ''}</td>
+          <td class="col-stock" style="color:var(--text-tertiary)">${p.min}</td>
+          <td class="col-time">${p.updated}</td>
+        `;
+        tr.addEventListener('click', () => toggleExpand(p, tr));
+        tr.addEventListener('keydown', (e) => handleRowKey(e, idx, tr));
+
+        // Expand detail row
+        const detailTr = document.createElement('tr');
+        detailTr.className = 'row-detail';
+        detailTr.setAttribute('data-detail-for', p.id);
+        detailTr.innerHTML = `
+          <td colspan="5">
+            <div style="font-size:var(--text-xs);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Últimos movimientos</div>
+            <div class="movements-list">
+              ${p.movements.map(m => `
+                <div class="mov-item">
+                  <span class="mov-type ${m.type === 'in' ? 'in' : 'out'}">${m.type === 'in' ? '+' : '−'}${m.qty}</span>
+                  <span class="mov-qty">${m.note}</span>
+                  <span class="mov-date">${m.date}</span>
+                </div>
+              `).join('')}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+        tbody.appendChild(detailTr);
+      });
+      updateKPIs();
+    }
+
+    function renderSkeleton() {
+      const skel = document.getElementById('skeletonBody');
+      skel.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const tr = document.createElement('tr');
+        tr.className = 'skeleton-row';
+        const widths = ['70%','40%','30%','30%','50%'];
+        tr.innerHTML = widths.map(w => `<td><div class="skeleton-bar" style="width:${w}"></div></td>`).join('');
+        skel.appendChild(tr);
+      }
+      skel.classList.add('active');
+    }
+
+    function showLoading() {
+      document.getElementById('skeletonBody').classList.add('active');
+      document.getElementById('tableBody').innerHTML = '';
+      document.getElementById('emptyState').classList.remove('active');
+      document.getElementById('errorState').classList.remove('active');
+    }
+
+    function hideLoading() {
+      document.getElementById('skeletonBody').classList.remove('active');
+    }
+
+    function showError(msg) {
+      hideLoading();
+      document.getElementById('tableBody').innerHTML = '';
+      document.getElementById('emptyState').classList.remove('active');
+      document.getElementById('errorState').classList.add('active');
+      document.getElementById('errorMsg').textContent = msg;
+    }
+
+    /* ─── KPI UPDATE ──────────────────────────────────────────── */
+    function updateKPIs() {
+      const total = filteredProducts.reduce((s, p) => s + p.stock, 0);
+      const low = filteredProducts.filter(p => p.stock < p.min).length;
+      document.getElementById('kpiTotal').textContent = total;
+      document.getElementById('kpiLow').textContent = low;
+    }
+
+    /* ─── EXPAND ──────────────────────────────────────────────── */
+    function toggleExpand(product, rowEl) {
+      const detailRow = document.querySelector(`[data-detail-for="${product.id}"]`);
+      if (!detailRow) return;
+      const isOpen = detailRow.classList.contains('open');
+      // Close all others
+      document.querySelectorAll('.row-detail.open').forEach(r => r.classList.remove('open'));
+      if (!isOpen) {
+        detailRow.classList.add('open');
+        expandedRow = product.id;
+      } else {
+        expandedRow = null;
+      }
+    }
+
+    /* ─── KEYBOARD NAV TABLE ──────────────────────────────────── */
+    function handleRowKey(e, idx, rowEl) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = rowEl.parentElement.children[idx * 2 + 2];
+        if (next) next.focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = rowEl.parentElement.children[Math.max(0, idx * 2 - 2)];
+        if (prev) prev.focus();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        toggleExpand(filteredProducts[idx], rowEl);
+      }
+    }
+
+    /* ─── TABLE SORT ──────────────────────────────────────────── */
+    let sortCol = null, sortDir = 'asc';
+    function sortTable(col) {
+      if (sortCol === col) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      else { sortCol = col; sortDir = 'asc'; }
+      filteredProducts.sort((a, b) => {
+        let va = a[col], vb = b[col];
+        if (col === 'updated') { va = va.replace(':', ''); vb = vb.replace(':', ''); }
+        if (typeof va === 'number') return sortDir === 'asc' ? va - vb : vb - va;
+        return sortDir === 'asc' ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+      });
+      document.querySelectorAll('th').forEach(th => { th.classList.remove('sorted', 'desc'); th.setAttribute('aria-sort','none'); });
+      const th = document.querySelector(`th[data-col="${col}"]`);
+      if (th) { th.classList.add('sorted'); th.setAttribute('aria-sort', sortDir === 'asc' ? 'ascending' : 'descending'); if (sortDir === 'desc') th.classList.add('desc'); }
+      renderTable();
+    }
+
+    /* ─── SEARCH ──────────────────────────────────────────────── */
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      filteredProducts = products.filter(p => {
+        const matchesSearch = !q || p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
+        const matchesLow = !lowStockOnly || p.stock < p.min;
+        return matchesSearch && matchesLow;
+      });
+      hideLoading();
+      renderTable();
+    });
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      filteredProducts = products.filter(p => {
+        const matchesSearch = !q || p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q);
+        const matchesLow = !lowStockOnly || p.stock < p.min;
+        return matchesSearch && matchesLow;
+      });
+      hideLoading();
+      renderTable();
+    }
+
+    /* ─── TOGGLE LOW STOCK ────────────────────────────────────── */
+    function toggleLowStock() {
+      lowStockOnly = !lowStockOnly;
+      const track = document.getElementById('lowStockToggle');
+      if (lowStockOnly) { track.classList.add('active'); track.setAttribute('aria-checked','true'); }
+      else { track.classList.remove('active'); track.setAttribute('aria-checked','false'); }
+      applyFilters();
+    }
+
+    /* ─── SIDEBAR ─────────────────────────────────────────────── */
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const cat = item.dataset.cat;
+        const q = document.getElementById('searchInput').value.toLowerCase().trim();
+        filteredProducts = products.filter(p => {
+          const matchesCat = cat === 'all' || p.cat === cat;
+          const matchesSearch = !q || p.name.toLowerCase().includes(q);
+          return matchesCat && matchesSearch;
+        });
+        hideLoading();
+        renderTable();
+      });
+    });
+
+    /* ─── HAMBURGER ───────────────────────────────────────────── */
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('dashboard').classList.toggle('sidebar-collapsed');
+    });
+
+    /* ─── ALERT PANEL ─────────────────────────────────────────── */
+    document.getElementById('alertHeader').addEventListener('click', () => {
+      document.getElementById('alertPanel').classList.toggle('open');
+    });
+
+    function dismissAlert(btn) {
+      const row = btn.closest('.alert-row');
+      row.classList.add('dismissing');
+      row.addEventListener('transitionend', () => {
+        row.remove();
+        updateAlertBadge();
+      }, { once: true });
+    }
+
+    function updateAlertBadge() {
+      const remaining = document.querySelectorAll('#alertBody .alert-row:not(.dismissing)').length;
+      document.getElementById('alertBadge').textContent = remaining;
+      document.getElementById('bellBadge').textContent = remaining;
+      if (remaining === 0) {
+        document.getElementById('alertPanel').classList.add('empty');
+        document.getElementById('alertPanel').classList.remove('open');
+      }
+    }
+
+    /* ─── DRAWER ──────────────────────────────────────────────── */
+    function openDrawer(mode) {
+      drawerMode = mode;
+      document.getElementById('drawer').classList.remove('closing');
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('overlay').classList.add('active');
+      document.getElementById('drawer').setAttribute('aria-label', mode === 'ingreso' ? 'Registrar ingreso' : 'Registrar salida');
+      document.getElementById('drawerTitle').textContent = mode === 'ingreso' ? 'Registrar Ingreso' : 'Registrar Salida';
+      document.getElementById('drawerConfirmBtn').textContent = mode === 'ingreso' ? 'Confirmar Ingreso' : 'Confirmar Salida';
+      document.getElementById('drawerConfirmBtn').style.display = mode === 'ingreso' ? '' : 'none';
+      document.getElementById('drawerNextBtn').style.display = mode === 'salida' ? '' : 'none';
+      document.getElementById('drawerStepForm').style.display = '';
+      document.getElementById('drawerStepGuide').style.display = 'none';
+      document.getElementById('summaryBox').style.display = 'none';
+      // Reset form
+      document.getElementById('drawerProduct').value = '';
+      document.getElementById('drawerQty').value = '1';
+      document.getElementById('drawerDate').valueAsDate = new Date();
+      document.getElementById('drawerNote').value = '';
+      selectedProduct = null;
+      document.getElementById('drawerConfirmBtn').disabled = true;
+      document.getElementById('drawerNextBtn').disabled = true;
+      document.getElementById('acDropdown').classList.remove('open');
+      // Focus product input
+      setTimeout(() => document.getElementById('drawerProduct').focus(), 350);
+    }
+
+    function closeDrawer(noAnim) {
+      const drawer = document.getElementById('drawer');
+      const overlay = document.getElementById('overlay');
+      if (noAnim) {
+        drawer.classList.remove('open', 'closing');
+        overlay.classList.remove('active');
+        return;
+      }
+      drawer.classList.add('closing');
+      drawer.classList.remove('open');
+      overlay.classList.remove('active');
+    }
+
+    /* ─── AUTOCOMPLETE ────────────────────────────────────────── */
+    document.getElementById('drawerProduct').addEventListener('input', (e) => {
+      const val = e.target.value.toLowerCase().trim();
+      const dropdown = document.getElementById('acDropdown');
+      if (!val || val.length < 1) { dropdown.classList.remove('open'); return; }
+      const matches = products.filter(p => p.name.toLowerCase().includes(val) || p.id.toLowerCase().includes(val));
+      dropdown.innerHTML = matches.map(p => `
+        <div class="autocomplete-item" data-id="${p.id}" onclick="selectProduct('${p.id}')">
+          <span class="ac-code">${p.id}</span>
+          <span class="ac-name">${p.name}</span>
+        </div>
+      `).join('');
+      dropdown.classList.toggle('open', matches.length > 0);
+    });
+
+    document.getElementById('drawerProduct').addEventListener('keydown', (e) => {
+      const dropdown = document.getElementById('acDropdown');
+      if (!dropdown.classList.contains('open')) return;
+      const items = dropdown.querySelectorAll('.autocomplete-item');
+      if (!items.length) return;
+      let idx = Array.from(items).findIndex(i => i.classList.contains('highlighted'));
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        items.forEach(i => i.classList.remove('highlighted'));
+        idx = Math.min(idx + 1, items.length - 1);
+        items[idx].classList.add('highlighted');
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        items.forEach(i => i.classList.remove('highlighted'));
+        idx = Math.max(idx - 1, 0);
+        items[idx].classList.add('highlighted');
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const hl = dropdown.querySelector('.autocomplete-item.highlighted');
+        if (hl) selectProduct(hl.dataset.id);
+      } else if (e.key === 'Escape') {
+        dropdown.classList.remove('open');
+      }
+    });
+
+    function selectProduct(id) {
+      selectedProduct = products.find(p => p.id === id);
+      document.getElementById('drawerProduct').value = selectedProduct.name;
+      document.getElementById('acDropdown').classList.remove('open');
+      document.getElementById('qtyHint').textContent = `Stock disponible: ${selectedProduct.stock}`;
+      document.getElementById('drawerConfirmBtn').disabled = false;
+      document.getElementById('drawerNextBtn').disabled = false;
+      updateSummary();
+    }
+
+    /* ─── QUANTITY CHANGE ─────────────────────────────────────── */
+    document.getElementById('drawerQty').addEventListener('input', updateSummary);
+    document.getElementById('drawerQty').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        if (drawerMode === 'salida' && document.getElementById('drawerStepForm').style.display !== 'none') {
+          e.preventDefault();
+          showGuideStep();
+        } else if (drawerMode === 'ingreso') {
+          e.preventDefault();
+          confirmDrawer();
+        }
+      }
+    });
+
+    function updateSummary() {
+      const summaryBox = document.getElementById('summaryBox');
+      if (!selectedProduct) { summaryBox.style.display = 'none'; return; }
+      const qty = parseInt(document.getElementById('drawerQty').value) || 0;
+      if (qty <= 0) { summaryBox.style.display = 'none'; return; }
+      summaryBox.style.display = '';
+      document.getElementById('summaryProduct').textContent = selectedProduct.name;
+      document.getElementById('summaryOldQty').textContent = selectedProduct.stock;
+      const newQty = drawerMode === 'ingreso' ? selectedProduct.stock + qty : selectedProduct.stock - qty;
+      const resultEl = document.getElementById('summaryNewQty');
+      resultEl.textContent = newQty;
+      resultEl.className = 'summary-result';
+      if (drawerMode === 'ingreso') {
+        resultEl.classList.add('green');
+      } else {
+        resultEl.classList.add(newQty < selectedProduct.min ? 'red' : 'green');
+      }
+    }
+
+    /* ─── GUIDE STEP ──────────────────────────────────────────── */
+    function showGuideStep() {
+      if (!selectedProduct) return;
+      document.getElementById('drawerStepForm').style.display = 'none';
+      document.getElementById('drawerStepGuide').style.display = '';
+      document.getElementById('guideProduct').textContent = selectedProduct.name;
+      document.getElementById('guideQty').textContent = document.getElementById('drawerQty').value;
+      document.getElementById('guideDate').textContent = new Date().toLocaleDateString('es-PE');
+      document.getElementById('drawerConfirmBtn').style.display = '';
+      document.getElementById('drawerNextBtn').style.display = 'none';
+      document.getElementById('drawerConfirmBtn').textContent = 'Generar Guía';
+      document.getElementById('drawerConfirmBtn').disabled = false;
+    }
+
+    function soloRegistrarSalida() {
+      confirmarOperacionOptimista();
+    }
+
+    function generarGuia() {
+      confirmarOperacionOptimista();
+      showToast('Guía GR-2026-0042 generada', false);
+    }
+
+    /* ─── CONFIRM ──────────────────────────────────────────────── */
+    function confirmDrawer() {
+      if (!selectedProduct) return;
+      if (drawerMode === 'salida' && document.getElementById('drawerStepForm').style.display !== 'none') {
+        showGuideStep();
+        return;
+      }
+      confirmarOperacionOptimista();
+    }
+
+    function confirmarOperacionOptimista() {
+      const qty = parseInt(document.getElementById('drawerQty').value) || 0;
+      if (!selectedProduct || qty <= 0) return;
+      const oldStock = selectedProduct.stock;
+      const newStock = drawerMode === 'ingreso' ? oldStock + qty : oldStock - qty;
+      if (drawerMode === 'salida' && newStock < 0) {
+        showToast('Stock insuficiente para la operación', true);
+        return;
+      }
+
+      // Store for undo
+      lastAction = { productId: selectedProduct.id, oldStock, qty, mode: drawerMode, time: Date.now() };
+
+      // Optimistic update
+      selectedProduct.stock = newStock;
+      selectedProduct.updated = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+
+      // Close drawer
+      closeDrawer();
+
+      // Re-render
+      applyFilters();
+
+      // Flash updated row
+      setTimeout(() => {
+        const row = document.querySelector(`tr[data-id="${selectedProduct.id}"]`);
+        if (row) {
+          row.classList.add('row-updated');
+          row.addEventListener('animationend', () => row.classList.remove('row-updated'), { once: true });
+        }
+      }, 350);
+
+      // Toast with undo
+      const actionWord = drawerMode === 'ingreso' ? 'Ingreso' : 'Salida';
+      showToast(`${actionWord} registrado · ${selectedProduct.name} ${drawerMode === 'ingreso' ? '+' : '−'}${qty}`, false, true);
+
+      // Simulate network — 10% chance of failure after 2s
+      setTimeout(() => {
+        if (Math.random() < 0.1) {
+          // Simulated error: rollback
+          selectedProduct.stock = oldStock;
+          applyFilters();
+          const row = document.querySelector(`tr[data-id="${selectedProduct.id}"]`);
+          if (row) {
+            const stockCell = row.querySelector('.col-stock');
+            if (stockCell) stockCell.classList.add('cell-rollback');
+          }
+          showToast('Error al registrar — reintente', true);
+        }
+      }, 2000);
+    }
+
+    /* ─── TOAST ───────────────────────────────────────────────── */
+    function showToast(msg, isError, showUndo) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast' + (isError ? ' error' : '');
+      const icon = isError
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M20 6L9 17l-5-5"/></svg>';
+      toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-msg">${msg}</span>`;
+      if (showUndo) {
+        toast.innerHTML += `<button class="toast-action" id="undoBtn">Deshacer</button>`;
+      }
+      if (isError) {
+        toast.innerHTML += `<button class="toast-action" onclick="retryLastAction()">Reintentar</button>`;
+      }
+      container.appendChild(toast);
+
+      // Undo handler
+      if (showUndo) {
+        setTimeout(() => {
+          const btn = toast.querySelector('#undoBtn');
+          if (btn) {
+            btn.addEventListener('click', () => {
+              if (lastAction) {
+                const p = products.find(pr => pr.id === lastAction.productId);
+                if (p) { p.stock = lastAction.oldStock; }
+                lastAction = null;
+                applyFilters();
+                toast.remove();
+                showToast('Operación deshecha', false);
+              }
+            });
+          }
+        }, 50);
+      }
+
+      // Auto-dismiss
+      const dismissTime = showUndo ? 8000 : 4000;
+      setTimeout(() => {
+        toast.classList.add('out');
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+      }, dismissTime);
+    }
+
+    function retryLastAction() {
+      if (lastAction) confirmarOperacionOptimista();
+    }
+
+    /* ─── MODAL ───────────────────────────────────────────────── */
+    function closeModal() {
+      document.getElementById('concurrencyModal').classList.remove('active');
+    }
+    // Show modal on double-click of same product (simulated concurrency)
+    // This is triggered randomly in optimistic flow
+
+    /* ─── RETRY LOAD ──────────────────────────────────────────── */
+    function retryLoad() {
+      errorCount = 0;
+      showLoading();
+      setTimeout(() => {
+        hideLoading();
+        filteredProducts = [...products];
+        renderTable();
+      }, 1000);
+    }
+
+    /* ─── GLOBAL KEYBOARD ─────────────────────────────────────── */
+    document.addEventListener('keydown', (e) => {
+      const isDrawerOpen = document.getElementById('drawer').classList.contains('open');
+      const modalOpen = document.getElementById('concurrencyModal').classList.contains('active');
+
+      if (modalOpen) return;
+
+      // Ctrl+Z — Undo
+      if (e.ctrlKey && e.key === 'z' && !isDrawerOpen) {
+        e.preventDefault();
+        if (lastAction && (Date.now() - lastAction.time) < 5000) {
+          const p = products.find(pr => pr.id === lastAction.productId);
+          if (p) { p.stock = lastAction.oldStock; }
+          lastAction = null;
+          applyFilters();
+          showToast('Operación deshecha', false);
+        }
+        return;
+      }
+
+      if (isDrawerOpen) {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeDrawer(true);
+        }
+        if (e.key === 'Enter' && e.ctrlKey) {
+          e.preventDefault();
+          soloRegistrarSalida();
+        }
+        return;
+      }
+
+      if (e.key === 'Escape') {
+        const search = document.getElementById('searchInput');
+        if (document.activeElement === search) {
+          search.value = '';
+          applyFilters();
+        }
+        return;
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('searchInput').focus();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+        e.preventDefault();
+        openDrawer('ingreso');
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        openDrawer('salida');
+        return;
+      }
+    });
+
+    /* ─── CLOSE DRAWER ON OVERLAY CLICK ───────────────────────── */
+    document.getElementById('overlay').addEventListener('click', () => closeDrawer());
+
+    /* ─── INIT ────────────────────────────────────────────────── */
+    renderSkeleton();
+    // Simulate loading
+    setTimeout(() => {
+      hideLoading();
+      filteredProducts = [...products];
+      renderTable();
+    }, 800);
+  </script>
+</body>
+</html>
