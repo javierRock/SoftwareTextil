@@ -13,6 +13,7 @@
 - `feature/<modulo>-<responsable>` para una funcionalidad en desarrollo.
 - `work/<tema>` para un bloque de trabajo aislado.
 - `fix/<tema>` para una corrección puntual.
+- `personal/<tema>` para trabajo local de un integrante; estas ramas no se publican.
 - Los nombres de ramas no deben incluir `codex`.
 
 ## Archivo histórico
