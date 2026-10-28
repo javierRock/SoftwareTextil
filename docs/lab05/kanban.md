@@ -49,3 +49,11 @@ Este tablero reproduce la plantilla Kanban solicitada en el laboratorio y sirve 
 - **Issues:** [#8](https://github.com/javierRock/SoftwareTextil/issues/8), [#9](https://github.com/javierRock/SoftwareTextil/issues/9), [#10](https://github.com/javierRock/SoftwareTextil/issues/10), [#11](https://github.com/javierRock/SoftwareTextil/issues/11), [#12](https://github.com/javierRock/SoftwareTextil/issues/12), [#13](https://github.com/javierRock/SoftwareTextil/issues/13), [#14](https://github.com/javierRock/SoftwareTextil/issues/14)
 
 El proyecto está configurado como tablero y usa el campo `Status` con las columnas `TO-DO`, `CURRENT ITERATION`, `IN PROGRESS`, `FIX VALIDATION` y `DONE`. Las tarjetas #8–#14 están en `DONE` después de completar y validar el laboratorio.
+
+## Contribuidores asignados
+
+- `carlosGCMP`: entorno, informe y cobertura.
+- `javierRock`: módulo de pagos, dominio y dobles.
+- `Angel-Cs2004`: revisión final del equipo.
+- `novato-intlgnt`: revisión final del equipo.
+- `Lizzy354`: revisión final del equipo.

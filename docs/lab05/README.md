@@ -19,3 +19,14 @@ La [revisión profunda](REVISION.md) registra la auditoría de estructura, prueb
 ## Tablero publicado
 
 El tablero Kanban real está disponible en [GitHub Projects](https://github.com/users/carlosGCMP/projects/1). La rama y los Issues vinculados pertenecen exclusivamente al Laboratorio 05.
+
+## Verificación frente a las instrucciones del laboratorio
+
+- **Framework de pruebas:** pytest/pytest-django para Python, equivalente al framework xUnit solicitado para el lenguaje elegido.
+- **Cobertura:** pytest-cov con cobertura de ramas y umbral mínimo de 85%.
+- **Mocking:** `unittest.mock` (`MagicMock` y `create_autospec`).
+- **Separación:** implementación en `apps/`; pruebas en `tests/` y `apps/*/tests/`.
+- **Kanban:** proyecto público con las cinco columnas solicitadas e Issues #8–#14.
+- **Responsables:** Carlos, Javier, Angelo/Yizens, Alejandro/Emilio y Lizzy están asignados en los Issues correspondientes.
+- **Commits:** la rama publicada es `laboratorio-05` y sus mensajes describen cada cambio.
+- **Reportes:** JUnit XML y cobertura XML generados en `build/reports/`.
