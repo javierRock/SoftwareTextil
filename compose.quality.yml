@@ -1,4 +1,4 @@
-# Base exclusiva de la practica; no reutiliza el contenedor del proyecto original.
+# Base aislada para validaciones; no reutiliza el contenedor del proyecto original.
 services:
   db:
     image: postgres:16-alpine

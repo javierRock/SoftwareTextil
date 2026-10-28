@@ -5,8 +5,14 @@ SHELL := /bin/bash
 FRONTEND_DIR := frontend/inventario
 BUILD_SETTINGS := config.settings.build
 DEV_SETTINGS := config.settings.dev
+QUALITY_COMPOSE := docker compose -p softwaretextil-quality -f compose.quality.yml
+export DB_NAME ?= software_textil_quality
+export DB_USER ?= postgres
+export DB_PASSWORD ?= postgres
+export DB_HOST ?= 127.0.0.1
+export DB_PORT ?= 55432
 
-.PHONY: help prerequisites deps db-ready frontend-check frontend check test quality static invalidate-release package verify-release build clean
+.PHONY: help prerequisites deps db-up db-down db-ready frontend-check frontend check test quality static invalidate-release package verify-release build clean
 
 help: ## Muestra los objetivos disponibles.
 	@awk 'BEGIN {FS = ":.*## "; printf "Uso: make <objetivo>\n\n"} /^[a-zA-Z0-9_-]+:.*## / {printf "  %-18s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -29,6 +35,12 @@ deps: prerequisites ## Instala dependencias bloqueadas de Python y frontend.
 db-ready: deps ## Comprueba la conexión PostgreSQL usada por las pruebas.
 	@DJANGO_SETTINGS_MODULE=$(DEV_SETTINGS) uv run --locked python -c 'from django.db import connection; connection.ensure_connection(); print("PostgreSQL disponible para pruebas.")' || { echo "Error: PostgreSQL no está disponible. Ejecuta 'docker compose up -d db' y espera a que esté saludable." >&2; exit 1; }
 
+db-up: ## Levanta la base aislada para calidad y pruebas.
+	$(QUALITY_COMPOSE) up -d --wait db
+
+db-down: ## Detiene la base aislada para calidad y pruebas.
+	$(QUALITY_COMPOSE) down
+
 frontend-check: deps ## Ejecuta pruebas y lint del frontend.
 	npm --prefix $(FRONTEND_DIR) test
 	npm --prefix $(FRONTEND_DIR) run lint
@@ -46,7 +58,7 @@ test: check db-ready ## Ejecuta la suite Python contra PostgreSQL.
 	uv run --locked pytest
 
 quality: ## Ejecuta la suite completa, cobertura de pagos y reportes JUnit/XML.
-	docker compose -p softwaretextil-quality -f compose.quality.yml up -d --wait db
+	$(QUALITY_COMPOSE) up -d --wait db
 	mkdir -p build/reports
 	uv run --locked pytest --cov=apps/ventas/pagos --cov-branch --cov-report=term-missing --cov-report=xml:build/reports/coverage-quality.xml --junitxml=build/reports/pytest-quality-full.xml
 
