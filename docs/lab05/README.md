@@ -15,3 +15,7 @@ Consulta el [diagrama de realización](diagrama-realizacion-objetivos.md) para v
 ## Revisión profunda
 
 La [revisión profunda](REVISION.md) registra la auditoría de estructura, pruebas, cobertura, documentación y estado del repositorio.
+
+## Tablero publicado
+
+El tablero Kanban real está disponible en [GitHub Projects](https://github.com/users/carlosGCMP/projects/1). La rama y los Issues vinculados pertenecen exclusivamente al Laboratorio 05.
