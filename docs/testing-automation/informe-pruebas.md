@@ -16,8 +16,8 @@ make quality
 ## Resultado
 
 - Fecha de ejecución: 28-10-2026.
-- Pruebas recopiladas: 54.
-- Pruebas aprobadas: 54.
+- Pruebas recopiladas: 286.
+- Pruebas aprobadas: 286.
 - Pruebas fallidas: 0.
 - Cobertura total: 87.90% con ramas.
 - Umbral configurado: 85%.

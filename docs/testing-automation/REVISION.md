@@ -27,7 +27,7 @@ DB_NAME=software_textil_quality DB_PORT=55432 DB_HOST=127.0.0.1 \
   uv run pytest --junitxml=build/reports/pytest-quality-full.xml
 ```
 
-Resultado: **274 pruebas aprobadas, 0 fallos**.
+Resultado: **286 pruebas aprobadas, 0 fallos**.
 
 La validación específica del módulo de pagos generó:
 

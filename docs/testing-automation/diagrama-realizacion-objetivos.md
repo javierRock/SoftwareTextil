@@ -63,7 +63,7 @@ flowchart TD
 | Organizar el trabajo | `docs/testing-automation/kanban.md` y `kanban-import.csv` | Tablero y tarjetas |
 | Probar reglas del dominio | `tests/pagos/test_pago_dominio.py` | Casos del agregado `Pago` |
 | Probar servicios con dobles | `tests/pagos/test_servicio_pagos_doubles.py` | `Mock`, `MagicMock` y `create_autospec` |
-| Probar integración y API | `tests/pagos/test_api_pagos.py` y `test_repositorio_pagos.py` | 54 pruebas aprobadas |
+| Probar integración y API | `tests/pagos/test_api_pagos.py` y `test_repositorio_pagos.py` | 286 pruebas aprobadas |
 | Medir cobertura | `build/reports/coverage-quality.xml` | 87.90% de cobertura |
 | Reportar ejecución | `build/reports/pytest-quality-full.xml` y `docs/testing-automation/informe-pruebas.md` | Informe JUnit y resumen |
 
