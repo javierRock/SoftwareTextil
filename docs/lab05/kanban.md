@@ -2,8 +2,8 @@
 
 Este tablero reproduce la plantilla Kanban solicitada en el laboratorio y sirve como respaldo local. No se conecta ni publica cambios en GitHub.
 
-**Repositorio de trabajo:** `SoftwareTextil_Lab05_Local`  
-**Rama:** `codex/practica-3-construccion-automatica`  
+**Repositorio de trabajo:** `javierRock/SoftwareTextil`
+**Rama:** `laboratorio-05`
 **Módulo seleccionado:** `apps/ventas/pagos`  
 **Etiquetas:** `unit-test`, `enhancement`, `test-double`, `coverage`, `report`
 
@@ -26,6 +26,11 @@ Este tablero reproduce la plantilla Kanban solicitada en el laboratorio y sirve 
 | LAB05-05 | Ejecutar pruebas y cobertura | Generar JUnit XML y `coverage.xml`; comprobar umbral de cobertura del módulo de pagos. | Equipo | coverage | 30 min | DONE |
 | LAB05-06 | Elaborar informe de ejecución | Registrar comando, fecha, versión, cantidad de pruebas, aprobadas/fallidas y conclusiones. | Equipo | report | 30 min | DONE |
 | LAB05-07 | Revisión final del laboratorio | Revisar código, evidencias, tablero y trazabilidad de commits/issues. | Equipo | enhancement | 20 min | DONE |
+| LAB05-08 | Automatizar ejecución de pruebas y reportes | Ejecutar pruebas, cobertura y reportes JUnit/XML con un único comando reproducible. | `carlosGCMP` | automation | 30 min | DONE |
+| LAB05-09 | Integrar validación automática en CI | Ejecutar `make lab05` en un entorno limpio y conservar los reportes como artefactos. | `carlosGCMP`, `javierRock` | automation | 45 min | IN PROGRESS |
+| LAB05-10 | Documentar ciclo TDD y refactorización | Registrar Red-Green-Refactor y la evidencia de las pruebas de dominio y servicio. | `carlosGCMP`, `javierRock` | tdd | 45 min | FIX VALIDATION |
+| LAB05-11 | Asociar commits con Issues | Mantener trazabilidad entre Issues, commits y archivos entregables del laboratorio. | Equipo | traceability | 20 min | DONE |
+| LAB05-12 | Completar evidencia final de automatización | Reunir capturas del tablero, consola, JUnit, cobertura, diagrama y explicación de `make lab05`. | Equipo | documentation | 30 min | CURRENT ITERATION |
 
 ## Flujo de trabajo
 
@@ -46,9 +51,9 @@ Este tablero reproduce la plantilla Kanban solicitada en el laboratorio y sirve 
 
 - **Proyecto:** [Laboratorio 05 - Pruebas Unitarias y Dobles](https://github.com/users/carlosGCMP/projects/1)
 - **Rama:** [laboratorio-05](https://github.com/javierRock/SoftwareTextil/tree/laboratorio-05)
-- **Issues:** [#8](https://github.com/javierRock/SoftwareTextil/issues/8), [#9](https://github.com/javierRock/SoftwareTextil/issues/9), [#10](https://github.com/javierRock/SoftwareTextil/issues/10), [#11](https://github.com/javierRock/SoftwareTextil/issues/11), [#12](https://github.com/javierRock/SoftwareTextil/issues/12), [#13](https://github.com/javierRock/SoftwareTextil/issues/13), [#14](https://github.com/javierRock/SoftwareTextil/issues/14)
+- **Issues:** [#8](https://github.com/javierRock/SoftwareTextil/issues/8), [#9](https://github.com/javierRock/SoftwareTextil/issues/9), [#10](https://github.com/javierRock/SoftwareTextil/issues/10), [#11](https://github.com/javierRock/SoftwareTextil/issues/11), [#12](https://github.com/javierRock/SoftwareTextil/issues/12), [#13](https://github.com/javierRock/SoftwareTextil/issues/13), [#14](https://github.com/javierRock/SoftwareTextil/issues/14), [#15](https://github.com/javierRock/SoftwareTextil/issues/15), [#16](https://github.com/javierRock/SoftwareTextil/issues/16), [#17](https://github.com/javierRock/SoftwareTextil/issues/17), [#18](https://github.com/javierRock/SoftwareTextil/issues/18), [#19](https://github.com/javierRock/SoftwareTextil/issues/19)
 
-El proyecto está configurado como tablero y usa el campo `Status` con las columnas `TO-DO`, `CURRENT ITERATION`, `IN PROGRESS`, `FIX VALIDATION` y `DONE`. Las tarjetas #8–#14 están en `DONE` después de completar y validar el laboratorio.
+El proyecto está configurado como tablero y usa el campo `Status` con las columnas `TO-DO`, `CURRENT ITERATION`, `IN PROGRESS`, `FIX VALIDATION` y `DONE`. Las tarjetas #8–#15 y #18 están en `DONE`; #16 continúa en `IN PROGRESS`, #17 está en `FIX VALIDATION` y #19 en `CURRENT ITERATION` porque son las tareas que todavía requieren integración CI o evidencias finales.
 
 ## Contribuidores asignados
 
