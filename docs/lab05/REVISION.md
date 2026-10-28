@@ -44,3 +44,7 @@ La validación específica del módulo de pagos generó:
 - `Makefile`: nuevo objetivo `make lab05` para repetir la validación.
 
 Los archivos generados (`build/`, cachés, `.venv/`, `node_modules/`) permanecen ignorados por Git y no se mezclan con el código fuente.
+
+## Hallazgos no bloqueantes
+
+La revisión global de Ruff todavía informa 58 incidencias históricas en módulos de catálogo, inventario, pruebas existentes y `manage.py`. La prueba nueva del laboratorio 05 pasa Ruff sin incidencias. Esas incidencias previas no se modificaron porque refactorizarlas cambiaría el alcance funcional de otros laboratorios; quedan registradas para una tarea de saneamiento independiente.
