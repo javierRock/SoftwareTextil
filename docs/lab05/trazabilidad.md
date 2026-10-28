@@ -12,8 +12,8 @@ La entrega se publica en la rama `laboratorio-05`. Cada tarea del tablero tiene 
 | #13 | `docs/lab05/informe-pruebas.md` | DONE |
 | #14 | Revisión final y diagrama | DONE |
 | #15 | `Makefile`, objetivo `lab05` | DONE |
-| #16 | Integración CI completa | IN PROGRESS |
-| #17 | `docs/lab05/tdd-refactorizacion.md` | FIX VALIDATION |
+| #16 | Integración CI completa | DONE |
+| #17 | `docs/lab05/tdd-refactorizacion.md` | DONE |
 | #18 | Este documento y commit de trazabilidad | DONE |
 | #19 | Capturas y presentación final | CURRENT ITERATION |
 
