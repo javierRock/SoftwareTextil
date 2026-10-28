@@ -1,0 +1,20 @@
+# Trazabilidad de Issues y commits — Laboratorio 05
+
+La entrega se publica en la rama `laboratorio-05`. Cada tarea del tablero tiene un Issue y una evidencia en el repositorio.
+
+| Issue | Evidencia principal | Estado |
+|---:|---|---|
+| #8 | Preparación de entorno y PostgreSQL local | DONE |
+| #9 | `tests/pagos/test_pago_dominio.py` | DONE |
+| #10 | `tests/pagos/test_servicio_pagos_doubles.py` | DONE |
+| #11 | Casos negativos del servicio | DONE |
+| #12 | Reportes JUnit y cobertura | DONE |
+| #13 | `docs/lab05/informe-pruebas.md` | DONE |
+| #14 | Revisión final y diagrama | DONE |
+| #15 | `Makefile`, objetivo `lab05` | DONE |
+| #16 | Integración CI completa | TO-DO |
+| #17 | `docs/lab05/tdd-refactorizacion.md` | CURRENT ITERATION |
+| #18 | Este documento y commit de trazabilidad | CURRENT ITERATION |
+| #19 | Capturas y presentación final | TO-DO |
+
+Para nuevos cambios se debe usar un mensaje descriptivo y asociar el Issue con `fix #<número>` o `refs #<número>`.

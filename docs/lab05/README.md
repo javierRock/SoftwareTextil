@@ -30,3 +30,8 @@ El tablero Kanban real está disponible en [GitHub Projects](https://github.com/
 - **Responsables:** Carlos, Javier, Angelo/Yizens, Alejandro/Emilio y Lizzy están asignados en los Issues correspondientes.
 - **Commits:** la rama publicada es `laboratorio-05` y sus mensajes describen cada cambio.
 - **Reportes:** JUnit XML y cobertura XML generados en `build/reports/`.
+
+## Automatización y TDD
+
+- [Ciclo TDD y refactorización](tdd-refactorizacion.md)
+- [Trazabilidad de Issues y commits](trazabilidad.md)
