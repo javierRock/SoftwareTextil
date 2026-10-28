@@ -48,9 +48,12 @@ pipeline {
             steps {
                 sh 'make check'
                 sh 'make test'
+                sh 'make lab05'
             }
             post {
-                always { junit testResults: 'build/reports/pytest.xml', allowEmptyResults: true }
+                always {
+                    junit testResults: 'build/reports/pytest.xml,build/reports/pytest-lab05-full.xml', allowEmptyResults: true
+                }
             }
         }
         stage('SonarQube Analysis (optional)') {
