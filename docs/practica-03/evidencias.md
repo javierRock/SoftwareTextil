@@ -1,6 +1,6 @@
 # Evidencias de ejecución
 
-Rama: `doc/automatic`.
+Rama: `build-automation`.
 
 ## Comandos ejecutados y resultados observados
 
@@ -61,5 +61,5 @@ alcance.
 ## Publicación pendiente
 
 ```bash
-git push -u origin doc/automatic
+git push -u origin build-automation
 ```

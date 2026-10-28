@@ -73,7 +73,7 @@ make prerequisites
 ```bash
 git clone https://github.com/javierRock/SoftwareTextil.git
 cd SoftwareTextil
-git switch doc/automatic
+git switch build-automation
 ```
 
 Todos los comandos restantes, salvo los que incluyen un `cd` explícito, se
