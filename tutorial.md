@@ -2,7 +2,7 @@
 
 ## 1. Objetivo
 
-La Práctica 03 pide describir y ejecutar la construcción del sistema mediante
+El flujo de construcción automática describe y ejecuta la construcción del sistema mediante
 una herramienta automática. SoftwareTextil usa **GNU Make** como punto de
 entrada y conserva las herramientas propias de cada parte: `uv` para Python,
 `npm ci` y Vite para React, Django para checks y estáticos, y un script Python
