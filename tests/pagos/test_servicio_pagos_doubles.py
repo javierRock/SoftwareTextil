@@ -11,7 +11,7 @@ from apps.compartido.domain.enums import EstadoPago, EstadoPedido, MetodoPago
 from apps.ventas.pagos.application.ports import PedidoParaPago, RepositorioPedidoPago
 from apps.ventas.pagos.application.services import ServicioPagos
 from apps.ventas.pagos.domain.excepciones import MontoNoCoincideConPedido
-from apps.ventas.pagos.domain.pago import Pago, PagoFactory
+from apps.ventas.pagos.domain.pago import PagoFactory
 from apps.ventas.pagos.domain.repositorios import RepositorioPago
 
 
