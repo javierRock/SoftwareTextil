@@ -11,3 +11,7 @@ El clon local no tiene remoto configurado, por lo que estas acciones no publican
 ## Diagrama de realización de objetivos
 
 Consulta el [diagrama de realización](diagrama-realizacion-objetivos.md) para ver la relación entre objetivos, actividades, código y entregables.
+
+## Revisión profunda
+
+La [revisión profunda](REVISION.md) registra la auditoría de estructura, pruebas, cobertura, documentación y estado del repositorio.
