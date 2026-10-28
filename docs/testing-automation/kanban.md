@@ -49,7 +49,7 @@ Este tablero reproduce la plantilla Kanban solicitada en el flujo de calidad y s
 
 ## Tablero GitHub publicado
 
-- **Proyecto:** [Quality & Automation - Pruebas Unitarias y Dobles](https://github.com/users/carlosGCMP/projects/1)
+- **Proyecto:** [SoftwareTextil — Quality & Automation](https://github.com/users/carlosGCMP/projects/1)
 - **Rama:** [testing-automation](https://github.com/javierRock/SoftwareTextil/tree/testing-automation)
 - **Issues:** [#8](https://github.com/javierRock/SoftwareTextil/issues/8), [#9](https://github.com/javierRock/SoftwareTextil/issues/9), [#10](https://github.com/javierRock/SoftwareTextil/issues/10), [#11](https://github.com/javierRock/SoftwareTextil/issues/11), [#12](https://github.com/javierRock/SoftwareTextil/issues/12), [#13](https://github.com/javierRock/SoftwareTextil/issues/13), [#14](https://github.com/javierRock/SoftwareTextil/issues/14), [#15](https://github.com/javierRock/SoftwareTextil/issues/15), [#16](https://github.com/javierRock/SoftwareTextil/issues/16), [#17](https://github.com/javierRock/SoftwareTextil/issues/17), [#18](https://github.com/javierRock/SoftwareTextil/issues/18), [#19](https://github.com/javierRock/SoftwareTextil/issues/19)
 
