@@ -1,0 +1,5 @@
+Servidor Django real (runserver, puerto temporal 18003).
+GET /: HTTP 200, text/html; charset=utf-8, 704 bytes
+GET /login: HTTP 200, text/html; charset=utf-8, 704 bytes
+GET /static/zuren/assets/app.js: HTTP 200, text/javascript, 289842 bytes
+GET /static/zuren/assets/app.css: HTTP 200, text/css, 23828 bytes

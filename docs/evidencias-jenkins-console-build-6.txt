@@ -1,0 +1,302 @@
+Lanzada por el usuario unknown or anonymous
+Checking out git /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil into /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil/tmp/jenkins-home/workspace/SoftwareTextil-CI@script/d5840eb6fa14d58b4dd2bc261cd57c8862eed3170258f8a95f2095a44eb975eb to read Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil/tmp/jenkins-home/workspace/SoftwareTextil-CI@script/d5840eb6fa14d58b4dd2bc261cd57c8862eed3170258f8a95f2095a44eb975eb/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil # timeout=10
+Fetching upstream changes from /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil
+ > git --version # timeout=10
+ > git --version # 'git version 2.53.0'
+ > git fetch --tags --force --progress -- /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/codex/practica-3-construccion-automatica^{commit} # timeout=10
+Checking out Revision 14ecec59081d8633c5a290b598b96c5b95ad74b7 (refs/remotes/origin/codex/practica-3-construccion-automatica)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 14ecec59081d8633c5a290b598b96c5b95ad74b7 # timeout=10
+Commit message: "fix: usar proyecto Compose aislado en Jenkins"
+ > git rev-list --no-walk 2f346168517573f2e0fec6ecc2ae5ead0e9eeea8 # timeout=10
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins  in /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil/tmp/jenkins-home/workspace/SoftwareTextil-CI
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Git Checkout)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil/tmp/jenkins-home/workspace/SoftwareTextil-CI/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil # timeout=10
+Fetching upstream changes from /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil
+ > git --version # timeout=10
+ > git --version # 'git version 2.53.0'
+ > git fetch --tags --force --progress -- /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/codex/practica-3-construccion-automatica^{commit} # timeout=10
+Checking out Revision 14ecec59081d8633c5a290b598b96c5b95ad74b7 (refs/remotes/origin/codex/practica-3-construccion-automatica)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 14ecec59081d8633c5a290b598b96c5b95ad74b7 # timeout=10
+Commit message: "fix: usar proyecto Compose aislado en Jenkins"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Tool Check)
+[Pipeline] sh
++ set -eux
++ java -version
+openjdk version "21.0.12.1" 2026-08-18
+OpenJDK Runtime Environment Homebrew (build 21.0.12.1)
+OpenJDK 64-Bit Server VM Homebrew (build 21.0.12.1, mixed mode, sharing)
++ git --version
+git version 2.53.0
++ make --version
++ head -n 1
+GNU Make 3.81
++ uv --version
+uv 0.12.17 (635500036 2026-09-18 aarch64-apple-darwin)
++ node --version
+v24.19.0
++ npm --version
+11.6.2
++ docker compose version
+Docker Compose version v5.5.1
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Database)
+[Pipeline] sh
++ make db-up
+docker compose -p softwaretextil-jenkins -f compose.practica3.yml up -d --wait db
+ Network softwaretextil-jenkins_default Creating 
+ Volume softwaretextil-jenkins_practica3_postgres Creating 
+ Volume softwaretextil-jenkins_practica3_postgres Creating 
+ Network softwaretextil-jenkins_default Creating 
+ Volume softwaretextil-jenkins_practica3_postgres Created 
+ Volume softwaretextil-jenkins_practica3_postgres Created 
+ Network softwaretextil-jenkins_default Created 
+ Network softwaretextil-jenkins_default Created 
+ Container softwaretextil-jenkins-db-1 Creating 
+ Container softwaretextil-jenkins-db-1 Created 
+ Container softwaretextil-jenkins-db-1 Starting 
+ Container softwaretextil-jenkins-db-1 Started 
+ Container softwaretextil-jenkins-db-1 Waiting 
+ Container softwaretextil-jenkins-db-1 Healthy 
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ make build
+uv sync --locked --python 3.11
+Resolved 20 packages in 9ms
+Checked 15 packages in 3ms
+npm --prefix frontend/inventario ci
+
+added 269 packages, and audited 270 packages in 2s
+
+115 packages are looking for funding
+  run `npm fund` for details
+
+5 high severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+npm --prefix frontend/inventario run build
+
+> software-textil-inventario@0.1.0 build
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 55 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html        0.70 kB │ gzip:  0.41 kB
+dist/assets/app.css   23.83 kB │ gzip:  5.96 kB
+dist/assets/app.js   289.84 kB │ gzip: 88.67 kB
+✓ built in 452ms
+uv run --locked python -m compileall -q apps config manage.py
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test and Quality)
+[Pipeline] sh
++ make check
+uv run --locked python manage.py check --fail-level WARNING
+System check identified no issues (0 silenced).
+uv run --locked python manage.py makemigrations --check --dry-run
+No changes detected
+[Pipeline] sh
++ make test
+mkdir -p build/reports
+uv run --locked pytest --junitxml=build/reports/pytest.xml
+============================= test session starts ==============================
+platform darwin -- Python 3.11.16, pytest-9.1.1, pluggy-1.6.0
+django: version: 5.2.16, settings: config.settings.dev (from env)
+rootdir: /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil/tmp/jenkins-home/workspace/SoftwareTextil-CI
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collected 271 items
+
+apps/catalogo/tests/test_buscar_prendas_api.py ...........               [  4%]
+apps/catalogo/tests/test_catalogo_seguro_api.py ....                     [  5%]
+apps/catalogo/tests/test_categoria_api.py ....                           [  7%]
+apps/catalogo/tests/test_consultar_detalle_prenda_api.py ..              [  7%]
+apps/catalogo/tests/test_errores_catalogo.py .                           [  8%]
+apps/catalogo/tests/test_publicacion_prenda_api.py ....                  [  9%]
+apps/catalogo/tests/test_registro_prenda_api.py ............             [ 14%]
+apps/catalogo/tests/test_repositorio_prenda.py .                         [ 14%]
+apps/catalogo/tests/test_tipo_producto_api.py ....                       [ 15%]
+apps/catalogo/tests/test_visualizar_catalogo_api.py ..                   [ 16%]
+apps/inventario/tests/test_alertas_api.py .....                          [ 18%]
+apps/inventario/tests/test_api.py .................                      [ 24%]
+apps/inventario/tests/test_reportes_api.py ....                          [ 26%]
+apps/inventario/tests/test_service.py .........                          [ 29%]
+apps/inventario/tests/test_stock_por_categoria.py ............           [ 33%]
+tests/compartido/test_integridad_esquema.py .............                [ 38%]
+tests/pagos/test_api_pagos.py ............                               [ 43%]
+tests/pagos/test_repositorio_pagos.py .........                          [ 46%]
+tests/test_spa.py .                                                      [ 46%]
+tests/test_usuarios_auth.py .............                                [ 51%]
+tests/ventas/test_api_carrito_pedidos.py .............                   [ 56%]
+tests/ventas/test_api_despachos.py .......                               [ 59%]
+apps/inventario/tests/test_concurrency.py .                              [ 59%]
+apps/catalogo/tests/test_buscar_prendas.py .....                         [ 61%]
+apps/catalogo/tests/test_categoria.py .......                            [ 63%]
+apps/catalogo/tests/test_consultar_detalle_prenda.py ..                  [ 64%]
+apps/catalogo/tests/test_errores_catalogo.py ....                        [ 66%]
+apps/catalogo/tests/test_publicacion_prenda.py ...                       [ 67%]
+apps/catalogo/tests/test_registro_prenda.py .................            [ 73%]
+apps/catalogo/tests/test_services.py ...                                 [ 74%]
+apps/catalogo/tests/test_tipo_producto.py ........                       [ 77%]
+apps/catalogo/tests/test_visualizar_catalogo.py ..                       [ 78%]
+apps/inventario/tests/test_domain.py ......                              [ 80%]
+tests/pagos/test_pago_dominio.py .....................                   [ 88%]
+tests/pagos/test_servicio_pagos.py .........                             [ 91%]
+tests/test_spa.py .....                                                  [ 93%]
+tests/ventas/test_carrito_solid.py ......                                [ 95%]
+tests/ventas/test_errores_http.py ....                                   [ 97%]
+tests/ventas/test_pedidos_solid.py ........                              [100%]
+
+- generated xml file: /Users/carlosgc/Documents/ChatGPT/ISOFTWARE2_PRJ 2/SoftwareTextil/tmp/jenkins-home/workspace/SoftwareTextil-CI/build/reports/pytest.xml -
+============================= 271 passed in 4.09s ==============================
+npm --prefix frontend/inventario test
+
+> software-textil-inventario@0.1.0 test
+> node --test src/services/*.test.js
+
+✔ apiUrl conserva ruta y omite filtros vacíos (0.302291ms)
+✔ request serializa JSON y devuelve la respuesta (9.793625ms)
+✔ request normaliza errores de validación (0.347833ms)
+✔ download devuelve blob y nombre de Content-Disposition (0.655041ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.609667
+npm --prefix frontend/inventario run lint
+
+> software-textil-inventario@0.1.0 lint
+> eslint .
+
+Post stage
+[Pipeline] junit
+Grabando resultados de tests
+[Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (SonarQube Analysis (optional))
+Stage "SonarQube Analysis (optional)" skipped due to when conditional
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Package and Publish)
+[Pipeline] sh
++ make package
+uv run --locked python scripts/package_practica3.py
+Paquete: software-textil-0.1.0.zip (442 archivos + manifiesto)
+SHA-256: f5071d44035b977c5efdfa6e43e75ced37f3fc53c73e2d674efcfdabf22c86dc
+[Pipeline] archiveArtifacts
+Guardando archivos
+Almacenando firmas
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Run Published Application)
+[Pipeline] sh
++ set -eux
++ make demo
+uv run --locked python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, catalogo, contenttypes, inventario, sessions, usuarios, ventas
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying usuarios.0001_initial... OK
+  Applying catalogo.0001_initial... OK
+  Applying catalogo.0002_prenda_imagen_variante_moneda... OK
+  Applying inventario.0001_initial... OK
+  Applying sessions.0001_initial... OK
+  Applying usuarios.0002_roles_y_permisos_base... OK
+  Applying ventas.0001_initial... OK
+uv run --locked python manage.py sembrar_demo
+Datos demo listos: admin, inventario y cliente comparten la contrasena indicada
++ mkdir -p build/reports
++ nohup uv run --locked python manage.py runserver 0.0.0.0:8083
++ echo 32301
++ sleep 5
++ curl --fail --silent http://127.0.0.1:8083/
+Post stage
+[Pipeline] archiveArtifacts
+Guardando archivos
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] sh
++ '[' -f build/application.pid ']'
+++ cat build/application.pid
++ kill 32301
++ make db-down
+docker compose -p softwaretextil-jenkins -f compose.practica3.yml down
+ Container softwaretextil-jenkins-db-1 Stopping 
+ Container softwaretextil-jenkins-db-1 Stopped 
+ Container softwaretextil-jenkins-db-1 Removing 
+ Container softwaretextil-jenkins-db-1 Removed 
+ Network softwaretextil-jenkins_default Removing 
+ Network softwaretextil-jenkins_default Removed 
+[Pipeline] archiveArtifacts
+Guardando archivos
+[Pipeline] echo
+JENKINS BUILD SUCCESS: CI completed.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

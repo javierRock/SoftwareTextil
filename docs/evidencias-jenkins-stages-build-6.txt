@@ -1,0 +1,17 @@
+Pipeline Overview - SoftwareTextil-CI #6
+
+Result: SUCCESS
+Duration: 22.856 seconds
+
+Git Checkout: PASS
+Tool Check: PASS
+Database: PASS
+Build: PASS
+Test and Quality: PASS
+SonarQube Analysis (optional): SKIPPED (RUN_SONAR=false)
+Package and Publish: PASS
+Run Published Application: PASS
+Post Actions: PASS
+
+The full console output is in evidencias-jenkins-console-build-6.txt.
+
