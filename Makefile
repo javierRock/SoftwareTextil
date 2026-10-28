@@ -6,7 +6,7 @@ FRONTEND_DIR := frontend/inventario
 BUILD_SETTINGS := config.settings.build
 DEV_SETTINGS := config.settings.dev
 
-.PHONY: help prerequisites deps db-ready frontend-check frontend check test static invalidate-release package verify-release build clean
+.PHONY: help prerequisites deps db-ready frontend-check frontend check test quality static invalidate-release package verify-release build clean
 
 help: ## Muestra los objetivos disponibles.
 	@awk 'BEGIN {FS = ":.*## "; printf "Uso: make <objetivo>\n\n"} /^[a-zA-Z0-9_-]+:.*## / {printf "  %-18s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -44,6 +44,11 @@ check: frontend ## Ejecuta análisis estático y checks de Django/migraciones.
 
 test: check db-ready ## Ejecuta la suite Python contra PostgreSQL.
 	uv run --locked pytest
+
+quality: ## Ejecuta la suite completa, cobertura de pagos y reportes JUnit/XML.
+	docker compose -p softwaretextil-quality -f compose.quality.yml up -d --wait db
+	mkdir -p build/reports
+	uv run --locked pytest --cov=apps/ventas/pagos --cov-branch --cov-report=term-missing --cov-report=xml:build/reports/coverage-quality.xml --junitxml=build/reports/pytest-quality-full.xml
 
 static: test ## Recolecta archivos estáticos en build/staticfiles.
 	rm -rf build/staticfiles
