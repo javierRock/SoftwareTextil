@@ -1,4 +1,4 @@
-# Ciclo TDD y refactorización — Laboratorio 05
+# Ciclo TDD y refactorización — Quality & Automation
 
 ## Caso seleccionado
 

@@ -5,4 +5,4 @@ Dobles para ServicioPagos,"Aislar repositorios y unidad de trabajo con Mock/crea
 Validar casos negativos,"Cubrir pedido inexistente, cliente no autorizado, monto distinto y pago duplicado.",Equipo,unit-test,45 min,TO-DO
 Ejecutar pruebas y cobertura,"Generar JUnit XML y coverage.xml; comprobar umbral de cobertura del módulo de pagos.",Equipo,coverage,30 min,TO-DO
 Elaborar informe de ejecución,"Registrar comando, fecha, versión, cantidad de pruebas, aprobadas/fallidas y conclusiones.",Equipo,report,30 min,TO-DO
-Revisión final del laboratorio,"Revisar código, evidencias, tablero y trazabilidad de commits/issues.",Equipo,enhancement,20 min,TO-DO
+Revisión final del flujo de calidad,"Revisar código, evidencias, tablero y trazabilidad de commits/issues.",Equipo,enhancement,20 min,TO-DO

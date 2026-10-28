@@ -1,4 +1,4 @@
-"""Pruebas de aplicación con dobles de prueba (Laboratorio 05)."""
+"""Pruebas de aplicación con dobles de prueba."""
 
 from contextlib import nullcontext
 from decimal import Decimal

@@ -1,10 +1,10 @@
-# Diagrama de realización de objetivos — Laboratorio 05
+# Diagrama de realización de objetivos — Quality & Automation
 
-El siguiente flujo muestra cómo se cumplen los objetivos del laboratorio dentro de `SoftwareTextil`, desde la planificación Kanban hasta la evidencia final.
+El siguiente flujo muestra cómo se cumplen los objetivos del flujo de calidad dentro de `SoftwareTextil`, desde la planificación Kanban hasta la evidencia final.
 
 ```mermaid
 flowchart TD
-    A[Objetivo del laboratorio 05\nAutomatizar pruebas unitarias e integración] --> B[Preparar entorno local]
+    A[Objetivo de calidad y automatización\nAutomatizar pruebas unitarias e integración] --> B[Preparar entorno local]
     B --> B1[Python 3.11 + uv]
     B --> B2[pytest + pytest-cov]
     B --> B3[PostgreSQL local aislado]
@@ -47,7 +47,7 @@ flowchart TD
     H --> H2[Reporte de cobertura XML]
     H2 --> H3[Umbral mínimo 85%]
 
-    H1 --> I[Entregables del laboratorio]
+    H1 --> I[Entregables]
     H3 --> I
     C5 --> I
     I --> I1[Código de pruebas en el repositorio]
@@ -60,22 +60,22 @@ flowchart TD
 
 | Objetivo | Implementación | Evidencia |
 |---|---|---|
-| Organizar el trabajo | `docs/lab05/kanban.md` y `kanban-import.csv` | Tablero y tarjetas |
+| Organizar el trabajo | `docs/testing-automation/kanban.md` y `kanban-import.csv` | Tablero y tarjetas |
 | Probar reglas del dominio | `tests/pagos/test_pago_dominio.py` | Casos del agregado `Pago` |
 | Probar servicios con dobles | `tests/pagos/test_servicio_pagos_doubles.py` | `Mock`, `MagicMock` y `create_autospec` |
 | Probar integración y API | `tests/pagos/test_api_pagos.py` y `test_repositorio_pagos.py` | 54 pruebas aprobadas |
-| Medir cobertura | `build/reports/coverage-lab05.xml` | 87.90% de cobertura |
-| Reportar ejecución | `build/reports/pytest-lab05.xml` y `docs/lab05/informe-pruebas.md` | Informe JUnit y resumen |
+| Medir cobertura | `build/reports/coverage-quality.xml` | 87.90% de cobertura |
+| Reportar ejecución | `build/reports/pytest-quality-full.xml` y `docs/testing-automation/informe-pruebas.md` | Informe JUnit y resumen |
 
 ## Comando que reproduce el flujo técnico
 
 ```bash
-DB_NAME=software_textil_practica3 DB_PORT=55432 \
-  docker compose -p softwaretextil-lab05 -f compose.practica3.yml up -d --wait db
+DB_NAME=software_textil_quality DB_PORT=55432 \
+  docker compose -p softwaretextil-quality -f compose.quality.yml up -d --wait db
 
-DB_NAME=software_textil_practica3 DB_PORT=55432 DB_HOST=127.0.0.1 \
+DB_NAME=software_textil_quality DB_PORT=55432 DB_HOST=127.0.0.1 \
   uv run pytest tests/pagos \
   --cov=apps/ventas/pagos --cov-branch \
-  --cov-report=xml:build/reports/coverage-lab05.xml \
-  --junitxml=build/reports/pytest-lab05.xml
+  --cov-report=xml:build/reports/coverage-quality.xml \
+  --junitxml=build/reports/pytest-quality-full.xml
 ```

@@ -1,4 +1,4 @@
-// Pipeline declarativo para el Laboratorio 03: Integración Continua - Jenkins.
+// Pipeline declarativo de integración continua para SoftwareTextil.
 // SoftwareTextil usa Django/React/PostgreSQL, por eso Make coordina el build.
 pipeline {
     agent any
@@ -12,7 +12,7 @@ pipeline {
             description: 'Ejecutar SonarQube si ya fue configurado en Jenkins.')
     }
     environment {
-        DB_NAME = 'software_textil_practica3_jenkins'
+        DB_NAME = 'software_textil_quality_jenkins'
         DB_USER = 'postgres'
         DB_PASSWORD = 'postgres'
         DB_HOST = '127.0.0.1'
@@ -48,11 +48,11 @@ pipeline {
             steps {
                 sh 'make check'
                 sh 'make test'
-                sh 'make lab05'
+                sh 'make quality'
             }
             post {
                 always {
-                    junit testResults: 'build/reports/pytest.xml,build/reports/pytest-lab05-full.xml', allowEmptyResults: true
+                    junit testResults: 'build/reports/pytest.xml,build/reports/pytest-quality-full.xml', allowEmptyResults: true
                 }
             }
         }

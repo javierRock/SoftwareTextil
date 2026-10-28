@@ -1,6 +1,6 @@
-# Laboratorio 05 — pruebas unitarias, dobles y automatización
+# Quality & Automation — pruebas unitarias, dobles y automatización
 
-Esta entrega se ejecuta en la rama `laboratorio-05` sobre el proyecto Django real. El módulo elegido es `apps/ventas/pagos`; la implementación permanece en `apps/` y las pruebas en `tests/` y `apps/*/tests/`.
+Esta entrega se ejecuta en la rama `testing-automation` sobre el proyecto Django real. El módulo elegido es `apps/ventas/pagos`; la implementación permanece en `apps/` y las pruebas en `tests/` y `apps/*/tests/`.
 
 ## Ejecución local
 
@@ -8,12 +8,12 @@ Desde la raíz del repositorio:
 
 ```bash
 uv sync --locked --python 3.11
-make lab05
+make quality
 ```
 
-`make lab05` levanta un PostgreSQL aislado con `compose.practica3.yml`, ejecuta la suite con `pytest`, mide cobertura de ramas con `pytest-cov` y escribe los reportes JUnit/XML en `build/reports/`. El umbral mínimo configurado es 85%. Al terminar, se puede detener la base con `make db-down`.
+`make quality` levanta un PostgreSQL aislado con `compose.quality.yml`, ejecuta la suite con `pytest`, mide cobertura de ramas con `pytest-cov` y escribe los reportes JUnit/XML en `build/reports/`. El umbral mínimo configurado es 85%. Al terminar, se puede detener la base con `make db-down`.
 
-## Entregables del laboratorio
+## Entregables
 
 - [Kanban y tarjetas](kanban.md)
 - [Diagrama de realización de objetivos](diagrama-realizacion-objetivos.md)
@@ -22,10 +22,10 @@ make lab05
 - [Ciclo TDD y refactorización](tdd-refactorizacion.md)
 - [Trazabilidad de Issues y commits](trazabilidad.md)
 - `tests/pagos/test_servicio_pagos_doubles.py`: pruebas con dobles de persistencia y unidad de trabajo
-- `build/reports/pytest-lab05-full.xml`: reporte JUnit generado
-- `build/reports/coverage-lab05.xml`: reporte XML de cobertura generado
+- `build/reports/pytest-quality-full.xml`: reporte JUnit generado
+- `build/reports/coverage-quality.xml`: reporte XML de cobertura generado
 
-## Correspondencia con el laboratorio
+## Correspondencia con los objetivos
 
 - **Framework xUnit:** pytest y pytest-django para Python.
 - **Cobertura:** pytest-cov con ramas y `fail_under = 85` en `pyproject.toml`.
@@ -33,11 +33,11 @@ make lab05
 - **Separación:** código productivo en `apps/` y pruebas en `tests/`/`apps/*/tests/`.
 - **TDD:** ciclo Red-Green-Refactor documentado para `ServicioPagos`.
 - **Kanban:** proyecto público con `TO-DO`, `CURRENT ITERATION`, `IN PROGRESS`, `FIX VALIDATION` y `DONE`.
-- **Automatización:** objetivo `make lab05` y `Jenkinsfile` para ejecutar build, validaciones, pruebas y archivar reportes.
+- **Automatización:** objetivo `make quality` y `Jenkinsfile` para ejecutar build, validaciones, pruebas y archivar reportes.
 - **Trazabilidad:** Issues #8–#19 enlazados al proyecto y commits descriptivos en esta rama.
 
 ## Tablero y rama publicados
 
-- [Proyecto Kanban del Laboratorio 05](https://github.com/users/carlosGCMP/projects/1)
-- [Rama `laboratorio-05`](https://github.com/javierRock/SoftwareTextil/tree/laboratorio-05)
+- [Proyecto Kanban de SoftwareTextil](https://github.com/users/carlosGCMP/projects/1)
+- [Rama `testing-automation`](https://github.com/javierRock/SoftwareTextil/tree/testing-automation)
 - [Issues del repositorio](https://github.com/javierRock/SoftwareTextil/issues)
