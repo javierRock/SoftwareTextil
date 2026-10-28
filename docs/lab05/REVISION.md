@@ -18,7 +18,7 @@ Se revisaron la estructura DDD, configuración de pruebas, dependencias, base de
 | Cobertura | Conforme | Umbral 85%; reporte generado con 87.90% para pagos |
 | Kanban | Conforme | `docs/lab05/kanban.md` y `kanban-import.csv` |
 | Documentación | Conforme | guía, diagrama, informe y referencias en `docs/lab05/` |
-| Repositorio original | Conforme | cambios integrados en la rama local; sin publicación remota |
+| Rama de entrega | Conforme | `laboratorio-05` publicada en GitHub; el trabajo no modifica `dev` ni `main` |
 
 ## Validación ejecutada
 
@@ -31,8 +31,8 @@ Resultado: **274 pruebas aprobadas, 0 fallos**.
 
 La validación específica del módulo de pagos generó:
 
-- `build/reports/pytest-lab05.xml`: 54 pruebas del módulo de pagos.
-- `build/reports/coverage-lab05.xml`: 87.90% de cobertura con ramas.
+- `build/reports/pytest-lab05-full.xml`: reporte JUnit de la suite del laboratorio.
+- `build/reports/coverage-lab05.xml`: cobertura de ramas del módulo de pagos; el umbral es 85%.
 
 ## Organización final
 

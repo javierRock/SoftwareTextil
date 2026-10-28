@@ -1,37 +1,43 @@
-# Laboratorio 05 — guía de trabajo local
+# Laboratorio 05 — pruebas unitarias, dobles y automatización
 
-1. Abrir `kanban.md` y mover las tarjetas según el flujo.
-2. Ejecutar desde la raíz del clon local: `uv run pytest tests/pagos -q`.
-3. Generar cobertura: `uv run pytest tests/pagos --cov=apps/ventas/pagos --cov-branch --cov-report=term-missing --cov-report=xml:build/reports/coverage.xml --junitxml=build/reports/pytest-lab05.xml`.
-4. Guardar los reportes en `build/reports/` y completar el informe.
-5. Para presentar el trabajo, mostrar el Kanban, el reporte de pruebas y el reporte de cobertura.
+Esta entrega se ejecuta en la rama `laboratorio-05` sobre el proyecto Django real. El módulo elegido es `apps/ventas/pagos`; la implementación permanece en `apps/` y las pruebas en `tests/` y `apps/*/tests/`.
 
-El clon local no tiene remoto configurado, por lo que estas acciones no publican ni alteran `javierRock/SoftwareTextil`.
+## Ejecución local
 
-## Diagrama de realización de objetivos
+Desde la raíz del repositorio:
 
-Consulta el [diagrama de realización](diagrama-realizacion-objetivos.md) para ver la relación entre objetivos, actividades, código y entregables.
+```bash
+uv sync --locked --python 3.11
+make lab05
+```
 
-## Revisión profunda
+`make lab05` levanta un PostgreSQL aislado con `compose.practica3.yml`, ejecuta la suite con `pytest`, mide cobertura de ramas con `pytest-cov` y escribe los reportes JUnit/XML en `build/reports/`. El umbral mínimo configurado es 85%. Al terminar, se puede detener la base con `make db-down`.
 
-La [revisión profunda](REVISION.md) registra la auditoría de estructura, pruebas, cobertura, documentación y estado del repositorio.
+## Entregables del laboratorio
 
-## Tablero publicado
-
-El tablero Kanban real está disponible en [GitHub Projects](https://github.com/users/carlosGCMP/projects/1). La rama y los Issues vinculados pertenecen exclusivamente al Laboratorio 05.
-
-## Verificación frente a las instrucciones del laboratorio
-
-- **Framework de pruebas:** pytest/pytest-django para Python, equivalente al framework xUnit solicitado para el lenguaje elegido.
-- **Cobertura:** pytest-cov con cobertura de ramas y umbral mínimo de 85%.
-- **Mocking:** `unittest.mock` (`MagicMock` y `create_autospec`).
-- **Separación:** implementación en `apps/`; pruebas en `tests/` y `apps/*/tests/`.
-- **Kanban:** proyecto público con las cinco columnas solicitadas e Issues #8–#14.
-- **Responsables:** Carlos, Javier, Angelo/Yizens, Alejandro/Emilio y Lizzy están asignados en los Issues correspondientes.
-- **Commits:** la rama publicada es `laboratorio-05` y sus mensajes describen cada cambio.
-- **Reportes:** JUnit XML y cobertura XML generados en `build/reports/`.
-
-## Automatización y TDD
-
+- [Kanban y tarjetas](kanban.md)
+- [Diagrama de realización de objetivos](diagrama-realizacion-objetivos.md)
+- [Informe de pruebas](informe-pruebas.md)
+- [Revisión profunda](REVISION.md)
 - [Ciclo TDD y refactorización](tdd-refactorizacion.md)
 - [Trazabilidad de Issues y commits](trazabilidad.md)
+- `tests/pagos/test_servicio_pagos_doubles.py`: pruebas con dobles de persistencia y unidad de trabajo
+- `build/reports/pytest-lab05-full.xml`: reporte JUnit generado
+- `build/reports/coverage-lab05.xml`: reporte XML de cobertura generado
+
+## Correspondencia con el laboratorio
+
+- **Framework xUnit:** pytest y pytest-django para Python.
+- **Cobertura:** pytest-cov con ramas y `fail_under = 85` en `pyproject.toml`.
+- **Mocking:** `unittest.mock`, usando `MagicMock` y `create_autospec`.
+- **Separación:** código productivo en `apps/` y pruebas en `tests/`/`apps/*/tests/`.
+- **TDD:** ciclo Red-Green-Refactor documentado para `ServicioPagos`.
+- **Kanban:** proyecto público con `TO-DO`, `CURRENT ITERATION`, `IN PROGRESS`, `FIX VALIDATION` y `DONE`.
+- **Automatización:** objetivo `make lab05` y `Jenkinsfile` para ejecutar build, validaciones, pruebas y archivar reportes.
+- **Trazabilidad:** Issues #8–#19 enlazados al proyecto y commits descriptivos en esta rama.
+
+## Tablero y rama publicados
+
+- [Proyecto Kanban del Laboratorio 05](https://github.com/users/carlosGCMP/projects/1)
+- [Rama `laboratorio-05`](https://github.com/javierRock/SoftwareTextil/tree/laboratorio-05)
+- [Issues del repositorio](https://github.com/javierRock/SoftwareTextil/issues)

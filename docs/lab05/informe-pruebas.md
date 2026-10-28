@@ -6,18 +6,11 @@ Se seleccionó el módulo `apps/ventas/pagos` del repositorio SoftwareTextil. La
 
 ## Ejecución reproducible
 
-Desde la raíz de `SoftwareTextil_Lab05_Local`:
+Desde la raíz de la rama `laboratorio-05` del repositorio:
 
 ```bash
-DB_NAME=software_textil_practica3 DB_PORT=55432 docker compose -p softwaretextil-lab05 -f compose.practica3.yml up -d --wait db
-DB_NAME=software_textil_practica3 DB_PORT=55432 DB_HOST=127.0.0.1 \
-  uv run python manage.py migrate --noinput
-DB_NAME=software_textil_practica3 DB_PORT=55432 DB_HOST=127.0.0.1 \
-  uv run pytest tests/pagos \
-    --cov=apps/ventas/pagos --cov-branch \
-    --cov-report=term-missing \
-    --cov-report=xml:build/reports/coverage-lab05.xml \
-    --junitxml=build/reports/pytest-lab05.xml
+make db-up
+make lab05
 ```
 
 ## Resultado
@@ -32,7 +25,7 @@ DB_NAME=software_textil_practica3 DB_PORT=55432 DB_HOST=127.0.0.1 \
 
 ## Evidencias generadas
 
-- `build/reports/pytest-lab05.xml`: reporte JUnit de ejecución.
+- `build/reports/pytest-lab05-full.xml`: reporte JUnit de ejecución.
 - `build/reports/coverage-lab05.xml`: reporte XML de cobertura.
 - `tests/pagos/test_servicio_pagos_doubles.py`: casos con dobles de prueba.
 - `docs/lab05/kanban.md`: tablero y trazabilidad de las tarjetas.
@@ -42,5 +35,5 @@ DB_NAME=software_textil_practica3 DB_PORT=55432 DB_HOST=127.0.0.1 \
 La base PostgreSQL se ejecuta en el contenedor local `softwaretextil-lab05-db-1`, publicado en el puerto `55432`. El contenedor pertenece al laboratorio y se puede detener con:
 
 ```bash
-docker compose -p softwaretextil-lab05 -f compose.practica3.yml down
+make db-down
 ```
