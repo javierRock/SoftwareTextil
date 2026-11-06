@@ -23,7 +23,16 @@ DJANGO_SETTINGS_MODULE = "config.settings.dev"
 
 [tool.coverage.run]
 branch = true
-source = ["apps/ventas/pagos"]
+# Cobertura de todo el codigo ejecutable; se excluyen migraciones generadas y
+# las suites de prueba por modulo para que el porcentaje refleje solo produccion.
+source = ["apps"]
+omit = ["*/migrations/*", "*/tests/*"]
+
+[tool.coverage.html]
+directory = "build/reports/coverage-html"
+
+[tool.coverage.xml]
+output = "build/reports/coverage.xml"
 
 [tool.coverage.report]
 fail_under = 85
@@ -87,8 +96,8 @@ select = [
 # es justamente lo que se espera de una prueba. El patron cubre tanto la suite
 # raiz `tests/` como las suites por modulo (`apps/catalogo/tests/`). Los dobles
 # de prueba ademas respetan la firma que reemplazan aunque no usen todos sus
-# parametros (ARG001), y la prueba de concurrencia hereda de `TestCase` (PT009).
-"**/tests/**" = ["S101", "PLR2004", "PLR0913", "PLR0917", "ARG001", "PT009"]
+# parametros (ARG001); usan credenciales ficticias (S105/S106), y la prueba de concurrencia hereda de `TestCase` (PT009).
+"**/tests/**" = ["S101", "S105", "S106", "PLR2004", "PLR0913", "PLR0917", "ARG001", "PT009"]
 # El parametro `db` de pytest-django no se usa como valor: su sola presencia
 # habilita el acceso a la base de datos en la fixture (de ahi ARG001).
 "conftest.py" = ["S101", "PLR2004", "ARG001"]

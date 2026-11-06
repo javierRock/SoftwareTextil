@@ -1,6 +1,6 @@
 ## Proyecto GitHub
 
-- Rama de trabajo: `doc/automatic`.
+- Rama de trabajo: `build-automation`.
 - Commit base de `dev`: `63e48ac75026d682c231efb724f436e265489653`.
 - Commits de implementación:
   - `7617d60` — versión de Node y compatibilidad del frontend.
