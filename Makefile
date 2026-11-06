@@ -12,7 +12,7 @@ export DB_PASSWORD ?= postgres
 export DB_HOST ?= 127.0.0.1
 export DB_PORT ?= 55432
 
-.PHONY: help prerequisites deps db-up db-down db-ready frontend-check frontend check test quality static invalidate-release package verify-release build clean
+.PHONY: help prerequisites deps db-up db-down db-ready frontend-check frontend check test quality reportes static invalidate-release package verify-release build clean
 
 help: ## Muestra los objetivos disponibles.
 	@awk 'BEGIN {FS = ":.*## "; printf "Uso: make <objetivo>\n\n"} /^[a-zA-Z0-9_-]+:.*## / {printf "  %-18s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -61,6 +61,10 @@ quality: ## Ejecuta la suite completa, cobertura de pagos y reportes JUnit/XML.
 	$(QUALITY_COMPOSE) up -d --wait db
 	mkdir -p build/reports
 	uv run --locked pytest --cov=apps/ventas/pagos --cov-branch --cov-report=term-missing --cov-report=xml:build/reports/coverage-quality.xml --junitxml=build/reports/pytest-quality-full.xml
+
+reportes: ## Ejecuta la suite y genera reportes JUnit, cobertura HTML/XML (sin Docker; usa DB_PORT=5432 en local).
+	mkdir -p build/reports
+	uv run --locked pytest --cov --cov-report=term --cov-report=html --cov-report=xml --junitxml=build/reports/junit.xml
 
 static: test ## Recolecta archivos estáticos en build/staticfiles.
 	rm -rf build/staticfiles
