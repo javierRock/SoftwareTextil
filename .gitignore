@@ -26,3 +26,6 @@ media/
 
 .opencode/
 .sisyphus/
+
+# Entrega local de Lizzy
+/lab05-lizzy/
