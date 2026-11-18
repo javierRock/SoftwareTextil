@@ -21,10 +21,12 @@ from apps.compartido.infrastructure.campos import (
 )
 from apps.compartido.infrastructure.models import ModeloBase
 
+MODELO_USUARIO = "usuarios.UsuarioModel"
+
 
 class CarritoModel(ModeloBase):
     cliente = models.ForeignKey(
-        "usuarios.UsuarioModel",
+        MODELO_USUARIO,
         on_delete=models.PROTECT,
         related_name="carritos",
     )
@@ -76,7 +78,7 @@ class ItemCarritoModel(ModeloBase):
 
 class PedidoModel(ModeloBase):
     cliente = models.ForeignKey(
-        "usuarios.UsuarioModel",
+        MODELO_USUARIO,
         on_delete=models.PROTECT,
         related_name="pedidos",
     )
@@ -181,7 +183,7 @@ class DespachoModel(ModeloBase):
     direccion_entrega = models.CharField(max_length=250)
     estado = campo_estado(EstadoDespacho, default=EstadoDespacho.PENDIENTE)
     responsable = models.ForeignKey(
-        "usuarios.UsuarioModel",
+        MODELO_USUARIO,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

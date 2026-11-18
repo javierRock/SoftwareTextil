@@ -6,11 +6,12 @@ dominio, nunca de Django ni del ORM (DIP), y declara unicamente los roles de
 lectura y escritura que usa, no los de catalogo (ISP).
 """
 
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, nullcontext
 
 from apps.inventario.domain.excepciones import StockNoEncontradoError
 from apps.inventario.domain.repositorios import RepositorioInventario
+from apps.inventario.domain.stock_prenda import StockVariante
 from apps.ventas.carrito.domain.carrito import CarritoCompras
 from apps.ventas.carrito.domain.repositorios import EscritorCarrito, LectorCarrito
 from apps.ventas.pedidos.domain.errors import (
@@ -91,18 +92,21 @@ class ServicioPedidos:
     def _reservar(self, detalles: list[DetallePedido]) -> None:
         if self._inventario is None:
             return
-        for detalle in sorted(detalles, key=lambda item: item.variante_id):
-            stock = self._inventario.buscar_por_variante_bloqueada(
-                detalle.variante_id
-            )
-            if stock is None:
-                raise StockNoEncontradoError(
-                    "No existe stock para una variante del pedido"
-                )
+        for detalle, stock in self._stocks_bloqueados(detalles):
             stock.reservar(detalle.cantidad)
             self._inventario.guardar(stock)
 
     def _liberar(self, detalles: list[DetallePedido]) -> None:
+        if self._inventario is None:
+            return
+        for detalle, stock in self._stocks_bloqueados(detalles):
+            stock.liberar(detalle.cantidad)
+            self._inventario.guardar(stock)
+
+    def _stocks_bloqueados(
+        self, detalles: list[DetallePedido]
+    ) -> Iterator[tuple[DetallePedido, StockVariante]]:
+        """Comparte validación y orden de bloqueos sin adelantar escrituras."""
         if self._inventario is None:
             return
         for detalle in sorted(detalles, key=lambda item: item.variante_id):
@@ -113,5 +117,4 @@ class ServicioPedidos:
                 raise StockNoEncontradoError(
                     "No existe stock para una variante del pedido"
                 )
-            stock.liberar(detalle.cantidad)
-            self._inventario.guardar(stock)
+            yield detalle, stock
