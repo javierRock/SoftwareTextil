@@ -1,0 +1,51 @@
+{
+  "paging": {
+    "pageIndex": 1,
+    "pageSize": 100,
+    "total": 3
+  },
+  "analyses": [
+    {
+      "key": "AaHvarVph3B_ePy7CAv8",
+      "date": "2026-11-18T16:08:01+0000",
+      "events": [
+        {
+          "key": "AaHvaru1h3B_ePy7CDYg",
+          "category": "VERSION",
+          "name": "addd8df"
+        }
+      ],
+      "projectVersion": "addd8df",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    },
+    {
+      "key": "AaHvadIMh3B_ePy7B-GE",
+      "date": "2026-11-18T16:07:03+0000",
+      "events": [
+        {
+          "key": "AaHvadivh3B_ePy7CAvy",
+          "category": "QUALITY_GATE",
+          "name": "Failed",
+          "description": "Coverage on New Code < 80"
+        },
+        {
+          "key": "AaHvadiwh3B_ePy7CAvz",
+          "category": "VERSION",
+          "name": "not provided"
+        }
+      ],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    },
+    {
+      "key": "AaHvaQyHh3B_ePy7B8FZ",
+      "date": "2026-11-18T16:06:14+0000",
+      "events": [],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    }
+  ]
+}

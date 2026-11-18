@@ -1,0 +1,5 @@
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory '/workspace/SoftwareTextil/frontend/inventario/dist' in the STATICFILES_DIRS setting does not exist.
+No changes detected

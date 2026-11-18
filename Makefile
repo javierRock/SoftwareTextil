@@ -21,7 +21,7 @@ prerequisites: ## Comprueba las herramientas requeridas.
 	@command -v uv >/dev/null || { echo "Error: instala uv (https://docs.astral.sh/uv/)." >&2; exit 1; }
 	@command -v npm >/dev/null || { echo "Error: instala Node.js $(shell cat .node-version) y npm." >&2; exit 1; }
 	@command -v git >/dev/null || { echo "Error: instala Git para generar el manifiesto." >&2; exit 1; }
-	@node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (!((major === 20 && minor >= 19) || major >= 22)) { console.error("Error: Vite requiere Node ^20.19.0 o >=22.12.0; versión actual: " + process.version); process.exit(1); }'
+	@node -e 'const [major, minor] = process.versions.node.split(".").map(Number); const compatible = (major === 20 && minor >= 19) || (major === 22 && minor >= 12) || major > 22; if (!compatible) { console.error("Error: Vite requiere Node ^20.19.0 o >=22.12.0; versión actual: " + process.version); process.exit(1); }'
 	@printf 'Make: '; make --version | sed -n '1p'
 	@uv --version
 	@printf 'Python seleccionado: '; uv run --no-sync python --version

@@ -70,6 +70,10 @@ class ServicioAutenticacion:
 
         self._registrar_intento(username, ip, True)
 
+        sesion = self._crear_sesion(usuario, ip)
+        return self._respuesta_login(usuario, sesion)
+
+    def _crear_sesion(self, usuario: Usuario, ip: str) -> Sesion:
         token = token_urlsafe(32)
         sesion = Sesion(
             id=str(uuid4()),
@@ -81,9 +85,12 @@ class ServicioAutenticacion:
             estado=EstadoSesion.ACTIVA,
         )
         self.repo_sesion.guardar(sesion)
+        return sesion
 
+    @staticmethod
+    def _respuesta_login(usuario: Usuario, sesion: Sesion) -> dict:
         return {
-            "token": token,
+            "token": sesion.token,
             "usuario_id": usuario.id,
             "nombre": usuario.nombre,
             "email": usuario.email,

@@ -6,15 +6,17 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+RUTA_VENTAS = "api/ventas/"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("apps.usuarios.presentation.urls")),
     path("api/", include("apps.catalogo.presentation.urls")),
     path("api/", include("apps.inventario.presentation.urls")),
-    path("api/ventas/", include("apps.ventas.carrito.presentation.urls")),
-    path("api/ventas/", include("apps.ventas.pedidos.presentation.urls")),
-    path("api/ventas/", include("apps.ventas.pagos.presentation.urls")),
-    path("api/ventas/", include("apps.ventas.despachos.presentation.urls")),
+    path(RUTA_VENTAS, include("apps.ventas.carrito.presentation.urls")),
+    path(RUTA_VENTAS, include("apps.ventas.pedidos.presentation.urls")),
+    path(RUTA_VENTAS, include("apps.ventas.pagos.presentation.urls")),
+    path(RUTA_VENTAS, include("apps.ventas.despachos.presentation.urls")),
     # BrowserRouter necesita que cada ruta visual entregue el mismo index.
     # Las rutas de API y Django se resuelven antes de este fallback.
     re_path(

@@ -1,0 +1,39 @@
+
+> software-textil-inventario@0.1.0 test
+> node --test src/services/*.test.js
+
+✔ apiUrl conserva ruta y omite filtros vacíos (0.574375ms)
+✔ request serializa JSON y devuelve la respuesta (23.990542ms)
+✔ request normaliza errores de validación (0.358625ms)
+✔ request conserva el FormData y devuelve null para HTTP 204 (0.181666ms)
+✔ download devuelve blob y nombre de Content-Disposition (0.50475ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63.967875
+
+> software-textil-inventario@0.1.0 lint
+> eslint .
+
+
+> software-textil-inventario@0.1.0 build
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 55 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html        0.70 kB │ gzip:  0.41 kB
+dist/assets/app.css   23.83 kB │ gzip:  5.96 kB
+dist/assets/app.js   289.87 kB │ gzip: 88.67 kB
+✓ built in 449ms
+Make: GNU Make 3.81
+uv 0.12.17 (635500036 2026-09-18 aarch64-apple-darwin)
+Python seleccionado: Python 3.11.16
+Node: v24.22.3
+npm: 11.6.2

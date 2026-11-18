@@ -36,25 +36,32 @@ function errorMessage(payload, fallback) {
   return `${first[0]}: ${value}`;
 }
 
+function encodeBody(body, headers) {
+  if (body === undefined || (typeof FormData !== 'undefined' && body instanceof FormData)) {
+    return body;
+  }
+  headers['Content-Type'] = 'application/json';
+  return JSON.stringify(body);
+}
+
+async function readPayload(response) {
+  if (response.status === 204) return null;
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType.includes('json')) return response.json().catch(() => null);
+  return response.text().catch(() => '');
+}
+
 export async function request(path, { method = 'GET', body, query, signal, auth = true, baseUrl } = {}) {
   const headers = { Accept: 'application/json' };
   const token = auth ? sessionToken() : '';
   if (token) headers.Authorization = `Bearer ${token}`;
-  const isForm = typeof FormData !== 'undefined' && body instanceof FormData;
-  if (body !== undefined && !isForm) headers['Content-Type'] = 'application/json';
-
   const response = await fetch(apiUrl(path, query, baseUrl), {
     method,
     headers,
-    body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
+    body: encodeBody(body, headers),
     signal,
   });
-  const contentType = response.headers.get('content-type') || '';
-  const payload = response.status === 204
-    ? null
-    : contentType.includes('json')
-      ? await response.json().catch(() => null)
-      : await response.text().catch(() => '');
+  const payload = await readPayload(response);
   if (!response.ok) {
     if (response.status === 401 && auth && typeof window !== 'undefined') {
       window.localStorage.removeItem(SESSION_KEY);
