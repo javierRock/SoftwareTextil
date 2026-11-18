@@ -1,5 +1,7 @@
 """Repositorios concretos con Django ORM para usuarios."""
 
+from django.db import transaction
+
 from apps.compartido.domain.enums import EstadoSesion, EstadoUsuario
 from apps.compartido.infrastructure.mapeo import a_texto, uuid_valido
 from apps.usuarios.domain.repositorios import (
@@ -122,6 +124,7 @@ class DjangoRepositorioUsuario(RepositorioUsuario):
 
 
 class DjangoRepositorioRol(RepositorioRol):
+    @transaction.atomic
     def guardar(self, rol: Rol) -> None:
         model = RolModel.objects.filter(id=rol.id).first()
         if model is None:

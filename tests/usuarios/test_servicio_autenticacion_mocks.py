@@ -64,6 +64,12 @@ class TestServicioAutenticacionConMocks:
         self.repo_sesion.guardar.assert_called_once_with(ANY)
         sesion = self.repo_sesion.guardar.call_args.args[0]
         assert sesion.token == resultado["token"]
+        assert set(resultado) == {
+            "token", "usuario_id", "nombre", "email", "rol", "expira_en"
+        }
+        assert resultado["expira_en"] == sesion.fecha_expiracion
+        assert resultado["nombre"] == self.usuario.nombre
+        assert resultado["email"] == self.usuario.email
         assert self._intento_registrado().exitoso is True
 
     def test_password_incorrecto_no_crea_sesion(self) -> None:
