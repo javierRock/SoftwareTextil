@@ -12,7 +12,7 @@ from urllib.request import Request, urlopen
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destino", type=Path)
-    parser.add_argument("--project", default="softwaretextil-quality-expanded")
+    parser.add_argument("--project", default="softwaretextil-quality-review")
     args = parser.parse_args()
     host = os.environ.get("SONAR_HOST_URL", "http://127.0.0.1:9008")
     if host not in {"http://127.0.0.1:9007", "http://127.0.0.1:9008"}:
