@@ -61,6 +61,23 @@ class TestServicioCatalogoConMocks:
         self.repo_catalogo.buscar_tipo.assert_called_once_with("t-x")
         self.repo_prenda.guardar.assert_not_called()
 
+    def test_actualizar_con_tipo_inexistente_conserva_la_prenda(self) -> None:
+        prenda = PrendaFabrica.crear(
+            "Polo", "", Dinero(Decimal("10.00")), "c-1", None, tallas=["M"]
+        )
+        self.repo_prenda.buscar_por_id.return_value = prenda
+        self.repo_catalogo.buscar_tipo.return_value = None
+
+        with pytest.raises(
+            RecursoNoEncontradoError, match="El tipo de producto no existe"
+        ):
+            self.servicio.actualizar_prenda(
+                prenda.id, "Polo nuevo", "", "39.90", "PEN", "c-1", "t-x"
+            )
+
+        assert prenda.nombre == "Polo"
+        self.repo_prenda.guardar.assert_not_called()
+
     @pytest.mark.parametrize("monto", ["abc", "-5", "0"])
     def test_precio_invalido_no_guarda(self, monto: str) -> None:
         with pytest.raises(ValidacionError):

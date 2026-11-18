@@ -38,13 +38,7 @@ class ServicioCatalogo:
         tipo_producto_id: str | None = None,
         tallas: list[str] | None = None,
     ) -> Prenda:
-        if self.repo_catalogo.buscar_categoria(categoria_id) is None:
-            raise RecursoNoEncontradoError("La categoria no existe")
-        if (
-            tipo_producto_id is not None
-            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
-        ):
-            raise RecursoNoEncontradoError("El tipo de producto no existe")
+        self._validar_clasificacion(categoria_id, tipo_producto_id)
 
         prenda = PrendaFabrica.crear(
             nombre=nombre,
@@ -102,13 +96,7 @@ class ServicioCatalogo:
         tipo_producto_id: str | None,
     ) -> Prenda:
         prenda = self.buscar_prenda(prenda_id)
-        if self.repo_catalogo.buscar_categoria(categoria_id) is None:
-            raise RecursoNoEncontradoError("La categoria no existe")
-        if (
-            tipo_producto_id is not None
-            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
-        ):
-            raise RecursoNoEncontradoError("El tipo de producto no existe")
+        self._validar_clasificacion(categoria_id, tipo_producto_id)
         precio = self._crear_precio(precio_monto, precio_moneda)
         prenda.actualizar_datos_comerciales(
             nombre=nombre,
@@ -119,6 +107,17 @@ class ServicioCatalogo:
         )
         self.repo_prenda.guardar(prenda)
         return prenda
+
+    def _validar_clasificacion(
+        self, categoria_id: str, tipo_producto_id: str | None
+    ) -> None:
+        if self.repo_catalogo.buscar_categoria(categoria_id) is None:
+            raise RecursoNoEncontradoError("La categoria no existe")
+        if (
+            tipo_producto_id is not None
+            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
+        ):
+            raise RecursoNoEncontradoError("El tipo de producto no existe")
 
     def activar_prenda(self, prenda_id: str) -> Prenda:
         prenda = self.buscar_prenda(prenda_id)
