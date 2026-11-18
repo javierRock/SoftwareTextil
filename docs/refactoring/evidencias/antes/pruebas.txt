@@ -1,0 +1,224 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.16, pytest-9.1.1, pluggy-1.6.0
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: /workspace/SoftwareTextil
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collected 407 items
+
+apps/catalogo/tests/test_buscar_prendas_api.py ...........               [  2%]
+apps/catalogo/tests/test_catalogo_seguro_api.py ....                     [  3%]
+apps/catalogo/tests/test_categoria_api.py ....                           [  4%]
+apps/catalogo/tests/test_consultar_detalle_prenda_api.py ..              [  5%]
+apps/catalogo/tests/test_errores_catalogo.py .                           [  5%]
+apps/catalogo/tests/test_publicacion_prenda_api.py ....                  [  6%]
+apps/catalogo/tests/test_registro_prenda_api.py ............             [  9%]
+apps/catalogo/tests/test_repositorio_prenda.py .                         [  9%]
+apps/catalogo/tests/test_tipo_producto_api.py ....                       [ 10%]
+apps/catalogo/tests/test_visualizar_catalogo_api.py ..                   [ 11%]
+apps/inventario/tests/test_alertas_api.py .....                          [ 12%]
+apps/inventario/tests/test_api.py .................                      [ 16%]
+apps/inventario/tests/test_reportes_api.py ....                          [ 17%]
+apps/inventario/tests/test_service.py .........                          [ 19%]
+apps/inventario/tests/test_stock_por_categoria.py ............           [ 22%]
+tests/catalogo/test_repositorio_catalogo.py .......                      [ 24%]
+tests/compartido/test_integridad_esquema.py .............                [ 27%]
+tests/despachos/test_repositorio_despachos.py .....                      [ 28%]
+tests/inventario/test_repositorio_inventario.py ......                   [ 30%]
+tests/pagos/test_api_pagos.py ............                               [ 33%]
+tests/pagos/test_repositorio_pagos.py .........                          [ 35%]
+tests/test_spa.py .                                                      [ 35%]
+tests/test_usuarios_auth.py .............                                [ 38%]
+tests/usuarios/test_repositorio_usuarios.py ......                       [ 40%]
+tests/ventas/test_api_carrito_pedidos.py .............                   [ 43%]
+tests/ventas/test_api_despachos.py .......                               [ 45%]
+tests/ventas/test_repositorio_pedidos.py .....                           [ 46%]
+apps/inventario/tests/test_concurrency.py .                              [ 46%]
+apps/catalogo/tests/test_buscar_prendas.py .....                         [ 47%]
+apps/catalogo/tests/test_categoria.py .......                            [ 49%]
+apps/catalogo/tests/test_consultar_detalle_prenda.py ..                  [ 50%]
+apps/catalogo/tests/test_errores_catalogo.py ....                        [ 51%]
+apps/catalogo/tests/test_publicacion_prenda.py ...                       [ 51%]
+apps/catalogo/tests/test_registro_prenda.py .................            [ 56%]
+apps/catalogo/tests/test_services.py ...                                 [ 56%]
+apps/catalogo/tests/test_tipo_producto.py ........                       [ 58%]
+apps/catalogo/tests/test_visualizar_catalogo.py ..                       [ 59%]
+apps/inventario/tests/test_domain.py ......                              [ 60%]
+tests/catalogo/test_prenda_dominio.py ................                   [ 64%]
+tests/catalogo/test_servicio_catalogo_mocks.py ........                  [ 66%]
+tests/despachos/test_despacho_dominio.py .............                   [ 69%]
+tests/despachos/test_servicio_despachos_mocks.py .....                   [ 71%]
+tests/inventario/test_servicio_inventario_mocks.py .......               [ 72%]
+tests/inventario/test_stock_dominio.py ............                      [ 75%]
+tests/pagos/test_pago_dominio.py .....................                   [ 80%]
+tests/pagos/test_servicio_pagos.py .........                             [ 83%]
+tests/pagos/test_servicio_pagos_doubles.py ...                           [ 83%]
+tests/release/test_release.py ............                               [ 86%]
+tests/test_spa.py .....                                                  [ 87%]
+tests/usuarios/test_servicio_autenticacion_mocks.py .......              [ 89%]
+tests/usuarios/test_usuario_dominio.py ........                          [ 91%]
+tests/ventas/test_carrito_solid.py ......                                [ 93%]
+tests/ventas/test_errores_http.py ....                                   [ 94%]
+tests/ventas/test_pedido_dominio.py ..........                           [ 96%]
+tests/ventas/test_pedidos_solid.py ........                              [ 98%]
+tests/ventas/test_servicio_pedidos_mocks.py ......                       [100%]
+
+- generated xml file: /workspace/SoftwareTextil/build/reports/junit.xml -
+================================ tests coverage ================================
+______________ coverage: platform darwin, python 3.11.16-final-0 _______________
+
+Name                                                   Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------------------------------------
+apps/__init__.py                                           0      0      0      0   100%
+apps/catalogo/__init__.py                                  0      0      0      0   100%
+apps/catalogo/application/__init__.py                      0      0      0      0   100%
+apps/catalogo/application/services.py                    106      9     14      0    89%   104-121
+apps/catalogo/apps.py                                      4      0      0      0   100%
+apps/catalogo/domain/__init__.py                           0      0      0      0   100%
+apps/catalogo/domain/excepciones.py                        4      0      0      0   100%
+apps/catalogo/domain/prenda.py                           183     18     50      8    89%   114, 124, 127, 153, 155, 160, 201, 206, 219, 237, 249, 259-275, 280
+apps/catalogo/domain/repositorios.py                      52     15      0      0    71%   18, 22, 26, 30, 40, 52, 56, 60, 64, 70, 74, 78, 82, 86, 90
+apps/catalogo/infrastructure/__init__.py                   0      0      0      0   100%
+apps/catalogo/infrastructure/models.py                     1      0      0      0   100%
+apps/catalogo/infrastructure/repositories.py             103      8     28      4    89%   52, 163, 172-178, 183, 190
+apps/catalogo/models.py                                   47      0      0      0   100%
+apps/catalogo/presentation/__init__.py                     0      0      0      0   100%
+apps/catalogo/presentation/errors.py                      11      0      6      0   100%
+apps/catalogo/presentation/serializers.py                129      2      8      2    97%   99, 219
+apps/catalogo/presentation/urls.py                         8      0      0      0   100%
+apps/catalogo/presentation/views.py                      183     16     26      0    91%   145, 148, 151-172, 228, 254, 297
+apps/compartido/__init__.py                                0      0      0      0   100%
+apps/compartido/apps.py                                    4      0      0      0   100%
+apps/compartido/domain/__init__.py                         0      0      0      0   100%
+apps/compartido/domain/auditoria.py                        8      8      0      0     0%   3-12
+apps/compartido/domain/dinero.py                          20      4      6      2    77%   16, 23-24, 28
+apps/compartido/domain/enums.py                           54      0      0      0   100%
+apps/compartido/domain/errors.py                           1      0      0      0   100%
+apps/compartido/domain/periodo.py                         16     16      4      0     0%   3-23
+apps/compartido/infrastructure/__init__.py                 0      0      0      0   100%
+apps/compartido/infrastructure/campos.py                  26      0      0      0   100%
+apps/compartido/infrastructure/mapeo.py                   14      0      0      0   100%
+apps/compartido/infrastructure/models.py                  11      0      0      0   100%
+apps/compartido/presentation/__init__.py                   0      0      0      0   100%
+apps/compartido/presentation/errores.py                   13      0      4      0   100%
+apps/inventario/__init__.py                                0      0      0      0   100%
+apps/inventario/application/__init__.py                    0      0      0      0   100%
+apps/inventario/application/reportes.py                  161      4     36      4    96%   45, 85, 212, 310
+apps/inventario/application/services.py                   86     18     12      2    80%   63-77, 140-143, 155-159, 162, 177
+apps/inventario/apps.py                                    4      0      0      0   100%
+apps/inventario/domain/__init__.py                         0      0      0      0   100%
+apps/inventario/domain/consultas.py                       72      0      0      0   100%
+apps/inventario/domain/excepciones.py                     10      0      0      0   100%
+apps/inventario/domain/repositorios.py                    39     11      0      0    72%   19, 23, 32, 36, 40, 48, 53, 59, 63, 69, 73
+apps/inventario/domain/stock_prenda.py                   117      9     24      4    89%   32-33, 121, 130-133, 162, 221
+apps/inventario/infrastructure/__init__.py                 0      0      0      0   100%
+apps/inventario/infrastructure/models.py                   2      0      0      0   100%
+apps/inventario/infrastructure/repositories.py            88      5     20      5    91%   154, 164, 182, 233, 254
+apps/inventario/models.py                                 37      0      0      0   100%
+apps/inventario/presentation/__init__.py                   0      0      0      0   100%
+apps/inventario/presentation/errores.py                    7      0      0      0   100%
+apps/inventario/presentation/serializers.py               72      0      0      0   100%
+apps/inventario/presentation/urls.py                       6      0      0      0   100%
+apps/inventario/presentation/views.py                    101     12      6      2    85%   62, 95-98, 121, 126, 203-210
+apps/usuarios/__init__.py                                  0      0      0      0   100%
+apps/usuarios/application/__init__.py                      0      0      0      0   100%
+apps/usuarios/application/services.py                    116     21     26      7    77%   138, 164, 183, 186, 200, 202, 209, 212, 220-222, 225-232, 235, 240
+apps/usuarios/apps.py                                      4      0      0      0   100%
+apps/usuarios/domain/__init__.py                           0      0      0      0   100%
+apps/usuarios/domain/exceptions.py                         6      0      0      0   100%
+apps/usuarios/domain/repositorios.py                      70     21      0      0    70%   11, 15, 19, 23, 27, 31, 35, 39, 45, 49, 53, 57, 63, 67, 71, 75, 81, 85, 89, 93, 99
+apps/usuarios/domain/usuario.py                           72      0      2      0   100%
+apps/usuarios/infrastructure/__init__.py                   0      0      0      0   100%
+apps/usuarios/infrastructure/models.py                     1      0      0      0   100%
+apps/usuarios/infrastructure/repositories.py             122     25     18      2    76%   113-114, 126-132, 136, 145-146, 155-160, 165, 175-176, 179-180, 183-186, 192->194
+apps/usuarios/management/__init__.py                       0      0      0      0   100%
+apps/usuarios/management/commands/__init__.py              0      0      0      0   100%
+apps/usuarios/management/commands/crear_admin.py          29      5      4      2    79%   34, 39, 52-54
+apps/usuarios/management/commands/sembrar_demo.py         43     43     10      0     0%   3-161
+apps/usuarios/models.py                                   63      0      0      0   100%
+apps/usuarios/presentation/__init__.py                     0      0      0      0   100%
+apps/usuarios/presentation/authentication.py              43      6     12      2    82%   46, 64-68
+apps/usuarios/presentation/permissions.py                 14      0      0      0   100%
+apps/usuarios/presentation/serializers.py                 35      0      0      0   100%
+apps/usuarios/presentation/urls.py                         8      0      0      0   100%
+apps/usuarios/presentation/views.py                      132     33      2      0    75%   94-95, 131-134, 150-153, 165-169, 185-188, 202-203, 208-212, 221-230
+apps/ventas/__init__.py                                    0      0      0      0   100%
+apps/ventas/apps.py                                        4      0      0      0   100%
+apps/ventas/carrito/__init__.py                            0      0      0      0   100%
+apps/ventas/carrito/application/__init__.py                0      0      0      0   100%
+apps/ventas/carrito/application/consultas.py              16      1      4      1    90%   21
+apps/ventas/carrito/application/services.py               46      3      6      1    92%   79-80, 100
+apps/ventas/carrito/domain/__init__.py                     0      0      0      0   100%
+apps/ventas/carrito/domain/carrito.py                     80     17     22      7    73%   29, 49, 61, 66-71, 76, 80, 83, 89, 93-95, 111
+apps/ventas/carrito/domain/errors.py                      32      4      0      0    88%   31, 36, 46, 51
+apps/ventas/carrito/domain/repositorios.py                21      5      0      0    76%   18, 24, 32, 36, 44
+apps/ventas/carrito/infrastructure/__init__.py             0      0      0      0   100%
+apps/ventas/carrito/infrastructure/catalogo.py            21      1      8      1    93%   16
+apps/ventas/carrito/infrastructure/factories.py           11      0      0      0   100%
+apps/ventas/carrito/infrastructure/memoria.py             19      1      2      1    90%   19
+apps/ventas/carrito/infrastructure/models.py               1      0      0      0   100%
+apps/ventas/carrito/infrastructure/repositories.py        45      3     12      3    89%   63, 71, 77
+apps/ventas/carrito/presentation/__init__.py               0      0      0      0   100%
+apps/ventas/carrito/presentation/errores.py                8      0      0      0   100%
+apps/ventas/carrito/presentation/serializers.py           21      0      0      0   100%
+apps/ventas/carrito/presentation/urls.py                   5      0      0      0   100%
+apps/ventas/carrito/presentation/views.py                 61     11     14      3    79%   53, 76, 82, 95-106
+apps/ventas/despachos/__init__.py                          0      0      0      0   100%
+apps/ventas/despachos/application/__init__.py              0      0      0      0   100%
+apps/ventas/despachos/application/services.py             78     10     18      5    84%   49->55, 52, 60-61, 84-85, 94, 97, 103, 122, 125
+apps/ventas/despachos/domain/__init__.py                   0      0      0      0   100%
+apps/ventas/despachos/domain/despacho.py                  62      0     12      0   100%
+apps/ventas/despachos/domain/errors.py                    31      2      0      0    94%   42, 57
+apps/ventas/despachos/domain/repositorios.py              18      5      0      0    72%   11, 15, 21, 25, 29
+apps/ventas/despachos/infrastructure/__init__.py           0      0      0      0   100%
+apps/ventas/despachos/infrastructure/models.py             2      0      0      0   100%
+apps/ventas/despachos/infrastructure/repositories.py      53      3     12      2    92%   65, 75, 80
+apps/ventas/despachos/presentation/__init__.py             0      0      0      0   100%
+apps/ventas/despachos/presentation/errores.py              9      0      0      0   100%
+apps/ventas/despachos/presentation/serializers.py         20      0      0      0   100%
+apps/ventas/despachos/presentation/urls.py                 5      0      0      0   100%
+apps/ventas/despachos/presentation/views.py               66     12      6      3    79%   48-49, 54, 69-73, 79, 93, 102-103
+apps/ventas/models.py                                     73      0      0      0   100%
+apps/ventas/pagos/__init__.py                              0      0      0      0   100%
+apps/ventas/pagos/application/__init__.py                  0      0      0      0   100%
+apps/ventas/pagos/application/ports.py                    27      4      0      0    85%   28, 35, 39, 43
+apps/ventas/pagos/application/services.py                 89     11     26      7    83%   50, 73, 112-116, 119, 127, 136, 167
+apps/ventas/pagos/domain/__init__.py                       0      0      0      0   100%
+apps/ventas/pagos/domain/excepciones.py                   58      2      0      0    97%   16, 34
+apps/ventas/pagos/domain/pago.py                          53      3     18      3    92%   47, 53, 60
+apps/ventas/pagos/domain/politicas.py                     51      5     16      3    88%   18, 32, 37, 92, 95
+apps/ventas/pagos/domain/repositorios.py                  26      6      0      0    77%   23, 28, 33, 38, 43, 53
+apps/ventas/pagos/infrastructure/__init__.py               0      0      0      0   100%
+apps/ventas/pagos/infrastructure/models.py                 2      0      0      0   100%
+apps/ventas/pagos/infrastructure/pedidos.py               29      5     10      5    74%   24, 33, 39, 48, 54
+apps/ventas/pagos/infrastructure/repositories.py          43      3     10      4    87%   51, 57, 63, 73->77
+apps/ventas/pagos/presentation/__init__.py                 0      0      0      0   100%
+apps/ventas/pagos/presentation/serializers.py             29      0      2      0   100%
+apps/ventas/pagos/presentation/urls.py                     5      0      0      0   100%
+apps/ventas/pagos/presentation/views.py                   77      5     16      3    91%   56, 93, 102-103, 145
+apps/ventas/pedidos/__init__.py                            0      0      0      0   100%
+apps/ventas/pedidos/application/__init__.py                0      0      0      0   100%
+apps/ventas/pedidos/application/consultas.py              16      1      4      1    90%   21
+apps/ventas/pedidos/application/services.py               66      1     20      1    98%   113
+apps/ventas/pedidos/domain/__init__.py                     0      0      0      0   100%
+apps/ventas/pedidos/domain/errors.py                      32      0      0      0   100%
+apps/ventas/pedidos/domain/pedido.py                      49      0     14      0   100%
+apps/ventas/pedidos/domain/repositorios.py                21      5      0      0    76%   18, 22, 30, 34, 42
+apps/ventas/pedidos/infrastructure/__init__.py             0      0      0      0   100%
+apps/ventas/pedidos/infrastructure/factories.py           13      0      0      0   100%
+apps/ventas/pedidos/infrastructure/memoria.py             19      1      2      1    90%   19
+apps/ventas/pedidos/infrastructure/models.py               1      0      0      0   100%
+apps/ventas/pedidos/infrastructure/repositories.py        44      2     10      2    93%   71, 77
+apps/ventas/pedidos/presentation/__init__.py               0      0      0      0   100%
+apps/ventas/pedidos/presentation/errores.py               10      0      0      0   100%
+apps/ventas/pedidos/presentation/serializers.py           18      0      0      0   100%
+apps/ventas/pedidos/presentation/urls.py                   5      0      0      0   100%
+apps/ventas/pedidos/presentation/views.py                 49      1      8      1    96%   56
+apps/ventas/permissions.py                                 4      0      0      0   100%
+apps/ventas/presentation/__init__.py                       0      0      0      0   100%
+apps/ventas/presentation/errores.py                       11      1      0      0    91%   24
+--------------------------------------------------------------------------------------------------
+TOTAL                                                   4213    443    590    104    88%
+Coverage XML written to file build/reports/coverage.xml
+Required test coverage of 85.0% reached. Total coverage: 87.65%
+============================= 407 passed in 9.20s ==============================

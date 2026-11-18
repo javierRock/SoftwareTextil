@@ -1,0 +1,16 @@
+
+> software-textil-inventario@0.1.0 test
+> node --test src/services/*.test.js
+
+✔ apiUrl conserva ruta y omite filtros vacíos (0.558292ms)
+✔ request serializa JSON y devuelve la respuesta (24.022375ms)
+✔ request normaliza errores de validación (0.363583ms)
+✔ download devuelve blob y nombre de Content-Disposition (0.643834ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 64.029625

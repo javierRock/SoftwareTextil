@@ -1,0 +1,52 @@
+{
+  "paging": {
+    "pageIndex": 1,
+    "pageSize": 100,
+    "total": 3
+  },
+  "analyses": [
+    {
+      "key": "AaHvWYrEQcFWzodUvZmS",
+      "date": "2026-11-18T15:49:22+0000",
+      "events": [
+        {
+          "key": "AaHvWZDZQcFWzodUvb0w",
+          "category": "QUALITY_GATE",
+          "name": "Passed",
+          "description": ""
+        },
+        {
+          "key": "AaHvWZDZQcFWzodUvb0x",
+          "category": "VERSION",
+          "name": "not provided"
+        }
+      ],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    },
+    {
+      "key": "AaHvWKfBQcFWzodUvXbh",
+      "date": "2026-11-18T15:48:25+0000",
+      "events": [
+        {
+          "key": "AaHvWK5LQcFWzodUvZmJ",
+          "category": "QUALITY_GATE",
+          "name": "Failed",
+          "description": "Coverage on New Code < 80"
+        }
+      ],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    },
+    {
+      "key": "AaHvV7K8QcFWzodUvVy4",
+      "date": "2026-11-18T15:47:21+0000",
+      "events": [],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    }
+  ]
+}

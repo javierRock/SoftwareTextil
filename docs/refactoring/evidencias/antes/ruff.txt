@@ -1,0 +1,630 @@
+PLR0913 Too many arguments in function definition (8 > 5)
+  --> apps/catalogo/application/services.py:30:9
+   |
+28 |         self.repo_catalogo = repo_catalogo
+29 |
+30 |     def crear_prenda(
+   |         ^^^^^^^^^^^^
+31 |         self,
+32 |         nombre: str,
+   |
+help: Consider adding `@typing.override` if changing the function signature would violate the Liskov Substitution Principle
+
+PLR0917 Too many positional arguments (8 > 5)
+  --> apps/catalogo/application/services.py:30:9
+   |
+28 |         self.repo_catalogo = repo_catalogo
+29 |
+30 |     def crear_prenda(
+   |         ^^^^^^^^^^^^
+31 |         self,
+32 |         nombre: str,
+   |
+help: Consider adding `@typing.override` if changing the function signature would violate the Liskov Substitution Principle
+
+PLR0913 Too many arguments in function definition (7 > 5)
+  --> apps/catalogo/application/services.py:94:9
+   |
+92 |         return prenda
+93 |
+94 |     def actualizar_prenda(
+   |         ^^^^^^^^^^^^^^^^^
+95 |         self,
+96 |         prenda_id: str,
+   |
+help: Consider adding `@typing.override` if changing the function signature would violate the Liskov Substitution Principle
+
+PLR0917 Too many positional arguments (7 > 5)
+  --> apps/catalogo/application/services.py:94:9
+   |
+92 |         return prenda
+93 |
+94 |     def actualizar_prenda(
+   |         ^^^^^^^^^^^^^^^^^
+95 |         self,
+96 |         prenda_id: str,
+   |
+help: Consider adding `@typing.override` if changing the function signature would violate the Liskov Substitution Principle
+
+PLR0913 Too many arguments in function definition (7 > 5)
+   --> apps/catalogo/domain/prenda.py:305:9
+    |
+303 | class PrendaFabrica:
+304 |     @staticmethod
+305 |     def crear(
+    |         ^^^^^
+306 |         nombre: str,
+307 |         descripcion: str,
+    |
+help: Consider adding `@typing.override` if changing the function signature would violate the Liskov Substitution Principle
+
+PLR0917 Too many positional arguments (7 > 5)
+   --> apps/catalogo/domain/prenda.py:305:9
+    |
+303 | class PrendaFabrica:
+304 |     @staticmethod
+305 |     def crear(
+    |         ^^^^^
+306 |         nombre: str,
+307 |         descripcion: str,
+    |
+help: Consider adding `@typing.override` if changing the function signature would violate the Liskov Substitution Principle
+
+RUF012 Mutable default value for class attribute
+  --> apps/catalogo/tests/test_errores_catalogo.py:17:26
+   |
+15 | class VistaErrorCatalogo(ManejoErroresCatalogoMixin, APIView):
+16 |     excepcion = CatalogoError
+17 |     permission_classes = [AllowAny]
+   |                          ^^^^^^^^^^
+18 |
+19 |     def get(self, request):
+   |
+help: Consider initializing in `__init__` or annotating with `typing.ClassVar`
+
+ARG002 Unused method argument: `request`
+  --> apps/catalogo/tests/test_errores_catalogo.py:19:19
+   |
+17 |     permission_classes = [AllowAny]
+18 |
+19 |     def get(self, request):
+   |                   ^^^^^^^
+20 |         raise self.excepcion("Error de prueba")
+   |
+
+ARG002 Unused method argument: `kwargs`
+  --> apps/catalogo/tests/test_errores_catalogo.py:56:36
+   |
+54 | def test_error_inesperado_conserva_respuesta_http_500(monkeypatch) -> None:
+55 |     class ServicioConFallo:
+56 |         def buscar_prendas(self, **kwargs):
+   |                                    ^^^^^^
+57 |             raise RuntimeError("Fallo inesperado")
+   |
+
+PLW0108 Lambda may be unnecessary; consider inlining inner function
+  --> apps/catalogo/tests/test_errores_catalogo.py:61:9
+   |
+59 |     monkeypatch.setattr(
+60 |         "apps.catalogo.presentation.views._servicio",
+61 |         lambda: ServicioConFallo(),
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+62 |     )
+63 |     cliente = APIClient()
+   |
+help: Inline function call
+
+E501 Line too long (104 > 88)
+  --> apps/inventario/application/reportes.py:31:89
+   |
+30 | class ServicioReporteInventario:
+31 |     def __init__(self, servicio_inventario: ServicioInventario, repo_prenda: RepositorioPrenda) -> None:
+   |                                                                                         ^^^^^^^^^^^^^^^^
+32 |         self.servicio_inventario = servicio_inventario
+33 |         self.repo_prenda = repo_prenda
+   |
+
+E501 Line too long (91 > 88)
+  --> apps/inventario/application/reportes.py:37:89
+   |
+35 |     def construir_reporte(self, categoria_id: str | None = None) -> ReporteInventario:
+36 |         resumen = self.servicio_inventario.listar_stock_por_categoria(categoria_id)
+37 |         prendas_catalogo = {str(prenda.id): prenda for prenda in self.repo_prenda.listar()}
+   |                                                                                         ^^^
+38 |
+39 |         categorias: list[ReporteInventarioCategoria] = []
+   |
+
+E501 Line too long (103 > 88)
+  --> apps/inventario/application/reportes.py:47:89
+   |
+45 |                     continue
+46 |
+47 |                 precio = Decimal(prenda.precio.monto).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+   |                                                                                         ^^^^^^^^^^^^^^^
+48 |                 prendas.append(
+49 |                     ReporteInventarioPrenda(
+   |
+
+E501 Line too long (95 > 88)
+  --> apps/inventario/application/reportes.py:70:89
+   |
+68 |         return ReporteInventario(categorias=categorias)
+69 |
+70 |     def generar_archivo(self, formato: str, categoria_id: str | None = None) -> ArchivoReporte:
+   |                                                                                         ^^^^^^^
+71 |         reporte = self.construir_reporte(categoria_id)
+72 |         formato_normalizado = formato.lower()
+   |
+
+E501 Line too long (97 > 88)
+   --> apps/inventario/application/reportes.py:101:89
+    |
+ 99 |             archive.writestr("xl/styles.xml", self._xlsx_styles_xml())
+100 |             archive.writestr("xl/worksheets/sheet1.xml", self._xlsx_sheet_xml(
+101 |                 ["Categoría", "Prenda", "Cantidad", "Precio unitario", "Moneda", "Valorización"],
+    |                                                                                         ^^^^^^^^^
+102 |                 [
+103 |                     [
+    |
+
+E501 Line too long (97 > 88)
+   --> apps/inventario/application/reportes.py:107:89
+    |
+105 |                         prenda.prenda,
+106 |                         prenda.cantidad_actual,
+107 |                         prenda.precio_unitario.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+    |                                                                                         ^^^^^^^^^
+108 |                         prenda.moneda,
+109 |                         prenda.valorizacion.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+    |
+
+E501 Line too long (94 > 88)
+   --> apps/inventario/application/reportes.py:109:89
+    |
+107 |                         prenda.precio_unitario.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+108 |                         prenda.moneda,
+109 |                         prenda.valorizacion.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+    |                                                                                         ^^^^^^
+110 |                     ]
+111 |                     for categoria in reporte.categorias
+    |
+
+E501 Line too long (147 > 88)
+   --> apps/inventario/application/reportes.py:118:89
+    |
+116 | …orización total"],
+117 | …
+118 | …cantidad_total, categoria.valorizacion_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)]
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+119 | …ias
+120 | …l, reporte.valorizacion_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)]],
+    |
+
+E501 Line too long (134 > 88)
+   --> apps/inventario/application/reportes.py:120:89
+    |
+118 | …egoria.cantidad_total, categoria.valorizacion_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)]
+119 | …categorias
+120 | …ad_total, reporte.valorizacion_total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)]],
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+121 | …
+122 | …
+    |
+
+E501 Line too long (122 > 88)
+   --> apps/inventario/application/reportes.py:126:89
+    |
+124 |     def _generar_pdf(self, reporte: ReporteInventario) -> bytes:
+125 |         lineas = self._lineas_pdf(reporte)
+126 |         paginas = [lineas[indice : indice + 42] for indice in range(0, len(lineas), 42)] or [["Inventario sin registros"]]
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+127 |
+128 |         font_object_number = 3 + len(paginas) * 2
+    |
+
+E501 Line too long (126 > 88)
+   --> apps/inventario/application/reportes.py:132:89
+    |
+130 |         objects: list[bytes] = [
+131 |             self._pdf_object(1, "/Type /Catalog /Pages 2 0 R"),
+132 |             self._pdf_object(2, f"/Type /Pages /Kids [{' '.join(f'{ref} 0 R' for ref in pages_refs)}] /Count {len(paginas)}"),
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+133 |         ]
+    |
+
+E501 Line too long (162 > 88)
+   --> apps/inventario/application/reportes.py:141:89
+    |
+139 | …
+140 | …
+141 | …0 0 595 842] /Resources << /Font << /F1 {font_object_number} 0 R >> >> /Contents {content_number} 0 R",
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+142 | …
+143 | …
+    |
+
+E501 Line too long (112 > 88)
+   --> apps/inventario/application/reportes.py:147:89
+    |
+145 |             objects.append(self._pdf_stream_object(content_number, content))
+146 |
+147 |         objects.append(self._pdf_object(font_object_number, "/Type /Font /Subtype /Type1 /BaseFont /Helvetica"))
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+148 |         return self._ensamblar_pdf(objects)
+    |
+
+E501 Line too long (103 > 88)
+   --> apps/inventario/application/reportes.py:156:89
+    |
+154 |     @staticmethod
+155 |     def _pdf_stream_object(object_number: int, contenido: bytes) -> bytes:
+156 |         encabezado = f"{object_number} 0 obj << /Length {len(contenido)} >> stream\n".encode("latin-1")
+    |                                                                                         ^^^^^^^^^^^^^^^
+157 |         return encabezado + contenido + b"\nendstream\nendobj\n"
+    |
+
+E501 Line too long (98 > 88)
+   --> apps/inventario/application/reportes.py:173:89
+    |
+171 |         xref_offset = len(cuerpo)
+172 |         total_objetos = len(objects)
+173 |         xref = [b"xref\n", f"0 {total_objetos + 1}\n".encode("latin-1"), b"0000000000 65535 f \n"]
+    |                                                                                         ^^^^^^^^^^
+174 |         for offset in offsets[1:]:
+175 |             xref.append(f"{offset:010d} 00000 n \n".encode("latin-1"))
+    |
+
+E501 Line too long (125 > 88)
+   --> apps/inventario/application/reportes.py:177:89
+    |
+175 |             xref.append(f"{offset:010d} 00000 n \n".encode("latin-1"))
+176 |
+177 |         trailer = f"trailer << /Size {total_objetos + 1} /Root 1 0 R >>\nstartxref\n{xref_offset}\n%%EOF\n".encode("latin-1")
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+178 |         return cuerpo + b"".join(xref) + trailer
+    |
+
+E501 Line too long (103 > 88)
+   --> apps/inventario/application/reportes.py:180:89
+    |
+178 |         return cuerpo + b"".join(xref) + trailer
+179 |
+180 |     def _build_pdf_page_content(self, lineas: Iterable[str], pagina: int, total_paginas: int) -> bytes:
+    |                                                                                         ^^^^^^^^^^^^^^^
+181 |         contenido = ["BT", "/F1 10 Tf", "50 800 Td"]
+182 |         for indice, linea in enumerate(lineas):
+    |
+
+E501 Line too long (89 > 88)
+   --> apps/inventario/application/reportes.py:199:89
+    |
+197 |         lineas = [
+198 |             "Reporte del inventario actual",
+199 |             f"Generado: {timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M')}",
+    |                                                                                         ^
+200 |             f"Cantidad total: {reporte.cantidad_total}",
+201 |             f"Valorización total: {reporte.valorizacion_total.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)}",
+    |
+
+E501 Line too long (114 > 88)
+   --> apps/inventario/application/reportes.py:201:89
+    |
+199 |             f"Generado: {timezone.localtime(timezone.now()).strftime('%Y-%m-%d %H:%M')}",
+200 |             f"Cantidad total: {reporte.cantidad_total}",
+201 |             f"Valorización total: {reporte.valorizacion_total.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)}",
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+202 |             "",
+203 |         ]
+    |
+
+E501 Line too long (188 > 88)
+   --> apps/inventario/application/reportes.py:205:89
+    |
+203 | …
+204 | …
+205 | …ategoria.cantidad_total} | Valor: {categoria.valorizacion_total.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)}")
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+206 | …
+207 | …
+    |
+
+E501 Line too long (277 > 88)
+   --> apps/inventario/application/reportes.py:208:89
+    |
+206 | …
+207 | …
+208 | …dad_actual} | Precio: {prenda.precio_unitario.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)} {prenda.moneda} | Valor: {prenda.valorizacion.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)}"
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+209 | …
+210 | …
+    |
+
+E501 Line too long (116 > 88)
+   --> apps/inventario/application/reportes.py:224:89
+    |
+222 | …     "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+223 | …     "<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">"
+224 | …     "<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>"
+    |                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+225 | …     "<Default Extension=\"xml\" ContentType=\"application/xml\"/>"
+226 | …     "<Override PartName=\"/xl/workbook.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+x…
+    |
+
+E501 Line too long (146 > 88)
+   --> apps/inventario/application/reportes.py:226:89
+    |
+224 | …e=\"application/vnd.openxmlformats-package.relationships+xml\"/>"
+225 | …=\"application/xml\"/>"
+226 | …" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml\"/>"
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+227 | …eet1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+228 | …eet2.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+    |
+
+E501 Line too long (154 > 88)
+   --> apps/inventario/application/reportes.py:227:89
+    |
+225 | …pplication/xml\"/>"
+226 | …ntentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml\"/>"
+227 | ….xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+228 | ….xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+229 | …entType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml\"/>"
+    |
+
+E501 Line too long (154 > 88)
+   --> apps/inventario/application/reportes.py:228:89
+    |
+226 | …ntentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml\"/>"
+227 | ….xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+228 | ….xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+229 | …entType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml\"/>"
+230 | …
+    |
+
+E501 Line too long (140 > 88)
+   --> apps/inventario/application/reportes.py:229:89
+    |
+227 | …/sheet1.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+228 | …/sheet2.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+229 | …\" ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml\"/>"
+    |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+230 | …
+231 | …
+    |
+
+E501 Line too long (160 > 88)
+   --> apps/inventario/application/reportes.py:238:89
+    |
+236 | …dalone=\"yes\"?>"
+237 | …formats.org/package/2006/relationships\">"
+238 | …as.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"xl/workbook.xml\"/>"
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+239 | …
+240 | …
+    |
+
+E501 Line too long (172 > 88)
+   --> apps/inventario/application/reportes.py:246:89
+    |
+244 | …
+245 | …=\"yes\"?>"
+246 | …/spreadsheetml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+247 | …
+248 | …/>"
+    |
+
+E501 Line too long (161 > 88)
+   --> apps/inventario/application/reportes.py:259:89
+    |
+257 | …alone=\"yes\"?>"
+258 | …ormats.org/package/2006/relationships\">"
+259 | …s.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet1.xml\"/>"
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+260 | …s.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet2.xml\"/>"
+261 | …s.openxmlformats.org/officeDocument/2006/relationships/styles\" Target=\"styles.xml\"/>"
+    |
+
+E501 Line too long (161 > 88)
+   --> apps/inventario/application/reportes.py:260:89
+    |
+258 | …ormats.org/package/2006/relationships\">"
+259 | …s.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet1.xml\"/>"
+260 | …s.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet2.xml\"/>"
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+261 | …s.openxmlformats.org/officeDocument/2006/relationships/styles\" Target=\"styles.xml\"/>"
+262 | …
+    |
+
+E501 Line too long (147 > 88)
+   --> apps/inventario/application/reportes.py:261:89
+    |
+259 | …/schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet1.xml\"/>"
+260 | …/schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet\" Target=\"worksheets/sheet2.xml\"/>"
+261 | …/schemas.openxmlformats.org/officeDocument/2006/relationships/styles\" Target=\"styles.xml\"/>"
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+262 | …
+263 | …
+    |
+
+E501 Line too long (132 > 88)
+   --> apps/inventario/application/reportes.py:270:89
+    |
+268 |             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
+269 |             "<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">"
+270 |             "<fonts count=\"1\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/></font></fonts>"
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+271 |             "<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>"
+272 |             "<borders count=\"1\"><border><left/><right/><top/><bottom/><diagonal/></border></borders>"
+    |
+
+E501 Line too long (89 > 88)
+   --> apps/inventario/application/reportes.py:271:89
+    |
+269 |             "<styleSheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">"
+270 |             "<fonts count=\"1\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/></font></fonts>"
+271 |             "<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>"
+    |                                                                                         ^
+272 |             "<borders count=\"1\"><border><left/><right/><top/><bottom/><diagonal/></border></borders>"
+273 |             "<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>"
+    |
+
+E501 Line too long (103 > 88)
+   --> apps/inventario/application/reportes.py:272:89
+    |
+270 |             "<fonts count=\"1\"><font><sz val=\"11\"/><color theme=\"1\"/><name val=\"Calibri\"/><family val=\"2\"/></font></fonts>"
+271 |             "<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>"
+272 |             "<borders count=\"1\"><border><left/><right/><top/><bottom/><diagonal/></border></borders>"
+    |                                                                                         ^^^^^^^^^^^^^^^
+273 |             "<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>"
+274 |             "<cellXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\"/></cellXfs>"
+    |
+
+E501 Line too long (116 > 88)
+   --> apps/inventario/application/reportes.py:273:89
+    |
+271 |             "<fills count=\"1\"><fill><patternFill patternType=\"none\"/></fill></fills>"
+272 |             "<borders count=\"1\"><border><left/><right/><top/><bottom/><diagonal/></border></borders>"
+273 |             "<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>"
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+274 |             "<cellXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\"/></cellXfs>"
+275 |             "</styleSheet>"
+    |
+
+E501 Line too long (117 > 88)
+   --> apps/inventario/application/reportes.py:274:89
+    |
+272 |             "<borders count=\"1\"><border><left/><right/><top/><bottom/><diagonal/></border></borders>"
+273 |             "<cellStyleXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\"/></cellStyleXfs>"
+274 |             "<cellXfs count=\"1\"><xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" xfId=\"0\"/></cellXfs>"
+    |                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+275 |             "</styleSheet>"
+276 |         )
+    |
+
+E501 Line too long (96 > 88)
+   --> apps/inventario/application/reportes.py:295:89
+    |
+293 |         cells = []
+294 |         for column_index, value in enumerate(values, start=1):
+295 |             reference = ServicioReporteInventario._xlsx_cell_reference(column_index, row_number)
+    |                                                                                         ^^^^^^^^
+296 |             cells.append(ServicioReporteInventario._xlsx_cell_xml(reference, value))
+297 |         return f"<row r=\"{row_number}\">{''.join(cells)}</row>"
+    |
+
+E501 Line too long (99 > 88)
+   --> apps/inventario/application/reportes.py:313:89
+    |
+311 |         if isinstance(value, (int, Decimal)):
+312 |             return f"<c r=\"{reference}\"><v>{xml_escape(str(value))}</v></c>"
+313 |         return f"<c r=\"{reference}\" t=\"inlineStr\"><is><t>{xml_escape(str(value))}</t></is></c>"
+    |                                                                                         ^^^^^^^^^^^
+    |
+
+E501 Line too long (90 > 88)
+  --> apps/inventario/tests/test_reportes_api.py:13:89
+   |
+12 | def _leer_filas_xlsx(contenido: bytes, hoja: str) -> list[list[str]]:
+13 |     ruta = "xl/worksheets/sheet1.xml" if hoja == "Resumen" else "xl/worksheets/sheet2.xml"
+   |                                                                                         ^^
+14 |     namespace = {"main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+   |
+
+S314 Using `xml` to parse untrusted data is known to be vulnerable to XML attacks; use `defusedxml` equivalents
+  --> apps/inventario/tests/test_reportes_api.py:19:12
+   |
+17 |         xml = archivo.read(ruta)
+18 |
+19 |     raiz = ET.fromstring(xml)
+   |            ^^^^^^^^^^^^^^^^^^
+20 |     filas: list[list[str]] = []
+21 |     for fila in raiz.findall("main:sheetData/main:row", namespace):
+   |
+
+E501 Line too long (90 > 88)
+  --> apps/inventario/tests/test_reportes_api.py:26:89
+   |
+24 |             tipo = celda.attrib.get("t")
+25 |             if tipo == "inlineStr":
+26 |                 valor = celda.findtext("main:is/main:t", default="", namespaces=namespace)
+   |                                                                                         ^^
+27 |             else:
+28 |                 valor = celda.findtext("main:v", default="", namespaces=namespace)
+   |
+
+E501 Line too long (91 > 88)
+  --> apps/inventario/tests/test_reportes_api.py:35:89
+   |
+34 | @pytest.mark.django_db
+35 | def test_reporte_xlsx_es_legible_y_no_toca_la_base_de_datos(client, stock, prenda) -> None:
+   |                                                                                         ^^^
+36 |     stock_count_before = StockVarianteModel.objects.count()
+   |
+
+E501 Line too long (107 > 88)
+  --> apps/inventario/tests/test_reportes_api.py:41:89
+   |
+40 |     assert respuesta.status_code == 200
+41 |     assert respuesta["Content-Type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+   |                                                                                         ^^^^^^^^^^^^^^^^^^^
+42 |     assert respuesta["Content-Disposition"].startswith("attachment; filename=\"reporte-inventario")
+43 |     assert StockVarianteModel.objects.count() == stock_count_before
+   |
+
+E501 Line too long (99 > 88)
+  --> apps/inventario/tests/test_reportes_api.py:42:89
+   |
+40 |     assert respuesta.status_code == 200
+41 |     assert respuesta["Content-Type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+42 |     assert respuesta["Content-Disposition"].startswith("attachment; filename=\"reporte-inventario")
+   |                                                                                         ^^^^^^^^^^^
+43 |     assert StockVarianteModel.objects.count() == stock_count_before
+   |
+
+E501 Line too long (105 > 88)
+  --> apps/inventario/tests/test_reportes_api.py:46:89
+   |
+45 |     resumen = _leer_filas_xlsx(respuesta.content, "Resumen")
+46 |     assert resumen[0] == ["Categoría", "Prenda", "Cantidad", "Precio unitario", "Moneda", "Valorización"]
+   |                                                                                         ^^^^^^^^^^^^^^^^^
+47 |     assert resumen[1][0] == "Camisetas"
+48 |     assert resumen[1][1].startswith("Prenda ")
+   |
+
+E501 Line too long (104 > 88)
+  --> apps/inventario/tests/test_reportes_api.py:87:89
+   |
+85 |     assert respuesta.status_code == 200
+86 |     resumen = _leer_filas_xlsx(respuesta.content, "Resumen")
+87 |     assert resumen == [["Categoría", "Prenda", "Cantidad", "Precio unitario", "Moneda", "Valorización"]]
+   |                                                                                         ^^^^^^^^^^^^^^^^
+   |
+
+PLC0415 `import` should be at the top-level of a file
+  --> apps/inventario/tests/test_reportes_api.py:92:5
+   |
+90 | @pytest.mark.django_db
+91 | def test_reporte_rechaza_solicitudes_sin_autenticacion() -> None:
+92 |     from rest_framework.test import APIClient
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+93 |
+94 |     respuesta = APIClient().get("/api/stock/reporte/?formato=xlsx")
+   |
+
+PLC0415 `import` should be at the top-level of a file
+  --> manage.py:10:5
+   |
+ 8 | def main() -> None:
+ 9 |     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
+10 |     from django.core.management import execute_from_command_line
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |
+12 |     execute_from_command_line(sys.argv)
+   |
+
+Found 58 errors.
+No fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).
