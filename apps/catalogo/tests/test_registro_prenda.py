@@ -131,6 +131,47 @@ def test_servicio_impide_registro_con_tipo_inexistente() -> None:
     assert repo_prenda.prendas == {}
 
 
+@pytest.mark.parametrize(
+    ("categoria_id", "tipo_producto_id"),
+    [
+        ("inexistente", "tipo-1"),
+        ("categoria-1", "inexistente"),
+    ],
+)
+def test_servicio_impide_actualizar_prenda_con_categoria_o_tipo_inexistente(
+    categoria_id: str,
+    tipo_producto_id: str,
+) -> None:
+    servicio, repo_prenda, repo_catalogo = crear_servicio()
+    repo_catalogo.guardar_categoria(Categoria(id="categoria-1", nombre="Camisas"))
+    repo_catalogo.guardar_tipo_producto(TipoProducto(id="tipo-1", nombre="Camisa"))
+    prenda = servicio.crear_prenda(
+        nombre="Camisa original",
+        descripcion="Algodon",
+        precio_monto="49.90",
+        precio_moneda="PEN",
+        categoria_id="categoria-1",
+        tipo_producto_id="tipo-1",
+        registrado_por=None,
+    )
+
+    with pytest.raises(RecursoNoEncontradoError):
+        servicio.actualizar_prenda(
+            prenda_id=prenda.id,
+            nombre="Camisa actualizada",
+            descripcion="Algodon peinado",
+            precio_monto="59.90",
+            precio_moneda="PEN",
+            categoria_id=categoria_id,
+            tipo_producto_id=tipo_producto_id,
+        )
+
+    assert repo_prenda.buscar_por_id(prenda.id) == prenda
+    assert prenda.nombre == "Camisa original"
+    assert prenda.categoria_id == "categoria-1"
+    assert prenda.tipo_producto_id == "tipo-1"
+
+
 @pytest.mark.parametrize("precio", ["0", "-1", "no-es-numero"])
 def test_servicio_impide_registro_con_precio_invalido(precio) -> None:
     servicio, repo_prenda, repo_catalogo = crear_servicio()
