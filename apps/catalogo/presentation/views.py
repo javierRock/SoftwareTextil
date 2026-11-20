@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, AllowAny
 from rest_framework.response import Response
 
-from apps.catalogo.application.services import ServicioCatalogo
+from apps.catalogo.application.services import DatosComercialesPrenda, ServicioCatalogo
 from apps.catalogo.domain.excepciones import RecursoNoEncontradoError
 from apps.catalogo.infrastructure.models import PrendaModel, VariantePrendaModel
 from apps.catalogo.infrastructure.repositories import (
@@ -126,13 +126,15 @@ class PrendaViewSet(
         serializer.is_valid(raise_exception=True)
         servicio = _servicio()
         prenda = servicio.crear_prenda(
-            nombre=serializer.validated_data["nombre"],
-            descripcion=serializer.validated_data["descripcion"],
-            precio_monto=serializer.validated_data["precio_monto"],
-            precio_moneda=serializer.validated_data["precio_moneda"],
-            categoria_id=serializer.validated_data["categoria_id"],
+            datos=DatosComercialesPrenda(
+                nombre=serializer.validated_data["nombre"],
+                descripcion=serializer.validated_data["descripcion"],
+                precio_monto=serializer.validated_data["precio_monto"],
+                precio_moneda=serializer.validated_data["precio_moneda"],
+                categoria_id=serializer.validated_data["categoria_id"],
+                tipo_producto_id=serializer.validated_data.get("tipo_producto_id"),
+            ),
             registrado_por=str(request.user.id),
-            tipo_producto_id=serializer.validated_data.get("tipo_producto_id"),
             tallas=serializer.validated_data["tallas"],
         )
         model = self.get_queryset().get(id=prenda.id)
@@ -155,14 +157,16 @@ class PrendaViewSet(
         datos = serializer.validated_data
         prenda = servicio.actualizar_prenda(
             prenda_id=pk,
-            nombre=datos.get("nombre", actual.nombre),
-            descripcion=datos.get("descripcion", actual.descripcion),
-            precio_monto=datos.get("precio_monto", actual.precio.monto),
-            precio_moneda=datos.get("precio_moneda", actual.precio.moneda),
-            categoria_id=datos.get("categoria_id", actual.categoria_id),
-            tipo_producto_id=datos.get(
-                "tipo_producto_id",
-                actual.tipo_producto_id,
+            datos=DatosComercialesPrenda(
+                nombre=datos.get("nombre", actual.nombre),
+                descripcion=datos.get("descripcion", actual.descripcion),
+                precio_monto=datos.get("precio_monto", actual.precio.monto),
+                precio_moneda=datos.get("precio_moneda", actual.precio.moneda),
+                categoria_id=datos.get("categoria_id", actual.categoria_id),
+                tipo_producto_id=datos.get(
+                    "tipo_producto_id",
+                    actual.tipo_producto_id,
+                ),
             ),
         )
         model = self.get_queryset().get(id=prenda.id)

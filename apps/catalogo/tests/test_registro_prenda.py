@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import pytest
 
+from apps.catalogo.application.services import DatosComercialesPrenda
 from apps.catalogo.domain.excepciones import (
     RecursoNoEncontradoError,
     ValidacionError,
@@ -82,12 +83,14 @@ def test_servicio_registra_prenda_con_categoria_y_tipo_existentes() -> None:
     repo_catalogo.guardar_tipo_producto(TipoProducto(id="tipo-1", nombre="Camisa"))
 
     prenda = servicio.crear_prenda(
-        nombre="Camisa clasica",
-        descripcion="Algodon",
-        precio_monto="49.90",
-        precio_moneda="pen",
-        categoria_id="categoria-1",
-        tipo_producto_id="tipo-1",
+        datos=DatosComercialesPrenda(
+            nombre="Camisa clasica",
+            descripcion="Algodon",
+            precio_monto="49.90",
+            precio_moneda="pen",
+            categoria_id="categoria-1",
+            tipo_producto_id="tipo-1",
+        ),
         tallas=["M", "L", "40", "41"],
         registrado_por="usuario-externo",
     )
@@ -102,11 +105,13 @@ def test_servicio_impide_registro_con_categoria_inexistente() -> None:
 
     with pytest.raises(RecursoNoEncontradoError):
         servicio.crear_prenda(
-            nombre="Camisa",
-            descripcion="",
-            precio_monto="10",
-            precio_moneda="PEN",
-            categoria_id="inexistente",
+            datos=DatosComercialesPrenda(
+                nombre="Camisa",
+                descripcion="",
+                precio_monto="10",
+                precio_moneda="PEN",
+                categoria_id="inexistente",
+            ),
             registrado_por=None,
         )
 
@@ -119,12 +124,14 @@ def test_servicio_impide_registro_con_tipo_inexistente() -> None:
 
     with pytest.raises(RecursoNoEncontradoError):
         servicio.crear_prenda(
-            nombre="Camisa",
-            descripcion="",
-            precio_monto="10",
-            precio_moneda="PEN",
-            categoria_id="categoria-1",
-            tipo_producto_id="inexistente",
+            datos=DatosComercialesPrenda(
+                nombre="Camisa",
+                descripcion="",
+                precio_monto="10",
+                precio_moneda="PEN",
+                categoria_id="categoria-1",
+                tipo_producto_id="inexistente",
+            ),
             registrado_por=None,
         )
 
@@ -146,24 +153,28 @@ def test_servicio_impide_actualizar_prenda_con_categoria_o_tipo_inexistente(
     repo_catalogo.guardar_categoria(Categoria(id="categoria-1", nombre="Camisas"))
     repo_catalogo.guardar_tipo_producto(TipoProducto(id="tipo-1", nombre="Camisa"))
     prenda = servicio.crear_prenda(
-        nombre="Camisa original",
-        descripcion="Algodon",
-        precio_monto="49.90",
-        precio_moneda="PEN",
-        categoria_id="categoria-1",
-        tipo_producto_id="tipo-1",
+        datos=DatosComercialesPrenda(
+            nombre="Camisa original",
+            descripcion="Algodon",
+            precio_monto="49.90",
+            precio_moneda="PEN",
+            categoria_id="categoria-1",
+            tipo_producto_id="tipo-1",
+        ),
         registrado_por=None,
     )
 
     with pytest.raises(RecursoNoEncontradoError):
         servicio.actualizar_prenda(
             prenda_id=prenda.id,
-            nombre="Camisa actualizada",
-            descripcion="Algodon peinado",
-            precio_monto="59.90",
-            precio_moneda="PEN",
-            categoria_id=categoria_id,
-            tipo_producto_id=tipo_producto_id,
+            datos=DatosComercialesPrenda(
+                nombre="Camisa actualizada",
+                descripcion="Algodon peinado",
+                precio_monto="59.90",
+                precio_moneda="PEN",
+                categoria_id=categoria_id,
+                tipo_producto_id=tipo_producto_id,
+            ),
         )
 
     assert repo_prenda.buscar_por_id(prenda.id) == prenda
@@ -179,11 +190,13 @@ def test_servicio_impide_registro_con_precio_invalido(precio) -> None:
 
     with pytest.raises(ValidacionError):
         servicio.crear_prenda(
-            nombre="Camisa",
-            descripcion="",
-            precio_monto=precio,
-            precio_moneda="PEN",
-            categoria_id="categoria-1",
+            datos=DatosComercialesPrenda(
+                nombre="Camisa",
+                descripcion="",
+                precio_monto=precio,
+                precio_moneda="PEN",
+                categoria_id="categoria-1",
+            ),
             registrado_por=None,
         )
 

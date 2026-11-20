@@ -1,5 +1,6 @@
 """Servicios de aplicacion para catalogo."""
 
+from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from uuid import uuid4
 
@@ -18,6 +19,16 @@ from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoPrenda
 
 
+@dataclass(frozen=True)
+class DatosComercialesPrenda:
+    nombre: str
+    descripcion: str
+    precio_monto: str
+    precio_moneda: str
+    categoria_id: str
+    tipo_producto_id: str | None = None
+
+
 class ServicioCatalogo:
     def __init__(
         self,
@@ -29,24 +40,19 @@ class ServicioCatalogo:
 
     def crear_prenda(
         self,
-        nombre: str,
-        descripcion: str,
-        precio_monto: str,
-        precio_moneda: str,
-        categoria_id: str,
+        datos: DatosComercialesPrenda,
         registrado_por: str | None,
-        tipo_producto_id: str | None = None,
         tallas: list[str] | None = None,
     ) -> Prenda:
-        self._validar_categoria_y_tipo(categoria_id, tipo_producto_id)
+        self._validar_categoria_y_tipo(datos.categoria_id, datos.tipo_producto_id)
 
         prenda = PrendaFabrica.crear(
-            nombre=nombre,
-            descripcion=descripcion,
-            precio=self._crear_precio(precio_monto, precio_moneda),
-            categoria_id=categoria_id,
+            nombre=datos.nombre,
+            descripcion=datos.descripcion,
+            precio=self._crear_precio(datos.precio_monto, datos.precio_moneda),
+            categoria_id=datos.categoria_id,
             registrado_por=registrado_por,
-            tipo_producto_id=tipo_producto_id,
+            tipo_producto_id=datos.tipo_producto_id,
             tallas=tallas,
         )
         self.repo_prenda.guardar(prenda)
@@ -88,22 +94,17 @@ class ServicioCatalogo:
     def actualizar_prenda(
         self,
         prenda_id: str,
-        nombre: str,
-        descripcion: str,
-        precio_monto: str,
-        precio_moneda: str,
-        categoria_id: str,
-        tipo_producto_id: str | None,
+        datos: DatosComercialesPrenda,
     ) -> Prenda:
         prenda = self.buscar_prenda(prenda_id)
-        self._validar_categoria_y_tipo(categoria_id, tipo_producto_id)
-        precio = self._crear_precio(precio_monto, precio_moneda)
+        self._validar_categoria_y_tipo(datos.categoria_id, datos.tipo_producto_id)
+        precio = self._crear_precio(datos.precio_monto, datos.precio_moneda)
         prenda.actualizar_datos_comerciales(
-            nombre=nombre,
-            descripcion=descripcion,
+            nombre=datos.nombre,
+            descripcion=datos.descripcion,
             precio=precio,
-            categoria_id=categoria_id,
-            tipo_producto_id=tipo_producto_id,
+            categoria_id=datos.categoria_id,
+            tipo_producto_id=datos.tipo_producto_id,
         )
         self.repo_prenda.guardar(prenda)
         return prenda
