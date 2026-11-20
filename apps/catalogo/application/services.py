@@ -38,13 +38,7 @@ class ServicioCatalogo:
         tipo_producto_id: str | None = None,
         tallas: list[str] | None = None,
     ) -> Prenda:
-        if self.repo_catalogo.buscar_categoria(categoria_id) is None:
-            raise RecursoNoEncontradoError("La categoria no existe")
-        if (
-            tipo_producto_id is not None
-            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
-        ):
-            raise RecursoNoEncontradoError("El tipo de producto no existe")
+        self._validar_categoria_y_tipo(categoria_id, tipo_producto_id)
 
         prenda = PrendaFabrica.crear(
             nombre=nombre,
@@ -102,13 +96,7 @@ class ServicioCatalogo:
         tipo_producto_id: str | None,
     ) -> Prenda:
         prenda = self.buscar_prenda(prenda_id)
-        if self.repo_catalogo.buscar_categoria(categoria_id) is None:
-            raise RecursoNoEncontradoError("La categoria no existe")
-        if (
-            tipo_producto_id is not None
-            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
-        ):
-            raise RecursoNoEncontradoError("El tipo de producto no existe")
+        self._validar_categoria_y_tipo(categoria_id, tipo_producto_id)
         precio = self._crear_precio(precio_monto, precio_moneda)
         prenda.actualizar_datos_comerciales(
             nombre=nombre,
@@ -201,6 +189,19 @@ class ServicioCatalogo:
         tipo.desactivar()
         self.repo_catalogo.guardar_tipo_producto(tipo)
         return tipo
+
+    def _validar_categoria_y_tipo(
+        self,
+        categoria_id: str,
+        tipo_producto_id: str | None,
+    ) -> None:
+        if self.repo_catalogo.buscar_categoria(categoria_id) is None:
+            raise RecursoNoEncontradoError("La categoria no existe")
+        if (
+            tipo_producto_id is not None
+            and self.repo_catalogo.buscar_tipo(tipo_producto_id) is None
+        ):
+            raise RecursoNoEncontradoError("El tipo de producto no existe")
 
     @staticmethod
     def _crear_precio(precio_monto: str, precio_moneda: str) -> Dinero:
