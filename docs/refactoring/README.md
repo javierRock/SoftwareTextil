@@ -4,6 +4,7 @@ La revisión compara `a312d0a` de `dev` con el código refactorizado en `7785a6a
 
 | Entregable | Dónde revisar |
 | --- | --- |
+| Integración continua para `dev` | [Pipeline Jenkins y configuración de SonarQube](pipeline-jenkins.md) |
 | Proyecto final | Código, configuración, pruebas y commits publicados en `refactor/code-quality` |
 | Matriz de problemas y estrategias | [Matriz consolidada](matriz.md) y [reparto por integrante](reparto/README.md) |
 | SonarQube antes y después | [Comparación](resultado-ampliado.md) y archivos JSON de cada ejecución |

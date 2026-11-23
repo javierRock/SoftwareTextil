@@ -1,111 +1,100 @@
-// Pipeline declarativo de integración continua para SoftwareTextil.
-// SoftwareTextil usa Django/React/PostgreSQL, por eso Make coordina el build.
 pipeline {
     agent any
     options {
         disableConcurrentBuilds()
         skipDefaultCheckout(true)
         buildDiscarder(logRotator(numToKeepStr: '10'))
+        timeout(time: 20, unit: 'MINUTES')
     }
     parameters {
-        booleanParam(name: 'RUN_SONAR', defaultValue: false,
-            description: 'Ejecutar SonarQube si ya fue configurado en Jenkins.')
+        booleanParam(name: 'RUN_SONAR', defaultValue: true,
+            description: 'Ejecutar el análisis y esperar el Quality Gate. Desactivar solo para validar la configuración de Jenkins.')
+        string(name: 'SONAR_PROJECT_KEY', defaultValue: 'softwaretextil-dev-ci',
+            description: 'Clave de CI para dev. Usar una clave separada para una comparación.')
     }
     environment {
         DB_NAME = 'software_textil_quality_jenkins'
-        DB_USER = 'postgres'
-        DB_PASSWORD = 'postgres'
         DB_HOST = '127.0.0.1'
-        DB_PORT = '55432'
-        DJANGO_SETTINGS_MODULE = 'config.settings.dev'
-        COMPOSE_PROJECT = 'softwaretextil-jenkins'
+        SONAR_HOST_URL = 'http://localhost:9000'
     }
     stages {
-        stage('Git Checkout') {
-            steps { checkout scm }
-        }
-        stage('Tool Check') {
+        stage('Checkout') {
             steps {
-                sh '''
-                    set -eux
-                    java -version
-                    git --version
-                    make --version | head -n 1
-                    uv --version
-                    node --version
-                    npm --version
-                    docker compose version
-                '''
+                checkout scm
+                sh 'make clean'
             }
         }
-        stage('Database') {
-            steps { sh 'make db-up' }
-        }
-        stage('Build') {
-            steps { sh 'make build' }
-        }
-        stage('Test and Quality') {
+        stage('Construcción') {
             steps {
-                sh 'make check'
-                sh 'make test'
-                sh 'make quality'
+                sh 'make deps frontend-build'
+            }
+        }
+        stage('PostgreSQL de pruebas') {
+            steps {
+                script {
+                    // El puerto asignado por Docker permite probar varios jobs en el mismo agente.
+                    env.COMPOSE_PROJECT_NAME = sh(returnStdout: true, script: '''
+                        printf 'textil-%s' "$BUILD_TAG" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_-' '-'
+                    ''').trim()
+                    env.DB_PORT = sh(returnStdout: true, script: '''
+                        set -eu
+                        export DB_PORT=0
+                        docker compose -f compose.quality.yml up -d --wait db >&2
+                        endpoint=$(docker compose -f compose.quality.yml port db 5432)
+                        port=${endpoint##*:}
+                        test "$port" -gt 0
+                        printf '%s\n' "$port"
+                    ''').trim()
+                }
+            }
+        }
+        stage('Pruebas automatizadas') {
+            steps {
+                sh 'make django-check reportes frontend-reportes'
+                sh 'npm --prefix frontend/inventario run lint'
             }
             post {
                 always {
-                    junit testResults: 'build/reports/pytest.xml,build/reports/pytest-quality-full.xml', allowEmptyResults: true
+                    junit testResults: 'build/reports/*junit.xml', allowEmptyResults: true
                 }
             }
         }
-        stage('SonarQube Analysis (optional)') {
+        stage('Distribución verificable') {
+            steps {
+                sh 'make collect-static release-zip release-verify'
+                archiveArtifacts artifacts: 'dist/*.zip,dist/*.zip.sha256', fingerprint: true
+            }
+        }
+        stage('SonarQube y Quality Gate') {
             when { expression { params.RUN_SONAR } }
             steps {
-                withSonarQubeEnv('sonarqube-local') {
+                withCredentials([string(credentialsId: 'sonarqube-softwaretextil', variable: 'SONAR_TOKEN')]) {
                     sh '''
-                        set -eux
+                        set +x
+                        set -eu
+                        test -s build/reports/coverage.xml
+                        test -s build/reports/frontend-lcov.info
                         sonar-scanner \
-                          -Dsonar.projectKey=software-textil \
-                          -Dsonar.projectName=software-textil \
-                          -Dsonar.sources=apps,config,frontend/inventario/src \
-                          -Dsonar.exclusions='**/migrations/**,frontend/inventario/node_modules/**'
+                          -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
+                          -Dsonar.projectName="$SONAR_PROJECT_KEY" \
+                          -Dsonar.python.coverage.reportPaths=build/reports/coverage.xml \
+                          -Dsonar.qualitygate.wait=true \
+                          -Dsonar.qualitygate.timeout=300
                     '''
                 }
-            }
-        }
-        stage('Package and Publish') {
-            steps {
-                sh 'make package'
-                archiveArtifacts artifacts: 'dist/*,frontend/inventario/dist/**', fingerprint: true
-            }
-        }
-        stage('Run Published Application') {
-            steps {
-                sh '''
-                    set -eux
-                    make demo
-                    mkdir -p build/reports
-                    nohup uv run --locked python manage.py runserver 0.0.0.0:8083 \
-                      > build/reports/application.log 2>&1 &
-                    echo $! > build/application.pid
-                    sleep 5
-                    curl --fail --silent http://127.0.0.1:8083/ > build/reports/application.html
-                '''
-            }
-            post {
-                always { archiveArtifacts artifacts: 'build/reports/application.*', allowEmptyArchive: true }
             }
         }
     }
     post {
         always {
-            sh '''
-                if [ -f build/application.pid ]; then
-                    kill "$(cat build/application.pid)" || true
-                fi
-                make db-down || true
-            '''
             archiveArtifacts artifacts: 'build/reports/**', allowEmptyArchive: true
         }
-        success { echo 'JENKINS BUILD SUCCESS: CI completed.' }
-        failure { echo 'JENKINS BUILD FAILURE: revisar la etapa roja y Console Output.' }
+        cleanup {
+            sh '''
+                if [ -n "${COMPOSE_PROJECT_NAME:-}" ]; then
+                    docker compose -f compose.quality.yml down --volumes
+                fi
+            '''
+        }
     }
 }
