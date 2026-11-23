@@ -1,17 +1,43 @@
-# Tareas y cambios
+# Trazabilidad de la revisión de calidad
 
-La [trazabilidad actualizada](commits-locales.md) incluye los commits locales y las verificaciones.
+El [Kanban de SoftwareTextil — Mejora de calidad](https://github.com/users/javierRock/projects/2/views/1) y la [vista Reparto](https://github.com/users/javierRock/projects/2/views/6) contienen los 25 issues de la [matriz](matriz.md). Los 10 cambios publicados en el [PR #46](https://github.com/javierRock/SoftwareTextil/pull/46) están en **FIX VALIDATION** y los 15 pendientes están en **TO-DO**. La tabla refleja el estado verificado el 23 de noviembre de 2026.
 
-Tablero previsto: SoftwareTextil — Quality & Automation, vista de refactorización. Su URL y configuración se verificarán antes de reutilizarlo.
+Los dos issues de Catálogo quedan sin asignar hasta confirmar la cuenta. La matriz indica `Lizzy342` y GitHub ofrece `Lizzy354` como asignable. El Project conserva su visibilidad privada.
 
-| ID | Issue URL | Tarea Project URL | Responsable confirmado | Commit URL | Pruebas | Estado |
-| --- | --- | --- | --- | --- | --- | --- |
-| Q-01 | Publicación pendiente | Publicación pendiente | carlosGCMP | Sin commit todavía | Suite pedidos aprobada | FIX VALIDATION |
-| Q-02 | Pendiente | Pendiente | carlosGCMP | Pendiente | Plan definido | TO-DO |
-| Q-03 | Publicación pendiente | Publicación pendiente | carlosGCMP | Sin commit todavía | Contrato de login verificado | FIX VALIDATION |
-| Q-04 | Pendiente | Pendiente | carlosGCMP | Pendiente | Reproducción pendiente | TO-DO |
-| Q-05 | Publicación pendiente | Publicación pendiente | carlosGCMP | Sin commit todavía | Dos fallos antes; dos pruebas aprobadas después | FIX VALIDATION |
-| S-01/S-02/S-03 | Publicación pendiente | Publicación pendiente | carlosGCMP | Sin commit todavía | Regresión y ausencia de migraciones verificadas | FIX VALIDATION |
+| ID | Módulo | Issue | Project | Responsable | Prioridad | Estimación (h) | Estado | Commit publicado |
+| --- | --- | --- | --- | --- | --- | ---: | --- | --- |
+| Q-01 | Pedidos | [#47](https://github.com/javierRock/SoftwareTextil/issues/47) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `Angel-Cs2004` | Media | 2 | FIX VALIDATION | [`ff73eea`](https://github.com/javierRock/SoftwareTextil/commit/ff73eeaa3420f7e18749dbf046647e98763730a9) |
+| Q-02 | Usuarios | [#48](https://github.com/javierRock/SoftwareTextil/issues/48) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `carlosGCMP` | Media | 3 | TO-DO | — |
+| Q-03 | Usuarios | [#49](https://github.com/javierRock/SoftwareTextil/issues/49) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `carlosGCMP` | Media | 2 | FIX VALIDATION | [`afc3b6d`](https://github.com/javierRock/SoftwareTextil/commit/afc3b6d88cc9336d123ae49fe3910eeff8d7f29c) |
+| Q-04 | Usuarios | [#50](https://github.com/javierRock/SoftwareTextil/issues/50) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `carlosGCMP` | Alta | 3 | TO-DO | — |
+| Q-05 | Roles | [#51](https://github.com/javierRock/SoftwareTextil/issues/51) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `carlosGCMP` | Alta | 2 | FIX VALIDATION | [`afc3b6d`](https://github.com/javierRock/SoftwareTextil/commit/afc3b6d88cc9336d123ae49fe3910eeff8d7f29c) |
+| Q-06 | Catálogo | [#52](https://github.com/javierRock/SoftwareTextil/issues/52) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | Pendiente de confirmar | Media | 2 | FIX VALIDATION | [`6d2eb20`](https://github.com/javierRock/SoftwareTextil/commit/6d2eb20aee1c4259bc97fd69197866af65a98d8f) |
+| Q-07 | Catálogo | [#53](https://github.com/javierRock/SoftwareTextil/issues/53) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | Pendiente de confirmar | Media | 3 | TO-DO | — |
+| Q-08 | Inventario | [#54](https://github.com/javierRock/SoftwareTextil/issues/54) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `novato-intlgnt` | Media | 3 | TO-DO | — |
+| Q-09 | Reportes de inventario | [#55](https://github.com/javierRock/SoftwareTextil/issues/55) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `novato-intlgnt` | Media | 4 | TO-DO | — |
+| Q-10 | Despachos | [#56](https://github.com/javierRock/SoftwareTextil/issues/56) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `javierRock` | Media | 3 | TO-DO | — |
+| Q-11 | Pagos | [#57](https://github.com/javierRock/SoftwareTextil/issues/57) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `javierRock` | Baja | 2 | TO-DO | — |
+| Q-12 | Panel React | [#58](https://github.com/javierRock/SoftwareTextil/issues/58) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `novato-intlgnt` | Media | 2 | TO-DO | — |
+| A-01 | GitHub Actions | [#59](https://github.com/javierRock/SoftwareTextil/issues/59) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `javierRock` | Media | 1 | FIX VALIDATION | [`7d490ce`](https://github.com/javierRock/SoftwareTextil/commit/7d490cebfade74acf46de196e1d0cb2f722edfdc) |
+| A-02 | Make | [#60](https://github.com/javierRock/SoftwareTextil/issues/60) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `javierRock` | Media | 1 | FIX VALIDATION | [`7d490ce`](https://github.com/javierRock/SoftwareTextil/commit/7d490cebfade74acf46de196e1d0cb2f722edfdc) |
+| A-03 | Jenkins | [#61](https://github.com/javierRock/SoftwareTextil/issues/61) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `javierRock` | Media | 2 | TO-DO | — |
+| A-04 | Construcción | [#62](https://github.com/javierRock/SoftwareTextil/issues/62) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `javierRock` | Alta | 3 | TO-DO | — |
+| S-01 | Inventario | [#63](https://github.com/javierRock/SoftwareTextil/issues/63) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `novato-intlgnt` | Baja | 1 | FIX VALIDATION | [`7d490ce`](https://github.com/javierRock/SoftwareTextil/commit/7d490cebfade74acf46de196e1d0cb2f722edfdc) |
+| S-02 | Ventas | [#64](https://github.com/javierRock/SoftwareTextil/issues/64) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `Angel-Cs2004` | Baja | 1 | FIX VALIDATION | [`ff73eea`](https://github.com/javierRock/SoftwareTextil/commit/ff73eeaa3420f7e18749dbf046647e98763730a9) |
+| S-03 | Rutas | [#65](https://github.com/javierRock/SoftwareTextil/issues/65) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `Angel-Cs2004` | Baja | 1 | FIX VALIDATION | [`ff73eea`](https://github.com/javierRock/SoftwareTextil/commit/ff73eeaa3420f7e18749dbf046647e98763730a9) |
+| S-04 | Compartido | [#66](https://github.com/javierRock/SoftwareTextil/issues/66) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `carlosGCMP` | Media | 1 | TO-DO | — |
+| S-05 | Configuración Django | [#67](https://github.com/javierRock/SoftwareTextil/issues/67) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `javierRock` | Baja | 2 | TO-DO | — |
+| S-06 | Cliente HTTP React | [#68](https://github.com/javierRock/SoftwareTextil/issues/68) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `novato-intlgnt` | Media | 2 | FIX VALIDATION | [`addd8df`](https://github.com/javierRock/SoftwareTextil/commit/addd8dfbc3460b813c06822716a8796993175b90) |
+| S-07 | Autenticación React | [#69](https://github.com/javierRock/SoftwareTextil/issues/69) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `carlosGCMP` | Baja | 2 | TO-DO | — |
+| S-08 | Páginas React | [#70](https://github.com/javierRock/SoftwareTextil/issues/70) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `novato-intlgnt` | Media | 4 | TO-DO | — |
+| S-09 | Autenticación estática | [#71](https://github.com/javierRock/SoftwareTextil/issues/71) | [Kanban](https://github.com/users/javierRock/projects/2/views/1) | `carlosGCMP` | Baja | 2 | TO-DO | — |
 
-Flujo: TO-DO → CURRENT ITERATION → IN PROGRESS → FIX VALIDATION → DONE.
-Cerrar únicamente con validación y cambio integrado. Los nombres de ramas, issues y commits describirán el objetivo técnico, sin números de prácticas.
+## Evidencias para la revisión
+
+- GitHub Actions aprobó los jobs de backend y frontend en la revisión original del PR. [Ejecución de CI](https://github.com/javierRock/SoftwareTextil/actions/runs/44345327892) · [Commits del PR](https://github.com/javierRock/SoftwareTextil/pull/46/commits).
+- La medición comparable del 18 de noviembre de 2026 usó [`a312d0a`](https://github.com/javierRock/SoftwareTextil/commit/a312d0ad8ba7199d28782371a08b62f590c95679) y [`7785a6a`](https://github.com/javierRock/SoftwareTextil/commit/7785a6a689518d4e0e1eae9df43218670fb49de4). SonarQube registró 22 → 16 issues abiertos. [Métricas antes](evidencias/ampliada/antes/sonarqube-comparable/metricas.json) · [Métricas después](evidencias/ampliada/despues/sonarqube-comparable/metricas.json) · [Scanner antes](evidencias/ampliada/antes/scanner-comparable.txt) · [Scanner después](evidencias/ampliada/despues/scanner-comparable.txt).
+- El Quality Gate posterior falló por cobertura de código nuevo de 55,2 % frente al 80 % exigido. [Exportación del Gate](evidencias/ampliada/despues/sonarqube-comparable/quality-gate.json).
+- Se registraron 410 pruebas Python y 5 pruebas Node aprobadas. `make check` se detuvo en 58 diagnósticos Ruff. [Python](evidencias/ampliada/despues/backend.txt) · [Node](evidencias/ampliada/despues/frontend.txt) · [Make](evidencias/ampliada/despues/make-check.txt).
+- La revalidación focalizada del 23 de noviembre de 2026 obtuvo dos fallos en la base y dos aprobaciones con la refactorización. [Rollback antes](evidencias/rollback-revalidado/antes.txt) · [Rollback después](evidencias/rollback-revalidado/despues.txt).
+
+El PR sigue en borrador. Antes de integrar falta aprobar los criterios de las tarjetas en validación y resolver la cobertura del Quality Gate y los diagnósticos de Ruff. La validación integral en Jenkins queda pendiente antes del despliegue.

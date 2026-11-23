@@ -1,0 +1,85 @@
+Revalidación local del rollback del repositorio de roles
+Fecha: 2026-11-23 (America/Lima)
+Commit del código: a312d0a
+Mismos dos casos de prueba de 7785a6a en ambas copias
+Comando: uv run --no-sync pytest -vv --tb=short tests/usuarios/test_rol_atomicidad.py
+
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- /workspace/SoftwareTextil/.venv/bin/python
+cachedir: .pytest_cache
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: /workspace/SoftwareTextil
+configfile: pyproject.toml
+plugins: django-4.12.0, cov-7.1.0
+collecting ... collected 2 items
+
+tests/usuarios/test_rol_atomicidad.py::test_guardar_rol_revierte_nombre_si_falla_sincronizacion FAILED [ 50%]
+tests/usuarios/test_rol_atomicidad.py::test_guardar_rol_nuevo_no_deja_fila_parcial_si_falla_sincronizacion FAILED [100%]
+
+=================================== FAILURES ===================================
+___________ test_guardar_rol_revierte_nombre_si_falla_sincronizacion ___________
+tests/usuarios/test_rol_atomicidad.py:26: in test_guardar_rol_revierte_nombre_si_falla_sincronizacion
+    assert modelo.nombre == "Operador"
+E   AssertionError: assert 'Supervisor' == 'Operador'
+E
+E     - Operador
+E     + Supervisor
+---------------------------- Captured stdout setup -----------------------------
+Operations to perform:
+  Synchronize unmigrated apps: compartido, messages, rest_framework, staticfiles
+  Apply all migrations: admin, auth, catalogo, contenttypes, inventario, sessions, usuarios, ventas
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying usuarios.0001_initial... OK
+  Applying catalogo.0001_initial... OK
+  Applying catalogo.0002_prenda_imagen_variante_moneda... OK
+  Applying inventario.0001_initial... OK
+  Applying sessions.0001_initial... OK
+  Applying usuarios.0002_roles_y_permisos_base... OK
+  Applying ventas.0001_initial... OK
+---------------------------- Captured stderr setup -----------------------------
+Creating test database for alias 'default' ('test_software_textil_quality')...
+_____ test_guardar_rol_nuevo_no_deja_fila_parcial_si_falla_sincronizacion ______
+tests/usuarios/test_rol_atomicidad.py:40: in test_guardar_rol_nuevo_no_deja_fila_parcial_si_falla_sincronizacion
+    assert not RolModel.objects.filter(id=rol.id).exists()
+E   AssertionError: assert not True
+E    +  where True = exists()
+E    +    where exists = <QuerySet [<RolModel: RolModel object (f93a575b-ac7d-4369-a00d-6ad8ba735ea8)>]>.exists
+E    +      where <QuerySet [<RolModel: RolModel object (f93a575b-ac7d-4369-a00d-6ad8ba735ea8)>]> = filter(id='f93a575b-ac7d-4369-a00d-6ad8ba735ea8')
+E    +        where filter = <django.db.models.manager.Manager object at 0x7f5a3efa8c90>.filter
+E    +          where <django.db.models.manager.Manager object at 0x7f5a3efa8c90> = RolModel.objects
+E    +        and   'f93a575b-ac7d-4369-a00d-6ad8ba735ea8' = Rol(id='f93a575b-ac7d-4369-a00d-6ad8ba735ea8', nombre='Supervisor', descripcion='', permisos=[]).id
+--------------------------- Captured stderr teardown ---------------------------
+Destroying test database for alias 'default' ('test_software_textil_quality')...
+=========================== short test summary info ============================
+FAILED tests/usuarios/test_rol_atomicidad.py::test_guardar_rol_revierte_nombre_si_falla_sincronizacion - AssertionError: assert 'Supervisor' == 'Operador'
+
+  - Operador
+  + Supervisor
+FAILED tests/usuarios/test_rol_atomicidad.py::test_guardar_rol_nuevo_no_deja_fila_parcial_si_falla_sincronizacion - AssertionError: assert not True
+ +  where True = exists()
+ +    where exists = <QuerySet [<RolModel: RolModel object (f93a575b-ac7d-4369-a00d-6ad8ba735ea8)>]>.exists
+ +      where <QuerySet [<RolModel: RolModel object (f93a575b-ac7d-4369-a00d-6ad8ba735ea8)>]> = filter(id='f93a575b-ac7d-4369-a00d-6ad8ba735ea8')
+ +        where filter = <django.db.models.manager.Manager object at 0x7f5a3efa8c90>.filter
+ +          where <django.db.models.manager.Manager object at 0x7f5a3efa8c90> = RolModel.objects
+ +        and   'f93a575b-ac7d-4369-a00d-6ad8ba735ea8' = Rol(id='f93a575b-ac7d-4369-a00d-6ad8ba735ea8', nombre='Supervisor', descripcion='', permisos=[]).id
+============================== 2 failed in 0.82s ===============================

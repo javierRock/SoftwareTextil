@@ -1,0 +1,19 @@
+Revalidación local del rollback del repositorio de roles
+Fecha: 2026-11-23 (America/Lima)
+Commit del código: 4b29ff2
+Mismos dos casos de prueba de 7785a6a en ambas copias
+Comando: uv run --no-sync pytest -vv --tb=short tests/usuarios/test_rol_atomicidad.py
+
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- /workspace/SoftwareTextil/.venv/bin/python
+cachedir: .pytest_cache
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: /workspace/SoftwareTextil
+configfile: pyproject.toml
+plugins: django-4.12.0, cov-7.1.0
+collecting ... collected 2 items
+
+tests/usuarios/test_rol_atomicidad.py::test_guardar_rol_revierte_nombre_si_falla_sincronizacion PASSED [ 50%]
+tests/usuarios/test_rol_atomicidad.py::test_guardar_rol_nuevo_no_deja_fila_parcial_si_falla_sincronizacion PASSED [100%]
+
+============================== 2 passed in 0.77s ===============================

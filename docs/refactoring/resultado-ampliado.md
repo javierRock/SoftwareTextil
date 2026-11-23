@@ -1,6 +1,6 @@
 # Comparación ampliada de calidad
 
-| Verificación | Antes, dev `a312d0a` | Después, rama local `7785a6a` |
+| Verificación | Antes, dev `a312d0a` | Después, código refactorizado `7785a6a` |
 | --- | ---: | ---: |
 | Issues SonarQube abiertos | 22 | 16 |
 | Bugs SonarQube | 1 | 0 |
@@ -23,4 +23,4 @@ Las rutas personales en los logs publicados se sustituyeron por rutas genéricas
 
 Evidencias [antes](evidencias/ampliada/antes/sonarqube-comparable/metricas.json) · [después](evidencias/ampliada/despues/sonarqube-comparable/metricas.json) · [Quality Gate final](evidencias/ampliada/despues/sonarqube-comparable/quality-gate.json) · [backend](evidencias/ampliada/despues/backend.txt) · [frontend](evidencias/ampliada/despues/frontend.txt) · [make check](evidencias/ampliada/despues/make-check.txt).
 
-ESLint, Vite, los prerrequisitos de Make y las comprobaciones de Django y migraciones pasaron. `make check` se detuvo en Ruff. La validación integral del pipeline Jenkins y del despliegue queda pendiente. El tablero y la trazabilidad se mantienen localmente para revisión.
+ESLint, Vite, los prerrequisitos de Make y las comprobaciones de Django y migraciones pasaron. `make check` se detuvo en Ruff. La validación integral del pipeline Jenkins y del despliegue queda pendiente. El [tablero y la trazabilidad publicados](trazabilidad.md) enlazan las tareas con su implementación y evidencia.

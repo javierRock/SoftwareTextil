@@ -1,4 +1,4 @@
-# Kanban local
+# Flujo de revisión de calidad
 
 Flujo **TO-DO → CURRENT ITERATION → IN PROGRESS → FIX VALIDATION → DONE**. Las tareas implementadas esperan revisión en FIX VALIDATION.
 
@@ -10,4 +10,4 @@ Flujo **TO-DO → CURRENT ITERATION → IN PROGRESS → FIX VALIDATION → DONE*
 | FIX VALIDATION | Q-01, Q-03, Q-05, Q-06, A-01, A-02, S-01, S-02, S-03, S-06 |
 | DONE | Sin tarjetas |
 
-Consulta la [matriz](matriz.md) y el [reparto por integrante](reparto/README.md) para crear las tarjetas en GitHub Projects tras revisar la entrega.
+Consulta el [Kanban de GitHub Projects](https://github.com/users/javierRock/projects/2/views/1) para el estado actual y la [trazabilidad publicada](trazabilidad.md) para localizar los issues.
