@@ -22,3 +22,12 @@ El `Jenkinsfile` del [PR #46](https://github.com/javierRock/SoftwareTextil/pull/
 Las etapas ejecutan la construcción y las pruebas una sola vez. La distribución se archiva como evidencia de construcción. `make check` sigue disponible como verificación estricta de Ruff. [Configuración del scanner y del Quality Gate](https://docs.sonarsource.com/sonarqube-server/2025.2/analyzing-source-code/ci-integration/overview).
 
 Para obtener el antes y el después, sigue la [guía de reproducción](ejecucion-local.md). Guarda la evidencia del análisis de `dev` antes de enviar el análisis posterior a la misma clave.
+
+
+## Ejecución verificada el 23 de noviembre de 2026
+
+Jenkins 2.580.2, build #3, ejecutó el commit `11fa65f` de `refactor/code-quality` desde un espejo Git local verificado con el mismo SHA publicado. Construyó la SPA con Node 22.14.0, validó configuración y migraciones de Django, y archivó la distribución después de verificar el ZIP y su checksum. Publicó **415 pruebas aprobadas y 0 fallidas**, incluidas 410 de Pytest y 5 de Node. Retiró el PostgreSQL aislado de esa ejecución al finalizar.
+
+El scanner importó el XML y el LCOV generados por el job. La clave aislada `softwaretextil-jenkins-validation` tenía `a312d0a` como línea base. El build terminó en **FAILURE** porque SonarQube midió **55,2 %** de cobertura de código nuevo frente al **80 %** exigido. `make check` siguió deteniéndose en 58 diagnósticos de Ruff en una ejecución aparte.
+
+[Consola del build](evidencias/jenkins-2026-11-23/consola.txt) · [Build y artefactos](evidencias/jenkins-2026-11-23/ejecucion.json) · [JUnit en Jenkins](evidencias/jenkins-2026-11-23/pruebas.json) · [Quality Gate de Jenkins](evidencias/jenkins-2026-11-23/quality-gate.json) · [Resultado de make check](evidencias/jenkins-2026-11-23/make-check-resumen.txt).

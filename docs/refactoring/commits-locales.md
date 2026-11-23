@@ -9,5 +9,6 @@
 | Análisis ampliado | `da644a4` | Configuración y exportación SonarQube |
 | S-06 | `addd8df` | Pruebas de API React, ESLint y Vite |
 | Comparación reproducible | `7785a6a` | Importación equivalente de LCOV en ambas versiones |
+| A-03 | `2f1471e` | [Construcción, pruebas y Quality Gate en Jenkins](pipeline-jenkins.md#ejecución-verificada-el-23-de-noviembre-de-2026) |
 
 Desde el repositorio, `git log --oneline origin/dev..refactor/code-quality` y `git show <commit>` permiten revisar los cambios. Consulta las [URLs publicadas de los issues, el Project y los commits](trazabilidad.md).
