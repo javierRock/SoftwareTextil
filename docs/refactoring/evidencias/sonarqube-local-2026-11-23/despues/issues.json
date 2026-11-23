@@ -1,0 +1,5194 @@
+{
+  "total": 113,
+  "issues": [
+    {
+      "key": "1617aa31-dcb9-4616-9ede-aeccd5f7c57e",
+      "rule": "python:S6553",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:apps/catalogo/models.py",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 108,
+      "hash": "38f420d1b3fc7fa51c18131c0b390b68",
+      "textRange": {
+        "startLine": 108,
+        "endLine": 108,
+        "startOffset": 8,
+        "endOffset": 17
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Remove this \"null=True\" flag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "django"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "e76465f7-9423-4aac-b4d6-2606c99b6247",
+      "rule": "python:S5864",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:apps/compartido/infrastructure/campos.py",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 25,
+      "hash": "650f10d3c682e3de34ffa1a569a0abbe",
+      "textRange": {
+        "startLine": 25,
+        "endLine": 25,
+        "startOffset": 41,
+        "endOffset": 52
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Replace this expression; Previous type checks suggest that \"enumeracion\" has type \"type[StrEnum]\" and isn't iterable.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "typing",
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "addd228b-71f7-4549-ae1e-e040e6ac0859",
+      "rule": "python:S5864",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:apps/compartido/infrastructure/campos.py",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 30,
+      "hash": "5e5cba2f4dcdd2cbea432909dbfdfda1",
+      "textRange": {
+        "startLine": 30,
+        "endLine": 30,
+        "startOffset": 58,
+        "endOffset": 69
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Replace this expression; Previous type checks suggest that \"enumeracion\" has type \"type[StrEnum]\" and isn't iterable.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "typing",
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "d81aafc1-8581-494c-b620-4efc50fa11f0",
+      "rule": "Web:S6819",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 747,
+      "hash": "25d0dbf960b62f9eaf466b54ecf2c547",
+      "textRange": {
+        "startLine": 747,
+        "endLine": 747,
+        "startOffset": 6,
+        "endOffset": 140
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use <section> instead of the region role to ensure accessibility across all devices.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "4a89ae5d-5274-4cb5-8127-a7903b07301c",
+      "rule": "Web:S6842",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 813,
+      "hash": "a440385f633f8c6c103899243a010b46",
+      "textRange": {
+        "startLine": 813,
+        "endLine": 813,
+        "startOffset": 8,
+        "endOffset": 100
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Non-interactive elements should not be assigned interactive roles.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "512e1955-4bdd-4b1f-9700-2c4a80c453ae",
+      "rule": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 816,
+      "hash": "9f34f5a6e353cba02116f1afe7dae5df",
+      "textRange": {
+        "startLine": 816,
+        "endLine": 816,
+        "startOffset": 14,
+        "endOffset": 120
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Add a 'onKeyPress|onKeyDown|onKeyUp' attribute to this <th> tag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "BUG",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "COMPLETE",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "d97b8a11-5573-4e7a-be05-36977b6dcb21",
+      "rule": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 817,
+      "hash": "c34fb1ce0b98fb719dd4d18e91c05e4d",
+      "textRange": {
+        "startLine": 817,
+        "endLine": 817,
+        "startOffset": 14,
+        "endOffset": 122
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Add a 'onKeyPress|onKeyDown|onKeyUp' attribute to this <th> tag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "BUG",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "COMPLETE",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "daf100c0-08f6-41ba-9aaa-15e8c6af18ff",
+      "rule": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 818,
+      "hash": "c1056e20a48423670197bc37070ae3c3",
+      "textRange": {
+        "startLine": 818,
+        "endLine": 818,
+        "startOffset": 14,
+        "endOffset": 132
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Add a 'onKeyPress|onKeyDown|onKeyUp' attribute to this <th> tag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "BUG",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "COMPLETE",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "a84466de-8d03-4890-a6f3-db83721c3b81",
+      "rule": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 819,
+      "hash": "edea790ee202a4a086df3fc96c1ce7af",
+      "textRange": {
+        "startLine": 819,
+        "endLine": 819,
+        "startOffset": 14,
+        "endOffset": 134
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Add a 'onKeyPress|onKeyDown|onKeyUp' attribute to this <th> tag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "BUG",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "COMPLETE",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b6b719e5-abcb-4a5b-80b5-601f5f70fc35",
+      "rule": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 820,
+      "hash": "09adb72a97ed4d0f7363db9312c8e035",
+      "textRange": {
+        "startLine": 820,
+        "endLine": 820,
+        "startOffset": 14,
+        "endOffset": 118
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Add a 'onKeyPress|onKeyDown|onKeyUp' attribute to this <th> tag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "BUG",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "COMPLETE",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "7191ac98-432a-4d9f-bc38-9bb5c219f7b3",
+      "rule": "Web:MouseEventWithoutKeyboardEquivalentCheck",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 855,
+      "hash": "0825e2b9927d810f7fe3e7bfac492f50",
+      "textRange": {
+        "startLine": 855,
+        "endLine": 855,
+        "startOffset": 2,
+        "endOffset": 60
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Add a 'onKeyPress|onKeyDown|onKeyUp' attribute to this <div> tag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "BUG",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "COMPLETE",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "fa83bd02-3b1f-4f64-9d7b-577e7b495ffe",
+      "rule": "Web:S6848",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 855,
+      "hash": "0825e2b9927d810f7fe3e7bfac492f50",
+      "textRange": {
+        "startLine": 855,
+        "endLine": 855,
+        "startOffset": 0,
+        "endOffset": 66
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "9238474b-b60b-4c87-bedf-19120425469b",
+      "rule": "Web:S6819",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 858,
+      "hash": "e5c22f4a0db57ef9a8270310998fe942",
+      "textRange": {
+        "startLine": 858,
+        "endLine": 858,
+        "startOffset": 2,
+        "endOffset": 97
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use <dialog> instead of the dialog role to ensure accessibility across all devices.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "10863982-45b3-4d4a-b6d0-04e64f5b4287",
+      "rule": "Web:S6853",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 906,
+      "hash": "57cf977a1791087b9dc46abea9ed5f87",
+      "textRange": {
+        "startLine": 906,
+        "endLine": 906,
+        "startOffset": 37,
+        "endOffset": 44
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A form label must be associated with a control.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2b39aa3e-ef03-44c2-99de-e1d22e8fa993",
+      "rule": "Web:S6853",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 907,
+      "hash": "76556add2029a124e43cf8425def531c",
+      "textRange": {
+        "startLine": 907,
+        "endLine": 907,
+        "startOffset": 37,
+        "endOffset": 44
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A form label must be associated with a control.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "18f86a12-2a5b-4ef9-b3ac-b3b390ef58d9",
+      "rule": "Web:S6853",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 908,
+      "hash": "16d35ace409b14ff8cdc5d80012b3c34",
+      "textRange": {
+        "startLine": 908,
+        "endLine": 908,
+        "startOffset": 37,
+        "endOffset": 44
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A form label must be associated with a control.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b113349d-d6c2-482c-8b9e-91f2b9279dea",
+      "rule": "Web:S6853",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 909,
+      "hash": "876c6e845b78061b19249761b1d9f8c4",
+      "textRange": {
+        "startLine": 909,
+        "endLine": 909,
+        "startOffset": 37,
+        "endOffset": 44
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A form label must be associated with a control.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b90287d8-8e14-454e-9bfc-475cf0b30856",
+      "rule": "Web:S6853",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 910,
+      "hash": "c56537f79696f69458edc5fae508e932",
+      "textRange": {
+        "startLine": 910,
+        "endLine": 910,
+        "startOffset": 37,
+        "endOffset": 44
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A form label must be associated with a control.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b552eb57-b204-4003-93e4-7c4f5cd12fd3",
+      "rule": "Web:S6853",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 911,
+      "hash": "6f15ac84140c238f1e99f6e99c9495af",
+      "textRange": {
+        "startLine": 911,
+        "endLine": 911,
+        "startOffset": 37,
+        "endOffset": 44
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A form label must be associated with a control.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "5fa3a4c9-ca8d-4957-b266-fec428a39aff",
+      "rule": "Web:S6853",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 912,
+      "hash": "6e656afee6173987f08cdb15a9d26e07",
+      "textRange": {
+        "startLine": 912,
+        "endLine": 912,
+        "startOffset": 37,
+        "endOffset": 44
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A form label must be associated with a control.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "ba40aa5a-ce53-4a71-a072-0515e4a2a428",
+      "rule": "javascript:S3776",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 1521,
+      "hash": "4cb170d9acf05448241716e49677c0ac",
+      "textRange": {
+        "startLine": 1521,
+        "endLine": 1521,
+        "startOffset": 45,
+        "endOffset": 47
+      },
+      "flows": [
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1525,
+                "endLine": 1525,
+                "startOffset": 6,
+                "endOffset": 8
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1528,
+                "endLine": 1528,
+                "startOffset": 6,
+                "endOffset": 8
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1528,
+                "endLine": 1528,
+                "startOffset": 20,
+                "endOffset": 22
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1530,
+                "endLine": 1530,
+                "startOffset": 8,
+                "endOffset": 10
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1530,
+                "endLine": 1530,
+                "startOffset": 23,
+                "endOffset": 25
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1532,
+                "endLine": 1532,
+                "startOffset": 10,
+                "endOffset": 12
+              },
+              "msg": "+3 (incl. 2 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1540,
+                "endLine": 1540,
+                "startOffset": 6,
+                "endOffset": 8
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1541,
+                "endLine": 1541,
+                "startOffset": 8,
+                "endOffset": 10
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1545,
+                "endLine": 1545,
+                "startOffset": 8,
+                "endOffset": 10
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1545,
+                "endLine": 1545,
+                "startOffset": 30,
+                "endOffset": 32
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1552,
+                "endLine": 1552,
+                "startOffset": 6,
+                "endOffset": 8
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1554,
+                "endLine": 1554,
+                "startOffset": 8,
+                "endOffset": 10
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1561,
+                "endLine": 1561,
+                "startOffset": 6,
+                "endOffset": 8
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1561,
+                "endLine": 1561,
+                "startOffset": 33,
+                "endOffset": 34
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1566,
+                "endLine": 1566,
+                "startOffset": 6,
+                "endOffset": 8
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1566,
+                "endLine": 1566,
+                "startOffset": 33,
+                "endOffset": 34
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1571,
+                "endLine": 1571,
+                "startOffset": 6,
+                "endOffset": 8
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+              "textRange": {
+                "startLine": 1571,
+                "endLine": 1571,
+                "startOffset": 33,
+                "endOffset": 34
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        }
+      ],
+      "status": "OPEN",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.",
+      "effort": "14min",
+      "debt": "14min",
+      "author": "",
+      "tags": [
+        "brain-overload"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "FOCUSED",
+      "cleanCodeAttributeCategory": "ADAPTABLE",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "d0e23029-cbff-404a-9fa8-d7458dfc92af",
+      "rule": "javascript:S3626",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:apps/inventario/index.html",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 1574,
+      "hash": "505b97969baa28c3f607a38ee02f4f2d",
+      "textRange": {
+        "startLine": 1574,
+        "endLine": 1574,
+        "startOffset": 8,
+        "endOffset": 15
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Remove this redundant jump.",
+      "effort": "1min",
+      "debt": "1min",
+      "author": "",
+      "tags": [
+        "redundant",
+        "clumsy"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": true,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "98a125bc-2983-447e-bad6-83552896740e",
+      "rule": "python:S6553",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:apps/usuarios/models.py",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 157,
+      "hash": "2b306110a44d94322f78b1bd2238394d",
+      "textRange": {
+        "startLine": 157,
+        "endLine": 157,
+        "startOffset": 52,
+        "endOffset": 61
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Remove this \"null=True\" flag.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "django"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "848ad76f-1cba-4ae8-b9f0-9d28609cffa7",
+      "rule": "python:S2208",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-refactoring-compare:config/settings/build.py",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 3,
+      "hash": "89cd28064a6264945b0860d7f287e2f9",
+      "textRange": {
+        "startLine": 3,
+        "endLine": 3,
+        "startOffset": 0,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Import only needed names or import the module and then use its members.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "bad-practice",
+        "pitfall"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "14f0938f-0467-4fe3-bf0d-cca6d9273c6e",
+      "rule": "python:S2208",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-refactoring-compare:config/settings/dev.py",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 9,
+      "hash": "89cd28064a6264945b0860d7f287e2f9",
+      "textRange": {
+        "startLine": 9,
+        "endLine": 9,
+        "startOffset": 0,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Import only needed names or import the module and then use its members.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "bad-practice",
+        "pitfall"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "42f981f9-d8eb-4171-8735-589e1a1ebba3",
+      "rule": "python:S2208",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-refactoring-compare:config/settings/prod.py",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 7,
+      "hash": "89cd28064a6264945b0860d7f287e2f9",
+      "textRange": {
+        "startLine": 7,
+        "endLine": 7,
+        "startOffset": 0,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Import only needed names or import the module and then use its members.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "bad-practice",
+        "pitfall"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "HIGH"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "7eaa5a6f-df32-417a-b97e-e67c01a12952",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/App.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 17,
+      "hash": "9d44f5ba52d2a2f87849fe2ee677f582",
+      "textRange": {
+        "startLine": 17,
+        "endLine": 17,
+        "startOffset": 28,
+        "endOffset": 36
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'children' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "be064ce7-9d59-4e91-9bc5-9b954d45b541",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/App.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 17,
+      "hash": "9d44f5ba52d2a2f87849fe2ee677f582",
+      "textRange": {
+        "startLine": 17,
+        "endLine": 17,
+        "startOffset": 21,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'roles' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2829ceb5-bb11-4a35-926a-bd8f9252aae6",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/App.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 22,
+      "hash": "b87dc06b55320d9b2a2b89f2f24d93d8",
+      "textRange": {
+        "startLine": 22,
+        "endLine": 22,
+        "startOffset": 22,
+        "endOffset": 30
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'roles.includes' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "64915195-6e26-4374-b577-62028144f90f",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/auth/AuthContext.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 11,
+      "hash": "f6374349f69fba4ea95c65c3f3fe824d",
+      "textRange": {
+        "startLine": 11,
+        "endLine": 11,
+        "startOffset": 31,
+        "endOffset": 39
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'children' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "848deb8d-254e-47a1-8cd6-ebc0b3589969",
+      "rule": "javascript:S6481",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/auth/AuthContext.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 71,
+      "hash": "b1bcb9ee62c0132322e9ae1c17ddcb15",
+      "textRange": {
+        "startLine": 71,
+        "endLine": 71,
+        "startOffset": 33,
+        "endOffset": 167
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "The object passed as the value prop to the Context provider changes every render. To fix this consider wrapping it in a useMemo hook.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "performance",
+        "react",
+        "jsx"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "EFFICIENT",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b38be3b4-0187-43ee-bce4-4eb19eaddacd",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 3,
+      "hash": "48c5256f458be204a19ff175a3bba13b",
+      "textRange": {
+        "startLine": 3,
+        "endLine": 3,
+        "startOffset": 23,
+        "endOffset": 27
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'name' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "c7f11b2a-c109-4229-bc09-5287d0291dfa",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 3,
+      "hash": "48c5256f458be204a19ff175a3bba13b",
+      "textRange": {
+        "startLine": 3,
+        "endLine": 3,
+        "startOffset": 29,
+        "endOffset": 38
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'size' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "80efd6d1-13c9-461e-a264-2330464cf6e9",
+      "rule": "javascript:S6749",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 12,
+      "hash": "1611329a26649ee6ae6f0e4830c381ef",
+      "textRange": {
+        "startLine": 12,
+        "endLine": 12,
+        "startOffset": 11,
+        "endOffset": 61
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A fragment with only one child is redundant.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "DISTINCT",
+      "cleanCodeAttributeCategory": "ADAPTABLE",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "a50a84e4-b820-4b01-8226-a780489e6fe6",
+      "rule": "javascript:S6749",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 13,
+      "hash": "1b3d4c28bc9e4cf972f1abee79b9100f",
+      "textRange": {
+        "startLine": 13,
+        "endLine": 13,
+        "startOffset": 12,
+        "endOffset": 80
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A fragment with only one child is redundant.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "DISTINCT",
+      "cleanCodeAttributeCategory": "ADAPTABLE",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "8f1f4790-c9ce-475c-af4f-4eff5aae315a",
+      "rule": "javascript:S6749",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 20,
+      "hash": "e5d027ddfbfd775d567d1825ece96070",
+      "textRange": {
+        "startLine": 20,
+        "endLine": 20,
+        "startOffset": 14,
+        "endOffset": 60
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A fragment with only one child is redundant.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "DISTINCT",
+      "cleanCodeAttributeCategory": "ADAPTABLE",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "a08522d1-c08b-4598-acf1-e38c303b2213",
+      "rule": "javascript:S6749",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 22,
+      "hash": "289e5d05634d231483f4a76173df5f54",
+      "textRange": {
+        "startLine": 22,
+        "endLine": 22,
+        "startOffset": 12,
+        "endOffset": 64
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "A fragment with only one child is redundant.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "DISTINCT",
+      "cleanCodeAttributeCategory": "ADAPTABLE",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "98f3550e-30e5-4892-b882-194c706674bb",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 28,
+      "hash": "a2cecbc964a4b94fca48ff52cd3bcecf",
+      "textRange": {
+        "startLine": 28,
+        "endLine": 28,
+        "startOffset": 38,
+        "endOffset": 43
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'title' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "9a91dcf2-f1de-4668-be63-0331f4d7c555",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 28,
+      "hash": "a2cecbc964a4b94fca48ff52cd3bcecf",
+      "textRange": {
+        "startLine": 28,
+        "endLine": 28,
+        "startOffset": 45,
+        "endOffset": 56
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'description' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "9ec1ce45-1465-4950-b8f1-a6db5943e56f",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 28,
+      "hash": "a2cecbc964a4b94fca48ff52cd3bcecf",
+      "textRange": {
+        "startLine": 28,
+        "endLine": 28,
+        "startOffset": 29,
+        "endOffset": 36
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'eyebrow' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "fca6af57-739d-4750-8946-f2544c6d2289",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 28,
+      "hash": "a2cecbc964a4b94fca48ff52cd3bcecf",
+      "textRange": {
+        "startLine": 28,
+        "endLine": 28,
+        "startOffset": 58,
+        "endOffset": 65
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'actions' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "0b9bc803-c236-4a92-a36a-6c3c8a916981",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 32,
+      "hash": "26922ccff6e3fb43dc876701bd24d789",
+      "textRange": {
+        "startLine": 32,
+        "endLine": 32,
+        "startOffset": 56,
+        "endOffset": 60
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'icon' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "a628856f-1b89-4e49-b1b4-eab990cafdd9",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 32,
+      "hash": "26922ccff6e3fb43dc876701bd24d789",
+      "textRange": {
+        "startLine": 32,
+        "endLine": 32,
+        "startOffset": 35,
+        "endOffset": 54
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'variant' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "bf52092d-a84a-4f08-bbab-2c0a7ce37163",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 32,
+      "hash": "26922ccff6e3fb43dc876701bd24d789",
+      "textRange": {
+        "startLine": 32,
+        "endLine": 32,
+        "startOffset": 25,
+        "endOffset": 33
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'children' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "707ff04e-f5d6-4b59-a0bd-5aa572edd60f",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 36,
+      "hash": "767dab2966dbd53286aa3205fd2887b1",
+      "textRange": {
+        "startLine": 36,
+        "endLine": 36,
+        "startOffset": 25,
+        "endOffset": 33
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'children' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "023effb8-b5c1-4c09-832e-b2c3293cf891",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 41,
+      "hash": "b38625e57f09735d8927b7d80daa6cfc",
+      "textRange": {
+        "startLine": 41,
+        "endLine": 41,
+        "startOffset": 24,
+        "endOffset": 31
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'loading' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "125f30bd-271b-4774-8a8f-721c39f306ab",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 41,
+      "hash": "b38625e57f09735d8927b7d80daa6cfc",
+      "textRange": {
+        "startLine": 41,
+        "endLine": 41,
+        "startOffset": 33,
+        "endOffset": 38
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'error' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "35340c39-5ae4-486f-af12-0d5b58687907",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 41,
+      "hash": "b38625e57f09735d8927b7d80daa6cfc",
+      "textRange": {
+        "startLine": 41,
+        "endLine": 41,
+        "startOffset": 56,
+        "endOffset": 64
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'children' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "8b70dd40-0993-485e-a9a4-5adbea97cb37",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 41,
+      "hash": "b38625e57f09735d8927b7d80daa6cfc",
+      "textRange": {
+        "startLine": 41,
+        "endLine": 41,
+        "startOffset": 40,
+        "endOffset": 45
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'empty' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "f3c52044-30a2-479f-9c6f-33782f69f100",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 41,
+      "hash": "b38625e57f09735d8927b7d80daa6cfc",
+      "textRange": {
+        "startLine": 41,
+        "endLine": 41,
+        "startOffset": 47,
+        "endOffset": 54
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'onRetry' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b83cf2f4-5240-4896-bb04-fdf6d874b304",
+      "rule": "javascript:S6819",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 42,
+      "hash": "3aa6463724a63c362b887fc2dab1d872",
+      "textRange": {
+        "startLine": 42,
+        "endLine": 42,
+        "startOffset": 22,
+        "endOffset": 64
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility",
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "bb1d87c5-39df-4d30-b329-f22a3a692872",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 48,
+      "hash": "32bd636bf22dcedfc62cdfead681b06d",
+      "textRange": {
+        "startLine": 48,
+        "endLine": 48,
+        "startOffset": 37,
+        "endOffset": 45
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'children' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "d98758d4-c0b7-4cb9-b97f-689d8a093011",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 48,
+      "hash": "32bd636bf22dcedfc62cdfead681b06d",
+      "textRange": {
+        "startLine": 48,
+        "endLine": 48,
+        "startOffset": 31,
+        "endOffset": 35
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'hint' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "f34003a7-f62f-4743-968e-4c24df0efbee",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 48,
+      "hash": "32bd636bf22dcedfc62cdfead681b06d",
+      "textRange": {
+        "startLine": 48,
+        "endLine": 48,
+        "startOffset": 24,
+        "endOffset": 29
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'label' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "00b67017-8a52-41a2-bfd7-8daaacfd0b02",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 52,
+      "hash": "2960138b6f3d95b88b6298dfb0f2b44d",
+      "textRange": {
+        "startLine": 52,
+        "endLine": 52,
+        "startOffset": 51,
+        "endOffset": 58
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'onClose' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "713b68b9-021c-4665-9f5e-6ee453e81ac6",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 52,
+      "hash": "2960138b6f3d95b88b6298dfb0f2b44d",
+      "textRange": {
+        "startLine": 52,
+        "endLine": 52,
+        "startOffset": 25,
+        "endOffset": 29
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'open' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "98010da1-2a6f-4fed-9f5f-80ebd2a14920",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 52,
+      "hash": "2960138b6f3d95b88b6298dfb0f2b44d",
+      "textRange": {
+        "startLine": 52,
+        "endLine": 52,
+        "startOffset": 38,
+        "endOffset": 49
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'description' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "a99b097b-9b0d-49ae-8cc0-f9a85ec7815a",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 52,
+      "hash": "2960138b6f3d95b88b6298dfb0f2b44d",
+      "textRange": {
+        "startLine": 52,
+        "endLine": 52,
+        "startOffset": 31,
+        "endOffset": 36
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'title' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "ae1945af-85da-4a79-916e-cc46f4da73af",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 52,
+      "hash": "2960138b6f3d95b88b6298dfb0f2b44d",
+      "textRange": {
+        "startLine": 52,
+        "endLine": 52,
+        "startOffset": 60,
+        "endOffset": 68
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'children' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "4ecc0116-bf64-429f-9552-25b3246d9500",
+      "rule": "javascript:S6819",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 60,
+      "hash": "05fc6ead525aa67edfd4cbc2b1f979f4",
+      "textRange": {
+        "startLine": 60,
+        "endLine": 60,
+        "startOffset": 141,
+        "endOffset": 232
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use <dialog> instead of the \"dialog\" role to ensure accessibility across all devices.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility",
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "a01aab87-2d02-4ba6-a2ac-0b71cf461128",
+      "rule": "javascript:S6819",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 60,
+      "hash": "05fc6ead525aa67edfd4cbc2b1f979f4",
+      "textRange": {
+        "startLine": 60,
+        "endLine": 60,
+        "startOffset": 9,
+        "endOffset": 141
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use <img alt=...> instead of the \"presentation\" role to ensure accessibility across all devices.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility",
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "7565aa01-abf2-4ea8-bb15-8c772aca54ff",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 63,
+      "hash": "f557eb8f321a0fbe166a9e2b571d10d8",
+      "textRange": {
+        "startLine": 63,
+        "endLine": 63,
+        "startOffset": 39,
+        "endOffset": 46
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'success' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "db8ce6db-9170-4d60-8f78-a81d4986c879",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 63,
+      "hash": "f557eb8f321a0fbe166a9e2b571d10d8",
+      "textRange": {
+        "startLine": 63,
+        "endLine": 63,
+        "startOffset": 32,
+        "endOffset": 37
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'error' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b2089ed0-1d8f-41ad-8b40-4e88256729d6",
+      "rule": "javascript:S6819",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 65,
+      "hash": "b27965d2bd9feb4139a11645c08bea82",
+      "textRange": {
+        "startLine": 65,
+        "endLine": 65,
+        "startOffset": 9,
+        "endOffset": 91
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility",
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "dede51cb-4c7c-463a-a6fb-64687bfc995e",
+      "rule": "javascript:S6551",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/components/ui.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 79,
+      "hash": "e4dc76da210228a09058e9354f018fcc",
+      "textRange": {
+        "startLine": 79,
+        "endLine": 79,
+        "startOffset": 9,
+        "endOffset": 23
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'data.get(name)' may use Object's default stringification format ('[object Object]') when stringified.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "string",
+        "type-dependent",
+        "object"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "LOGICAL",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "18b21e53-be04-4b3b-9076-9398ced1c159",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 46,
+      "hash": "d7e4d25a0a459abde039bac627386253",
+      "textRange": {
+        "startLine": 46,
+        "endLine": 46,
+        "startOffset": 65,
+        "endOffset": 92
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "5792e680-de9b-4e37-8717-e61178e1ac6e",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 56,
+      "hash": "dfa2342fb00f97ab23aaccee3e4026e4",
+      "textRange": {
+        "startLine": 56,
+        "endLine": 56,
+        "startOffset": 23,
+        "endOffset": 26
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'tab' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2157a0b9-8f7b-40e0-b927-ce3c5d48e179",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 57,
+      "hash": "9b70ce413e43f326cc80827a1b364a9d",
+      "textRange": {
+        "startLine": 57,
+        "endLine": 57,
+        "startOffset": 22,
+        "endOffset": 25
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'tab' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2e88b868-5f1d-4fb0-b02c-8a93cbc4ce5e",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 57,
+      "hash": "9b70ce413e43f326cc80827a1b364a9d",
+      "textRange": {
+        "startLine": 57,
+        "endLine": 57,
+        "startOffset": 65,
+        "endOffset": 73
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'onRemove' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2fea6dfd-9f05-4c05-a90c-5b7b216d9eb2",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 57,
+      "hash": "9b70ce413e43f326cc80827a1b364a9d",
+      "textRange": {
+        "startLine": 57,
+        "endLine": 57,
+        "startOffset": 33,
+        "endOffset": 43
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'categories' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "5d704c12-7b7e-4707-9699-be70289991fe",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 57,
+      "hash": "9b70ce413e43f326cc80827a1b364a9d",
+      "textRange": {
+        "startLine": 57,
+        "endLine": 57,
+        "startOffset": 55,
+        "endOffset": 63
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'onToggle' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "6ee2b88e-d374-48d6-a806-f674b3707a7d",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 57,
+      "hash": "9b70ce413e43f326cc80827a1b364a9d",
+      "textRange": {
+        "startLine": 57,
+        "endLine": 57,
+        "startOffset": 45,
+        "endOffset": 53
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'garments' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "ea3abad5-66f9-45e6-840a-a807e5c8131a",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 57,
+      "hash": "9b70ce413e43f326cc80827a1b364a9d",
+      "textRange": {
+        "startLine": 57,
+        "endLine": 57,
+        "startOffset": 27,
+        "endOffset": 31
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "11674917-4872-4aa7-8fb9-76ee583578c6",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 103,
+        "endOffset": 114
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.descripcion' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "204e263f-f582-49e1-9904-6eef5d6d02bc",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 74,
+        "endOffset": 80
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.nombre' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "25a9755f-0c9b-4518-8cd1-31b1f5d4a79c",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 161,
+        "endOffset": 177
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.categoria_nombre' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2989b017-9ab1-40ea-85da-e0bca49d62a5",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 226,
+        "endOffset": 238
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.categoria_id' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2f2f2c90-3f72-4423-879b-6e2ea6065d3b",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 192,
+        "endOffset": 196
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'categories.find' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "506e1a05-c502-448b-814e-0e80da9701a5",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 391,
+        "endOffset": 397
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.estado' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "5e406f5c-5867-48b6-b819-80f3707be20d",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 333,
+        "endOffset": 346
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.precio_moneda' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "823720e4-89f7-485b-8ce8-d262fd8459aa",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 314,
+        "endOffset": 326
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.precio_monto' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "c454e20a-99d5-4c71-ba3f-77842b6fb5ee",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 58,
+      "hash": "1c17bc1057a29709dbc801484f64d476",
+      "textRange": {
+        "startLine": 58,
+        "endLine": 58,
+        "startOffset": 505,
+        "endOffset": 511
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.estado' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "17954205-0578-4b14-a90e-082b9129ee97",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 73,
+        "endOffset": 76
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.sku' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2d67d027-8118-494c-af34-b33480d8fcc3",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 340,
+        "endOffset": 346
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.activa' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "31bc2d11-7426-4f06-a88a-372d5cad8d10",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 509,
+        "endOffset": 515
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.activa' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "49485703-ca4c-4c0f-9e91-78af608fb8d5",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 147,
+        "endOffset": 151
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'garments.find' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "74b026e3-8dd0-4a0e-b537-aa0695c69b7a",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 182,
+        "endOffset": 191
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.prenda_id' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b4c352e4-8662-4dff-bcee-d7acfde938f9",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 251,
+        "endOffset": 256
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.talla' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "cdbd8e71-7dbe-4059-8358-2144bde54265",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 291,
+        "endOffset": 296
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.color' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "ef47304f-1fcc-464e-999d-fdd7c56b5d45",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 121,
+        "endOffset": 134
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.prenda_nombre' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "f91cdeea-528a-427f-b03d-f4d492a88cec",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 59,
+      "hash": "e1dc86bd0b6ef5980105f696802b7b69",
+      "textRange": {
+        "startLine": 59,
+        "endLine": 59,
+        "startOffset": 200,
+        "endOffset": 206
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.prenda' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "29a3ebd6-880b-4e7e-aa8f-91ec5375262d",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 60,
+      "hash": "89531304ed67623ade9b119fedc127bc",
+      "textRange": {
+        "startLine": 60,
+        "endLine": 60,
+        "startOffset": 133,
+        "endOffset": 144
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.descripcion' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "cc521eba-4839-4562-8220-10356e541710",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 60,
+      "hash": "89531304ed67623ade9b119fedc127bc",
+      "textRange": {
+        "startLine": 60,
+        "endLine": 60,
+        "startOffset": 77,
+        "endOffset": 83
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.nombre' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2999ee54-52c9-4023-a11e-ba5f54536cb1",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 61,
+      "hash": "c5e6a456ee9a09845dac83f070b7042b",
+      "textRange": {
+        "startLine": 61,
+        "endLine": 61,
+        "startOffset": 117,
+        "endOffset": 131
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.atributos_base' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "4de7a855-1721-4fda-a2aa-b7e96bb02974",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 61,
+      "hash": "c5e6a456ee9a09845dac83f070b7042b",
+      "textRange": {
+        "startLine": 61,
+        "endLine": 61,
+        "startOffset": 212,
+        "endOffset": 218
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.activo' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "d99162f5-913f-492f-9c01-78eb9bc0d313",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 61,
+      "hash": "c5e6a456ee9a09845dac83f070b7042b",
+      "textRange": {
+        "startLine": 61,
+        "endLine": 61,
+        "startOffset": 51,
+        "endOffset": 57
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.nombre' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "dac5426e-8e98-46ba-89fb-46d2350a4522",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 61,
+      "hash": "c5e6a456ee9a09845dac83f070b7042b",
+      "textRange": {
+        "startLine": 61,
+        "endLine": 61,
+        "startOffset": 350,
+        "endOffset": 356
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'item.activo' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "273f2f65-6eb3-4abc-a20e-d7f63b476be5",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AuthPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 7,
+      "hash": "fc4d6e1abd43e3a5a0e5c3fa8f60f3bd",
+      "textRange": {
+        "startLine": 7,
+        "endLine": 7,
+        "startOffset": 21,
+        "endOffset": 25
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'mode' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "047962fb-47a0-41b1-aca3-1873b57b8f81",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/AuthPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 39,
+      "hash": "930754ba6d2e15ca56f7406db0553da7",
+      "textRange": {
+        "startLine": 39,
+        "endLine": 39,
+        "startOffset": 110,
+        "endOffset": 147
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "6b79932c-e11d-42a3-a5e2-14a4cba230fd",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/CatalogPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 36,
+      "hash": "66ab343cf2d5e06407f8476bd2f010e3",
+      "textRange": {
+        "startLine": 36,
+        "endLine": 36,
+        "startOffset": 26,
+        "endOffset": 98
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "60bf428a-b4f1-43de-9204-05da5a340e75",
+      "rule": "javascript:S6819",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/CatalogPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 52,
+      "hash": "78623fd4a6fec465302897efdd124003",
+      "textRange": {
+        "startLine": 52,
+        "endLine": 52,
+        "startOffset": 1507,
+        "endOffset": 1551
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Use <output> instead of the \"status\" role to ensure accessibility across all devices.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "accessibility",
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "2be5e808-26f3-4585-951a-e05b3130ce60",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/InventoryPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 19,
+      "hash": "ea79dc6f4f01e0467537813375eb38dd",
+      "textRange": {
+        "startLine": 19,
+        "endLine": 19,
+        "startOffset": 24,
+        "endOffset": 29
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'label' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "76da446f-3cd1-4e9a-89c6-f1bb3371e396",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/InventoryPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 19,
+      "hash": "ea79dc6f4f01e0467537813375eb38dd",
+      "textRange": {
+        "startLine": 19,
+        "endLine": 19,
+        "startOffset": 44,
+        "endOffset": 50
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'danger' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "7f2cb817-22fa-4c2b-9dd4-62ae03608a95",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/InventoryPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 19,
+      "hash": "ea79dc6f4f01e0467537813375eb38dd",
+      "textRange": {
+        "startLine": 19,
+        "endLine": 19,
+        "startOffset": 38,
+        "endOffset": 42
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'note' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "d43788a0-ab79-4cfe-b435-fb1c918edea3",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/InventoryPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 19,
+      "hash": "ea79dc6f4f01e0467537813375eb38dd",
+      "textRange": {
+        "startLine": 19,
+        "endLine": 19,
+        "startOffset": 18,
+        "endOffset": 22
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'icon' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "e1f772a0-297c-4bf2-9e92-aa0bb0324b15",
+      "rule": "javascript:S6774",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/InventoryPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 19,
+      "hash": "ea79dc6f4f01e0467537813375eb38dd",
+      "textRange": {
+        "startLine": 19,
+        "endLine": 19,
+        "startOffset": 31,
+        "endOffset": 36
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "'value' is missing in props validation",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "react"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CONVENTIONAL",
+      "cleanCodeAttributeCategory": "CONSISTENT",
+      "impacts": [
+        {
+          "softwareQuality": "RELIABILITY",
+          "severity": "LOW"
+        },
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "LOW"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "21f601da-43a7-4fc6-814e-6ebe6ebbd7f4",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/InventoryPages.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 53,
+      "hash": "5b7baf1ab5c3b631edc8b0563e2e7f0b",
+      "textRange": {
+        "startLine": 53,
+        "endLine": 53,
+        "startOffset": 1682,
+        "endOffset": 1745
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "7466a6e0-e279-426d-bab0-ec761ac3cc5f",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/StockOperationsPage.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 115,
+      "hash": "9f371f143fcaf27f685c38a4625ebdad",
+      "textRange": {
+        "startLine": 115,
+        "endLine": 115,
+        "startOffset": 49,
+        "endOffset": 152
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "f2de01d9-abfc-4b99-9d7b-00808ddc1ec9",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/StockOperationsPage.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 115,
+      "hash": "9f371f143fcaf27f685c38a4625ebdad",
+      "textRange": {
+        "startLine": 115,
+        "endLine": 115,
+        "startOffset": 89,
+        "endOffset": 152
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "11ac943d-f5c9-438e-92c8-d0098164500f",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/pages/StockOperationsPage.jsx",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 127,
+      "hash": "ade8beceb700c6d2b699131b43ee6e0f",
+      "textRange": {
+        "startLine": 127,
+        "endLine": 127,
+        "startOffset": 54,
+        "endOffset": 106
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "b0ad7af4-12b0-4d51-a8f7-111deec65d16",
+      "rule": "javascript:S6582",
+      "severity": "MINOR",
+      "component": "softwaretextil-refactoring-compare:frontend/inventario/src/services/api.js",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 1,
+      "hash": "7298607bb422b74584b463369c991e07",
+      "textRange": {
+        "startLine": 1,
+        "endLine": 1,
+        "startOffset": 17,
+        "endOffset": 70
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Prefer using an optional chain expression instead, as it's more concise and easier to read.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "4901940e-0a55-4380-ba74-0d2242394725",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:static/usuarios/auth.js",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 113,
+      "hash": "f9648e93ba1c594e789738ef97de853f",
+      "textRange": {
+        "startLine": 113,
+        "endLine": 113,
+        "startOffset": 105,
+        "endOffset": 156
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    },
+    {
+      "key": "74f3e0f4-1190-4e6e-8b8a-502a36e3117c",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-refactoring-compare:static/usuarios/auth.js",
+      "project": "softwaretextil-refactoring-compare",
+      "line": 113,
+      "hash": "f9648e93ba1c594e789738ef97de853f",
+      "textRange": {
+        "startLine": 113,
+        "endLine": 113,
+        "startOffset": 161,
+        "endOffset": 212
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-23T11:32:11-0500",
+      "updateDate": "2026-11-23T11:32:11-0500",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": [],
+      "codeVariants": [],
+      "cleanCodeAttribute": "CLEAR",
+      "cleanCodeAttributeCategory": "INTENTIONAL",
+      "impacts": [
+        {
+          "softwareQuality": "MAINTAINABILITY",
+          "severity": "MEDIUM"
+        }
+      ],
+      "issueStatus": "OPEN",
+      "prioritizedRule": false
+    }
+  ]
+}
