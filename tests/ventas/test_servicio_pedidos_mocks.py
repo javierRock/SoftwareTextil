@@ -12,7 +12,10 @@ import pytest
 
 from apps.compartido.domain.dinero import Dinero
 from apps.compartido.domain.enums import EstadoCarrito, EstadoPedido
-from apps.inventario.domain.excepciones import StockNoEncontradoError
+from apps.inventario.domain.excepciones import (
+    StockInsuficienteError,
+    StockNoEncontradoError,
+)
 from apps.inventario.domain.repositorios import RepositorioInventario
 from apps.inventario.domain.stock_prenda import StockVariante
 from apps.ventas.carrito.domain.carrito import CarritoCompras
@@ -131,3 +134,158 @@ class TestServicioPedidosConMocks:
             self.servicio.cancelar("pedido-x")
 
         self.escritor_pedido.guardar.assert_not_called()
+
+
+class TestBloqueoDeStockDelServicioPedidos:
+    """Q-01 (#47): reserva y liberacion comparten el bloqueo de stock.
+
+    Ambas operaciones deben bloquear las variantes en el mismo orden, validar
+    todas antes de modificar alguna y persistir solo cuando todas se ajustaron.
+    """
+
+    def setup_method(self) -> None:
+        self.lector_pedido = create_autospec(LectorPedido, instance=True)
+        self.escritor_pedido = create_autospec(EscritorPedido, instance=True)
+        self.lector_carrito = create_autospec(LectorCarrito, instance=True)
+        self.escritor_carrito = create_autospec(EscritorCarrito, instance=True)
+        self.inventario = create_autospec(RepositorioInventario, instance=True)
+        self.servicio = ServicioPedidos(
+            self.lector_pedido,
+            self.escritor_pedido,
+            self.lector_carrito,
+            self.escritor_carrito,
+            inventario=self.inventario,
+        )
+        self.stocks = {
+            variante: create_autospec(StockVariante, instance=True)
+            for variante in ("variante-a", "variante-b", "variante-c")
+        }
+        self.inventario.buscar_por_variante_bloqueada.side_effect = self.stocks.get
+
+    @staticmethod
+    def _carrito_desordenado() -> CarritoCompras:
+        carrito = CarritoCompras(id="carrito-1", cliente_id=CLIENTE)
+        carrito.agregar_item("variante-c", 3, Dinero(Decimal("12.00")))
+        carrito.agregar_item("variante-a", 1, Dinero(Decimal("20.00")))
+        carrito.agregar_item("variante-b", 2, Dinero(Decimal("8.00")))
+        return carrito
+
+    @staticmethod
+    def _pedido_desordenado():
+        return PedidoFactory.crear(
+            CLIENTE,
+            "carrito-1",
+            [
+                DetallePedido("variante-c", 3, Dinero(Decimal("12.00"))),
+                DetallePedido("variante-a", 1, Dinero(Decimal("20.00"))),
+                DetallePedido("variante-b", 2, Dinero(Decimal("8.00"))),
+            ],
+        )
+
+    def _variantes_bloqueadas(self) -> list[str]:
+        return [
+            llamada.args[0]
+            for llamada in self.inventario.buscar_por_variante_bloqueada.call_args_list
+        ]
+
+    def test_generar_y_cancelar_bloquean_variantes_en_el_mismo_orden(self) -> None:
+        self.lector_carrito.buscar_por_id_para_actualizar.return_value = (
+            self._carrito_desordenado()
+        )
+        pedido = self.servicio.generar_desde_carrito("carrito-1", CLIENTE)
+        orden_reserva = self._variantes_bloqueadas()
+        self.inventario.buscar_por_variante_bloqueada.reset_mock()
+        self.lector_pedido.buscar_por_id_para_actualizar.return_value = pedido
+
+        self.servicio.cancelar(pedido.id, CLIENTE)
+
+        assert orden_reserva == ["variante-a", "variante-b", "variante-c"]
+        assert self._variantes_bloqueadas() == orden_reserva
+
+    def test_generar_conserva_total_estado_y_cantidades_reservadas(self) -> None:
+        self.lector_carrito.buscar_por_id_para_actualizar.return_value = (
+            self._carrito_desordenado()
+        )
+
+        pedido = self.servicio.generar_desde_carrito("carrito-1", CLIENTE)
+
+        assert pedido.total == Dinero(Decimal("72.00"))
+        assert pedido.estado == EstadoPedido.CREADO
+        self.stocks["variante-a"].reservar.assert_called_once_with(1)
+        self.stocks["variante-b"].reservar.assert_called_once_with(2)
+        self.stocks["variante-c"].reservar.assert_called_once_with(3)
+        assert self.inventario.guardar.call_count == len(self.stocks)
+
+    def test_cancelar_libera_cada_variante_con_su_cantidad(self) -> None:
+        pedido = self._pedido_desordenado()
+        self.lector_pedido.buscar_por_id_para_actualizar.return_value = pedido
+
+        resultado = self.servicio.cancelar(pedido.id, CLIENTE)
+
+        assert resultado.estado == EstadoPedido.CANCELADO
+        assert resultado.total == Dinero(Decimal("72.00"))
+        self.stocks["variante-a"].liberar.assert_called_once_with(1)
+        self.stocks["variante-b"].liberar.assert_called_once_with(2)
+        self.stocks["variante-c"].liberar.assert_called_once_with(3)
+
+    def test_reserva_no_modifica_stocks_si_una_variante_no_existe(self) -> None:
+        del self.stocks["variante-c"]
+        self.lector_carrito.buscar_por_id_para_actualizar.return_value = (
+            self._carrito_desordenado()
+        )
+
+        with pytest.raises(StockNoEncontradoError):
+            self.servicio.generar_desde_carrito("carrito-1", CLIENTE)
+
+        self.stocks["variante-a"].reservar.assert_not_called()
+        self.stocks["variante-b"].reservar.assert_not_called()
+        self.inventario.guardar.assert_not_called()
+        self.escritor_pedido.guardar.assert_not_called()
+
+    def test_liberacion_no_modifica_stocks_si_una_variante_no_existe(self) -> None:
+        del self.stocks["variante-c"]
+        pedido = self._pedido_desordenado()
+        self.lector_pedido.buscar_por_id_para_actualizar.return_value = pedido
+
+        with pytest.raises(StockNoEncontradoError):
+            self.servicio.cancelar(pedido.id, CLIENTE)
+
+        self.stocks["variante-a"].liberar.assert_not_called()
+        self.stocks["variante-b"].liberar.assert_not_called()
+        self.inventario.guardar.assert_not_called()
+        self.escritor_pedido.guardar.assert_not_called()
+
+    def test_stock_insuficiente_no_persiste_las_variantes_ya_reservadas(
+        self,
+    ) -> None:
+        self.stocks["variante-c"].reservar.side_effect = StockInsuficienteError(
+            "No hay stock disponible para reservar"
+        )
+        self.lector_carrito.buscar_por_id_para_actualizar.return_value = (
+            self._carrito_desordenado()
+        )
+
+        with pytest.raises(StockInsuficienteError):
+            self.servicio.generar_desde_carrito("carrito-1", CLIENTE)
+
+        self.inventario.guardar.assert_not_called()
+        self.escritor_pedido.guardar.assert_not_called()
+
+    def test_sin_inventario_genera_y_cancela_sin_consultar_stock(self) -> None:
+        servicio = ServicioPedidos(
+            self.lector_pedido,
+            self.escritor_pedido,
+            self.lector_carrito,
+            self.escritor_carrito,
+        )
+        self.lector_carrito.buscar_por_id_para_actualizar.return_value = (
+            self._carrito_desordenado()
+        )
+        pedido = servicio.generar_desde_carrito("carrito-1", CLIENTE)
+        self.lector_pedido.buscar_por_id_para_actualizar.return_value = pedido
+
+        servicio.cancelar(pedido.id, CLIENTE)
+
+        assert pedido.estado == EstadoPedido.CANCELADO
+        self.inventario.buscar_por_variante_bloqueada.assert_not_called()
+        self.inventario.guardar.assert_not_called()
