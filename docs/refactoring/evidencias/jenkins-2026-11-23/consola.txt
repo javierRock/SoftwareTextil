@@ -1,0 +1,643 @@
+Started by user verificador
+Obtained Jenkinsfile from git git://127.0.0.1:9418/SoftwareTextil.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 20 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+The recommended git tool is: git
+No credentials specified
+Cloning the remote Git repository
+Cloning repository git://127.0.0.1:9418/SoftwareTextil.git
+ > git init /workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46 # timeout=10
+Fetching upstream changes from git://127.0.0.1:9418/SoftwareTextil.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.56.1'
+ > git fetch --tags --force --progress -- git://127.0.0.1:9418/SoftwareTextil.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url git://127.0.0.1:9418/SoftwareTextil.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/refactor/code-quality^{commit} # timeout=10
+Checking out Revision 11fa65fd1dabda3b333294da8c6801230f604770 (refs/remotes/origin/refactor/code-quality)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 11fa65fd1dabda3b333294da8c6801230f604770 # timeout=10
+Commit message: "docs(calidad): publicar escaneos de dev y refactor en SonarQube local"
+First time build. Skipping changelog.
+[Pipeline] sh
++ make clean
+rm -rf build frontend/inventario/dist dist
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Construcción)
+[Pipeline] sh
++ make deps frontend-build
+Make: GNU Make 4.4.1
+uv 0.13.9 (6b2d39dcc 2026-11-17 x86_64-unknown-linux-gnu)
+Python seleccionado: Using CPython 3.11.15
+Creating virtual environment at: .venv
+Python 3.11.15
+Node: v22.14.0
+npm: 10.9.2
+uv sync --locked
+Resolved 20 packages in 2ms
+warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.
+         If the cache and target directories are on different filesystems, hardlinking may not be supported.
+         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
+Installed 15 packages in 385ms
+ + asgiref==3.11.1
+ + coverage==7.15.2
+ + django==5.2.16
+ + djangorestframework==3.17.1
+ + iniconfig==2.3.0
+ + packaging==26.2
+ + pillow==12.3.0
+ + pluggy==1.6.0
+ + psycopg2-binary==2.9.12
+ + pygments==2.20.0
+ + pytest==9.1.1
+ + pytest-cov==7.1.0
+ + pytest-django==4.12.0
+ + ruff==0.16.0
+ + sqlparse==0.5.5
+npm --prefix frontend/inventario ci
+
+added 268 packages, and audited 269 packages in 1s
+
+115 packages are looking for funding
+  run `npm fund` for details
+
+7 high severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+npm --prefix frontend/inventario run build
+
+> software-textil-inventario@0.1.0 build
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 55 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html        0.70 kB │ gzip:  0.41 kB
+dist/assets/app.css   23.83 kB │ gzip:  5.96 kB
+dist/assets/app.js   289.87 kB │ gzip: 88.67 kB
+✓ built in 698ms
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (PostgreSQL de pruebas)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
++ printf textil-%s jenkins-SoftwareTextil-revision-PR46-3
++ tr '[:upper:]' '[:lower:]'
++ tr -c a-z0-9_- -
+[Pipeline] sh
++ set -eu
++ export DB_PORT=0
++ DB_PORT=0
++ docker compose -f compose.quality.yml up -d --wait db
+ Network textil-jenkins-softwaretextil-revision-pr46-3_default Creating
+ Volume textil-jenkins-softwaretextil-revision-pr46-3_quality_postgres Creating
+ Volume textil-jenkins-softwaretextil-revision-pr46-3_quality_postgres Created
+ Network textil-jenkins-softwaretextil-revision-pr46-3_default Created
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Creating
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Created
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Starting
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Started
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Waiting
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Healthy
+++ docker compose -f compose.quality.yml port db 5432
++ endpoint=127.0.0.1:32769
++ port=32769
++ test 32769 -gt 0
++ printf $'%s\n' 32769
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Pruebas automatizadas)
+[Pipeline] sh
++ make django-check reportes frontend-reportes
+DJANGO_SETTINGS_MODULE=config.settings.build uv run --locked python manage.py check
+System check identified no issues (0 silenced).
+DJANGO_SETTINGS_MODULE=config.settings.build uv run --locked python manage.py makemigrations --check --dry-run
+No changes detected
+mkdir -p build/reports
+uv run --locked pytest --cov --cov-report=term --cov-report=html --cov-report=xml --junitxml=build/reports/junit.xml
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: /workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46
+configfile: pyproject.toml
+plugins: django-4.12.0, cov-7.1.0
+collected 410 items
+
+apps/catalogo/tests/test_buscar_prendas_api.py ...........               [  2%]
+apps/catalogo/tests/test_catalogo_seguro_api.py ....                     [  3%]
+apps/catalogo/tests/test_categoria_api.py ....                           [  4%]
+apps/catalogo/tests/test_consultar_detalle_prenda_api.py ..              [  5%]
+apps/catalogo/tests/test_errores_catalogo.py .                           [  5%]
+apps/catalogo/tests/test_publicacion_prenda_api.py ....                  [  6%]
+apps/catalogo/tests/test_registro_prenda_api.py ............             [  9%]
+apps/catalogo/tests/test_repositorio_prenda.py .                         [  9%]
+apps/catalogo/tests/test_tipo_producto_api.py ....                       [ 10%]
+apps/catalogo/tests/test_visualizar_catalogo_api.py ..                   [ 10%]
+apps/inventario/tests/test_alertas_api.py .....                          [ 12%]
+apps/inventario/tests/test_api.py .................                      [ 16%]
+apps/inventario/tests/test_reportes_api.py ....                          [ 17%]
+apps/inventario/tests/test_service.py .........                          [ 19%]
+apps/inventario/tests/test_stock_por_categoria.py ............           [ 22%]
+tests/catalogo/test_repositorio_catalogo.py .......                      [ 24%]
+tests/compartido/test_integridad_esquema.py .............                [ 27%]
+tests/despachos/test_repositorio_despachos.py .....                      [ 28%]
+tests/inventario/test_repositorio_inventario.py ......                   [ 30%]
+tests/pagos/test_api_pagos.py ............                               [ 32%]
+tests/pagos/test_repositorio_pagos.py .........                          [ 35%]
+tests/test_spa.py .                                                      [ 35%]
+tests/test_usuarios_auth.py .............                                [ 38%]
+tests/usuarios/test_repositorio_usuarios.py ......                       [ 40%]
+tests/usuarios/test_rol_atomicidad.py ..                                 [ 40%]
+tests/ventas/test_api_carrito_pedidos.py .............                   [ 43%]
+tests/ventas/test_api_despachos.py .......                               [ 45%]
+tests/ventas/test_repositorio_pedidos.py .....                           [ 46%]
+apps/inventario/tests/test_concurrency.py .                              [ 46%]
+apps/catalogo/tests/test_buscar_prendas.py .....                         [ 48%]
+apps/catalogo/tests/test_categoria.py .......                            [ 49%]
+apps/catalogo/tests/test_consultar_detalle_prenda.py ..                  [ 50%]
+apps/catalogo/tests/test_errores_catalogo.py ....                        [ 51%]
+apps/catalogo/tests/test_publicacion_prenda.py ...                       [ 51%]
+apps/catalogo/tests/test_registro_prenda.py .................            [ 56%]
+apps/catalogo/tests/test_services.py ...                                 [ 56%]
+apps/catalogo/tests/test_tipo_producto.py ........                       [ 58%]
+apps/catalogo/tests/test_visualizar_catalogo.py ..                       [ 59%]
+apps/inventario/tests/test_domain.py ......                              [ 60%]
+tests/catalogo/test_prenda_dominio.py ................                   [ 64%]
+tests/catalogo/test_servicio_catalogo_mocks.py .........                 [ 66%]
+tests/despachos/test_despacho_dominio.py .............                   [ 70%]
+tests/despachos/test_servicio_despachos_mocks.py .....                   [ 71%]
+tests/inventario/test_servicio_inventario_mocks.py .......               [ 72%]
+tests/inventario/test_stock_dominio.py ............                      [ 75%]
+tests/pagos/test_pago_dominio.py .....................                   [ 80%]
+tests/pagos/test_servicio_pagos.py .........                             [ 83%]
+tests/pagos/test_servicio_pagos_doubles.py ...                           [ 83%]
+tests/release/test_release.py ............                               [ 86%]
+tests/test_spa.py .....                                                  [ 88%]
+tests/usuarios/test_servicio_autenticacion_mocks.py .......              [ 89%]
+tests/usuarios/test_usuario_dominio.py ........                          [ 91%]
+tests/ventas/test_carrito_solid.py ......                                [ 93%]
+tests/ventas/test_errores_http.py ....                                   [ 94%]
+tests/ventas/test_pedido_dominio.py ..........                           [ 96%]
+tests/ventas/test_pedidos_solid.py ........                              [ 98%]
+tests/ventas/test_servicio_pedidos_mocks.py ......                       [100%]
+
+- generated xml file: /workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/build/reports/junit.xml -
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                                   Stmts   Miss Branch BrPart  Cover   Missing
+--------------------------------------------------------------------------------------------------
+apps/__init__.py                                           0      0      0      0   100%
+apps/catalogo/__init__.py                                  0      0      0      0   100%
+apps/catalogo/application/__init__.py                      0      0      0      0   100%
+apps/catalogo/application/services.py                    105      4     10      0    97%   100-109
+apps/catalogo/apps.py                                      4      0      0      0   100%
+apps/catalogo/domain/__init__.py                           0      0      0      0   100%
+apps/catalogo/domain/excepciones.py                        4      0      0      0   100%
+apps/catalogo/domain/prenda.py                           183     18     50      8    89%   114, 124, 127, 153, 155, 160, 201, 206, 219, 237, 249, 259-275, 280
+apps/catalogo/domain/repositorios.py                      52     15      0      0    71%   18, 22, 26, 30, 40, 52, 56, 60, 64, 70, 74, 78, 82, 86, 90
+apps/catalogo/infrastructure/__init__.py                   0      0      0      0   100%
+apps/catalogo/infrastructure/models.py                     1      0      0      0   100%
+apps/catalogo/infrastructure/repositories.py             103      8     28      4    89%   52, 163, 172-178, 183, 190
+apps/catalogo/models.py                                   47      0      0      0   100%
+apps/catalogo/presentation/__init__.py                     0      0      0      0   100%
+apps/catalogo/presentation/errors.py                      11      0      6      0   100%
+apps/catalogo/presentation/serializers.py                129      2      8      2    97%   99, 219
+apps/catalogo/presentation/urls.py                         8      0      0      0   100%
+apps/catalogo/presentation/views.py                      183     16     26      0    91%   145, 148, 151-172, 228, 254, 297
+apps/compartido/__init__.py                                0      0      0      0   100%
+apps/compartido/apps.py                                    4      0      0      0   100%
+apps/compartido/domain/__init__.py                         0      0      0      0   100%
+apps/compartido/domain/auditoria.py                        8      8      0      0     0%   3-12
+apps/compartido/domain/dinero.py                          20      4      6      2    77%   16, 23-24, 28
+apps/compartido/domain/enums.py                           54      0      0      0   100%
+apps/compartido/domain/errors.py                           1      0      0      0   100%
+apps/compartido/domain/periodo.py                         16     16      4      0     0%   3-23
+apps/compartido/infrastructure/__init__.py                 0      0      0      0   100%
+apps/compartido/infrastructure/campos.py                  26      0      0      0   100%
+apps/compartido/infrastructure/mapeo.py                   14      0      0      0   100%
+apps/compartido/infrastructure/models.py                  11      0      0      0   100%
+apps/compartido/presentation/__init__.py                   0      0      0      0   100%
+apps/compartido/presentation/errores.py                   13      0      4      0   100%
+apps/inventario/__init__.py                                0      0      0      0   100%
+apps/inventario/application/__init__.py                    0      0      0      0   100%
+apps/inventario/application/reportes.py                  161      4     36      4    96%   45, 85, 212, 310
+apps/inventario/application/services.py                   86     18     12      2    80%   63-77, 140-143, 155-159, 162, 177
+apps/inventario/apps.py                                    4      0      0      0   100%
+apps/inventario/domain/__init__.py                         0      0      0      0   100%
+apps/inventario/domain/consultas.py                       72      0      0      0   100%
+apps/inventario/domain/excepciones.py                     10      0      0      0   100%
+apps/inventario/domain/repositorios.py                    39     11      0      0    72%   19, 23, 32, 36, 40, 48, 53, 59, 63, 69, 73
+apps/inventario/domain/stock_prenda.py                   117      9     24      4    89%   32-33, 121, 130-133, 162, 221
+apps/inventario/infrastructure/__init__.py                 0      0      0      0   100%
+apps/inventario/infrastructure/models.py                   2      0      0      0   100%
+apps/inventario/infrastructure/repositories.py            88      5     20      5    91%   154, 164, 182, 233, 254
+apps/inventario/models.py                                 37      0      0      0   100%
+apps/inventario/presentation/__init__.py                   0      0      0      0   100%
+apps/inventario/presentation/errores.py                    7      0      0      0   100%
+apps/inventario/presentation/serializers.py               72      0      0      0   100%
+apps/inventario/presentation/urls.py                       6      0      0      0   100%
+apps/inventario/presentation/views.py                    101     12      6      2    85%   62, 95-98, 121, 126, 203-210
+apps/usuarios/__init__.py                                  0      0      0      0   100%
+apps/usuarios/application/__init__.py                      0      0      0      0   100%
+apps/usuarios/application/services.py                    122     21     26      7    78%   145, 171, 190, 193, 207, 209, 216, 219, 227-229, 232-239, 242, 247
+apps/usuarios/apps.py                                      4      0      0      0   100%
+apps/usuarios/domain/__init__.py                           0      0      0      0   100%
+apps/usuarios/domain/exceptions.py                         6      0      0      0   100%
+apps/usuarios/domain/repositorios.py                      70     21      0      0    70%   11, 15, 19, 23, 27, 31, 35, 39, 45, 49, 53, 57, 63, 67, 71, 75, 81, 85, 89, 93, 99
+apps/usuarios/domain/usuario.py                           72      0      2      0   100%
+apps/usuarios/infrastructure/__init__.py                   0      0      0      0   100%
+apps/usuarios/infrastructure/models.py                     1      0      0      0   100%
+apps/usuarios/infrastructure/repositories.py             124     18     18      2    83%   115-116, 139, 148-149, 158-163, 168, 178-179, 182-183, 186-189, 195->197
+apps/usuarios/management/__init__.py                       0      0      0      0   100%
+apps/usuarios/management/commands/__init__.py              0      0      0      0   100%
+apps/usuarios/management/commands/crear_admin.py          29      5      4      2    79%   34, 39, 52-54
+apps/usuarios/management/commands/sembrar_demo.py         43     43     10      0     0%   3-161
+apps/usuarios/models.py                                   63      0      0      0   100%
+apps/usuarios/presentation/__init__.py                     0      0      0      0   100%
+apps/usuarios/presentation/authentication.py              43      6     12      2    82%   46, 64-68
+apps/usuarios/presentation/permissions.py                 14      0      0      0   100%
+apps/usuarios/presentation/serializers.py                 35      0      0      0   100%
+apps/usuarios/presentation/urls.py                         8      0      0      0   100%
+apps/usuarios/presentation/views.py                      132     33      2      0    75%   94-95, 131-134, 150-153, 165-169, 185-188, 202-203, 208-212, 221-230
+apps/ventas/__init__.py                                    0      0      0      0   100%
+apps/ventas/apps.py                                        4      0      0      0   100%
+apps/ventas/carrito/__init__.py                            0      0      0      0   100%
+apps/ventas/carrito/application/__init__.py                0      0      0      0   100%
+apps/ventas/carrito/application/consultas.py              16      1      4      1    90%   21
+apps/ventas/carrito/application/services.py               46      3      6      1    92%   79-80, 100
+apps/ventas/carrito/domain/__init__.py                     0      0      0      0   100%
+apps/ventas/carrito/domain/carrito.py                     80     17     22      7    73%   29, 49, 61, 66-71, 76, 80, 83, 89, 93-95, 111
+apps/ventas/carrito/domain/errors.py                      32      4      0      0    88%   31, 36, 46, 51
+apps/ventas/carrito/domain/repositorios.py                21      5      0      0    76%   18, 24, 32, 36, 44
+apps/ventas/carrito/infrastructure/__init__.py             0      0      0      0   100%
+apps/ventas/carrito/infrastructure/catalogo.py            21      1      8      1    93%   16
+apps/ventas/carrito/infrastructure/factories.py           11      0      0      0   100%
+apps/ventas/carrito/infrastructure/memoria.py             19      1      2      1    90%   19
+apps/ventas/carrito/infrastructure/models.py               1      0      0      0   100%
+apps/ventas/carrito/infrastructure/repositories.py        45      3     12      3    89%   63, 71, 77
+apps/ventas/carrito/presentation/__init__.py               0      0      0      0   100%
+apps/ventas/carrito/presentation/errores.py                8      0      0      0   100%
+apps/ventas/carrito/presentation/serializers.py           21      0      0      0   100%
+apps/ventas/carrito/presentation/urls.py                   5      0      0      0   100%
+apps/ventas/carrito/presentation/views.py                 61     11     14      3    79%   53, 76, 82, 95-106
+apps/ventas/despachos/__init__.py                          0      0      0      0   100%
+apps/ventas/despachos/application/__init__.py              0      0      0      0   100%
+apps/ventas/despachos/application/services.py             78     10     18      5    84%   49->55, 52, 60-61, 84-85, 94, 97, 103, 122, 125
+apps/ventas/despachos/domain/__init__.py                   0      0      0      0   100%
+apps/ventas/despachos/domain/despacho.py                  62      0     12      0   100%
+apps/ventas/despachos/domain/errors.py                    31      2      0      0    94%   42, 57
+apps/ventas/despachos/domain/repositorios.py              18      5      0      0    72%   11, 15, 21, 25, 29
+apps/ventas/despachos/infrastructure/__init__.py           0      0      0      0   100%
+apps/ventas/despachos/infrastructure/models.py             2      0      0      0   100%
+apps/ventas/despachos/infrastructure/repositories.py      53      3     12      2    92%   65, 75, 80
+apps/ventas/despachos/presentation/__init__.py             0      0      0      0   100%
+apps/ventas/despachos/presentation/errores.py              9      0      0      0   100%
+apps/ventas/despachos/presentation/serializers.py         20      0      0      0   100%
+apps/ventas/despachos/presentation/urls.py                 5      0      0      0   100%
+apps/ventas/despachos/presentation/views.py               66     12      6      3    79%   48-49, 54, 69-73, 79, 93, 102-103
+apps/ventas/models.py                                     74      0      0      0   100%
+apps/ventas/pagos/__init__.py                              0      0      0      0   100%
+apps/ventas/pagos/application/__init__.py                  0      0      0      0   100%
+apps/ventas/pagos/application/ports.py                    27      4      0      0    85%   28, 35, 39, 43
+apps/ventas/pagos/application/services.py                 89     11     26      7    83%   50, 73, 112-116, 119, 127, 136, 167
+apps/ventas/pagos/domain/__init__.py                       0      0      0      0   100%
+apps/ventas/pagos/domain/excepciones.py                   58      2      0      0    97%   16, 34
+apps/ventas/pagos/domain/pago.py                          53      3     18      3    92%   47, 53, 60
+apps/ventas/pagos/domain/politicas.py                     51      5     16      3    88%   18, 32, 37, 92, 95
+apps/ventas/pagos/domain/repositorios.py                  26      6      0      0    77%   23, 28, 33, 38, 43, 53
+apps/ventas/pagos/infrastructure/__init__.py               0      0      0      0   100%
+apps/ventas/pagos/infrastructure/models.py                 2      0      0      0   100%
+apps/ventas/pagos/infrastructure/pedidos.py               29      5     10      5    74%   24, 33, 39, 48, 54
+apps/ventas/pagos/infrastructure/repositories.py          43      3     10      4    87%   51, 57, 63, 73->77
+apps/ventas/pagos/presentation/__init__.py                 0      0      0      0   100%
+apps/ventas/pagos/presentation/serializers.py             29      0      2      0   100%
+apps/ventas/pagos/presentation/urls.py                     5      0      0      0   100%
+apps/ventas/pagos/presentation/views.py                   77      5     16      3    91%   56, 93, 102-103, 145
+apps/ventas/pedidos/__init__.py                            0      0      0      0   100%
+apps/ventas/pedidos/application/__init__.py                0      0      0      0   100%
+apps/ventas/pedidos/application/consultas.py              16      1      4      1    90%   21
+apps/ventas/pedidos/application/services.py               69      1     22      1    98%   111
+apps/ventas/pedidos/domain/__init__.py                     0      0      0      0   100%
+apps/ventas/pedidos/domain/errors.py                      32      0      0      0   100%
+apps/ventas/pedidos/domain/pedido.py                      49      0     14      0   100%
+apps/ventas/pedidos/domain/repositorios.py                21      5      0      0    76%   18, 22, 30, 34, 42
+apps/ventas/pedidos/infrastructure/__init__.py             0      0      0      0   100%
+apps/ventas/pedidos/infrastructure/factories.py           13      0      0      0   100%
+apps/ventas/pedidos/infrastructure/memoria.py             19      1      2      1    90%   19
+apps/ventas/pedidos/infrastructure/models.py               1      0      0      0   100%
+apps/ventas/pedidos/infrastructure/repositories.py        44      2     10      2    93%   71, 77
+apps/ventas/pedidos/presentation/__init__.py               0      0      0      0   100%
+apps/ventas/pedidos/presentation/errores.py               10      0      0      0   100%
+apps/ventas/pedidos/presentation/serializers.py           18      0      0      0   100%
+apps/ventas/pedidos/presentation/urls.py                   5      0      0      0   100%
+apps/ventas/pedidos/presentation/views.py                 49      1      8      1    96%   56
+apps/ventas/permissions.py                                 4      0      0      0   100%
+apps/ventas/presentation/__init__.py                       0      0      0      0   100%
+apps/ventas/presentation/errores.py                       11      1      0      0    91%   24
+--------------------------------------------------------------------------------------------------
+TOTAL                                                   4224    431    588    104    88%
+Coverage HTML written to dir build/reports/coverage-html
+Coverage XML written to file build/reports/coverage.xml
+Required test coverage of 85.0% reached. Total coverage: 88.05%
+============================= 410 passed in 8.41s ==============================
+mkdir -p build/reports
+node --experimental-test-coverage --test-coverage-include='frontend/inventario/src/services/api.js' \
+	--test-reporter=spec --test-reporter-destination=stdout \
+	--test-reporter=junit --test-reporter-destination=build/reports/node-junit.xml \
+	--test-reporter=lcov --test-reporter-destination=build/reports/frontend-lcov.info \
+	--test frontend/inventario/src/services/*.test.js
+(node:80391) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 end listeners added to [TestsStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ apiUrl conserva ruta y omite filtros vacíos (0.591314ms)
+✔ request serializa JSON y devuelve la respuesta (13.863584ms)
+✔ request normaliza errores de validación (0.642008ms)
+✔ request conserva el FormData y devuelve null para HTTP 204 (0.304969ms)
+✔ download devuelve blob y nombre de Content-Disposition (0.920118ms)
+(node:80391) ExperimentalWarning: glob is an experimental feature and might change at any time
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 61.432074
+ℹ start of coverage report
+ℹ -----------------------------------------------------------------------------
+ℹ file           | line % | branch % | funcs % | uncovered lines
+ℹ -----------------------------------------------------------------------------
+ℹ frontend       |        |          |         |
+ℹ  inventario    |        |          |         |
+ℹ   src          |        |          |         |
+ℹ    services    |        |          |         |
+ℹ     api.js     |  86.67 |    47.17 |   30.56 | 9 12-13 51 67-69 89-94 97-103
+ℹ -----------------------------------------------------------------------------
+ℹ all files      |  86.67 |    47.17 |   30.56 |
+ℹ -----------------------------------------------------------------------------
+ℹ end of coverage report
+[Pipeline] sh
++ npm --prefix frontend/inventario run lint
+
+> software-textil-inventario@0.1.0 lint
+> eslint .
+
+Post stage
+[Pipeline] junit
+Recording test results
+[Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Distribución verificable)
+[Pipeline] sh
++ make collect-static release-zip release-verify
+rm -rf build/staticfiles
+DJANGO_SETTINGS_MODULE=config.settings.build uv run --locked python manage.py collectstatic --noinput --clear
+
+159 static files copied to '/workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/build/staticfiles'.
+uv run --locked python -m scripts.package_release
+ZIP: dist/software-textil-0.1.0.zip
+SHA-256: dist/software-textil-0.1.0.zip.sha256
+uv run --locked python -m scripts.verify_release
+warning: `VIRTUAL_ENV=/workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/.venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.11.15
+Creating virtual environment at: .venv
+Resolved 20 packages in 0.53ms
+warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.
+         If the cache and target directories are on different filesystems, hardlinking may not be supported.
+         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
+Installed 6 packages in 138ms
+ + asgiref==3.11.1
+ + django==5.2.16
+ + djangorestframework==3.17.1
+ + pillow==12.3.0
+ + psycopg2-binary==2.9.12
+ + sqlparse==0.5.5
+warning: `VIRTUAL_ENV=/workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/.venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+System check identified no issues (0 silenced).
+Release verificado fuera del repositorio: /tmp/software-textil-release-n5c_qu8h
+[Pipeline] archiveArtifacts
+Archiving artifacts
+Recording fingerprints
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (SonarQube y Quality Gate)
+[Pipeline] withCredentials
+Masking supported pattern matches of $SONAR_TOKEN
+[Pipeline] {
+[Pipeline] sh
++ set +x
+11:47:25.460 INFO  Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+11:47:25.463 INFO  Project root configuration file: /workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/sonar-project.properties
+11:47:25.472 INFO  SonarScanner CLI 7.2.0.5079
+11:47:25.473 INFO  Linux 7.3.5-2-cachyos amd64
+11:47:25.891 INFO  Communicating with SonarQube Community Build 25.1.0.102122
+11:47:25.891 INFO  JRE provisioning: os[linux], arch[x86_64]
+11:47:26.120 INFO  Starting SonarScanner Engine...
+11:47:26.121 INFO  Java 17.0.13 Eclipse Adoptium (64-bit)
+11:47:26.625 INFO  Load global settings
+11:47:26.673 INFO  Load global settings (done) | time=48ms
+11:47:26.674 INFO  Server id: 86E1FA4D-AaCG8PAmVpgrvdSJQK1O
+11:47:26.679 INFO  Loading required plugins
+11:47:26.679 INFO  Load plugins index
+11:47:26.686 INFO  Load plugins index (done) | time=7ms
+11:47:26.686 INFO  Load/download plugins
+11:47:26.710 INFO  Load/download plugins (done) | time=23ms
+11:47:26.865 INFO  Process project properties
+11:47:26.870 INFO  Process project properties (done) | time=4ms
+11:47:26.874 INFO  Project key: softwaretextil-jenkins-validation
+11:47:26.875 INFO  Base dir: /workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46
+11:47:26.875 INFO  Working dir: /workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/.scannerwork
+11:47:26.878 INFO  Load project settings for component key: 'softwaretextil-jenkins-validation'
+11:47:26.889 INFO  Load project settings for component key: 'softwaretextil-jenkins-validation' (done) | time=11ms
+11:47:26.902 INFO  Load quality profiles
+11:47:26.936 INFO  Load quality profiles (done) | time=33ms
+11:47:26.946 INFO  Load active rules
+11:47:27.077 INFO  Load active rules (done) | time=131ms
+11:47:27.080 INFO  Load analysis cache
+11:47:27.108 INFO  Load analysis cache | time=28ms
+11:47:27.141 INFO  Preprocessing files...
+11:47:27.392 INFO  6 languages detected in 272 preprocessed files
+11:47:27.392 INFO  16286 files ignored because of inclusion/exclusion patterns
+11:47:27.393 INFO  Loading plugins for detected languages
+11:47:27.394 INFO  Load/download plugins
+11:47:27.401 INFO  Load/download plugins (done) | time=8ms
+11:47:27.488 INFO  Load project repositories
+11:47:27.534 INFO  Load project repositories (done) | time=46ms
+11:47:27.544 INFO  Indexing files...
+11:47:27.544 INFO  Project configuration:
+11:47:27.544 INFO    Excluded sources: **/migrations/**, **/tests/**, **/__pycache__/**, **/node_modules/**, **/dist/**, **/*.test.js, **/package-lock.json, tests/**, frontend/inventario/**/*.test.js
+11:47:27.545 INFO    Included tests: tests/**, frontend/inventario/**/*.test.js
+11:47:27.600 INFO  271 files indexed
+11:47:27.601 INFO  Quality profile for css: Sonar way
+11:47:27.601 INFO  Quality profile for js: Sonar way
+11:47:27.601 INFO  Quality profile for json: Sonar way
+11:47:27.601 INFO  Quality profile for py: Sonar way
+11:47:27.602 INFO  Quality profile for web: Sonar way
+11:47:27.602 INFO  Quality profile for yaml: Sonar way
+11:47:27.602 INFO  ------------- Run sensors on module softwaretextil-jenkins-validation
+11:47:27.626 INFO  Load metrics repository
+11:47:27.635 INFO  Load metrics repository (done) | time=10ms
+11:47:27.954 INFO  Sensor Python Sensor [python]
+11:47:27.975 INFO  Starting global symbols computation
+11:47:27.977 INFO  201 source files to be analyzed
+11:47:31.122 INFO  201/201 source files have been analyzed
+11:47:31.156 INFO  Starting rules execution
+11:47:31.156 INFO  201 source files to be analyzed
+11:47:33.480 INFO  201/201 source files have been analyzed
+11:47:33.480 INFO  The Python analyzer was able to leverage cached data from previous analyses for 0 out of 201 files. These files were not parsed.
+11:47:33.480 INFO  Sensor Python Sensor [python] (done) | time=5525ms
+11:47:33.480 INFO  Sensor Cobertura Sensor for Python coverage [python]
+11:47:33.634 INFO  Python test coverage
+11:47:33.635 INFO  Parsing report '/workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/build/reports/coverage.xml'
+11:47:33.678 INFO  Sensor Cobertura Sensor for Python coverage [python] (done) | time=199ms
+11:47:33.678 INFO  Sensor PythonXUnitSensor [python]
+11:47:33.829 INFO  Sensor PythonXUnitSensor [python] (done) | time=150ms
+11:47:33.829 INFO  Sensor HTML [web]
+11:47:33.922 INFO  Sensor HTML [web] (done) | time=94ms
+11:47:33.923 INFO  Sensor JaCoCo XML Report Importer [jacoco]
+11:47:33.923 INFO  'sonar.coverage.jacoco.xmlReportPaths' is not defined. Using default locations: target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml
+11:47:33.923 INFO  No report imported, no coverage information will be imported by JaCoCo XML Report Importer
+11:47:33.923 INFO  Sensor JaCoCo XML Report Importer [jacoco] (done) | time=1ms
+11:47:33.923 INFO  Sensor IaC CloudFormation Sensor [iac]
+11:47:33.931 INFO  0 source files to be analyzed
+11:47:33.931 INFO  0/0 source files have been analyzed
+11:47:33.932 INFO  Sensor IaC CloudFormation Sensor [iac] (done) | time=8ms
+11:47:33.932 INFO  Sensor IaC Kubernetes Sensor [iac]
+11:47:33.969 INFO  0 source files to be parsed
+11:47:33.969 INFO  0/0 source files have been parsed
+11:47:33.969 INFO  0 source files to be analyzed
+11:47:33.969 INFO  0/0 source files have been analyzed
+11:47:33.969 INFO  0 source files to be checked
+11:47:33.969 INFO  0/0 source files have been checked
+11:47:33.969 INFO  Sensor IaC Kubernetes Sensor [iac] (done) | time=38ms
+11:47:33.969 INFO  Sensor IaC AzureResourceManager Sensor [iac]
+11:47:34.001 INFO  0 source files to be analyzed
+11:47:34.001 INFO  0/0 source files have been analyzed
+11:47:34.002 INFO  Sensor IaC AzureResourceManager Sensor [iac] (done) | time=32ms
+11:47:34.002 INFO  Sensor Java Config Sensor [iac]
+11:47:34.009 INFO  0 source files to be analyzed
+11:47:34.009 INFO  0/0 source files have been analyzed
+11:47:34.009 INFO  Sensor Java Config Sensor [iac] (done) | time=8ms
+11:47:34.009 INFO  Sensor JavaScript/TypeScript analysis [javascript]
+11:47:34.083 INFO  Detected os: Linux arch: amd64 alpine: false. Platform: LINUX_X64
+11:47:34.083 INFO  Deploy location /workspace/.sonar/js/node-runtime, tagetRuntime: /workspace/.sonar/js/node-runtime/node,  version: /workspace/.sonar/js/node-runtime/version.txt
+11:47:34.113 INFO  Using embedded Node.js runtime.
+11:47:34.114 INFO  Using Node.js executable: '/workspace/.sonar/js/node-runtime/node'.
+11:47:34.913 INFO  Memory configuration: OS (15175 MB), Node.js (2096 MB).
+11:47:35.720 WARN  Access to the multi-values/property set property 'sonar.javascript.file.suffixes' should be made using 'getStringArray' method. The SonarQube plugin using this property should be updated.
+11:47:35.720 WARN  Access to the multi-values/property set property 'sonar.typescript.file.suffixes' should be made using 'getStringArray' method. The SonarQube plugin using this property should be updated.
+11:47:35.989 INFO  Found 0 tsconfig.json file(s): []
+11:47:35.995 INFO  Creating TypeScript program
+11:47:35.995 INFO  TypeScript configuration file /tmp/tmp-80873-JRsOIqY1R4z3
+11:47:35.995 INFO  20 source files to be analyzed
+11:47:36.230 INFO  Starting analysis with current program
+11:47:37.840 INFO  Analyzed 20 file(s) with current program
+11:47:37.845 INFO  20/20 source files have been analyzed
+11:47:37.845 INFO  Hit the cache for 0 out of 20
+11:47:37.845 INFO  Miss the cache for 20 out of 20: ANALYSIS_MODE_INELIGIBLE [20/20]
+11:47:37.845 INFO  Sensor JavaScript/TypeScript analysis [javascript] (done) | time=3836ms
+11:47:37.845 INFO  Sensor JavaScript inside YAML analysis [javascript]
+11:47:37.847 INFO  No input files found for analysis
+11:47:37.847 INFO  Hit the cache for 0 out of 0
+11:47:37.847 INFO  Miss the cache for 0 out of 0
+11:47:37.847 INFO  Sensor JavaScript inside YAML analysis [javascript] (done) | time=2ms
+11:47:37.847 INFO  Sensor JavaScript inside HTML analysis [javascript]
+11:47:37.849 INFO  3 source files to be analyzed
+11:47:38.103 INFO  3/3 source files have been analyzed
+11:47:38.104 INFO  Hit the cache for 0 out of 3
+11:47:38.104 INFO  Miss the cache for 3 out of 3: ANALYSIS_MODE_INELIGIBLE [3/3]
+11:47:38.104 INFO  Sensor JavaScript inside HTML analysis [javascript] (done) | time=256ms
+11:47:38.104 INFO  Sensor CSS Rules [javascript]
+11:47:38.106 INFO  5 source files to be analyzed
+11:47:38.231 INFO  5/5 source files have been analyzed
+11:47:38.231 INFO  Hit the cache for 0 out of 0
+11:47:38.231 INFO  Miss the cache for 0 out of 0
+11:47:38.231 INFO  Sensor CSS Rules [javascript] (done) | time=128ms
+11:47:38.232 INFO  Sensor JavaScript/TypeScript Coverage [javascript]
+11:47:38.232 INFO  Analysing [/workspace/jenkins-validator/jenkins-local/workspace/SoftwareTextil-revision-PR46/build/reports/frontend-lcov.info]
+11:47:38.236 INFO  Sensor JavaScript/TypeScript Coverage [javascript] (done) | time=5ms
+11:47:38.236 INFO  Sensor CSS Metrics [javascript]
+11:47:38.268 INFO  Sensor CSS Metrics [javascript] (done) | time=32ms
+11:47:38.268 INFO  Sensor IaC Docker Sensor [iac]
+11:47:38.283 INFO  0 source files to be analyzed
+11:47:38.283 INFO  0/0 source files have been analyzed
+11:47:38.283 INFO  Sensor IaC Docker Sensor [iac] (done) | time=15ms
+11:47:38.283 INFO  Sensor TextAndSecretsSensor [text]
+11:47:38.283 INFO  Available processors: 32
+11:47:38.283 INFO  Using 32 threads for analysis.
+11:47:38.452 INFO  Using git CLI to retrieve untracked files
+11:47:38.458 INFO  Analyzing language associated files and files included via "sonar.text.inclusions" that are tracked by git
+11:47:38.507 INFO  229 source files to be analyzed
+11:47:38.697 INFO  229/229 source files have been analyzed
+11:47:38.698 INFO  Sensor TextAndSecretsSensor [text] (done) | time=415ms
+11:47:38.700 INFO  ------------- Run sensors on project
+11:47:38.751 INFO  Sensor Zero Coverage Sensor
+11:47:38.753 INFO  Sensor Zero Coverage Sensor (done) | time=2ms
+11:47:38.754 INFO  SCM Publisher is disabled
+11:47:38.762 INFO  CPD Executor 74 files had no CPD blocks
+11:47:38.762 INFO  CPD Executor Calculating CPD for 111 files
+11:47:38.778 INFO  CPD Executor CPD calculation finished (done) | time=15ms
+11:47:38.871 INFO  Analysis report generated in 78ms, dir size=1.9 MB
+11:47:39.020 INFO  Analysis report compressed in 149ms, zip size=1.1 MB
+11:47:39.062 INFO  Analysis report uploaded in 43ms
+11:47:39.063 INFO  ------------- Check Quality Gate status
+11:47:39.063 INFO  Waiting for the analysis report to be processed (max 300s)
+11:47:44.199 ERROR QUALITY GATE STATUS: FAILED - View details on http://localhost:9000/dashboard?id=softwaretextil-jenkins-validation
+11:47:44.542 INFO  EXECUTION FAILURE
+11:47:44.544 INFO  Total time: 19.084s
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] sh
++ '[' -n textil-jenkins-softwaretextil-revision-pr46-3 ']'
++ docker compose -f compose.quality.yml down --volumes
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Stopping
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Stopped
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Removing
+ Container textil-jenkins-softwaretextil-revision-pr46-3-db-1 Removed
+ Volume textil-jenkins-softwaretextil-revision-pr46-3_quality_postgres Removing
+ Network textil-jenkins-softwaretextil-revision-pr46-3_default Removing
+ Volume textil-jenkins-softwaretextil-revision-pr46-3_quality_postgres Removed
+ Network textil-jenkins-softwaretextil-revision-pr46-3_default Removed
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 3
+Finished: FAILURE

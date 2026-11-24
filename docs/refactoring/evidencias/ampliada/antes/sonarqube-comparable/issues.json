@@ -1,0 +1,1130 @@
+{
+  "total": 22,
+  "issues": [
+    {
+      "key": "AaHvbQTBh3B_ePy7CDdM",
+      "rule": "python:S5864",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:apps/compartido/infrastructure/campos.py",
+      "project": "softwaretextil-quality-review",
+      "line": 25,
+      "hash": "650f10d3c682e3de34ffa1a569a0abbe",
+      "textRange": {
+        "startLine": 25,
+        "endLine": 25,
+        "startOffset": 41,
+        "endOffset": 52
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Replace this expression; Previous type checks suggest that \"enumeracion\" has type \"type[StrEnum]\" and isn't iterable.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTBh3B_ePy7CDdN",
+      "rule": "python:S5864",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:apps/compartido/infrastructure/campos.py",
+      "project": "softwaretextil-quality-review",
+      "line": 30,
+      "hash": "5e5cba2f4dcdd2cbea432909dbfdfda1",
+      "textRange": {
+        "startLine": 30,
+        "endLine": 30,
+        "startOffset": 58,
+        "endOffset": 69
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Replace this expression; Previous type checks suggest that \"enumeracion\" has type \"type[StrEnum]\" and isn't iterable.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQSth3B_ePy7CDdL",
+      "rule": "css:S4656",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:apps/inventario/index.html",
+      "project": "softwaretextil-quality-review",
+      "line": 404,
+      "hash": "fa76c006c65e6938ebc2646d6cd38f5c",
+      "textRange": {
+        "startLine": 404,
+        "endLine": 404,
+        "startOffset": 0,
+        "endOffset": 110
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Unexpected duplicate \"background\"",
+      "effort": "1min",
+      "debt": "1min",
+      "author": "",
+      "tags": [],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "BUG",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQSjh3B_ePy7CDdK",
+      "rule": "python:S1192",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-quality-review:apps/ventas/models.py",
+      "project": "softwaretextil-quality-review",
+      "line": 27,
+      "hash": "e23f07e7654b0b85d893105d73ddcbb5",
+      "textRange": {
+        "startLine": 27,
+        "endLine": 27,
+        "startOffset": 8,
+        "endOffset": 31
+      },
+      "flows": [
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:apps/ventas/models.py",
+              "textRange": {
+                "startLine": 79,
+                "endLine": 79,
+                "startOffset": 8,
+                "endOffset": 31
+              },
+              "msg": "Duplication",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:apps/ventas/models.py",
+              "textRange": {
+                "startLine": 184,
+                "endLine": 184,
+                "startOffset": 8,
+                "endOffset": 31
+              },
+              "msg": "Duplication",
+              "msgFormattings": []
+            }
+          ]
+        }
+      ],
+      "status": "OPEN",
+      "message": "Define a constant instead of duplicating this literal \"usuarios.UsuarioModel\" 3 times.",
+      "effort": "6min",
+      "debt": "6min",
+      "author": "",
+      "tags": [
+        "design"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTUh3B_ePy7CDdQ",
+      "rule": "python:S2208",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-quality-review:config/settings/build.py",
+      "project": "softwaretextil-quality-review",
+      "line": 3,
+      "hash": "89cd28064a6264945b0860d7f287e2f9",
+      "textRange": {
+        "startLine": 3,
+        "endLine": 3,
+        "startOffset": 0,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Import only needed names or import the module and then use its members.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "pitfall"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTRh3B_ePy7CDdO",
+      "rule": "python:S2208",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-quality-review:config/settings/dev.py",
+      "project": "softwaretextil-quality-review",
+      "line": 9,
+      "hash": "89cd28064a6264945b0860d7f287e2f9",
+      "textRange": {
+        "startLine": 9,
+        "endLine": 9,
+        "startOffset": 0,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Import only needed names or import the module and then use its members.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "pitfall"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTTh3B_ePy7CDdP",
+      "rule": "python:S2208",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-quality-review:config/settings/prod.py",
+      "project": "softwaretextil-quality-review",
+      "line": 7,
+      "hash": "89cd28064a6264945b0860d7f287e2f9",
+      "textRange": {
+        "startLine": 7,
+        "endLine": 7,
+        "startOffset": 0,
+        "endOffset": 34
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Import only needed names or import the module and then use its members.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "pitfall"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTWh3B_ePy7CDdR",
+      "rule": "python:S1192",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-quality-review:config/urls.py",
+      "project": "softwaretextil-quality-review",
+      "line": 14,
+      "hash": "8b37cf9da953d6a4c9a23c4c89ce199f",
+      "textRange": {
+        "startLine": 14,
+        "endLine": 14,
+        "startOffset": 9,
+        "endOffset": 22
+      },
+      "flows": [
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:config/urls.py",
+              "textRange": {
+                "startLine": 15,
+                "endLine": 15,
+                "startOffset": 9,
+                "endOffset": 22
+              },
+              "msg": "Duplication",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:config/urls.py",
+              "textRange": {
+                "startLine": 16,
+                "endLine": 16,
+                "startOffset": 9,
+                "endOffset": 22
+              },
+              "msg": "Duplication",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:config/urls.py",
+              "textRange": {
+                "startLine": 17,
+                "endLine": 17,
+                "startOffset": 9,
+                "endOffset": 22
+              },
+              "msg": "Duplication",
+              "msgFormattings": []
+            }
+          ]
+        }
+      ],
+      "status": "OPEN",
+      "message": "Define a constant instead of duplicating this literal \"api/ventas/\" 4 times.",
+      "effort": "8min",
+      "debt": "8min",
+      "author": "",
+      "tags": [
+        "design"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTkh3B_ePy7CDdd",
+      "rule": "javascript:S6481",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/auth/AuthContext.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 71,
+      "hash": "b1bcb9ee62c0132322e9ae1c17ddcb15",
+      "textRange": {
+        "startLine": 71,
+        "endLine": 71,
+        "startOffset": 33,
+        "endOffset": 167
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "The object passed as the value prop to the Context provider changes every render. To fix this consider wrapping it in a useMemo hook.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "jsx",
+        "performance",
+        "react"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTeh3B_ePy7CDdY",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/AdminPages.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 46,
+      "hash": "d7e4d25a0a459abde039bac627386253",
+      "textRange": {
+        "startLine": 46,
+        "endLine": 46,
+        "startOffset": 65,
+        "endOffset": 92
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTZh3B_ePy7CDdS",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/AuthPages.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 39,
+      "hash": "930754ba6d2e15ca56f7406db0553da7",
+      "textRange": {
+        "startLine": 39,
+        "endLine": 39,
+        "startOffset": 110,
+        "endOffset": 147
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTch3B_ePy7CDdX",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/CatalogPages.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 36,
+      "hash": "66ab343cf2d5e06407f8476bd2f010e3",
+      "textRange": {
+        "startLine": 36,
+        "endLine": 36,
+        "startOffset": 26,
+        "endOffset": 98
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTfh3B_ePy7CDdZ",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/InventoryPages.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 53,
+      "hash": "5b7baf1ab5c3b631edc8b0563e2e7f0b",
+      "textRange": {
+        "startLine": 53,
+        "endLine": 53,
+        "startOffset": 1682,
+        "endOffset": 1745
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTbh3B_ePy7CDdT",
+      "rule": "javascript:S3776",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 16,
+      "hash": "c05880b5e54f7d691162138eb21712e1",
+      "textRange": {
+        "startLine": 16,
+        "endLine": 16,
+        "startOffset": 16,
+        "endOffset": 35
+      },
+      "flows": [
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 26,
+                "endLine": 26,
+                "startOffset": 44,
+                "endOffset": 46
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 27,
+                "endLine": 27,
+                "startOffset": 48,
+                "endOffset": 50
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 78,
+                "endLine": 78,
+                "startOffset": 25,
+                "endOffset": 27
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 99,
+                "endLine": 99,
+                "startOffset": 31,
+                "endOffset": 33
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 115,
+                "endLine": 115,
+                "startOffset": 25,
+                "endOffset": 26
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 115,
+                "endLine": 115,
+                "startOffset": 70,
+                "endOffset": 71
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 115,
+                "endLine": 115,
+                "startOffset": 110,
+                "endOffset": 111
+              },
+              "msg": "+3 (incl. 2 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 122,
+                "endLine": 122,
+                "startOffset": 30,
+                "endOffset": 32
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 127,
+                "endLine": 127,
+                "startOffset": 34,
+                "endOffset": 35
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 127,
+                "endLine": 127,
+                "startOffset": 75,
+                "endOffset": 76
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 128,
+                "endLine": 128,
+                "startOffset": 88,
+                "endOffset": 89
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 128,
+                "endLine": 128,
+                "startOffset": 64,
+                "endOffset": 66
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+              "textRange": {
+                "startLine": 130,
+                "endLine": 130,
+                "startOffset": 21,
+                "endOffset": 22
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        }
+      ],
+      "status": "OPEN",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 17 to the 15 allowed.",
+      "effort": "7min",
+      "debt": "7min",
+      "author": "",
+      "tags": [
+        "brain-overload"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTbh3B_ePy7CDdU",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 115,
+      "hash": "9f371f143fcaf27f685c38a4625ebdad",
+      "textRange": {
+        "startLine": 115,
+        "endLine": 115,
+        "startOffset": 49,
+        "endOffset": 152
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTbh3B_ePy7CDdV",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 115,
+      "hash": "9f371f143fcaf27f685c38a4625ebdad",
+      "textRange": {
+        "startLine": 115,
+        "endLine": 115,
+        "startOffset": 89,
+        "endOffset": 152
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQTbh3B_ePy7CDdW",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/pages/StockOperationsPage.jsx",
+      "project": "softwaretextil-quality-review",
+      "line": 127,
+      "hash": "ade8beceb700c6d2b699131b43ee6e0f",
+      "textRange": {
+        "startLine": 127,
+        "endLine": 127,
+        "startOffset": 54,
+        "endOffset": 106
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQThh3B_ePy7CDda",
+      "rule": "javascript:S3776",
+      "severity": "CRITICAL",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+      "project": "softwaretextil-quality-review",
+      "line": 39,
+      "hash": "d185e3fddf3aacb2e44856aae57d8cca",
+      "textRange": {
+        "startLine": 39,
+        "endLine": 39,
+        "startOffset": 22,
+        "endOffset": 29
+      },
+      "flows": [
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 41,
+                "endLine": 41,
+                "startOffset": 21,
+                "endOffset": 22
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 42,
+                "endLine": 42,
+                "startOffset": 2,
+                "endOffset": 4
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 43,
+                "endLine": 43,
+                "startOffset": 49,
+                "endOffset": 51
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 44,
+                "endLine": 44,
+                "startOffset": 2,
+                "endOffset": 4
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 44,
+                "endLine": 44,
+                "startOffset": 25,
+                "endOffset": 27
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 49,
+                "endLine": 49,
+                "startOffset": 29,
+                "endOffset": 30
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 49,
+                "endLine": 49,
+                "startOffset": 50,
+                "endOffset": 51
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 52,
+                "endLine": 52,
+                "startOffset": 59,
+                "endOffset": 61
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 54,
+                "endLine": 54,
+                "startOffset": 4,
+                "endOffset": 5
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 56,
+                "endLine": 56,
+                "startOffset": 6,
+                "endOffset": 7
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 58,
+                "endLine": 58,
+                "startOffset": 2,
+                "endOffset": 4
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 59,
+                "endLine": 59,
+                "startOffset": 4,
+                "endOffset": 6
+              },
+              "msg": "+2 (incl. 1 for nesting)",
+              "msgFormattings": []
+            }
+          ]
+        },
+        {
+          "locations": [
+            {
+              "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+              "textRange": {
+                "startLine": 59,
+                "endLine": 59,
+                "startOffset": 32,
+                "endOffset": 34
+              },
+              "msg": "+1",
+              "msgFormattings": []
+            }
+          ]
+        }
+      ],
+      "status": "OPEN",
+      "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.",
+      "effort": "6min",
+      "debt": "6min",
+      "author": "",
+      "tags": [
+        "brain-overload"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQThh3B_ePy7CDdb",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+      "project": "softwaretextil-quality-review",
+      "line": 49,
+      "hash": "7504bc50d3287060039f0ebfabaa8c58",
+      "textRange": {
+        "startLine": 49,
+        "endLine": 49,
+        "startOffset": 43,
+        "endOffset": 79
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQThh3B_ePy7CDdc",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:frontend/inventario/src/services/api.js",
+      "project": "softwaretextil-quality-review",
+      "line": 55,
+      "hash": "08dd8c13bd7263aa5f38c1da5ae7c628",
+      "textRange": {
+        "startLine": 55,
+        "endLine": 57,
+        "startOffset": 6,
+        "endOffset": 45
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQToh3B_ePy7CDde",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:static/usuarios/auth.js",
+      "project": "softwaretextil-quality-review",
+      "line": 113,
+      "hash": "f9648e93ba1c594e789738ef97de853f",
+      "textRange": {
+        "startLine": 113,
+        "endLine": 113,
+        "startOffset": 105,
+        "endOffset": 156
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    },
+    {
+      "key": "AaHvbQToh3B_ePy7CDdf",
+      "rule": "javascript:S3358",
+      "severity": "MAJOR",
+      "component": "softwaretextil-quality-review:static/usuarios/auth.js",
+      "project": "softwaretextil-quality-review",
+      "line": 113,
+      "hash": "f9648e93ba1c594e789738ef97de853f",
+      "textRange": {
+        "startLine": 113,
+        "endLine": 113,
+        "startOffset": 161,
+        "endOffset": 212
+      },
+      "flows": [],
+      "status": "OPEN",
+      "message": "Extract this nested ternary operation into an independent statement.",
+      "effort": "5min",
+      "debt": "5min",
+      "author": "",
+      "tags": [
+        "confusing"
+      ],
+      "creationDate": "2026-11-18T16:10:32+0000",
+      "updateDate": "2026-11-18T16:10:32+0000",
+      "type": "CODE_SMELL",
+      "scope": "MAIN",
+      "quickFixAvailable": false,
+      "messageFormattings": []
+    }
+  ]
+}

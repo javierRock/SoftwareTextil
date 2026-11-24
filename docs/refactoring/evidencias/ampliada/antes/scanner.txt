@@ -1,0 +1,144 @@
+INFO: Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+INFO: Project root configuration file: /usr/src/sonar-project.properties
+INFO: SonarScanner 5.0.1.3006
+INFO: Java 17.0.10 Alpine (64-bit)
+INFO: Linux 7.0.12-linuxkit amd64
+INFO: User cache: /opt/sonar-scanner/.sonar/cache
+INFO: Analyzing on SonarQube server 9.9.7.96285
+INFO: Default locale: "en_US", source code encoding: "UTF-8"
+INFO: Load global settings
+INFO: Load global settings (done) | time=188ms
+INFO: Server id: 147B411E-AaHvaBgNrCpRuhXzwfOw
+INFO: User cache: /opt/sonar-scanner/.sonar/cache
+INFO: Load/download plugins
+INFO: Load plugins index
+INFO: Load plugins index (done) | time=133ms
+INFO: Load/download plugins (done) | time=2918ms
+INFO: Process project properties
+INFO: Process project properties (done) | time=7ms
+INFO: Execute project builders
+INFO: Execute project builders (done) | time=2ms
+INFO: Project key: softwaretextil-quality-expanded
+INFO: Base dir: /usr/src
+INFO: Working dir: /usr/src/.scannerwork
+INFO: Load project settings for component key: 'softwaretextil-quality-expanded'
+INFO: Load quality profiles
+INFO: Load quality profiles (done) | time=240ms
+INFO: Load active rules
+INFO: Load active rules (done) | time=3253ms
+INFO: Load analysis cache
+INFO: Load analysis cache (404) | time=95ms
+WARN: Property 'sonar.password' is deprecated. It will not be supported in the future. Please instead use the 'sonar.login' parameter with a token.
+INFO: Load project repositories
+INFO: Load project repositories (done) | time=95ms
+INFO: Indexing files...
+INFO: Project configuration:
+INFO:   Excluded sources: **/migrations/**, **/tests/**, **/__pycache__/**, **/node_modules/**, **/dist/**, **/*.test.js, **/package-lock.json, tests/**, frontend/inventario/**/*.test.js
+INFO:   Included tests: tests/**, frontend/inventario/**/*.test.js
+INFO: 231 files indexed
+INFO: 64 files ignored because of inclusion/exclusion patterns
+INFO: Quality profile for css: Sonar way
+INFO: Quality profile for js: Sonar way
+INFO: Quality profile for json: Sonar way
+INFO: Quality profile for py: Sonar way
+INFO: Quality profile for web: Sonar way
+INFO: Quality profile for yaml: Sonar way
+INFO: ------------- Run sensors on module SoftwareTextil Quality Expanded
+INFO: Load metrics repository
+INFO: Load metrics repository (done) | time=110ms
+INFO: Sensor Python Sensor [python]
+WARN: No explicit support for version 3.11. Python version has been set to 3.10.
+INFO: Starting global symbols computation
+INFO: 162 source files to be analyzed
+INFO: 162/162 source files have been analyzed
+INFO: Starting rules execution
+INFO: 199 source files to be analyzed
+INFO: 199/199 source files have been analyzed
+INFO: The Python analyzer was able to leverage cached data from previous analyses for 0 out of 199 files. These files were not parsed.
+INFO: Sensor Python Sensor [python] (done) | time=5649ms
+INFO: Sensor Cobertura Sensor for Python coverage [python]
+INFO: Python test coverage
+INFO: Parsing report '/usr/src/build/reports/sonar-coverage.xml'
+INFO: Sensor Cobertura Sensor for Python coverage [python] (done) | time=139ms
+INFO: Sensor PythonXUnitSensor [python]
+INFO: Sensor PythonXUnitSensor [python] (done) | time=38ms
+INFO: Sensor JaCoCo XML Report Importer [jacoco]
+INFO: 'sonar.coverage.jacoco.xmlReportPaths' is not defined. Using default locations: target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml
+INFO: No report imported, no coverage information will be imported by JaCoCo XML Report Importer
+INFO: Sensor JaCoCo XML Report Importer [jacoco] (done) | time=3ms
+INFO: Sensor IaC CloudFormation Sensor [iac]
+INFO: 0 source files to be analyzed
+INFO: 0/0 source files have been analyzed
+INFO: Sensor IaC CloudFormation Sensor [iac] (done) | time=18ms
+INFO: Sensor IaC Kubernetes Sensor [iac]
+INFO: 0 source files to be analyzed
+INFO: 0/0 source files have been analyzed
+INFO: Sensor IaC Kubernetes Sensor [iac] (done) | time=8ms
+INFO: Sensor JavaScript analysis [javascript]
+INFO: 20 source files to be analyzed
+INFO: 20/20 source files have been analyzed
+INFO: Hit the cache for 0 out of 20
+INFO: Miss the cache for 20 out of 20: ANALYSIS_MODE_INELIGIBLE [20/20]
+INFO: Sensor JavaScript analysis [javascript] (done) | time=10416ms
+INFO: Sensor TypeScript analysis [javascript]
+INFO: No input files found for analysis
+INFO: Hit the cache for 0 out of 0
+INFO: Miss the cache for 0 out of 0
+INFO: Sensor TypeScript analysis [javascript] (done) | time=3ms
+INFO: Sensor JavaScript inside YAML analysis [javascript]
+INFO: No input files found for analysis
+INFO: Hit the cache for 0 out of 0
+INFO: Miss the cache for 0 out of 0
+INFO: Sensor JavaScript inside YAML analysis [javascript] (done) | time=10ms
+INFO: Sensor CSS Rules [javascript]
+INFO: 5 source files to be analyzed
+INFO: 5/5 source files have been analyzed
+INFO: Hit the cache for 0 out of 0
+INFO: Miss the cache for 0 out of 0
+INFO: Sensor CSS Rules [javascript] (done) | time=380ms
+INFO: Sensor CSS Metrics [javascript]
+INFO: Sensor CSS Metrics [javascript] (done) | time=52ms
+INFO: Sensor C# Project Type Information [csharp]
+INFO: Sensor C# Project Type Information [csharp] (done) | time=1ms
+INFO: Sensor C# Analysis Log [csharp]
+INFO: Sensor C# Analysis Log [csharp] (done) | time=8ms
+INFO: Sensor C# Properties [csharp]
+INFO: Sensor C# Properties [csharp] (done) | time=0ms
+INFO: Sensor HTML [web]
+INFO: Sensor HTML [web] (done) | time=159ms
+INFO: Sensor TextAndSecretsSensor [text]
+INFO: 227 source files to be analyzed
+INFO: 227/227 source files have been analyzed
+INFO: Sensor TextAndSecretsSensor [text] (done) | time=219ms
+INFO: Sensor VB.NET Project Type Information [vbnet]
+INFO: Sensor VB.NET Project Type Information [vbnet] (done) | time=0ms
+INFO: Sensor VB.NET Analysis Log [vbnet]
+INFO: Sensor VB.NET Analysis Log [vbnet] (done) | time=5ms
+INFO: Sensor VB.NET Properties [vbnet]
+INFO: Sensor VB.NET Properties [vbnet] (done) | time=0ms
+INFO: Sensor IaC Docker Sensor [iac]
+INFO: 0 source files to be analyzed
+INFO: 0/0 source files have been analyzed
+INFO: Sensor IaC Docker Sensor [iac] (done) | time=41ms
+INFO: ------------- Run sensors on project
+INFO: Sensor Analysis Warnings import [csharp]
+INFO: Sensor Analysis Warnings import [csharp] (done) | time=1ms
+INFO: Sensor Zero Coverage Sensor
+INFO: Sensor Zero Coverage Sensor (done) | time=18ms
+INFO: SCM Publisher is disabled
+INFO: CPD Executor 74 files had no CPD blocks
+INFO: CPD Executor Calculating CPD for 110 files
+INFO: CPD Executor CPD calculation finished (done) | time=48ms
+INFO: Analysis report generated in 162ms, dir size=1.8 MB
+INFO: Analysis report compressed in 2259ms, zip size=1.1 MB
+INFO: Analysis report uploaded in 307ms
+INFO: ------------- Check Quality Gate status
+INFO: Waiting for the analysis report to be processed (max 300s)
+INFO: QUALITY GATE STATUS: PASSED - View details on http://host.docker.internal:9008/dashboard?id=softwaretextil-quality-expanded
+INFO: Analysis total time: 33.415 s
+INFO: ------------------------------------------------------------------------
+INFO: EXECUTION SUCCESS
+INFO: ------------------------------------------------------------------------
+INFO: Total time: 38.008s
+INFO: Final Memory: 26M/97M
+INFO: ------------------------------------------------------------------------

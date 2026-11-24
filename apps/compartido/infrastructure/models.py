@@ -11,6 +11,10 @@ from uuid import uuid4
 
 from django.db import models
 
+# Referencia perezosa compartida por las claves foraneas hacia el usuario: evita
+# importar la app de usuarios desde otros modelos y repetir el literal.
+MODELO_USUARIO = "usuarios.UsuarioModel"
+
 
 class ModeloBase(models.Model):
     """Identidad comun: UUID nativo como clave primaria."""

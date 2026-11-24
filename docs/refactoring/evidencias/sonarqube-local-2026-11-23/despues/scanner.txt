@@ -1,0 +1,160 @@
+11:34:50.166 INFO  Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+11:34:50.168 INFO  Project root configuration file: /workspace/SoftwareTextil/sonar-project.properties
+11:34:50.177 INFO  SonarScanner CLI 7.2.0.5079
+11:34:50.178 INFO  Linux 7.3.5-2-cachyos amd64
+11:34:50.607 INFO  Communicating with SonarQube Community Build 25.1.0.102122
+11:34:50.608 INFO  JRE provisioning: os[linux], arch[x86_64]
+11:34:50.934 INFO  Starting SonarScanner Engine...
+11:34:50.935 INFO  Java 17.0.13 Eclipse Adoptium (64-bit)
+11:34:51.436 INFO  Load global settings
+11:34:51.483 INFO  Load global settings (done) | time=46ms
+11:34:51.484 INFO  Server id: 86E1FA4D-AaCG8PAmVpgrvdSJQK1O
+11:34:51.488 INFO  Loading required plugins
+11:34:51.488 INFO  Load plugins index
+11:34:51.496 INFO  Load plugins index (done) | time=7ms
+11:34:51.496 INFO  Load/download plugins
+11:34:51.516 INFO  Load/download plugins (done) | time=21ms
+11:34:51.676 INFO  Process project properties
+11:34:51.681 INFO  Process project properties (done) | time=6ms
+11:34:51.686 INFO  Project key: softwaretextil-refactoring-compare
+11:34:51.687 INFO  Base dir: /workspace/SoftwareTextil
+11:34:51.687 INFO  Working dir: /workspace/SoftwareTextil/.scannerwork
+11:34:51.690 INFO  Load project settings for component key: 'softwaretextil-refactoring-compare'
+11:34:51.698 INFO  Load project settings for component key: 'softwaretextil-refactoring-compare' (done) | time=8ms
+11:34:51.711 INFO  Load quality profiles
+11:34:51.732 INFO  Load quality profiles (done) | time=21ms
+11:34:51.742 INFO  Load active rules
+11:34:51.867 INFO  Load active rules (done) | time=126ms
+11:34:51.870 INFO  Load analysis cache
+11:34:51.902 INFO  Load analysis cache | time=32ms
+11:34:51.928 INFO  Preprocessing files...
+11:34:51.985 INFO  6 languages detected in 271 preprocessed files
+11:34:51.985 INFO  256 files ignored because of inclusion/exclusion patterns
+11:34:51.987 INFO  Loading plugins for detected languages
+11:34:51.987 INFO  Load/download plugins
+11:34:51.991 INFO  Load/download plugins (done) | time=4ms
+11:34:52.079 INFO  Load project repositories
+11:34:52.137 INFO  Load project repositories (done) | time=57ms
+11:34:52.146 INFO  Indexing files...
+11:34:52.146 INFO  Project configuration:
+11:34:52.146 INFO    Excluded sources: **/migrations/**, **/tests/**, **/__pycache__/**, **/node_modules/**, **/dist/**, **/*.test.js, **/package-lock.json, tests/**, frontend/inventario/**/*.test.js
+11:34:52.146 INFO    Included tests: tests/**, frontend/inventario/**/*.test.js
+11:34:52.205 INFO  271 files indexed
+11:34:52.206 INFO  Quality profile for css: Sonar way
+11:34:52.206 INFO  Quality profile for js: Sonar way
+11:34:52.206 INFO  Quality profile for json: Sonar way
+11:34:52.206 INFO  Quality profile for py: Sonar way
+11:34:52.207 INFO  Quality profile for web: Sonar way
+11:34:52.207 INFO  Quality profile for yaml: Sonar way
+11:34:52.207 INFO  ------------- Run sensors on module SoftwareTextil - Comparacion de refactorizacion
+11:34:52.229 INFO  Load metrics repository
+11:34:52.238 INFO  Load metrics repository (done) | time=10ms
+11:34:52.552 INFO  Sensor Python Sensor [python]
+11:34:52.573 INFO  Starting global symbols computation
+11:34:52.575 INFO  201 source files to be analyzed
+11:34:55.771 INFO  201/201 source files have been analyzed
+11:34:55.808 INFO  Starting rules execution
+11:34:55.808 INFO  201 source files to be analyzed
+11:34:58.203 INFO  201/201 source files have been analyzed
+11:34:58.203 INFO  The Python analyzer was able to leverage cached data from previous analyses for 0 out of 201 files. These files were not parsed.
+11:34:58.203 INFO  Sensor Python Sensor [python] (done) | time=5652ms
+11:34:58.203 INFO  Sensor Cobertura Sensor for Python coverage [python]
+11:34:58.288 INFO  Python test coverage
+11:34:58.290 INFO  Parsing report '/workspace/SoftwareTextil/build/reports/sonar-coverage.xml'
+11:34:58.338 INFO  Sensor Cobertura Sensor for Python coverage [python] (done) | time=134ms
+11:34:58.338 INFO  Sensor PythonXUnitSensor [python]
+11:34:58.420 INFO  Sensor PythonXUnitSensor [python] (done) | time=83ms
+11:34:58.420 INFO  Sensor HTML [web]
+11:34:58.511 INFO  Sensor HTML [web] (done) | time=91ms
+11:34:58.511 INFO  Sensor JaCoCo XML Report Importer [jacoco]
+11:34:58.511 INFO  'sonar.coverage.jacoco.xmlReportPaths' is not defined. Using default locations: target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml,build/reports/jacoco/test/jacocoTestReport.xml
+11:34:58.512 INFO  No report imported, no coverage information will be imported by JaCoCo XML Report Importer
+11:34:58.512 INFO  Sensor JaCoCo XML Report Importer [jacoco] (done) | time=1ms
+11:34:58.512 INFO  Sensor IaC CloudFormation Sensor [iac]
+11:34:58.520 INFO  0 source files to be analyzed
+11:34:58.521 INFO  0/0 source files have been analyzed
+11:34:58.521 INFO  Sensor IaC CloudFormation Sensor [iac] (done) | time=8ms
+11:34:58.521 INFO  Sensor IaC Kubernetes Sensor [iac]
+11:34:58.559 INFO  0 source files to be parsed
+11:34:58.560 INFO  0/0 source files have been parsed
+11:34:58.560 INFO  0 source files to be analyzed
+11:34:58.560 INFO  0/0 source files have been analyzed
+11:34:58.560 INFO  0 source files to be checked
+11:34:58.560 INFO  0/0 source files have been checked
+11:34:58.560 INFO  Sensor IaC Kubernetes Sensor [iac] (done) | time=40ms
+11:34:58.560 INFO  Sensor IaC AzureResourceManager Sensor [iac]
+11:34:58.589 INFO  0 source files to be analyzed
+11:34:58.589 INFO  0/0 source files have been analyzed
+11:34:58.589 INFO  Sensor IaC AzureResourceManager Sensor [iac] (done) | time=29ms
+11:34:58.589 INFO  Sensor Java Config Sensor [iac]
+11:34:58.593 INFO  0 source files to be analyzed
+11:34:58.593 INFO  0/0 source files have been analyzed
+11:34:58.593 INFO  Sensor Java Config Sensor [iac] (done) | time=4ms
+11:34:58.593 INFO  Sensor JavaScript/TypeScript analysis [javascript]
+11:34:58.663 INFO  Detected os: Linux arch: amd64 alpine: false. Platform: LINUX_X64
+11:34:58.663 INFO  Deploy location /workspace/.sonar/js/node-runtime, tagetRuntime: /workspace/.sonar/js/node-runtime/node,  version: /workspace/.sonar/js/node-runtime/version.txt
+11:34:58.673 INFO  Using embedded Node.js runtime.
+11:34:58.673 INFO  Using Node.js executable: '/workspace/.sonar/js/node-runtime/node'.
+11:34:59.451 INFO  Memory configuration: OS (15175 MB), Node.js (2096 MB).
+11:35:00.209 WARN  Access to the multi-values/property set property 'sonar.javascript.file.suffixes' should be made using 'getStringArray' method. The SonarQube plugin using this property should be updated.
+11:35:00.209 WARN  Access to the multi-values/property set property 'sonar.typescript.file.suffixes' should be made using 'getStringArray' method. The SonarQube plugin using this property should be updated.
+11:35:00.429 INFO  Found 0 tsconfig.json file(s): []
+11:35:00.435 INFO  Creating TypeScript program
+11:35:00.435 INFO  TypeScript configuration file /tmp/tmp-72245-ZpHHc7GhBPg5
+11:35:00.435 INFO  20 source files to be analyzed
+11:35:00.604 INFO  Starting analysis with current program
+11:35:01.977 INFO  Analyzed 20 file(s) with current program
+11:35:01.981 INFO  20/20 source files have been analyzed
+11:35:01.981 INFO  Hit the cache for 0 out of 20
+11:35:01.981 INFO  Miss the cache for 20 out of 20: ANALYSIS_MODE_INELIGIBLE [20/20]
+11:35:01.981 INFO  Sensor JavaScript/TypeScript analysis [javascript] (done) | time=3388ms
+11:35:01.981 INFO  Sensor JavaScript inside YAML analysis [javascript]
+11:35:01.982 INFO  No input files found for analysis
+11:35:01.982 INFO  Hit the cache for 0 out of 0
+11:35:01.982 INFO  Miss the cache for 0 out of 0
+11:35:01.982 INFO  Sensor JavaScript inside YAML analysis [javascript] (done) | time=1ms
+11:35:01.982 INFO  Sensor JavaScript inside HTML analysis [javascript]
+11:35:01.983 INFO  3 source files to be analyzed
+11:35:02.179 INFO  3/3 source files have been analyzed
+11:35:02.179 INFO  Hit the cache for 0 out of 3
+11:35:02.179 INFO  Miss the cache for 3 out of 3: ANALYSIS_MODE_INELIGIBLE [3/3]
+11:35:02.179 INFO  Sensor JavaScript inside HTML analysis [javascript] (done) | time=197ms
+11:35:02.180 INFO  Sensor CSS Rules [javascript]
+11:35:02.182 INFO  5 source files to be analyzed
+11:35:02.284 INFO  5/5 source files have been analyzed
+11:35:02.284 INFO  Hit the cache for 0 out of 0
+11:35:02.285 INFO  Miss the cache for 0 out of 0
+11:35:02.285 INFO  Sensor CSS Rules [javascript] (done) | time=105ms
+11:35:02.285 INFO  Sensor JavaScript/TypeScript Coverage [javascript]
+11:35:02.285 INFO  Analysing [/workspace/SoftwareTextil/build/reports/frontend-lcov.info]
+11:35:02.290 INFO  Sensor JavaScript/TypeScript Coverage [javascript] (done) | time=6ms
+11:35:02.291 INFO  Sensor CSS Metrics [javascript]
+11:35:02.316 INFO  Sensor CSS Metrics [javascript] (done) | time=26ms
+11:35:02.316 INFO  Sensor IaC Docker Sensor [iac]
+11:35:02.330 INFO  0 source files to be analyzed
+11:35:02.330 INFO  0/0 source files have been analyzed
+11:35:02.330 INFO  Sensor IaC Docker Sensor [iac] (done) | time=14ms
+11:35:02.330 INFO  Sensor TextAndSecretsSensor [text]
+11:35:02.330 INFO  Available processors: 32
+11:35:02.330 INFO  Using 32 threads for analysis.
+11:35:02.489 INFO  Using git CLI to retrieve untracked files
+11:35:02.490 WARN  Analyzing only language associated files, make sure to run the analysis inside a git repository to make use of inclusions specified via "sonar.text.inclusions"
+11:35:02.538 INFO  229 source files to be analyzed
+11:35:02.644 INFO  229/229 source files have been analyzed
+11:35:02.645 INFO  Sensor TextAndSecretsSensor [text] (done) | time=315ms
+11:35:02.648 INFO  ------------- Run sensors on project
+11:35:02.703 INFO  Sensor Zero Coverage Sensor
+11:35:02.705 INFO  Sensor Zero Coverage Sensor (done) | time=2ms
+11:35:02.705 INFO  SCM Publisher is disabled
+11:35:02.716 INFO  CPD Executor 74 files had no CPD blocks
+11:35:02.716 INFO  CPD Executor Calculating CPD for 111 files
+11:35:02.733 INFO  CPD Executor CPD calculation finished (done) | time=17ms
+11:35:02.736 INFO  SCM revision ID '7785a6a689518d4e0e1eae9df43218670fb49de4'
+11:35:02.826 INFO  Analysis report generated in 78ms, dir size=1.9 MB
+11:35:02.968 INFO  Analysis report compressed in 142ms, zip size=1.1 MB
+11:35:03.002 INFO  Analysis report uploaded in 34ms
+11:35:03.002 INFO  ------------- Check Quality Gate status
+11:35:03.002 INFO  Waiting for the analysis report to be processed (max 300s)
+11:35:08.118 ERROR QUALITY GATE STATUS: FAILED - View details on http://localhost:9000/dashboard?id=softwaretextil-refactoring-compare
+11:35:08.477 INFO  EXECUTION FAILURE
+11:35:08.478 INFO  Total time: 18.313s

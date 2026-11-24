@@ -1,0 +1,48 @@
+{
+  "component": {
+    "key": "softwaretextil-quality-expanded",
+    "name": "SoftwareTextil Quality Expanded",
+    "qualifier": "TRK",
+    "measures": [
+      {
+        "metric": "ncloc",
+        "value": "10744"
+      },
+      {
+        "metric": "code_smells",
+        "value": "16",
+        "bestValue": false
+      },
+      {
+        "metric": "security_hotspots",
+        "value": "0",
+        "bestValue": true
+      },
+      {
+        "metric": "sqale_index",
+        "value": "82",
+        "bestValue": false
+      },
+      {
+        "metric": "coverage",
+        "value": "74.3",
+        "bestValue": false
+      },
+      {
+        "metric": "duplicated_lines_density",
+        "value": "0.2",
+        "bestValue": false
+      },
+      {
+        "metric": "vulnerabilities",
+        "value": "0",
+        "bestValue": true
+      },
+      {
+        "metric": "bugs",
+        "value": "0",
+        "bestValue": true
+      }
+    ]
+  }
+}

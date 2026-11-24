@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- .venv/bin/python
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: ~/Documents/UNSA_SEM/6TO_SEMESTRE/ING SOFTWARE/LABORATORIOS/lab_5_6/SoftwareTextil
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collecting ... collected 7 items
+
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[carritos-list-/api/ventas/carritos/-apps.ventas.carrito] PASSED [ 14%]
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[pedidos-list-/api/ventas/pedidos/-apps.ventas.pedidos] PASSED [ 28%]
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[pagos-list-/api/ventas/pagos/-apps.ventas.pagos] PASSED [ 42%]
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[despachos-list-/api/ventas/despachos/-apps.ventas.despachos] PASSED [ 57%]
+tests/ventas/test_rutas_ventas.py::test_modulos_de_ventas_conservan_su_orden_de_inclusion PASSED [ 71%]
+tests/ventas/test_rutas_ventas.py::test_rutas_de_ventas_se_resuelven_antes_del_fallback_de_la_spa PASSED [ 85%]
+tests/ventas/test_rutas_ventas.py::test_el_prefijo_de_ventas_se_declara_una_sola_vez PASSED [100%]
+
+============================== 7 passed in 0.08s ===============================

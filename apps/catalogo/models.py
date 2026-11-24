@@ -14,7 +14,7 @@ from apps.compartido.infrastructure.campos import (
     check_monto_positivo,
     opciones,
 )
-from apps.compartido.infrastructure.models import ModeloBase
+from apps.compartido.infrastructure.models import MODELO_USUARIO, ModeloBase
 
 
 class CategoriaModel(ModeloBase):
@@ -64,7 +64,7 @@ class PrendaModel(ModeloBase):
     )
     estado = campo_estado(EstadoPrenda, default=EstadoPrenda.ACTIVA)
     registrado_por = models.ForeignKey(
-        "usuarios.UsuarioModel",
+        MODELO_USUARIO,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

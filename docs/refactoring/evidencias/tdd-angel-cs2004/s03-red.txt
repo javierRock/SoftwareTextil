@@ -1,0 +1,32 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- .venv/bin/python
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: ~/Documents/UNSA_SEM/6TO_SEMESTRE/ING SOFTWARE/LABORATORIOS/lab_5_6/SoftwareTextil
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collecting ... collected 7 items
+
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[carritos-list-/api/ventas/carritos/-apps.ventas.carrito] PASSED [ 14%]
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[pedidos-list-/api/ventas/pedidos/-apps.ventas.pedidos] PASSED [ 28%]
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[pagos-list-/api/ventas/pagos/-apps.ventas.pagos] PASSED [ 42%]
+tests/ventas/test_rutas_ventas.py::test_cada_modulo_de_ventas_se_publica_bajo_el_prefijo[despachos-list-/api/ventas/despachos/-apps.ventas.despachos] PASSED [ 57%]
+tests/ventas/test_rutas_ventas.py::test_modulos_de_ventas_conservan_su_orden_de_inclusion PASSED [ 71%]
+tests/ventas/test_rutas_ventas.py::test_rutas_de_ventas_se_resuelven_antes_del_fallback_de_la_spa PASSED [ 85%]
+tests/ventas/test_rutas_ventas.py::test_el_prefijo_de_ventas_se_declara_una_sola_vez FAILED [100%]
+
+=================================== FAILURES ===================================
+______________ test_el_prefijo_de_ventas_se_declara_una_sola_vez _______________
+
+    def test_el_prefijo_de_ventas_se_declara_una_sola_vez() -> None:
+        fuente = Path(urls.__file__).read_text(encoding="utf-8")
+    
+        assert fuente.count('"api/ventas/"') == 1
+>       assert fuente.count("path(RUTA_VENTAS") == 1
+E       assert 4 == 1
+E        +  where 4 = <built-in method count of str object at 0x55ddce35ba70>('path(RUTA_VENTAS')
+E        +    where <built-in method count of str object at 0x55ddce35ba70> = '"""URL configuration del proyecto SoftwareTextil."""\n\nfrom django.conf import settings\nfrom django.conf.urls.static import static\nfrom django.contrib import admin\nfrom django.urls import include, path, re_path\nfrom django.views.generic import TemplateView\n\nRUTA_VENTAS = "api/ventas/"\n\nurlpatterns = [\n    path("admin/", admin.site.urls),\n    path("api/", include("apps.usuarios.presentation.urls")),\n    path("api/", include("apps.catalogo.presentation.urls")),\n    path("api/", include("apps.inventario.presentation.urls")),\n    path(RUTA_VENTAS, include("apps.ventas.carrito.presentation.urls")),\n    path(RUTA_VENTAS, include("apps.ventas.pedidos.presentation.urls")),\n    path(RUTA_VENTAS, include("apps.ventas.pagos.presentation.urls")),\n    path(RUTA_VENTAS, include("apps.ventas.despachos.presentation.urls")),\n    # BrowserRouter necesita que cada ruta visual entregue el mismo index.\n    # Las rutas de API y Django se resuelven antes de este fallback.\n    re_path(\n        r"^(?!api/|admin/|static/|media/).*$",\n        TemplateView.as_view(template_name="index.html"),\n        name="spa",\n    ),\n]\n\nif settings.DEBUG:\n    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n'.count
+
+tests/ventas/test_rutas_ventas.py:60: AssertionError
+=========================== short test summary info ============================
+FAILED tests/ventas/test_rutas_ventas.py::test_el_prefijo_de_ventas_se_declara_una_sola_vez
+========================= 1 failed, 6 passed in 0.11s ==========================

@@ -31,6 +31,32 @@ test('request normaliza errores de validación', async (t) => {
   );
 });
 
+test('request devuelve el contenido de una respuesta de texto', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; });
+  globalThis.fetch = async () => new Response('Reporte listo', {
+    headers: { 'content-type': 'text/plain' },
+  });
+
+  assert.equal(await request('/api/reportes/estado/'), 'Reporte listo');
+});
+
+test('request conserva el FormData y devuelve null para HTTP 204', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; });
+  const body = new FormData();
+  body.append('nombre', 'Lino');
+  globalThis.fetch = async (_url, options) => {
+    assert.equal(options.body, body);
+    assert.equal(options.headers['Content-Type'], undefined);
+    return new Response(null, { status: 204 });
+  };
+
+  const result = await request('/api/prendas/', { method: 'POST', body });
+
+  assert.equal(result, null);
+});
+
 test('download devuelve blob y nombre de Content-Disposition', async (t) => {
   const originalFetch = globalThis.fetch;
   t.after(() => { globalThis.fetch = originalFetch; });

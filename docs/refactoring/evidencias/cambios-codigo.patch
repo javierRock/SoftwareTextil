@@ -1,0 +1,211 @@
+diff --git a/.gitignore b/.gitignore
+index e43cc1e..526c855 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -26,6 +26,7 @@ media/
+ 
+ .opencode/
+ .sisyphus/
++.scannerwork/
+ 
+ # Entrega local de Lizzy
+ /lab05-lizzy/
+diff --git a/apps/inventario/index.html b/apps/inventario/index.html
+index 4c81339..13bbeb5 100644
+--- a/apps/inventario/index.html
++++ b/apps/inventario/index.html
+@@ -399,9 +399,9 @@
+     .skeleton-row td { padding: 10px 16px; border-bottom: 1px solid var(--bg-hover); }
+     .skeleton-bar {
+       height: 14px;
+-      background: var(--bg-hover);
++      background-color: var(--bg-hover);
+       border-radius: var(--radius-sm);
+-      background: linear-gradient(90deg, var(--bg-hover) 0%, var(--border-default) 50%, var(--bg-hover) 100%);
++      background-image: linear-gradient(90deg, var(--bg-hover) 0%, var(--border-default) 50%, var(--bg-hover) 100%);
+       background-size: 200% 100%;
+       animation: shimmer 1.5s ease-in-out infinite;
+     }
+diff --git a/apps/usuarios/application/services.py b/apps/usuarios/application/services.py
+index 8bc091e..5fbec24 100644
+--- a/apps/usuarios/application/services.py
++++ b/apps/usuarios/application/services.py
+@@ -70,6 +70,10 @@ class ServicioAutenticacion:
+ 
+         self._registrar_intento(username, ip, True)
+ 
++        sesion = self._crear_sesion(usuario, ip)
++        return self._respuesta_login(usuario, sesion)
++
++    def _crear_sesion(self, usuario: Usuario, ip: str) -> Sesion:
+         token = token_urlsafe(32)
+         sesion = Sesion(
+             id=str(uuid4()),
+@@ -81,9 +85,12 @@ class ServicioAutenticacion:
+             estado=EstadoSesion.ACTIVA,
+         )
+         self.repo_sesion.guardar(sesion)
++        return sesion
+ 
++    @staticmethod
++    def _respuesta_login(usuario: Usuario, sesion: Sesion) -> dict:
+         return {
+-            "token": token,
++            "token": sesion.token,
+             "usuario_id": usuario.id,
+             "nombre": usuario.nombre,
+             "email": usuario.email,
+diff --git a/apps/usuarios/infrastructure/repositories.py b/apps/usuarios/infrastructure/repositories.py
+index fc51f6d..66911d6 100644
+--- a/apps/usuarios/infrastructure/repositories.py
++++ b/apps/usuarios/infrastructure/repositories.py
+@@ -1,5 +1,7 @@
+ """Repositorios concretos con Django ORM para usuarios."""
+ 
++from django.db import transaction
++
+ from apps.compartido.domain.enums import EstadoSesion, EstadoUsuario
+ from apps.compartido.infrastructure.mapeo import a_texto, uuid_valido
+ from apps.usuarios.domain.repositorios import (
+@@ -122,6 +124,7 @@ class DjangoRepositorioUsuario(RepositorioUsuario):
+ 
+ 
+ class DjangoRepositorioRol(RepositorioRol):
++    @transaction.atomic
+     def guardar(self, rol: Rol) -> None:
+         model = RolModel.objects.filter(id=rol.id).first()
+         if model is None:
+diff --git a/apps/ventas/models.py b/apps/ventas/models.py
+index 7601ac6..d692c54 100644
+--- a/apps/ventas/models.py
++++ b/apps/ventas/models.py
+@@ -21,10 +21,12 @@ from apps.compartido.infrastructure.campos import (
+ )
+ from apps.compartido.infrastructure.models import ModeloBase
+ 
++MODELO_USUARIO = "usuarios.UsuarioModel"
++
+ 
+ class CarritoModel(ModeloBase):
+     cliente = models.ForeignKey(
+-        "usuarios.UsuarioModel",
++        MODELO_USUARIO,
+         on_delete=models.PROTECT,
+         related_name="carritos",
+     )
+@@ -76,7 +78,7 @@ class ItemCarritoModel(ModeloBase):
+ 
+ class PedidoModel(ModeloBase):
+     cliente = models.ForeignKey(
+-        "usuarios.UsuarioModel",
++        MODELO_USUARIO,
+         on_delete=models.PROTECT,
+         related_name="pedidos",
+     )
+@@ -181,7 +183,7 @@ class DespachoModel(ModeloBase):
+     direccion_entrega = models.CharField(max_length=250)
+     estado = campo_estado(EstadoDespacho, default=EstadoDespacho.PENDIENTE)
+     responsable = models.ForeignKey(
+-        "usuarios.UsuarioModel",
++        MODELO_USUARIO,
+         on_delete=models.SET_NULL,
+         null=True,
+         blank=True,
+diff --git a/apps/ventas/pedidos/application/services.py b/apps/ventas/pedidos/application/services.py
+index ebce7c6..752eeec 100644
+--- a/apps/ventas/pedidos/application/services.py
++++ b/apps/ventas/pedidos/application/services.py
+@@ -6,11 +6,12 @@ dominio, nunca de Django ni del ORM (DIP), y declara unicamente los roles de
+ lectura y escritura que usa, no los de catalogo (ISP).
+ """
+ 
+-from collections.abc import Callable
++from collections.abc import Callable, Iterator
+ from contextlib import AbstractContextManager, nullcontext
+ 
+ from apps.inventario.domain.excepciones import StockNoEncontradoError
+ from apps.inventario.domain.repositorios import RepositorioInventario
++from apps.inventario.domain.stock_prenda import StockVariante
+ from apps.ventas.carrito.domain.carrito import CarritoCompras
+ from apps.ventas.carrito.domain.repositorios import EscritorCarrito, LectorCarrito
+ from apps.ventas.pedidos.domain.errors import (
+@@ -91,18 +92,21 @@ class ServicioPedidos:
+     def _reservar(self, detalles: list[DetallePedido]) -> None:
+         if self._inventario is None:
+             return
+-        for detalle in sorted(detalles, key=lambda item: item.variante_id):
+-            stock = self._inventario.buscar_por_variante_bloqueada(
+-                detalle.variante_id
+-            )
+-            if stock is None:
+-                raise StockNoEncontradoError(
+-                    "No existe stock para una variante del pedido"
+-                )
++        for detalle, stock in self._stocks_bloqueados(detalles):
+             stock.reservar(detalle.cantidad)
+             self._inventario.guardar(stock)
+ 
+     def _liberar(self, detalles: list[DetallePedido]) -> None:
++        if self._inventario is None:
++            return
++        for detalle, stock in self._stocks_bloqueados(detalles):
++            stock.liberar(detalle.cantidad)
++            self._inventario.guardar(stock)
++
++    def _stocks_bloqueados(
++        self, detalles: list[DetallePedido]
++    ) -> Iterator[tuple[DetallePedido, StockVariante]]:
++        """Comparte validación y orden de bloqueos sin adelantar escrituras."""
+         if self._inventario is None:
+             return
+         for detalle in sorted(detalles, key=lambda item: item.variante_id):
+@@ -113,5 +117,4 @@ class ServicioPedidos:
+                 raise StockNoEncontradoError(
+                     "No existe stock para una variante del pedido"
+                 )
+-            stock.liberar(detalle.cantidad)
+-            self._inventario.guardar(stock)
++            yield detalle, stock
+diff --git a/config/urls.py b/config/urls.py
+index 124c2e1..fc8c7a9 100644
+--- a/config/urls.py
++++ b/config/urls.py
+@@ -6,15 +6,17 @@ from django.contrib import admin
+ from django.urls import include, path, re_path
+ from django.views.generic import TemplateView
+ 
++RUTA_VENTAS = "api/ventas/"
++
+ urlpatterns = [
+     path("admin/", admin.site.urls),
+     path("api/", include("apps.usuarios.presentation.urls")),
+     path("api/", include("apps.catalogo.presentation.urls")),
+     path("api/", include("apps.inventario.presentation.urls")),
+-    path("api/ventas/", include("apps.ventas.carrito.presentation.urls")),
+-    path("api/ventas/", include("apps.ventas.pedidos.presentation.urls")),
+-    path("api/ventas/", include("apps.ventas.pagos.presentation.urls")),
+-    path("api/ventas/", include("apps.ventas.despachos.presentation.urls")),
++    path(RUTA_VENTAS, include("apps.ventas.carrito.presentation.urls")),
++    path(RUTA_VENTAS, include("apps.ventas.pedidos.presentation.urls")),
++    path(RUTA_VENTAS, include("apps.ventas.pagos.presentation.urls")),
++    path(RUTA_VENTAS, include("apps.ventas.despachos.presentation.urls")),
+     # BrowserRouter necesita que cada ruta visual entregue el mismo index.
+     # Las rutas de API y Django se resuelven antes de este fallback.
+     re_path(
+diff --git a/tests/usuarios/test_servicio_autenticacion_mocks.py b/tests/usuarios/test_servicio_autenticacion_mocks.py
+index 99adf67..b0f03ba 100644
+--- a/tests/usuarios/test_servicio_autenticacion_mocks.py
++++ b/tests/usuarios/test_servicio_autenticacion_mocks.py
+@@ -64,6 +64,12 @@ class TestServicioAutenticacionConMocks:
+         self.repo_sesion.guardar.assert_called_once_with(ANY)
+         sesion = self.repo_sesion.guardar.call_args.args[0]
+         assert sesion.token == resultado["token"]
++        assert set(resultado) == {
++            "token", "usuario_id", "nombre", "email", "rol", "expira_en"
++        }
++        assert resultado["expira_en"] == sesion.fecha_expiracion
++        assert resultado["nombre"] == self.usuario.nombre
++        assert resultado["email"] == self.usuario.email
+         assert self._intento_registrado().exitoso is True
+ 
+     def test_password_incorrecto_no_crea_sesion(self) -> None:

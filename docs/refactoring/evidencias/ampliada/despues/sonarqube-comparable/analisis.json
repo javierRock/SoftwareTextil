@@ -1,0 +1,37 @@
+{
+  "paging": {
+    "pageIndex": 1,
+    "pageSize": 100,
+    "total": 2
+  },
+  "analyses": [
+    {
+      "key": "AaHvbZzTh3B_ePy7CFZe",
+      "date": "2026-11-18T16:11:14+0000",
+      "events": [
+        {
+          "key": "AaHvbaNZh3B_ePy7CIDm",
+          "category": "QUALITY_GATE",
+          "name": "Failed",
+          "description": "Coverage on New Code < 80"
+        },
+        {
+          "key": "AaHvbaNah3B_ePy7CIDn",
+          "category": "VERSION",
+          "name": "not provided"
+        }
+      ],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    },
+    {
+      "key": "AaHvbQEah3B_ePy7CDYn",
+      "date": "2026-11-18T16:10:32+0000",
+      "events": [],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "detectedCI": "undetected"
+    }
+  ]
+}

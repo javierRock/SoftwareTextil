@@ -1,0 +1,45 @@
+{
+  "paging": {
+    "pageIndex": 1,
+    "pageSize": 100,
+    "total": 2
+  },
+  "analyses": [
+    {
+      "key": "24bc6ffb-85bb-4910-b087-eb6a47cb8130",
+      "date": "2026-11-23T11:34:51-0500",
+      "events": [
+        {
+          "key": "7ebe84df-2d5d-4714-8d36-caaa5756067e",
+          "category": "QUALITY_GATE",
+          "name": "Failed",
+          "description": "Coverage on New Code < 80"
+        },
+        {
+          "key": "37c640fc-0745-4d07-8a01-ce358c035e9c",
+          "category": "VERSION",
+          "name": "not provided"
+        }
+      ],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "revision": "7785a6a689518d4e0e1eae9df43218670fb49de4",
+      "detectedCI": "undetected"
+    },
+    {
+      "key": "ff57f8ea-8208-4f57-87cf-c0293d0a995e",
+      "date": "2026-11-23T11:32:11-0500",
+      "events": [
+        {
+          "key": "c3290939-2faf-4ff6-bac9-98a0e698fea3",
+          "category": "SQ_UPGRADE",
+          "name": "25.1.0.102122"
+        }
+      ],
+      "projectVersion": "not provided",
+      "manualNewCodePeriodBaseline": false,
+      "revision": "a312d0ad8ba7199d28782371a08b62f590c95679",
+      "detectedCI": "undetected"
+    }
+  ]
+}
