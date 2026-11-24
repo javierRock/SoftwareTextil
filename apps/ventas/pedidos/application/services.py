@@ -6,8 +6,9 @@ dominio, nunca de Django ni del ORM (DIP), y declara unicamente los roles de
 lectura y escritura que usa, no los de catalogo (ISP).
 """
 
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from contextlib import AbstractContextManager, nullcontext
+from operator import attrgetter
 
 from apps.inventario.domain.excepciones import StockNoEncontradoError
 from apps.inventario.domain.repositorios import RepositorioInventario
@@ -22,6 +23,8 @@ from apps.ventas.pedidos.domain.errors import (
 )
 from apps.ventas.pedidos.domain.pedido import DetallePedido, Pedido, PedidoFactory
 from apps.ventas.pedidos.domain.repositorios import EscritorPedido, LectorPedido
+
+AjusteStock = Callable[[StockVariante, int], None]
 
 
 class ServicioPedidos:
@@ -90,31 +93,38 @@ class ServicioPedidos:
         ]
 
     def _reservar(self, detalles: list[DetallePedido]) -> None:
-        if self._inventario is None:
-            return
-        for detalle, stock in self._stocks_bloqueados(detalles):
-            stock.reservar(detalle.cantidad)
-            self._inventario.guardar(stock)
+        self._ajustar_stocks(detalles, lambda stock, cantidad: stock.reservar(cantidad))
 
     def _liberar(self, detalles: list[DetallePedido]) -> None:
+        self._ajustar_stocks(detalles, lambda stock, cantidad: stock.liberar(cantidad))
+
+    def _ajustar_stocks(
+        self, detalles: list[DetallePedido], ajuste: AjusteStock
+    ) -> None:
+        """Bloquea y valida todo, ajusta en memoria y recien entonces persiste.
+
+        Asi una variante inexistente o sin stock suficiente no deja escrituras
+        parciales aunque el repositorio no participe de la transaccion.
+        """
         if self._inventario is None:
             return
-        for detalle, stock in self._stocks_bloqueados(detalles):
-            stock.liberar(detalle.cantidad)
+        bloqueados = self._bloquear_stocks(self._inventario, detalles)
+        for detalle, stock in bloqueados:
+            ajuste(stock, detalle.cantidad)
+        for _, stock in bloqueados:
             self._inventario.guardar(stock)
 
-    def _stocks_bloqueados(
-        self, detalles: list[DetallePedido]
-    ) -> Iterator[tuple[DetallePedido, StockVariante]]:
-        """Comparte validación y orden de bloqueos sin adelantar escrituras."""
-        if self._inventario is None:
-            return
-        for detalle in sorted(detalles, key=lambda item: item.variante_id):
-            stock = self._inventario.buscar_por_variante_bloqueada(
-                detalle.variante_id
-            )
+    @staticmethod
+    def _bloquear_stocks(
+        inventario: RepositorioInventario, detalles: list[DetallePedido]
+    ) -> list[tuple[DetallePedido, StockVariante]]:
+        """Bloquea por `variante_id` para que reserva y liberacion compartan orden."""
+        bloqueados = []
+        for detalle in sorted(detalles, key=attrgetter("variante_id")):
+            stock = inventario.buscar_por_variante_bloqueada(detalle.variante_id)
             if stock is None:
                 raise StockNoEncontradoError(
                     "No existe stock para una variante del pedido"
                 )
-            yield detalle, stock
+            bloqueados.append((detalle, stock))
+        return bloqueados
