@@ -1,0 +1,23 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- .venv/bin/python
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: ~/Documents/UNSA_SEM/6TO_SEMESTRE/ING SOFTWARE/LABORATORIOS/lab_5_6/SoftwareTextil
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collecting ... collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+_____ ERROR collecting tests/compartido/test_referencia_modelo_usuario.py ______
+ImportError while importing test module 'tests/compartido/test_referencia_modelo_usuario.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+<python>/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/compartido/test_referencia_modelo_usuario.py:15: in <module>
+    from apps.compartido.infrastructure.models import MODELO_USUARIO
+E   ImportError: cannot import name 'MODELO_USUARIO' from 'apps.compartido.infrastructure.models' (apps/compartido/infrastructure/models.py)
+=========================== short test summary info ============================
+ERROR tests/compartido/test_referencia_modelo_usuario.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.09s ===============================

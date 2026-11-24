@@ -1,0 +1,125 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- .venv/bin/python
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: ~/Documents/UNSA_SEM/6TO_SEMESTRE/ING SOFTWARE/LABORATORIOS/lab_5_6/SoftwareTextil
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collecting ... collected 13 items / 6 deselected / 7 selected
+
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_generar_y_cancelar_bloquean_variantes_en_el_mismo_orden PASSED [ 14%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_generar_conserva_total_estado_y_cantidades_reservadas PASSED [ 28%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_cancelar_libera_cada_variante_con_su_cantidad PASSED [ 42%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_reserva_no_modifica_stocks_si_una_variante_no_existe FAILED [ 57%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_liberacion_no_modifica_stocks_si_una_variante_no_existe FAILED [ 71%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_stock_insuficiente_no_persiste_las_variantes_ya_reservadas FAILED [ 85%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_sin_inventario_genera_y_cancela_sin_consultar_stock PASSED [100%]
+
+=================================== FAILURES ===================================
+_ TestBloqueoDeStockDelServicioPedidos.test_reserva_no_modifica_stocks_si_una_variante_no_existe _
+
+self = <tests.ventas.test_servicio_pedidos_mocks.TestBloqueoDeStockDelServicioPedidos object at 0x7f3170bdb910>
+
+    def test_reserva_no_modifica_stocks_si_una_variante_no_existe(self) -> None:
+        del self.stocks["variante-c"]
+        self.lector_carrito.buscar_por_id_para_actualizar.return_value = (
+            self._carrito_desordenado()
+        )
+    
+        with pytest.raises(StockNoEncontradoError):
+            self.servicio.generar_desde_carrito("carrito-1", CLIENTE)
+    
+>       self.stocks["variante-a"].reservar.assert_not_called()
+
+tests/ventas/test_servicio_pedidos_mocks.py:240: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <MagicMock name='mock.reservar' spec='function' id='139850308465424'>
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'reservar' to not have been called. Called 1 times.
+E           Calls: [call(1)].
+
+<python>/lib/python3.11/unittest/mock.py:900: AssertionError
+_ TestBloqueoDeStockDelServicioPedidos.test_liberacion_no_modifica_stocks_si_una_variante_no_existe _
+
+self = <tests.ventas.test_servicio_pedidos_mocks.TestBloqueoDeStockDelServicioPedidos object at 0x7f3170bd8210>
+
+    def test_liberacion_no_modifica_stocks_si_una_variante_no_existe(self) -> None:
+        del self.stocks["variante-c"]
+        pedido = self._pedido_desordenado()
+        self.lector_pedido.buscar_por_id_para_actualizar.return_value = pedido
+    
+        with pytest.raises(StockNoEncontradoError):
+            self.servicio.cancelar(pedido.id, CLIENTE)
+    
+>       self.stocks["variante-a"].liberar.assert_not_called()
+
+tests/ventas/test_servicio_pedidos_mocks.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <MagicMock name='mock.liberar' spec='function' id='139850309074640'>
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'liberar' to not have been called. Called 1 times.
+E           Calls: [call(1)].
+
+<python>/lib/python3.11/unittest/mock.py:900: AssertionError
+_ TestBloqueoDeStockDelServicioPedidos.test_stock_insuficiente_no_persiste_las_variantes_ya_reservadas _
+
+self = <tests.ventas.test_servicio_pedidos_mocks.TestBloqueoDeStockDelServicioPedidos object at 0x7f3170bd8ad0>
+
+    def test_stock_insuficiente_no_persiste_las_variantes_ya_reservadas(
+        self,
+    ) -> None:
+        self.stocks["variante-c"].reservar.side_effect = StockInsuficienteError(
+            "No hay stock disponible para reservar"
+        )
+        self.lector_carrito.buscar_por_id_para_actualizar.return_value = (
+            self._carrito_desordenado()
+        )
+    
+        with pytest.raises(StockInsuficienteError):
+            self.servicio.generar_desde_carrito("carrito-1", CLIENTE)
+    
+>       self.inventario.guardar.assert_not_called()
+
+tests/ventas/test_servicio_pedidos_mocks.py:271: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <MagicMock name='mock.guardar' spec='function' id='139850351887440'>
+
+    def assert_not_called(self):
+        """assert that the mock was never called.
+        """
+        if self.call_count != 0:
+            msg = ("Expected '%s' to not have been called. Called %s times.%s"
+                   % (self._mock_name or 'mock',
+                      self.call_count,
+                      self._calls_repr()))
+>           raise AssertionError(msg)
+E           AssertionError: Expected 'guardar' to not have been called. Called 2 times.
+E           Calls: [call(<NonCallableMagicMock spec='StockVariante' id='139850312765136'>),
+E            call(<NonCallableMagicMock spec='StockVariante' id='139850312747344'>)].
+
+<python>/lib/python3.11/unittest/mock.py:900: AssertionError
+=========================== short test summary info ============================
+FAILED tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_reserva_no_modifica_stocks_si_una_variante_no_existe
+FAILED tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_liberacion_no_modifica_stocks_si_una_variante_no_existe
+FAILED tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_stock_insuficiente_no_persiste_las_variantes_ya_reservadas
+================== 3 failed, 4 passed, 6 deselected in 0.23s ===================

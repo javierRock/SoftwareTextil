@@ -1,0 +1,23 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- .venv/bin/python
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: ~/Documents/UNSA_SEM/6TO_SEMESTRE/ING SOFTWARE/LABORATORIOS/lab_5_6/SoftwareTextil
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collecting ... collected 13 items
+
+tests/ventas/test_servicio_pedidos_mocks.py::TestServicioPedidosConMocks::test_generar_pedido_reserva_stock_y_persiste PASSED [  7%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestServicioPedidosConMocks::test_carrito_ajeno_no_genera_pedido_ni_reservas PASSED [ 15%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestServicioPedidosConMocks::test_variante_sin_stock_aborta_sin_guardar_pedido PASSED [ 23%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestServicioPedidosConMocks::test_cancelar_pedido_libera_reserva_y_guarda PASSED [ 30%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestServicioPedidosConMocks::test_cancelar_pedido_de_otro_cliente_no_modifica_nada PASSED [ 38%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestServicioPedidosConMocks::test_cancelar_pedido_inexistente PASSED [ 46%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_generar_y_cancelar_bloquean_variantes_en_el_mismo_orden PASSED [ 53%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_generar_conserva_total_estado_y_cantidades_reservadas PASSED [ 61%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_cancelar_libera_cada_variante_con_su_cantidad PASSED [ 69%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_reserva_no_modifica_stocks_si_una_variante_no_existe PASSED [ 76%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_liberacion_no_modifica_stocks_si_una_variante_no_existe PASSED [ 84%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_stock_insuficiente_no_persiste_las_variantes_ya_reservadas PASSED [ 92%]
+tests/ventas/test_servicio_pedidos_mocks.py::TestBloqueoDeStockDelServicioPedidos::test_sin_inventario_genera_y_cancela_sin_consultar_stock PASSED [100%]
+
+============================== 13 passed in 0.16s ==============================

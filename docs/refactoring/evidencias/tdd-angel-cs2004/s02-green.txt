@@ -1,0 +1,20 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.15, pytest-9.1.1, pluggy-1.6.0 -- .venv/bin/python
+django: version: 5.2.16, settings: config.settings.dev (from ini)
+rootdir: ~/Documents/UNSA_SEM/6TO_SEMESTRE/ING SOFTWARE/LABORATORIOS/lab_5_6/SoftwareTextil
+configfile: pyproject.toml
+plugins: cov-7.1.0, django-4.12.0
+collecting ... collected 10 items
+
+tests/compartido/test_referencia_modelo_usuario.py::test_la_referencia_compartida_no_requiere_migraciones PASSED [ 10%]
+tests/compartido/test_referencia_modelo_usuario.py::test_la_constante_compartida_identifica_al_modelo_de_usuario PASSED [ 20%]
+tests/compartido/test_referencia_modelo_usuario.py::test_clave_foranea_apunta_al_modelo_de_usuario[CarritoModel-cliente] PASSED [ 30%]
+tests/compartido/test_referencia_modelo_usuario.py::test_clave_foranea_apunta_al_modelo_de_usuario[PedidoModel-cliente] PASSED [ 40%]
+tests/compartido/test_referencia_modelo_usuario.py::test_clave_foranea_apunta_al_modelo_de_usuario[DespachoModel-responsable] PASSED [ 50%]
+tests/compartido/test_referencia_modelo_usuario.py::test_clave_foranea_apunta_al_modelo_de_usuario[PrendaModel-registrado_por] PASSED [ 60%]
+tests/compartido/test_referencia_modelo_usuario.py::test_clave_foranea_apunta_al_modelo_de_usuario[MovimientoInventarioModel-registrado_por] PASSED [ 70%]
+tests/compartido/test_referencia_modelo_usuario.py::test_modelos_no_repiten_el_literal_del_usuario[catalogo] PASSED [ 80%]
+tests/compartido/test_referencia_modelo_usuario.py::test_modelos_no_repiten_el_literal_del_usuario[inventario] PASSED [ 90%]
+tests/compartido/test_referencia_modelo_usuario.py::test_modelos_no_repiten_el_literal_del_usuario[ventas] PASSED [100%]
+
+============================== 10 passed in 0.62s ==============================
