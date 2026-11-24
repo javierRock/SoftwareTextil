@@ -31,3 +31,17 @@ Jenkins 2.580.2, build #3, ejecutó el commit `11fa65f` de `refactor/code-qualit
 El scanner importó el XML y el LCOV generados por el job. La clave aislada `softwaretextil-jenkins-validation` tenía `a312d0a` como línea base. El build terminó en **FAILURE** porque SonarQube midió **55,2 %** de cobertura de código nuevo frente al **80 %** exigido. `make check` siguió deteniéndose en 58 diagnósticos de Ruff en una ejecución aparte.
 
 [Consola del build](evidencias/jenkins-2026-11-23/consola.txt) · [Build y artefactos](evidencias/jenkins-2026-11-23/ejecucion.json) · [JUnit en Jenkins](evidencias/jenkins-2026-11-23/pruebas.json) · [Quality Gate de Jenkins](evidencias/jenkins-2026-11-23/quality-gate.json) · [Resultado de make check](evidencias/jenkins-2026-11-23/make-check-resumen.txt).
+
+## Validación posterior en Jenkins
+
+El 23 de noviembre de 2026, el build #5 de `sotfwareTextil` terminó en **SUCCESS**. Ejecutó el commit [`358879b`](https://github.com/javierRock/SoftwareTextil/commit/358879bbbc1d809b31902c60b7db07022a0b4120) de `refactor/code-quality` en Jenkins 2.580.2.
+
+| Etapa | Resultado |
+| --- | --- |
+| Construcción y distribución | Jenkins construyó el frontend, verificó la distribución ZIP y archivó el paquete con su SHA-256. |
+| Pruebas automatizadas | Pasaron 412 pruebas de Python y 6 de Node. Pytest-cov registró 85,27 % de cobertura global de Python. |
+| Análisis SonarQube | El scanner importó el XML de Python y el LCOV de JavaScript. SonarQube devolvió `QUALITY GATE STATUS: PASSED` en el proyecto `softwaretextil-jenkins-validation`. |
+
+![Jenkins build 5 con construcción, pruebas, distribución y Quality Gate aprobados](evidencias/capturas-exposicion/jenkins-build-5.png)
+
+El PR #46 sigue en revisión para `dev`. La [comparación antes y después](sonarqube-local.md#capturas-de-la-comparación) corresponde a dos análisis anteriores. Los jobs de backend y frontend también aprobaron en [GitHub Actions para el mismo commit](https://github.com/javierRock/SoftwareTextil/actions/runs/45305647561).

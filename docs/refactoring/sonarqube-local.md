@@ -21,4 +21,14 @@ Horas de Lima. Un issue puede afectar más de una cualidad en el modo MQR. La [c
 - **Antes.** [Análisis](evidencias/sonarqube-local-2026-11-23/antes/analisis.json) · [Métricas](evidencias/sonarqube-local-2026-11-23/antes/metricas.json) · [Issues](evidencias/sonarqube-local-2026-11-23/antes/issues.json) · [Gate](evidencias/sonarqube-local-2026-11-23/antes/quality-gate.json) · [Scanner](evidencias/sonarqube-local-2026-11-23/antes/scanner.txt).
 - **Después.** [Análisis](evidencias/sonarqube-local-2026-11-23/despues/analisis.json) · [Métricas](evidencias/sonarqube-local-2026-11-23/despues/metricas.json) · [Issues](evidencias/sonarqube-local-2026-11-23/despues/issues.json) · [Gate](evidencias/sonarqube-local-2026-11-23/despues/quality-gate.json) · [Scanner](evidencias/sonarqube-local-2026-11-23/despues/scanner.txt).
 
+## Capturas de la comparación
+
+| Captura | Qué muestra |
+| --- | --- |
+| [Línea base](evidencias/capturas-exposicion/04-sonarqube-antes.png) | `a312d0a`, 23 de noviembre a las 11:32. SonarQube registra 118 issues únicos, 75,3 % de cobertura global y Gate aprobado. |
+| [Después del refactor](evidencias/capturas-exposicion/05-sonarqube-despues.png) | `7785a6a`, a las 11:34. SonarQube registra 113 issues únicos, 75,2 % de cobertura global y Gate fallido. |
+| [Cobertura de código nuevo](evidencias/capturas-exposicion/06-quality-gate.png) | El análisis posterior registra 55,2 % de cobertura de código nuevo frente al 80 % exigido. |
+
+El [build #5 de Jenkins](pipeline-jenkins.md#validación-posterior-en-jenkins) documenta la validación posterior en otro commit y con una clave de SonarQube separada.
+
 Consulta la [matriz de tareas](matriz.md), la [trazabilidad del PR](trazabilidad.md) y el [pipeline Jenkins para `dev`](pipeline-jenkins.md).

@@ -2,7 +2,7 @@
 
 El [Kanban de SoftwareTextil — Mejora de calidad](https://github.com/users/javierRock/projects/2/views/1) y la [vista Reparto](https://github.com/users/javierRock/projects/2/views/6) contienen los 25 issues de la [matriz](matriz.md). Los 11 cambios publicados en el [PR #46](https://github.com/javierRock/SoftwareTextil/pull/46) están en **FIX VALIDATION** y los 14 pendientes están en **TO-DO**. La tabla refleja el estado verificado el 23 de noviembre de 2026.
 
-Los dos issues de Catálogo quedan sin asignar hasta confirmar la cuenta. La matriz indica `Lizzy342` y GitHub ofrece `Lizzy354` como asignable. El Project conserva su visibilidad privada.
+Los dos issues de Catálogo quedan sin asignar hasta confirmar la cuenta. La matriz indica `Lizzy342` y GitHub ofrece `Lizzy354` como asignable. El Project es público y aparece en la [pestaña Projects del repositorio](https://github.com/javierRock/SoftwareTextil/projects).
 
 | ID | Módulo | Issue | Project | Responsable | Prioridad | Estimación (h) | Estado | Commit publicado |
 | --- | --- | --- | --- | --- | --- | ---: | --- | --- |
@@ -40,4 +40,4 @@ Los dos issues de Catálogo quedan sin asignar hasta confirmar la cuenta. La mat
 - Se registraron 410 pruebas Python y 5 pruebas Node aprobadas. `make check` se detuvo en 58 diagnósticos Ruff. [Python](evidencias/ampliada/despues/backend.txt) · [Node](evidencias/ampliada/despues/frontend.txt) · [Make](evidencias/ampliada/despues/make-check.txt).
 - La revalidación focalizada del 23 de noviembre de 2026 obtuvo dos fallos en la base y dos aprobaciones con la refactorización. [Rollback antes](evidencias/rollback-revalidado/antes.txt) · [Rollback después](evidencias/rollback-revalidado/despues.txt).
 
-El PR sigue en borrador. Antes de integrar falta aprobar los criterios de las tarjetas en validación y resolver la cobertura del Quality Gate y los diagnósticos de Ruff. La validación integral en Jenkins queda pendiente antes del despliegue.
+El PR sigue en borrador. El [build #5 de Jenkins](pipeline-jenkins.md#validación-posterior-en-jenkins) aprobó el Quality Gate en la rama de revisión. Antes de integrar quedan por revisar los criterios de las tarjetas en validación y los diagnósticos de Ruff.
