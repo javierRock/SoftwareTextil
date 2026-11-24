@@ -19,9 +19,7 @@ from apps.compartido.infrastructure.campos import (
     check_monto_positivo,
     check_positivo,
 )
-from apps.compartido.infrastructure.models import ModeloBase
-
-MODELO_USUARIO = "usuarios.UsuarioModel"
+from apps.compartido.infrastructure.models import MODELO_USUARIO, ModeloBase
 
 
 class CarritoModel(ModeloBase):

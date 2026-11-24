@@ -11,7 +11,7 @@ from apps.compartido.infrastructure.campos import (
     check_no_negativo,
     check_positivo,
 )
-from apps.compartido.infrastructure.models import ModeloBase
+from apps.compartido.infrastructure.models import MODELO_USUARIO, ModeloBase
 
 
 class StockVarianteModel(ModeloBase):
@@ -61,7 +61,7 @@ class MovimientoInventarioModel(ModeloBase):
     cantidad = models.IntegerField()
     motivo = models.TextField()
     registrado_por = models.ForeignKey(
-        "usuarios.UsuarioModel",
+        MODELO_USUARIO,
         on_delete=models.PROTECT,
         related_name="movimientos_registrados",
     )
