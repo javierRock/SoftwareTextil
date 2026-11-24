@@ -23,9 +23,9 @@ DJANGO_SETTINGS_MODULE = "config.settings.dev"
 
 [tool.coverage.run]
 branch = true
-# Cobertura de todo el codigo ejecutable; se excluyen migraciones generadas y
-# las suites de prueba por modulo para que el porcentaje refleje solo produccion.
-source = ["apps"]
+# Incluye los módulos Python de la aplicación y las herramientas de CI.
+source = ["apps", "config", "scripts"]
+relative_files = true
 omit = ["*/migrations/*", "*/tests/*"]
 
 [tool.coverage.html]

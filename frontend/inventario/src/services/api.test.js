@@ -31,6 +31,16 @@ test('request normaliza errores de validación', async (t) => {
   );
 });
 
+test('request devuelve el contenido de una respuesta de texto', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; });
+  globalThis.fetch = async () => new Response('Reporte listo', {
+    headers: { 'content-type': 'text/plain' },
+  });
+
+  assert.equal(await request('/api/reportes/estado/'), 'Reporte listo');
+});
+
 test('request conserva el FormData y devuelve null para HTTP 204', async (t) => {
   const originalFetch = globalThis.fetch;
   t.after(() => { globalThis.fetch = originalFetch; });
